@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDQsd6rwdTVOF14mbfyhZTgtI2rLx5QOXE",
+        authDomain: "paradigm-a1bc9.firebaseapp.com",
+        databaseURL: "https://paradigm-a1bc9.firebaseio.com",
+        projectId: "paradigm-a1bc9",
+        storageBucket: "paradigm-a1bc9.appspot.com",
+        messagingSenderId: "728943503114"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Paradigm</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-blue.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script defer src="./chat.js"></script>
+    <link rel="icon" href="/favicon.ico">  
+  </head>
+  <body class="mdl-color--blue-grey-900">
+      <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+      </div>
+    <noscript>
+      <strong>We're sorry but Paradigm doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
