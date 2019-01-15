@@ -1,19 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-import Home from './views/Home.vue'
-import Flamechat from './views/Flamechat.vue'
-import Hex from './views/Hex.vue'
-import Drawer from './views/Drawer.vue'
-import Launchpad from './views/Launchpad.vue'
-import Bookshelf from './views/Bookshelf.vue'
-import Scorecard from './views/Scorecard.vue'
-import DevNet from './views/DevNet.vue'
-import Support from './views/Support.vue'
-import Terms from './views/Terms.vue'
-import Changelog from './views/Changelog.vue'
-import Notice from './views/Notice.vue'
-import PageNotFound from './views/PageNotFound.vue'
+import Home from './views/Home'
+import Flamechat from './views/Flamechat'
+import Changelog from './views/Changelog'
+import Terms from './views/Terms'
+import Notice from './views/Notice'
+import Bookshelf from './views/Bookshelf'
 
 Vue.use(Router)
 
@@ -23,71 +15,33 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home'
-    },
-    {
-      path: '/home',
-      name: 'home',
+      name: 'Home',
       component: Home
     },
     {
       path: '/flamechat',
-      name: 'flamechat',
+      name: 'Flamechat',
       component: Flamechat
     },
     {
-      path: '/hex',
-      name: 'hex',
-      component: Hex
-    },
-    {
-      path: '/drawer',
-      name: 'drawer',
-      component: Drawer
-    },
-    {
-      path: '/launchpad',
-      name: 'launchpad',
-      component: Launchpad
-    },
-    {
-      path: '/bookshelf',
-      name: 'bookshelf',
-      component: Bookshelf
-    },
-    {
-      path: '/scorecard',
-      name: 'scorecard',
-      component: Scorecard
-    },
-    {
-      path: '/devnet',
-      name: 'devnet',
-      component: DevNet
-    },
-    {
-      path: '/support',
-      name: 'support',
-      component: Support
-    },
-    {
-      path: '/terms',
-      name: 'terms',
-      component: Terms
-    },
-    {
       path: '/changelog',
-      name: 'changelog',
+      name: 'Changelog',
       component: Changelog
     },
     {
-      path: '/notice',
-      name: 'notice',
-      component: Notice
+      path: '/terms',
+      name: 'Terms',
+      component: Terms
     },
     {
-      path: '*',
-      component: PageNotFound
-    }
+      path: '/notice',
+      name: 'Notice',
+      component: Notice
+		},
+		{
+			path: '/bookshelf',
+			name: 'Bookshelf',
+			component: Bookshelf
+		}
   ]
 })

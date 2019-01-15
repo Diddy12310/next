@@ -1,6 +1,6 @@
 <template>
-  <div>
-      <h1 style="text-align: center;">Terms of Service, Use, and Privacy Policy</h1>
+    <div class="terms">
+              <h1 style="text-align: center;">Terms of Service, Use, and Privacy Policy</h1>
       <h3 style="text-align: center;">Paradigm Development, Inc.</h3>
       <hr style="width: 500px; text-align: center; margin: auto;">
       <div id="terms" style="text-align: center; margin: auto; width: 80vw; padding-top: 10px;">
@@ -270,7 +270,7 @@
         <h6>Information Collected From Other Sources</h6>
           <i><b>In Short:</b> We may collect limited data from public databases, marketing partners, and other outside sources.</i>
           <br>
-         <p> 
+        <p>
           We may obtain information about you from other sources, such as public databases, joint marketing partners, as well as from
           other third parties. Examples of the information we receive from other sources include: social media profile information;
           marketing leads and search results and links, including paid listings (such as sponsored links).
@@ -644,5 +644,21 @@
           <a href="mailto:aidanliddy@outlook.com">aidanliddy@outlook.com</a>
         </p>
       </div>
+
     </div>
 </template>
+
+<script>
+export default {
+    name: 'Terms',
+    data() {
+        return {
+
+        }
+    }
+}
+</script>
+
+<style scoped>
+
+</style>

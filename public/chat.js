@@ -7,7 +7,7 @@ function signIn() {
   firebase.auth().signInWithPopup(provider);
 }
 
-// Signs-out of Friendly Chat.
+// Signs-out of Friendly Chat
 function signOut() {
   // Sign out of Firebase.
   firebase.auth().signOut();

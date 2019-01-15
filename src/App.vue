@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="head mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <div class="head mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
         <span class="mdl-layout-title"><img style="height: 55px;" src="./assets/paradigmlogo.png"></span>
@@ -15,37 +15,38 @@
     <div class="mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
       <span class="mdl-layout-title">Apps</span>
       <nav class="nav mdl-navigation mdl-color--blue-grey-800">
-        <router-link to="/home" id="homeLink" class="mdl-navigation__link">Home</router-link>
-        <router-link to="/flamechat" replace id="flameLink" class="mdl-navigation__link">Flamechat</router-link>
-        <router-link to="/hex" id="hexLink" class="mdl-navigation__link">Hex</router-link>
-        <router-link to="/drawer" id="drawerLink" class="mdl-navigation__link">Drawer</router-link>
-        <router-link to="/launchpad" id="launchLink" class="mdl-navigation__link">Launchpad</router-link>
-        <router-link to="/bookshelf" id="shelfLink" class="mdl-navigation__link">Bookshelf</router-link>
-        <router-link to="/scorecard" id="scoreLink" class="mdl-navigation__link">Scorecard</router-link>
-        <router-link to="/devnet" id="devLink" class="mdl-navigation__link">DevNet</router-link>
+        <router-link class="mdl-navigation__link" to="home">Home</router-link>
+        <router-link class="mdl-navigation__link" to="flamechat">Flamechat</router-link>
+        <router-link class="mdl-navigation__link" to="hex">Hex</router-link>
+        <router-link class="mdl-navigation__link" to="drawer">Drawer</router-link>
+        <router-link class="mdl-navigation__link" to="launch">Launchpad</router-link>
+        <router-link class="mdl-navigation__link" to="bookshelf">Bookshelf</router-link>
+        <router-link class="mdl-navigation__link" to="scorecard">Scorecard</router-link>
+        <router-link class="mdl-navigation__link" to="devnet">DevNet</router-link>
         <div class="mdl-layout-spacer"></div>
-        <router-link to="/support" id="supportLink" class="mdl-navigation__link">Support</router-link>
+        <router-link class="mdl-navigation__link" to="support">Support</router-link>
         <img class="drawerLogo" src="./assets/paradigmlogo.png">
       </nav>
     </div>
     <main class="mdl-layout__content">
-      <transition name="slide">
-        <router-view></router-view>
-      </transition>
+      <router-view/>
     </main>
-    <footer>© 2018 Paradigm Development. All Rights Reserved.&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<router-link to="/terms">Privacy Policy</router-link>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<router-link to="/changelog">Changelog</router-link>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<router-link to="/notice">Notice</router-link></footer>
+        <footer>© 2018 Paradigm Development. All Rights Reserved.&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<router-link to="terms">Privacy Policy</router-link>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<router-link to="changelog">Changelog</router-link>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<router-link to="notice">Notice</router-link></footer>
   </div>
 </template>
 
-<style lang="scss">
+<style>
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 * {
   font-family: 'Open Sans';
 }
 
 body {
+  background-color: silver;
   color: white;
 }
-
+  
 /* Scrollbar */
 
 /* width */
@@ -57,17 +58,19 @@ body {
 ::-webkit-scrollbar-track {
   background: rgba(241, 241, 241, 0.25);
 }
-
+  
+  
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #888;
 }
-
+  
+  
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
+  
 .chatroom {
   overflow-x: hidden;
   width: 98vw;
@@ -92,7 +95,7 @@ footer {
   vertical-align: middle;
   text-align: center;
 }
-
+  
 .bottomPrgs {
   position: absolute;
   bottom: 0px;
@@ -109,7 +112,7 @@ hr {
   margin-top: 20vh;
   text-align: center;
 }
-
+ 
 #loader {
   position: absolute;
   height: 50px;
@@ -259,7 +262,7 @@ main, #messages-card {
   padding-left: 20px;
 }
 
-#user-container button {
+#user-container button#sign-out {
   top: 2px;
 }
 
@@ -318,5 +321,19 @@ a  {
 .drawerLogo {
   width: 150px;
   margin: 10px;
+}
+
+.plus-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+table {
+  border-spacing: 20px;
+}
+
+ul {
+  list-style-type: square;
 }
 </style>

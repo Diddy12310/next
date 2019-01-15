@@ -1,14 +1,51 @@
 <template>
-  <div id="changelog" style="margin: auto; width: 80vw; padding-top: 10px;" class="page-content">
-    <h1><span class="mdl-badge" data-badge="B">v0.0.1</span></h1>
-    <p>+ Flamechat, a social media platform.</p>
-    <p>/ Hex (The Homework Exchange), is a homework-sharing tool. It is still in development.</p>
-    <p>/ Drawer, a file storage/sharing tool. It is still in development.</p>
-    <p>= Launchpad, our login service. Temporarily deprecated.</p>
-    <p>+ Bookshelf, an e-book/audiobook service.</p>
-    <p>/ Scorecard, a sports tracking tool. It is still in development.</p>
-    <p>+ Terms of Service, Use, and Privacy Policy</p>
-    <p>+ Changelog, what you are reading now.</p>
-    <p>/ DevNet, a developer's dream.</p>
+  <div class="changelog">
+  	<h1>Changelog</h1>
+    <div class="mdl-card" v-for="change in changelog" :key="change.id">
+      <div class="mdl-card__title"><h2 class="mdl-card__title-text">{{ change.title }}</h2><span v-if="change.beta" class="mdl-badge" data-badge="B"></span></div>
+      <div class="mdl-card__supporting-text">
+        <ul>
+          <li v-for="(list, index) in change.body" :key="index">{{ list }}</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
+
+<script>
+import db from './../../firebase/init'
+export default {
+  name:'Changelog',
+  data() {
+    return {
+      changelog: []
+    }
+  },
+  created() {
+    db.collection('changelog').get().then(snapshot => {
+      snapshot.forEach(doc => {
+        let change = doc.data()
+        change.id = doc.id
+        this.changelog.push(change)
+      })
+    })
+  }
+}
+</script>
+
+<style scoped>
+h1 {
+  text-align: center;
+}
+
+div.mdl-card {
+  margin: auto;
+  margin-bottom: 10px;
+  min-height: 0;
+}
+
+ul {
+  margin-top: 0;
+  padding-left: 20px;
+}
+</style>
