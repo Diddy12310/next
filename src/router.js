@@ -12,6 +12,8 @@ import Hex from './views/Hex'
 import Launchpad from './views/Launchpad'
 import Scorecard from './views/Scorecard'
 import Support from './views/Support'
+import PageNotFound from './views/404'
+import GPACalc from './views/GPA'
 
 Vue.use(Router)
 
@@ -82,6 +84,15 @@ export default new Router({
 			path: '/support',
 			name: 'Support',
 			component: Support
+		},
+		{
+			path: '/gpa',
+			name: 'GPACalc',
+			component: GPACalc
+		},
+		{
+			path:'*',
+			component: PageNotFound
 		}
   ]
 })
