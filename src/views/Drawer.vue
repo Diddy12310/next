@@ -1,19 +1,20 @@
 <template>
-  <div class="blank">
-		<h1>Drawer is Not Ready Yet</h1>
-		<v-divider></v-divider>
-		<h4>It is next in line for development.</h4>
-  </div>
+	<blank-space app="Drawer" message="It is next in line for development."/>
 </template>
 
 <script>
+import BlankSpace from '@/components/BlankSpace'
+
 export default {
   name: 'Drawer',
   data() {
     return {
 
     }
-  }
+	},
+	components: {
+		BlankSpace
+	}
 }
 </script>
 

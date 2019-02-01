@@ -5,7 +5,7 @@
 				<ul class="messages" v-chat-scroll>
 					<p v-if="!messages">There are no messages posted on this room.</p>
 					<li v-for="message in messages" :key="message.id">
-						<span style="color: #FF5722; font-size: 22.5px"><strong>{{ message.name }}</strong></span>
+						<span style="color: #FF5722; font-size: 22.5px;"><strong>{{ message.name }}</strong></span>
 						<span> {{ message.content }}</span>
 						<span class="time">{{ message.timestamp }}</span>
 					</li>

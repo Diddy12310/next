@@ -1,18 +1,19 @@
 <template>
-  <div class="blank">
-		<h1>Launchpad is Not Ready Yet</h1>
-		<v-divider></v-divider>
-		<h4>Development has been temporarily postponed on this project.</h4>
-  </div>
+	<BlankSpace app="Launchpad" message="Development has been temporarily discontinued."/>
 </template>
 
 <script>
+import BlankSpace from '@/components/BlankSpace'
+
 export default {
   data() {
     return {
 
     }
-  }
+	},
+	components: {
+		BlankSpace
+	}
 }
 </script>
 

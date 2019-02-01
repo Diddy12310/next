@@ -1,6 +1,6 @@
 <template>
   <div class="changelog">
-  	<h1>Changelog</h1>
+  	<h1 class="display-3 font-weight-thin" style="margin: 50px;">CHANGELOG</h1>
 		<div class="card" v-for="change in changelog" :key="change.id">
 			<v-card>
 				<v-badge color="blue"><span slot="badge" v-if="change.beta">B</span><v-card-title primary-title><span class="headline">{{ change.title }}</span></v-card-title></v-badge>

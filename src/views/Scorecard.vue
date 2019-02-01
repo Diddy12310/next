@@ -1,18 +1,19 @@
 <template>
-  <div class="blank">
-		<h1>Scorecard is Not Ready Yet</h1>
-		<v-divider></v-divider>
-		<h4>Scorecard's development has yet to begin.</h4>
-  </div>
+	<BlankSpace app="Scorecard" message="Development has yet to begin."/>
 </template>
 
 <script>
+import BlankSpace from '@/components/BlankSpace'
+
 export default {
   data() {
     return {
-
+			app: 'Scorecard'
     }
-  }
+	},
+	components: {
+		BlankSpace
+	}
 }
 </script>
 

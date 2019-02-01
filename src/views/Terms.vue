@@ -1,8 +1,8 @@
 <template>
     <div class="terms">
 			<div class="title">
-				<h1 style="text-align: center;">Terms of Service, Use, and Privacy Policy</h1>
-				<h3 style="text-align: center;">Paradigm Development, Inc.</h3>
+				<h1 style="text-align: center; margin: 50px 50px 20px 50px;" class="display-3 font-weight-thin">TERMS OF SERVICE, USE, AND PRIVACY POLICY</h1>
+				<h3 style="text-align: center;" class="display-1 font-weight-light">Paradigm Development, Inc.</h3>
 				<v-divider></v-divider>
 			</div>
       <div style="text-align: center; margin: auto; width: 80vw; padding-top: 10px;">
@@ -661,10 +661,6 @@ export default {
 </script>
 
 <style scoped>
-div.title {
-	padding-top: 30px;
-}
-
 div.title * {
 	padding-bottom: 20px;
 }
