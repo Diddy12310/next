@@ -1,25 +1,23 @@
 <template>
 	<div class="index">
   	<div class="home">
-      <h2 class="mdl-layout--large-screen-only" style="line-height: 70px; position: relative; text-align: center; margin: auto; padding-top: 15%; color: white;">A social media platform<br>built for the 21st century</h2>
-      <h3 class="mdl-layout--small-screen-only" style="line-height: 50px; position: relative; text-align: center; margin: auto; padding-top: 30%; color: white;">A social media platform<br>built for the 21st century</h3>
-      <router-link style="margin-top: 20px;" to="flamechat" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Open Flamechat</router-link>
+      <h2 class="display-3" style="position: relative; text-align: center; margin: auto; padding-top: 15%;">A social media platform<br>built for the 21st century</h2>
+			<v-btn router to="flamechat" style="margin-top: 20px;" color="primary">Open Flamechat</v-btn>
   	</div>
-		<h3 style="text-align: center;">Announcements</h3>
-		<div v-for="(announcement, index) in announcements" :key="index" class="announcements mdl-card">
-			<div class="mdl-card__title">
-				<h3 class="mdl-card__title-text">{{ announcement.title }}</h3>
-			</div>
-			<div class="mdl-card__supporting-text">
-				<h5 style="margin-top: 3px;">By {{ announcement.author }}</h5>
-				<p>{{ announcement.detail }}</p>
-			</div>
-		</div>
+		<h3 class="display-2" style="text-align: center; margin-top: 20px;">Announcements</h3>
+    <v-card v-for="(announcement, index) in announcements" :key="index" style="width: 500px; margin: 20px auto">
+      <v-card-title primary-title>
+        <div>
+          <h3 class="headline mb-0">{{ announcement.title }}</h3>
+          <div>{{ announcement.detail }}</div>
+        </div>
+      </v-card-title>
+    </v-card>
 	</div>
 </template>
 
 <script>
-import db from './../../firebase/init'
+import db from '@/firebase/init'
 
 export default {
   name: 'home',
@@ -44,8 +42,8 @@ export default {
 <style scoped>
 .home {
 	text-align: center;
-	height: calc(100vh - 76px);
-	background: url('./../assets/home_bg.jpg');
+	height: calc(100vh - 56px);
+	background: url('./../assets/home_bg.jpg') center center;
 	background-attachment: fixed;
 }
 

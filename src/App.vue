@@ -1,339 +1,147 @@
 <template>
-  <div class="head mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header">
-      <div class="mdl-layout__header-row">
-        <span class="mdl-layout-title"><img style="height: 55px;" src="./assets/paradigmlogo.png"></span>
-        <div class="mdl-layout-spacer"></div>
-        <div id="user-container">
-          <div hidden id="user-pic"></div>
-          <div hidden id="user-name"></div>
-          <button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">Logout</button>
-          <button hidden id="sign-in" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">Login</button>
-        </div>
-      </div>
-    </header>
-    <div class="mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
-      <span class="mdl-layout-title">Apps</span>
-      <nav class="nav mdl-navigation mdl-color--blue-grey-800">
-        <router-link class="mdl-navigation__link" to="home">Home</router-link>
-        <router-link class="mdl-navigation__link" to="flamechat">Flamechat</router-link>
-        <router-link class="mdl-navigation__link" to="hex">Hex</router-link>
-        <router-link class="mdl-navigation__link" to="drawer">Drawer</router-link>
-        <router-link class="mdl-navigation__link" to="launch">Launchpad</router-link>
-        <router-link class="mdl-navigation__link" to="bookshelf">Bookshelf</router-link>
-        <router-link class="mdl-navigation__link" to="scorecard">Scorecard</router-link>
-        <router-link class="mdl-navigation__link" to="devnet">DevNet</router-link>
-        <div class="mdl-layout-spacer"></div>
-        <router-link class="mdl-navigation__link" to="support">Support</router-link>
-        <img class="drawerLogo" src="./assets/paradigmlogo.png">
-      </nav>
-    </div>
-    <main class="mdl-layout__content">
-      <router-view/>
-    </main>
-        <footer>© 2018 Paradigm Development. All Rights Reserved.&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<router-link to="terms">Privacy Policy</router-link>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<router-link to="changelog">Changelog</router-link>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<router-link to="notice">Notice</router-link></footer>
-  </div>
+	<v-app dark>
+
+		<v-toolbar app>
+			<v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
+			<v-toolbar-title><img style="height: 55px; top: 5px; position: relative;" src="./assets/paradigmlogo.png"></v-toolbar-title>
+			<v-spacer></v-spacer>
+			<v-toolbar-items>
+				<h6 class="clock title">{{ time }}</h6>
+			</v-toolbar-items>
+		</v-toolbar>
+
+		<v-navigation-drawer v-model="drawer" app temporary floating>
+			<v-toolbar>
+				<v-toolbar-side-icon @click="drawer = !drawer"><v-icon>close</v-icon></v-toolbar-side-icon>
+				<v-toolbar-title>Apps</v-toolbar-title>
+			</v-toolbar>
+
+      <v-list>
+
+        <v-list-tile v-for="link in links" :key="link.route" router :to="link.route" :ripple="{ class: 'white--text' }">
+					<v-list-tile-action>
+						<v-icon>{{ link.icon }}</v-icon>
+					</v-list-tile-action>
+          <v-list-tile-title class="white--text">{{ link.text }}</v-list-tile-title>
+        </v-list-tile>
+
+
+
+				<v-list-group prepend-icon="business" value="true">
+          <v-list-tile slot="activator">
+            <v-list-tile-title>Company</v-list-tile-title>
+          </v-list-tile>
+
+					<v-list-tile router to="/support" :ripple="{ class: 'white--text' }">
+						<v-list-tile-action>
+							<v-icon>help</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-title class="white--text">Support</v-list-tile-title>
+					</v-list-tile>
+
+					<v-list-tile router to="/notice" :ripple="{ class: 'white--text' }">
+						<v-list-tile-action>
+							<v-icon>announcement</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-title class="white--text">Notice</v-list-tile-title>
+					</v-list-tile>
+
+					<v-list-tile router to="/changelog" :ripple="{ class: 'white--text' }">
+						<v-list-tile-action>
+							<v-icon>track_changes</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-title class="white--text">Changelog</v-list-tile-title>
+					</v-list-tile>
+
+					<v-list-tile router to="/terms" :ripple="{ class: 'white--text' }">
+						<v-list-tile-action>
+							<v-icon>info</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-title class="white--text">Terms</v-list-tile-title>
+					</v-list-tile>
+
+        </v-list-group>
+      </v-list>
+    </v-navigation-drawer>
+
+		<v-content>
+			<v-container fluid style="padding: 0;">
+				<router-view></router-view>
+			</v-container>
+		</v-content>
+
+		<v-footer>
+			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm Development. All Rights Reserved.</span></div>
+		</v-footer>
+	</v-app>
 </template>
 
+<script>
+import moment from 'moment'
+
+export default {
+	data() {
+		return {
+			drawer: false,
+			time: null,
+			links: [
+				{ text: 'Home', route: '/home', icon: 'home' },
+				{ text: 'Flamechat', route: '/flamechat', icon: 'forum' },
+				{ text: 'Hex', route: '/hex', icon: 'folder_shared' },
+				{ text: 'Drawer', route: '/drawer', icon: 'folder' },
+				{ text: 'Launchpad', route: '/launchpad', icon: 'account_circle' },
+				{ text: 'Bookshelf', route: '/bookshelf', icon: 'book' },
+				{ text: 'The Paradox', route: '/paradox', icon: 'language' },
+				{ text: 'Scorecard', route: '/scorecard', icon: 'live_tv' }
+			]
+		}
+	},
+	created() {
+		this.time = moment(Date.now()).format('LL')
+	}
+}
+</script>
+
 <style>
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
-
-* {
-  font-family: 'Open Sans';
+html {
+	overflow-y: auto;
 }
 
-body {
-  background-color: silver;
-  color: white;
+.clock {
+	margin-top: auto;
+	margin-bottom: auto;
 }
-  
+
 /* Scrollbar */
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
   background: rgba(241, 241, 241, 0.25);
 }
-  
-  
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #888;
 }
-  
-  
+
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-  
-.chatroom {
-  overflow-x: hidden;
-  width: 98vw;
-  height: 75vh;
-  position: absolute;
-  left: 25px;
-  top: 25px;
+
+.blank {
+	width: 500px;
+	margin: 100px auto;
+	text-align: center;
 }
 
-.drawer-label {
-  text-align: center;
-  font-size: 17px;
+.blank * {
+	padding-bottom: 10px;
 }
 
-footer {
-  position: relative;
-  bottom: 0px;
-  left: 0px;
-  width: 100%;
-  background-color: #242424;
-  color: white;
-  vertical-align: middle;
-  text-align: center;
-}
-  
-.bottomPrgs {
-  position: absolute;
-  bottom: 0px;
-  width: 100vw;
-  background-color: gray;
-}
-
-hr {
-  border-color: rgb(209, 209, 209);
-}
-
-.loader {
-  position: relative;
-  margin-top: 20vh;
-  text-align: center;
-}
- 
-#loader {
-  position: absolute;
-  height: 50px;
-  width: 50px;
-  text-align: center;
-  vertical-align: middle;
-}
-
-main, #messages-card {
-  height: 100%;
-  padding-bottom: 0;
-}
-
-#messages-card-container {
-  height: calc(100% - 35px);
-  padding-bottom: 0;
-}
-
-#messages-card {
-  margin-top: 15px;
-}
-
-.mdl-grid {
-  max-width: 1024px;
-  margin: auto;
-}
-
-.mdl-card__supporting-text {
-  width: auto;
-  height: 100%;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-#messages {
-  overflow-y: auto;
-  margin-bottom: 10px;
-  height: calc(100% - 80px);
-  display: flex;
-  flex-direction: column;
-}
-
-#message-filler {
-  flex-grow: 1;
-}
-
-.message-container:first-of-type {
-  border-top-width: 0;
-}
-
-.message-container {
-  display: block;
-  margin-top: 10px;
-  border-top: 1px solid #f3f3f3;
-  padding-top: 10px;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-}
-
-.message-container.visible {
-  opacity: 1;
-}
-
-.message-container .pic {
-  background-image: url('/assets/profile_placeholder.png');
-  background-repeat: no-repeat;
-  width: 30px;
-  height: 30px;
-  background-size: 30px;
-  border-radius: 20px;
-}
-
-.message-container .spacing {
-  display: table-cell;
-  vertical-align: top;
-}
-
-.message-container .message {
-  display: table-cell;
-  width: calc(100% - 40px);
-  padding: 5px 0 5px 10px;
-}
-
-.message-container .nameDateTime {
-  display: inline-block;
-  width: 100%;
-  padding-left: 40px;
-  color: #bbb;
-  font-style: italic;
-  font-size: 12px;
-  box-sizing: border-box;
-}
-
-#message-form {
-  display: flex;
-  flex-direction: row;
-  width: calc(100% - 48px);
-  float: left;
-}
-
-#image-form {
-  display: flex;
-  flex-direction: row;
-  width: 48px;
-  float: right;
-}
-
-#message-form .mdl-textfield {
-  width: calc(100% - 50px);
-}
-
-#message-form button, #image-form button {
-  margin: 15px 0 0 10px;
-}
-
-.mdl-card {
-  background: linear-gradient(white, #f9f9f9);
-  justify-content: space-between;
-}
-
-#user-container {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  right: 0;
-  padding-left: 10px;
-  justify-content: flex-end;
-  padding-right: 10px;
-}
-
-#user-container #user-pic {
-  position: relative;
-  display: inline-block;
-  background-image: url('/assets/profile_placeholder.png');
-  background-repeat: no-repeat;
-  width: 40px;
-  height: 40px;
-  background-size: 40px;
-  border-radius: 20px;
-}
-
-#user-container #user-name {
-  font-size: 16px;
-  line-height: 40px;
-  padding-right: 10px;
-  padding-left: 20px;
-}
-
-#user-container button#sign-out {
-  top: 2px;
-}
-
-.message img {
-  max-width: 300px;
-  max-height: 200px;
-}
-
-#mediaCapture {
-  display: none;
-}
-
-@media screen and (max-width: 610px) {
-  #user-container {
-    height: 38px;
-    padding-top: 3px;
-    padding-right: 2px;
-  }
-  #user-container #user-pic {
-    top: 2px;
-    width: 33px;
-    height: 33px;
-    background-size: 33px;
-  }
-}
-
-a  {
-  color: white;
-}
-
-.head .nav .mdl-navigation__link {
-  display: flex !important;
-  flex-direction: row;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.56);
-  font-weight: 500;
-  transition: background-color .25s;
-  -webkit-transition: background-color .25;
-}
-
-.head .nav .mdl-navigation__link:hover {
-  background-color: #607D8B;
-}
-
-.head .nav .material-icons {
-  font-size: 24px;
-  color: rgba(255, 255, 255, 0.56);
-  margin-right: 32px;
-}
-
-.nav {
-  flex-grow: 1;
-  border: none;
-}
-
-.drawerLogo {
-  width: 150px;
-  margin: 10px;
-}
-
-.plus-btn {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-}
-
-table {
-  border-spacing: 20px;
-}
-
-ul {
-  list-style-type: square;
-}
 </style>

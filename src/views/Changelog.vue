@@ -1,19 +1,27 @@
 <template>
   <div class="changelog">
   	<h1>Changelog</h1>
-    <div class="mdl-card" v-for="change in changelog" :key="change.id">
-      <div class="mdl-card__title"><h2 class="mdl-card__title-text">{{ change.title }}</h2><span v-if="change.beta" class="mdl-badge" data-badge="B"></span></div>
-      <div class="mdl-card__supporting-text">
-        <ul>
-          <li v-for="(list, index) in change.body" :key="index">{{ list }}</li>
-        </ul>
-      </div>
-    </div>
+		<div class="card" v-for="change in changelog" :key="change.id">
+			<v-card>
+				<v-badge color="blue"><span slot="badge" v-if="change.beta">B</span><v-card-title primary-title><span class="headline">{{ change.title }}</span></v-card-title></v-badge>
+				
+				<v-card-text>
+					<v-list>
+						<v-list-tile v-for="(list, index) in change.body" :key="index">
+							<v-list-tile-content>
+								<v-list-tile-title>{{ list }}</v-list-tile-title>
+							</v-list-tile-content>
+						</v-list-tile>
+					</v-list>
+				</v-card-text>
+			</v-card>
+			<div class="gap"></div>
+		</div>
   </div>
 </template>
 
 <script>
-import db from './../../firebase/init'
+import db from '@/firebase/init'
 export default {
   name:'Changelog',
   data() {
@@ -38,14 +46,13 @@ h1 {
   text-align: center;
 }
 
-div.mdl-card {
+div.card {
   margin: auto;
-  margin-bottom: 10px;
-  min-height: 0;
+  margin-bottom: 20px;
+  width: 750px;
 }
 
-ul {
-  margin-top: 0;
-  padding-left: 20px;
+div.gap {
+	height: 16px;
 }
 </style>

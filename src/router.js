@@ -2,18 +2,18 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home'
 import Flamechat from './views/Flamechat'
+import FlamechatChatroom from './views/FlamechatChatroom'
 import Changelog from './views/Changelog'
 import Terms from './views/Terms'
 import Notice from './views/Notice'
 import Bookshelf from './views/Bookshelf'
-import DevNet from './views/DevNet'
 import Drawer from './views/Drawer'
 import Hex from './views/Hex'
 import Launchpad from './views/Launchpad'
 import Scorecard from './views/Scorecard'
 import Support from './views/Support'
 import PageNotFound from './views/404'
-import GPACalc from './views/GPA'
+import News from './views/News'
 
 Vue.use(Router)
 
@@ -34,7 +34,20 @@ export default new Router({
       path: '/flamechat',
       name: 'Flamechat',
       component: Flamechat
-    },
+		},
+		{
+			path: '/flamechat/chatroom',
+			name: 'FlamechatChatroom',
+			component: FlamechatChatroom,
+			props: true,
+			beforeEnter: (to, from, next) => {
+				if(to.params.name) {
+					next()
+				} else {
+					next({ name: 'Flamechat' })
+				}
+			}
+		},
     {
       path: '/changelog',
       name: 'Changelog',
@@ -54,11 +67,6 @@ export default new Router({
 			path: '/bookshelf',
 			name: 'Bookshelf',
 			component: Bookshelf
-		},
-		{
-			path: '/devnet',
-			name: 'DevNet',
-			component: DevNet
 		},
 		{
 			path: '/drawer',
@@ -86,9 +94,9 @@ export default new Router({
 			component: Support
 		},
 		{
-			path: '/gpa',
-			name: 'GPACalc',
-			component: GPACalc
+			path: '/paradox',
+			name: 'News',
+			component: News
 		},
 		{
 			path:'*',

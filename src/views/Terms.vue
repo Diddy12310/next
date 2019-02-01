@@ -1,9 +1,11 @@
 <template>
     <div class="terms">
-              <h1 style="text-align: center;">Terms of Service, Use, and Privacy Policy</h1>
-      <h3 style="text-align: center;">Paradigm Development, Inc.</h3>
-      <hr style="width: 500px; text-align: center; margin: auto;">
-      <div id="terms" style="text-align: center; margin: auto; width: 80vw; padding-top: 10px;">
+			<div class="title">
+				<h1 style="text-align: center;">Terms of Service, Use, and Privacy Policy</h1>
+				<h3 style="text-align: center;">Paradigm Development, Inc.</h3>
+				<v-divider></v-divider>
+			</div>
+      <div style="text-align: center; margin: auto; width: 80vw; padding-top: 10px;">
         <h4>Agreement to Terms</h4>
         <p>
           These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity
@@ -644,21 +646,30 @@
           <a href="mailto:aidanliddy@outlook.com">aidanliddy@outlook.com</a>
         </p>
       </div>
-
     </div>
 </template>
 
 <script>
 export default {
-    name: 'Terms',
-    data() {
-        return {
+  name: 'Terms',
+  data() {
+    return {
 
-        }
     }
+  }
 }
 </script>
 
 <style scoped>
+div.title {
+	padding-top: 30px;
+}
 
+div.title * {
+	padding-bottom: 20px;
+}
+
+a {
+	color: white;
+}
 </style>

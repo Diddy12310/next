@@ -1,9 +1,29 @@
-# Paradigm NEXT
-The next generation of the Paradigm family of products.
+# vuetify
 
-### Changes
-* Using Vue.js instead of traditional HTML.
-* Faster and more responsive.
+## Project setup
+```
+npm install
+```
 
-### Release Timeline
-At the minute, we don't have an expected release date.
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Run your tests
+```
+npm run test
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
