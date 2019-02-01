@@ -1,4 +1,5 @@
-# vuetify
+# Paradigm Next
+Upon successful cloning of this repository, the following steps should be taken.
 
 ## Project setup
 ```
@@ -14,16 +15,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
