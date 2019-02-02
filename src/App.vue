@@ -19,7 +19,7 @@
       <v-list>
 
         <v-list-tile v-for="link in links" :key="link.route" router :to="link.route" :ripple="{ class: 'white--text' }">
-          <v-list-tile-title class="white--text">{{ link.text }}</v-list-tile-title>
+          <v-list-tile-title class="white--text font-weight-light">{{ link.text }}</v-list-tile-title>
         </v-list-tile>
 
 				<v-list-group value="true">
@@ -28,19 +28,19 @@
           </v-list-tile>
 
 					<v-list-tile router to="/support" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text">Support</v-list-tile-title>
+						<v-list-tile-title class="white--text font-weight-light">Support</v-list-tile-title>
 					</v-list-tile>
 
 					<v-list-tile router to="/notice" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text">Notice</v-list-tile-title>
+						<v-list-tile-title class="white--text font-weight-light">Notice</v-list-tile-title>
 					</v-list-tile>
 
 					<v-list-tile router to="/changelog" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text">Changelog</v-list-tile-title>
+						<v-list-tile-title class="white--text font-weight-light">Changelog</v-list-tile-title>
 					</v-list-tile>
 
 					<v-list-tile router to="/terms" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text">Terms</v-list-tile-title>
+						<v-list-tile-title class="white--text font-weight-light">Terms</v-list-tile-title>
 					</v-list-tile>
 
         </v-list-group>
