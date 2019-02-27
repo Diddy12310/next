@@ -1,18 +1,18 @@
 <template>
 	<div class="index">
   	<div class="home">
-      <h2 class="display-3" style="position: relative; text-align: center; margin: auto; padding-top: 15%;">A social media platform<br>built for the 21st century</h2>
+      <h2 class="display-3 font-weight-thin text-uppercase" style="position: relative; text-align: center; margin: auto; padding-top: 15%;">Welcome to<br>the future</h2>
 			<v-btn router to="flamechat" style="margin-top: 20px;" color="primary">Open Flamechat</v-btn>
   	</div>
 		<h3 class="display-2" style="text-align: center; margin-top: 20px;">Announcements</h3>
-    <v-card v-for="(announcement, index) in announcements" :key="index" style="width: 500px; margin: 20px auto">
-      <v-card-title primary-title>
-        <div>
-          <h3 class="headline mb-0">{{ announcement.title }}</h3>
-          <div>{{ announcement.detail }}</div>
-        </div>
-      </v-card-title>
-    </v-card>
+		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 500px; margin: 20px auto">
+			<v-card-title primary-title>
+				<div>
+					<h3 class="headline mb-0">{{ announcement.title }}</h3>
+					<div v-for="item in announcement.detail" :key="item" class="item">{{ item }}</div>
+				</div>
+			</v-card-title>
+		</v-card>
 	</div>
 </template>
 
@@ -20,12 +20,17 @@
 import db from '@/firebase/init'
 
 export default {
-  name: 'home',
+  name: 'Home',
   data() {
     return {
 			announcements: []
 		}
   },
+	methods: {
+		reload() {
+			location.reload()
+		}
+	},
   created() {
 		var dbRef = db.collection('announcements').orderBy('time', 'desc')
     dbRef.get().then(snapshot => {
@@ -51,19 +56,7 @@ h1 {
   text-align: center;
 }
 
-div.mdl-card {
-  margin: auto;
-  margin-bottom: 10px;
-  min-height: 0;
-}
-
-ul {
-  margin-top: 0;
-  padding-left: 20px;
-}
-
-.mdl-card__supporting-text {
-	text-align: left;
-	padding-bottom: 15px;
+.item {
+	padding-top: 10px;
 }
 </style>

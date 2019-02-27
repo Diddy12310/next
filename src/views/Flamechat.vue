@@ -2,14 +2,9 @@
 	<div class="welcome">
 		<v-card class="welcome-card">
 			<v-card-text>
-				<h2>Welcome to Flamechat!</h2>
-				<form @submit.prevent="enterChat">
-					<v-text-field autocomplete="off" type="text" name="name" v-model="name" label="Username"></v-text-field>
-					<v-checkbox v-model="terms" label="I have read and accepted the Terms and Conditions"></v-checkbox>
-					<v-btn flat router to="/terms">View Terms and Conditions</v-btn><br>
-					<p style="color: #F44336;" v-if="feedback">{{ feedback }}</p>
-					<v-btn type="submit">Enter Chat</v-btn>
-				</form>
+				<h2>Welcome to Flamechat!</h2><br><br>
+				<h1 class="display-4 red--text font-weight-bold">:(</h1><br><br>
+				<p class="headline font-weight-light">Flamechat is down.<br>We are actively trying to repair it.</p>
 			</v-card-text>
 		</v-card>
 	</div>

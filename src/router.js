@@ -14,6 +14,7 @@ import Scorecard from './views/Scorecard'
 import Support from './views/Support'
 import PageNotFound from './views/404'
 import News from './views/News'
+import Satellite from './views/Satellite'
 
 Vue.use(Router)
 
@@ -97,6 +98,11 @@ export default new Router({
 			path: '/paradox',
 			name: 'News',
 			component: News
+		},
+		{
+			path: '/satellite',
+			name: 'Satellite',
+			component: Satellite
 		},
 		{
 			path:'*',

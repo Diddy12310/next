@@ -68,14 +68,15 @@ export default {
 			drawer: false,
 			time: null,
 			links: [
-				{ text: 'Home', route: '/home', icon: 'home' },
-				{ text: 'Flamechat', route: '/flamechat', icon: 'forum' },
-				{ text: 'Hex', route: '/hex', icon: 'folder_shared' },
-				{ text: 'Drawer', route: '/drawer', icon: 'folder' },
-				{ text: 'Launchpad', route: '/launchpad', icon: 'account_circle' },
-				{ text: 'Bookshelf', route: '/bookshelf', icon: 'book' },
-				{ text: 'The Paradox', route: '/paradox', icon: 'language' },
-				{ text: 'Scorecard', route: '/scorecard', icon: 'live_tv' }
+				{ text: 'Home', route: '/home' },
+				{ text: 'Flamechat', route: '/flamechat' },
+				{ text: 'Hex', route: '/hex' },
+				{ text: 'Drawer', route: '/drawer' },
+				{ text: 'Launchpad', route: '/launchpad' },
+				{ text: 'Bookshelf', route: '/bookshelf' },
+				{ text: 'The Paradox', route: '/paradox' },
+				{ text: 'Scorecard', route: '/scorecard' },
+				{ text: 'Satellite', route: '/satellite'}
 			]
 		}
 	},
