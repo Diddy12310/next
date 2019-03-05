@@ -33,12 +33,7 @@ export default {
         this.bookshelf.push(book)
       })
     })
-  },
-	methods: {
-		track() {
-			this.$ga.page(this.$router)
-		}
-	}
+  }
 }
 </script>
 

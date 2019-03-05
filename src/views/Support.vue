@@ -10,12 +10,7 @@ export default {
     return {
 
     }
-  },
-	methods: {
-		track() {
-			this.$ga.page(this.$router)
-		}
-	}
+  }
 }
 </script>
 

@@ -11,7 +11,7 @@
 						<v-radio label="Bot" color="#00796B" value="#00796B" v-if="name == 'Paradigm'"></v-radio>
           </v-radio-group>
 					<v-checkbox v-model="terms" label="I have read and accepted the Terms and Conditions"></v-checkbox>
-					<v-btn flat router to="/terms">View Terms and Conditions</v-btn><br>
+					<v-btn flat router to="/company/terms">View Terms and Conditions</v-btn><br>
 					<p style="color: #F44336;" v-if="feedback">{{ feedback }}</p>
 					<v-btn type="submit">Enter Chat</v-btn>
 				</form>
@@ -41,9 +41,6 @@ export default {
 			} else {
 				this.feedback = 'You must enter a name and accept the Terms and Conditions to join!'
 			}
-		},
-		track() {
-			this.$ga.page(this.$router)
 		}
 	},
 	created() {

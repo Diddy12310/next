@@ -1,10 +1,10 @@
 <template>
 	<div class="404">
 		<div style="text-align: center; padding-top: 15vh; width: 75%; margin: auto;">
-      <span class="blue--text" style="font-size: 125px; ">¯\_(ツ)_/¯</span>
-      <hr style="margin: 50px;">
-      <h2>Error 404: Page Not Found</h2>
-      <h4>Sorry, but you've hit a dead end.</h4>
+      <span class="blue--text font-weight-light text-uppercase display-4">¯\_(ツ)_/¯</span>
+			<v-divider style="width: 750px; margin: auto; margin-bottom: 25px; margin-top: 25px;"></v-divider>
+      <h4 class="display-1">Error 404: Page Not Found</h4>
+      <h5 class="headline" style="margin-top: 10px;">Sorry, but you've hit a dead end.</h5>
     </div>
 	</div>
 </template>

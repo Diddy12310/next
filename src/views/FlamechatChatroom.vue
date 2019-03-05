@@ -13,7 +13,7 @@
 			</v-card-text>
 
 			<v-card-actions>
-				<NewMessage class="new-message" :name="name" :color="color" />
+				<NewMessage :name="name" :color="color" />
 			</v-card-actions>
 		</v-card>
 	</div>
@@ -52,18 +52,19 @@ export default {
 				}
 			})
 		})
-	},
-	methods: {
-		track() {
-			this.$ga.page(this.$router)
-		}
 	}
 }
 </script>
 
-<style>
+<style scoped>
 .new-message {
 	width: 100%;
+	position: relative;
+	bottom: -12px;
+}
+
+.v-card__text {
+	height: 100%;
 }
 
 .chat-card {
@@ -100,8 +101,7 @@ export default {
 }
 
 .messages {
-	max-height: 450px;
-	min-height: 450px;
+	height: calc(100vh - 250px);
 	overflow: auto;
 }
 

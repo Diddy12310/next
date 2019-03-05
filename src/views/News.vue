@@ -33,12 +33,7 @@ export default {
         this.news.push(item)
       })
     })
-  },
-	methods: {
-		track() {
-			this.$ga.page(this.$router)
-		}
-	}
+  }
 }
 </script>
 

@@ -3,9 +3,9 @@
 
 		<v-toolbar app style="background: linear-gradient(to right, #542478 0%, #011949 100%);">
 			<v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
-			<v-toolbar-title><img style="height: 55px; top: 5px; position: relative;" src="./assets/paradigmlogo.png"></v-toolbar-title>
+			<v-toolbar-title><img style="height: 45px; top: 5px; position: relative;" src="./assets/paradigmlogo.png"></v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-toolbar-items>
+			<v-toolbar-items class="hidden-xs-only">
 				<h6 class="clock title font-weight-light">{{ time }}</h6>
 			</v-toolbar-items>
 		</v-toolbar>

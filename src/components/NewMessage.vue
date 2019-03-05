@@ -7,6 +7,8 @@
 			<v-text-field class="message" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field>
 			<p style="color: #F44336;" v-if="feedback">{{ feedback }}</p>
 		</form>
+
+		<v-snackbar v-model="snackbar" bottom left timeout="6000">{{ snackbarMessage }}</v-snackbar>
 	</div>
 </template>
 
@@ -19,7 +21,8 @@ export default {
 	data() {
 		return {
 			newMessage: null,
-			feedback: null
+			feedback: null,
+			snackbar: false
 		}
 	},
 	methods: {
@@ -32,7 +35,11 @@ export default {
 					timestamp: Date.now()
 				}).catch(err => {
 					console.log(err)
+					this.snackbarMessage = 'Your message did not send successfully.'
 				})
+				this.snackbarMessage = 'Your message sent successfully.'
+				this.snackbar = true
+				this.$ga.event('Flamechat', this.name + ' sent ' + this.newMessage)
 				this.newMessage = null
 				this.feedback = null
 			} else {
