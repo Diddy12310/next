@@ -24,12 +24,17 @@
 
 <script>
 export default {
-    name: 'Notice',
-    data() {
-        return {
+  name: 'Notice',
+  data() {
+    return {
 
-        }
     }
+  },
+	methods: {
+		track() {
+			this.$ga.page(this.$router)
+		}
+	}
 }
 </script>
 

@@ -27,19 +27,19 @@
             <v-list-tile-title class="font-weight-black">Company</v-list-tile-title>
           </v-list-tile>
 
-					<v-list-tile router to="/support" :ripple="{ class: 'white--text' }">
+					<v-list-tile router to="/company/support" :ripple="{ class: 'white--text' }">
 						<v-list-tile-title class="white--text font-weight-light">Support</v-list-tile-title>
 					</v-list-tile>
 
-					<v-list-tile router to="/notice" :ripple="{ class: 'white--text' }">
+					<v-list-tile router to="/company/notice" :ripple="{ class: 'white--text' }">
 						<v-list-tile-title class="white--text font-weight-light">Notice</v-list-tile-title>
 					</v-list-tile>
 
-					<v-list-tile router to="/changelog" :ripple="{ class: 'white--text' }">
+					<v-list-tile router to="/company/changelog" :ripple="{ class: 'white--text' }">
 						<v-list-tile-title class="white--text font-weight-light">Changelog</v-list-tile-title>
 					</v-list-tile>
 
-					<v-list-tile router to="/terms" :ripple="{ class: 'white--text' }">
+					<v-list-tile router to="/company/terms" :ripple="{ class: 'white--text' }">
 						<v-list-tile-title class="white--text font-weight-light">Terms</v-list-tile-title>
 					</v-list-tile>
 

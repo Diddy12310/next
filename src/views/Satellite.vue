@@ -12,6 +12,11 @@ export default {
 		return {
 			address: 'https://www.bing.com/'
 		}
+	},
+	methods: {
+		track() {
+			this.$ga.page(this.$router)
+		}
 	}
 }
 </script>
@@ -20,6 +25,7 @@ export default {
 div.satellite {
 	height: 100%;
 	width: 100%;
+	margin: 16px;
 }
 
 embed {

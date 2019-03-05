@@ -4,6 +4,12 @@ import router from './router'
 import './plugins/vuetify'
 import VueChatScroll from 'vue-chat-scroll'
 import VueFriendlyIframe from 'vue-friendly-iframe';
+import VueAnalytics from 'vue-analytics'
+
+Vue.use(VueAnalytics, {
+	id: 'UA-52752236-3',
+	router
+})
 
 Vue.component('vue-friendly-iframe', VueFriendlyIframe);
 Vue.config.productionTip = false

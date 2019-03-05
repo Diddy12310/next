@@ -50,17 +50,17 @@ export default new Router({
 			}
 		},
     {
-      path: '/changelog',
+      path: '/company/changelog',
       name: 'Changelog',
       component: Changelog
     },
     {
-      path: '/terms',
+      path: '/company/terms',
       name: 'Terms',
       component: Terms
     },
     {
-      path: '/notice',
+      path: '/company/notice',
       name: 'Notice',
       component: Notice
 		},
@@ -90,7 +90,7 @@ export default new Router({
 			component: Scorecard
 		},
 		{
-			path: '/support',
+			path: '/company/support',
 			name: 'Support',
 			component: Support
 		},

@@ -15,7 +15,7 @@ import db from '@/firebase/init'
 
 export default {
 	name: 'NewMessage',
-	props: ['name'],
+	props: ['name', 'color'],
 	data() {
 		return {
 			newMessage: null,
@@ -28,6 +28,7 @@ export default {
 				db.collection('messages').add({
 					name: this.name,
 					content: this.newMessage,
+					color: this.color,
 					timestamp: Date.now()
 				}).catch(err => {
 					console.log(err)

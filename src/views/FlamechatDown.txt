@@ -1,0 +1,2 @@
+<h1 class="display-4 red--text font-weight-bold">:(</h1><br><br>
+<p class="headline font-weight-light">Flamechat is down.<br>We are actively trying to repair it.</p>

@@ -37,7 +37,12 @@ export default {
         this.changelog.push(change)
       })
     })
-  }
+  },
+	methods: {
+		track() {
+			this.$ga.page(this.$router)
+		}
+	}
 }
 </script>
 

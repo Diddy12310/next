@@ -14,6 +14,11 @@ export default {
 	},
 	components: {
 		BlankSpace
+	},
+	methods: {
+		track() {
+			this.$ga.page(this.$router)
+		}
 	}
 }
 </script>

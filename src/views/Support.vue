@@ -1,16 +1,21 @@
 <template>
-    <div class="support">
+  <div class="support">
 
-    </div>
+  </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
+  data() {
+    return {
 
-        }
     }
+  },
+	methods: {
+		track() {
+			this.$ga.page(this.$router)
+		}
+	}
 }
 </script>
 

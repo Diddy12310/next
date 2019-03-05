@@ -29,6 +29,9 @@ export default {
 	methods: {
 		reload() {
 			location.reload()
+		},
+		track() {
+			this.$ga.page(this.$router)
 		}
 	},
   created() {

@@ -77,7 +77,7 @@
           As a user of the Site, you agree not to:
           <br>
           1. Systematically retrieve data or other content from the Site to create or compile, directly or indirectly, a collection,
-          compilation, database, or directory wRhout written permission from us.
+          compilation, database, or directory without written permission from us.
           <br>
           2. Make any unauthorized use ofthe Site, including collecting usemames and/or email addresses of users by electronic
           or other means for the purpose of sending unsolicited email, or creating user accounts by automated means or under
@@ -628,23 +628,6 @@
           them. you hereby waive any and all defenses you may have based on the electronic form Of these Terms of use and the lack
           of signing by the parties hereto to execute these Terms of Use.
         </p>
-        <h4>Contact Us</h4>
-        <p>
-          In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us
-          at:
-          <br><br>
-          Paradigm Development, Inc.
-          <br>
-          228 Sharon Drive,
-          <br>
-          Pittsburgh, PA 15221,
-          <br>
-          United States of America
-          <br>
-          Phone: (412) 427-0411
-          <br>
-          <a href="mailto:aidanliddy@outlook.com">aidanliddy@outlook.com</a>
-        </p>
       </div>
     </div>
 </template>
@@ -656,7 +639,12 @@ export default {
     return {
 
     }
-  }
+  },
+	methods: {
+		track() {
+			this.$ga.page(this.$router)
+		}
+	}
 }
 </script>
 

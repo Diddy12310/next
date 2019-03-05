@@ -5,7 +5,7 @@
 				<ul class="messages" v-chat-scroll>
 					<p v-if="!messages">There are no messages posted on this room.</p>
 					<li v-for="message in messages" :key="message.id">
-						<span style="color: #FF5722; font-size: 22.5px;"><strong>{{ message.name }}</strong></span>
+						<span :style="{ color: message.color }" class="name"><strong>{{ message.name }}</strong></span>
 						<span> {{ message.content }}</span>
 						<span class="time">{{ message.timestamp }}</span>
 					</li>
@@ -13,7 +13,7 @@
 			</v-card-text>
 
 			<v-card-actions>
-				<NewMessage class="new-message" :name="name"/>
+				<NewMessage class="new-message" :name="name" :color="color" />
 			</v-card-actions>
 		</v-card>
 	</div>
@@ -26,7 +26,7 @@ import NewMessage from './../components/NewMessage'
 
 export default {
 	name: 'FlamechatChatroom',
-	props: ['name'],
+	props: ['name', 'color'],
 	components: {
 		NewMessage
 	},
@@ -46,11 +46,17 @@ export default {
 						id: doc.id,
 						name: doc.data().name,
 						content: doc.data().content,
+						color: doc.data().color,
 						timestamp: moment(doc.data().timestamp).format('lll')
 					})
 				}
 			})
 		})
+	},
+	methods: {
+		track() {
+			this.$ga.page(this.$router)
+		}
 	}
 }
 </script>
@@ -61,8 +67,12 @@ export default {
 }
 
 .chat-card {
-	margin: 16px;
+	margin-top: 16px;
+	margin-bottom: 16px;
+	margin-left: auto;
+	margin-right: auto;
 	width: 750px;
+	height: 100%;
 }
 
 .chat h2 {
@@ -93,5 +103,9 @@ export default {
 	max-height: 450px;
 	min-height: 450px;
 	overflow: auto;
+}
+
+.chat .name {
+	font-size: 22.5px;
 }
 </style>
