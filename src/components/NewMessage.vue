@@ -8,7 +8,7 @@
 			<p style="color: #F44336;" v-if="feedback">{{ feedback }}</p>
 		</form>
 
-		<v-snackbar v-model="snackbar" bottom left timeout="6000">{{ snackbarMessage }}</v-snackbar>
+		<!-- <v-snackbar v-model="snackbar" bottom left timeout="6000">{{ snackbarMessage }}</v-snackbar> -->
 	</div>
 </template>
 
@@ -17,19 +17,19 @@ import db from '@/firebase/init'
 
 export default {
 	name: 'NewMessage',
-	props: ['name', 'color'],
+	props: ['username', 'color'],
 	data() {
 		return {
 			newMessage: null,
 			feedback: null,
-			snackbar: false
+			snackbar: null
 		}
 	},
 	methods: {
 		addMessage() {
 			if(this.newMessage) {
 				db.collection('messages').add({
-					name: this.name,
+					name: this.username,
 					content: this.newMessage,
 					color: this.color,
 					timestamp: Date.now()
@@ -39,7 +39,7 @@ export default {
 				})
 				this.snackbarMessage = 'Your message sent successfully.'
 				this.snackbar = true
-				this.$ga.event('Flamechat', this.name + ' sent ' + this.newMessage)
+				this.$ga.event('Flamechat', this.username + ' sent ' + this.newMessage)
 				this.newMessage = null
 				this.feedback = null
 			} else {

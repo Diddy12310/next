@@ -26,7 +26,5 @@ div.satellite {
 embed {
 	height: calc(100vh - 202.5px);
 	width: 100%;
-	margin: 0;
-	padding-bottom: 0;
 }
 </style>

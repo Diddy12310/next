@@ -1,5 +1,11 @@
 <template>
 	<div class="chat">
+		<v-toolbar dense color="deep-orange darken-2">
+      <v-toolbar-title>Flamechat</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<v-btn flat @click="signOut()">Sign Out</v-btn>
+    </v-toolbar>
+
 		<v-card class="chat-card">
 			<v-card-text>
 				<ul class="messages" v-chat-scroll>
@@ -23,6 +29,7 @@
 import db from '@/firebase/init'
 import moment from 'moment'
 import NewMessage from './../components/NewMessage'
+import firebase from 'firebase'
 
 export default {
 	name: 'FlamechatChatroom',
@@ -52,6 +59,17 @@ export default {
 				}
 			})
 		})
+	},
+	methods: {
+		signOut() {
+			firebase.auth().signOut().then(() => {
+				alert('Signed out.')
+				this.$router.push({ name: 'Flamechat' })
+			}).catch(function(error) {
+				console.log(error)
+			})
+		}
+
 	}
 }
 </script>
@@ -82,7 +100,7 @@ export default {
 }
 
 .chat span {
-	font-size: 1.4em;
+	font-size: 1.25em;
 }
 
 .chat ul {
@@ -97,15 +115,15 @@ export default {
 
 .chat .time {
 	display: block;
-	font-size: 1em;
+	font-size: .85em;
 }
 
 .messages {
-	height: calc(100vh - 250px);
+	height: calc(100vh - 300px);
 	overflow: auto;
 }
 
 .chat .name {
-	font-size: 22.5px;
+	font-size: 20px;
 }
 </style>
