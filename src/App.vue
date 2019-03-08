@@ -11,40 +11,43 @@
 		</v-toolbar>
 
 		<v-navigation-drawer v-model="drawer" app temporary floating>
-			<v-toolbar>
+			<v-toolbar fixed>
 				<v-toolbar-side-icon @click="drawer = !drawer"><v-icon>close</v-icon></v-toolbar-side-icon>
 				<v-toolbar-title>Menu</v-toolbar-title>
 			</v-toolbar>
+			
+			<v-content>
+				<v-list>
 
-      <v-list>
-
-        <v-list-tile v-for="link in links" :key="link.route" router :to="link.route" :ripple="{ class: 'white--text' }">
-          <v-list-tile-title class="white--text font-weight-light">{{ link.text }}</v-list-tile-title>
-        </v-list-tile>
-
-				<v-list-group value="true">
-          <v-list-tile slot="activator">
-            <v-list-tile-title class="font-weight-black">Company</v-list-tile-title>
-          </v-list-tile>
-
-					<v-list-tile router to="/company/support" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text font-weight-light">Support</v-list-tile-title>
+					<v-list-tile v-for="link in links" :key="link.route" router :to="link.route" :ripple="{ class: 'white--text' }">
+						<v-list-tile-title class="white--text font-weight-light">{{ link.text }}</v-list-tile-title>
 					</v-list-tile>
 
-					<v-list-tile router to="/company/notice" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text font-weight-light">Notice</v-list-tile-title>
-					</v-list-tile>
+					<v-list-group value="true">
+						<v-list-tile slot="activator">
+							<v-list-tile-title class="font-weight-black">Company</v-list-tile-title>
+						</v-list-tile>
 
-					<v-list-tile router to="/company/changelog" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text font-weight-light">Changelog</v-list-tile-title>
-					</v-list-tile>
+						<v-list-tile router to="/company/support" :ripple="{ class: 'white--text' }">
+							<v-list-tile-title class="white--text font-weight-light">Support</v-list-tile-title>
+						</v-list-tile>
 
-					<v-list-tile router to="/company/terms" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text font-weight-light">Terms</v-list-tile-title>
-					</v-list-tile>
+						<v-list-tile router to="/company/notice" :ripple="{ class: 'white--text' }">
+							<v-list-tile-title class="white--text font-weight-light">Notice</v-list-tile-title>
+						</v-list-tile>
 
-        </v-list-group>
-      </v-list>
+						<v-list-tile router to="/company/changelog" :ripple="{ class: 'white--text' }">
+							<v-list-tile-title class="white--text font-weight-light">Changelog</v-list-tile-title>
+						</v-list-tile>
+
+						<v-list-tile router to="/company/terms" :ripple="{ class: 'white--text' }">
+							<v-list-tile-title class="white--text font-weight-light">Terms</v-list-tile-title>
+						</v-list-tile>
+						
+					</v-list-group>
+
+				</v-list>
+			</v-content>
     </v-navigation-drawer>
 
 		<v-content>

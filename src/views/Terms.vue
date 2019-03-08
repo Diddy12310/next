@@ -1,7 +1,7 @@
 <template>
     <div class="terms">
 			<div class="title">
-				<h1 style="text-align: center; margin: 50px 50px 20px 50px;" class="display-3 font-weight-thin">TERMS OF SERVICE, USE, AND PRIVACY POLICY</h1>
+				<h1 style="text-align: center; margin: 50px 50px 20px 50px;" class="display-3 blue--text font-weight-thin text-uppercase">TERMS OF SERVICE, USE, AND PRIVACY POLICY</h1>
 				<h3 style="text-align: center;" class="display-1 font-weight-light">Paradigm Development, Inc.</h3>
 				<v-divider></v-divider>
 			</div>

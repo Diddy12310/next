@@ -1,9 +1,9 @@
 <template>
 	<div class="news">
-		<h1>The Paradox</h1>
-		<h3>Accuracy. Clarity. Legitimacy.</h3>
+		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin-top: 50px; text-align: center;">The Paradox</h1>
+		<h3 class="display-1 blue-grey--text font-weight-light text-uppercase font-italic" style="text-align: center; margin-bottom: 50px;">Accuracy. Clarity. Legitimacy.</h3>
 
-		<v-card v-for="item in news" :key="item.timestamp" style="width: 500px; margin: 20px auto">
+		<v-card v-for="item in news" :key="item.timestamp">
       <v-card-title primary-title>
         <div>
           <h3 class="headline mb-0">{{ item.title }}</h3>
@@ -44,5 +44,11 @@ export default {
 
 .detitem:last-of-type {
 	padding-bottom: 0px;
+}
+
+div.v-card {
+	max-width: 850px;
+	min-width: 400px;
+	margin: 20px auto;
 }
 </style>

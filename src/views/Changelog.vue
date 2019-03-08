@@ -1,18 +1,14 @@
 <template>
   <div class="changelog">
-  	<h1 class="display-3 font-weight-thin" style="margin: 50px;">CHANGELOG</h1>
+  	<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">CHANGELOG</h1>
 		<div class="card" v-for="change in changelog" :key="change.id">
 			<v-card>
 				<v-badge color="blue"><span slot="badge" v-if="change.beta">B</span><v-card-title primary-title><span class="headline">{{ change.title }}</span></v-card-title></v-badge>
 				
 				<v-card-text>
-					<v-list>
-						<v-list-tile v-for="(list, index) in change.body" :key="index">
-							<v-list-tile-content>
-								<v-list-tile-title>{{ list }}</v-list-tile-title>
-							</v-list-tile-content>
-						</v-list-tile>
-					</v-list>
+					<ul>
+						<li v-for="(list, index) in change.body" :key="index">{{ list }}</li>
+					</ul>
 				</v-card-text>
 			</v-card>
 			<div class="gap"></div>
@@ -22,6 +18,7 @@
 
 <script>
 import db from '@/firebase/init'
+
 export default {
   name:'Changelog',
   data() {
@@ -54,5 +51,10 @@ div.card {
 
 div.gap {
 	height: 16px;
+}
+
+li {
+	list-style: none;
+	padding-bottom: 10px;
 }
 </style>

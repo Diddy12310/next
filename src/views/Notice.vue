@@ -1,7 +1,7 @@
 <template>
   <div class="notice">
     <div style="padding-top: 50px; width: 75%; margin: auto;">
-      <span class="display-3 blue--text font-weight-thin">NOTICE</span>
+      <span class="display-3 blue--text font-weight-thin text-uppercase">NOTICE</span>
 			<v-divider style="margin: 25px 0px;"></v-divider>
       <h1 class="display-2 purple--text darken-1 font-weight-medium" style="margin-bottom: 25px;">This is beta software.</h1>
       <h2 class="headline font-weight-regular">There is no guarantee that this software will work.</h2>

@@ -77,7 +77,8 @@
 
 <script>
 import db from '@/firebase/init'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import moment from 'moment'
 import NewMessage from './../components/NewMessage'
 
@@ -90,7 +91,7 @@ export default {
 			feedback: null,
 			colors: [],
 			username: null,
-			email: null,
+			email: '',
 			password: null,
 			user: [],
 			messages: []
