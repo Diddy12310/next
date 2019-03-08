@@ -11,7 +11,7 @@
 						<h4 class="subheading">By {{ book.author }}</h4>
           </div>
         </v-card-title>
-
+				<v-divider></v-divider>
 				<v-card-text>
 					{{ book.summary }}
 				</v-card-text>
@@ -54,7 +54,20 @@ export default {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
 		grid-gap: 16px;
-		margin-bottom: 16px;
+		margin-bottom: 32px;
+	}
+}
+
+@media screen and (max-width: 1240px) {
+	div.bookshelf {
+		margin-bottom: 32px;
+	}
+
+	div.v-card__text {
+		margin-bottom: 30px;
+		margin-top: 30px;
+		position: relative;
+		bottom: 30px;
 	}
 }
 
@@ -64,19 +77,14 @@ h1 {
 
 div.v-card {
 	margin: 16px auto;
-	max-width: 400px;
+	max-width: 375px;
 	width: 400px;
 	height: 100%;
-}
-
-div.v-card__text {
-	position: relative;
-	bottom: 40px;
-	padding-top: 30px;
 }
 
 div.v-card__actions {
 	position: absolute;
 	bottom: 0px;
+	margin-top: 16px;
 }
 </style>
