@@ -36,7 +36,7 @@ export default {
     }
   },
   created() {
-    db.collection('bookshelf').get().then(snapshot => {
+    db.collection('bookshelf').orderBy("title", "asc").get().then(snapshot => {
       snapshot.forEach(doc => {
         let book = doc.data()
 				book.id = doc.id
