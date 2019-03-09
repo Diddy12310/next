@@ -1,15 +1,24 @@
 <template>
 	<div class="news">
 		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin-top: 50px; text-align: center;">The Paradox</h1>
-		<h3 class="display-1 blue-grey--text font-weight-light text-uppercase font-italic" style="text-align: center; margin-bottom: 50px;">Accuracy. Clarity. Legitimacy.</h3>
+		<h3 class="display-1 blue-grey--text font-weight-light text-uppercase font-italic" style="text-align: center; margin-bottom: 50px;">Accuracy. Transparency. Legitimacy.</h3>
 
 		<v-card v-for="item in news" :key="item.timestamp">
-      <v-card-title primary-title>
-        <div>
-          <h3 class="headline mb-0">{{ item.title }}</h3>
-          <div class="detitem" style="" v-for="(detitem, index) in item.detail" :key="index">{{ detitem }}</div>
-        </div>
-      </v-card-title>
+			<div v-if="item.uploaded">
+				<v-img :src="item.cover"></v-img>
+
+
+				<v-card-title primary-title>
+					<div>
+					<h3 class="headline mb-0">{{ item.title }}</h3>
+					<h4 class="subheading grey--text">{{ item.author }} | {{ item.timestamp }}</h4>
+					</div>
+				</v-card-title>
+				<v-divider></v-divider>
+				<v-card-text>
+					<div class="detitem" style="" v-for="(detitem, index) in item.detail" :key="index">{{ detitem }}</div>
+				</v-card-text>
+			</div>
     </v-card>
 
 	</div>
@@ -17,6 +26,7 @@
 
 <script>
 import db from '@/firebase/init'
+import moment from 'moment'
 
 export default {
 	name: 'News',
@@ -28,7 +38,8 @@ export default {
 	created() {
     db.collection('news').get().then(snapshot => {
       snapshot.forEach(doc => {
-        let item = doc.data()
+				let item = doc.data()
+				item.timestamp = moment(item.timestamp.miliseconds).format('LL')
         item.id = doc.id
         this.news.push(item)
       })
@@ -38,7 +49,7 @@ export default {
 </script>
 
 <style scoped>
-.detitem {
+ .detitem {
 	padding-bottom: 10px;
 }
 

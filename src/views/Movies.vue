@@ -1,22 +1,22 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">Bookshelf</h1>
-			<div class="bookshelf">
-				<v-card v-for="(book, index) in bookshelf" :key="index">
-					<v-img :src="book.cover"></v-img>
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">Movies</h1>
+			<div class="movies">
+				<v-card v-for="(movie, index) in movies" :key="index">
+					<v-img :src="movie.cover"></v-img>
 
 					<v-card-title primary-title>
 						<div>
-							<h3 class="headline mb-0">{{ book.title }}</h3>
-							<h4 class="subheading grey--text">By {{ book.author }}</h4>
+							<h3 class="headline mb-0">{{ movie.title }}</h3>
+							<h4 class="subheading grey--text">{{ movie.duration }}</h4>
 						</div>
 					</v-card-title>
 					<v-divider></v-divider>
-					<v-card-text>{{ book.summary }}</v-card-text>
+					<v-card-text>{{ movie.summary }}</v-card-text>
 
 					<v-card-actions>
-						<v-btn flat color="accent" :href="book.link">Read</v-btn>
+						<v-btn flat color="accent" :href="movie.link">Play</v-btn>
 					</v-card-actions>
 				</v-card>
 			</div>
@@ -30,19 +30,19 @@ import db from '@/firebase/init'
 import firebase from 'firebase'
 
 export default {
-  name: 'Bookshelf',
+  name: 'Movies',
   data() {
     return {
-			bookshelf: []
+			movies: []
     }
   },
   created() {
-    db.collection('bookshelf').orderBy("title", "asc").get().then(snapshot => {
+    db.collection('movies').orderBy("title", "asc").get().then(snapshot => {
       snapshot.forEach(doc => {
-        let book = doc.data()
-				book.id = doc.id
+        let movie = doc.data()
+				movie.id = doc.id
 				
-        this.bookshelf.push(book)
+        this.movies.push(movie)
       })
 		})
 	}
@@ -51,7 +51,7 @@ export default {
 
 <style scoped>
 @media screen and (min-width: 1240px) {
-	div.bookshelf {
+	div.movies {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
 		grid-gap: 16px;
@@ -60,7 +60,7 @@ export default {
 }
 
 @media screen and (max-width: 1240px) {
-	div.bookshelf {
+	div.movies {
 		margin-bottom: 32px;
 	}
 

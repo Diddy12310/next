@@ -17,13 +17,13 @@
 					<v-tabs-items>
 						<!-- Sign in tab -->
 						<v-tab-item>
-							<v-text-field autocomplete="off" type="email" name="email" v-model="email" label="Email"></v-text-field>
+							<v-text-field autocomplete="off" type="text" name="username" v-model="username" label="Username"></v-text-field>
 							<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password"></v-text-field>
 
 							<v-radio-group v-model="color" column>
 								<v-radio :label="color.label" :color="color.value" :value="color.value" v-for="color in colors" :key="color.value"></v-radio>
-								<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="email == 'aidanliddy@outlook.com'"></v-radio>
-								<v-radio label="Bot" color="#00796B" value="#00796B" v-if="email == 'paradigmdevelop@gmail.com'"></v-radio>
+								<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'Diddy12310'"></v-radio>
+								<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'Paradigm'"></v-radio>
 							</v-radio-group>
 
 							<v-btn @click="signIn()">Sign In</v-btn>
@@ -33,13 +33,13 @@
 						<!-- Sign up tab -->
 						<v-tab-item>
 							<!-- <v-text-field autocomplete="off" type="text" name="username" v-model="username" label="Username"></v-text-field> -->
-							<v-text-field autocomplete="off" type="email" name="email" v-model="email" label="Email"></v-text-field>
+							<v-text-field autocomplete="off" type="text" name="username" v-model="username" label="Username"></v-text-field>
 							<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password"></v-text-field>
 
 							<v-radio-group v-model="color" column>
 								<v-radio :label="color.label" :color="color.value" :value="color.value" v-for="color in colors" :key="color.value"></v-radio>
-								<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="email == 'aidanliddy@outlook.com'"></v-radio>
-								<v-radio label="Bot" color="#00796B" value="#00796B" v-if="email == 'paradigmdevelop@gmail.com'"></v-radio>
+								<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'Diddy12310'"></v-radio>
+								<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'Paradigm'"></v-radio>
 							</v-radio-group>
 
 							<v-checkbox v-model="terms" label="I have read and accepted the Terms and Conditions"></v-checkbox>
@@ -90,7 +90,7 @@ export default {
 			color: null,
 			feedback: null,
 			colors: [],
-			username: null,
+			username: '',
 			email: '',
 			password: null,
 			user: [],
@@ -102,14 +102,18 @@ export default {
 	},
 	methods: {
 		signUp() {
-			if(this.email && this.password && this.terms == true) {
-				firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => console.log(error.message))
+			if(this.username && this.password && this.terms == true) {
+				firebase.auth().createUserWithEmailAndPassword(this.username + '@theparadigm.ga', this.password).catch(error => this.feedback = error.message)
 			} else {
 				this.feedback = 'Please fill in the required fields.'
 			}
 		},
 		signIn() {
-			firebase.auth().signInWithEmailAndPassword(this.email, this.password).catch(error => console.log(error.message))
+			if(this.username && this.password && this.color) {
+				firebase.auth().signInWithEmailAndPassword(this.username + '@theparadigm.ga', this.password).catch(error => this.feedback = error.message)
+			} else {
+				this.feedback = 'Please fill in the required fields.'
+			}
 		},
 		signOut() {
 			firebase.auth().signOut()
@@ -149,7 +153,6 @@ export default {
 			var scrnChat = document.querySelector('.chat-card')
 
 			if(firebaseUser) {
-				this.username = this.email.substring(0, this.email.lastIndexOf("@"))
 				btnLogout.classList.remove('hidden')
 				scrnWelcome.classList.add('hidden')
 				scrnChat.classList.remove('hidden')

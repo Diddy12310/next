@@ -15,6 +15,7 @@ import Support from './views/Support'
 import PageNotFound from './views/404'
 import News from './views/News'
 import Satellite from './views/Satellite'
+import Movies from './views/Movies'
 
 Vue.use(Router)
 
@@ -103,6 +104,11 @@ export default new Router({
 			path: '/satellite',
 			name: 'Satellite',
 			component: Satellite
+		},
+		{
+			path: '/movies',
+			name: 'Movies',
+			component: Movies
 		},
 		{
 			path:'*',
