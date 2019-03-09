@@ -103,14 +103,22 @@ export default {
 	methods: {
 		signUp() {
 			if(this.username && this.password && this.terms == true) {
-				firebase.auth().createUserWithEmailAndPassword(this.username + '@theparadigm.ga', this.password).catch(error => this.feedback = error.message)
+				firebase.auth().createUserWithEmailAndPassword(this.username + '@theparadigm.ga', this.password).catch(error => {
+					if(error.code == 'auth/invalid-email') {
+						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
+					}
+				})
 			} else {
 				this.feedback = 'Please fill in the required fields.'
 			}
 		},
 		signIn() {
 			if(this.username && this.password && this.color) {
-				firebase.auth().signInWithEmailAndPassword(this.username + '@theparadigm.ga', this.password).catch(error => this.feedback = error.message)
+				firebase.auth().signInWithEmailAndPassword(this.username + '@theparadigm.ga', this.password).catch(error => {
+					if(error.code == 'auth/invalid-email') {
+						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
+					}
+				})
 			} else {
 				this.feedback = 'Please fill in the required fields.'
 			}
@@ -170,7 +178,7 @@ export default {
 <style scoped>
 .welcome-card {
 	margin: 100px auto;
-	width: 500px;
+	width: 55vw;
 	text-align: center;
 }
 
@@ -193,7 +201,7 @@ export default {
 	margin-bottom: 16px;
 	margin-left: auto;
 	margin-right: auto;
-	width: 750px;
+	width: 75vw;
 	height: 100%;
 }
 

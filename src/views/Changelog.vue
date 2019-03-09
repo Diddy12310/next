@@ -3,8 +3,12 @@
   	<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">CHANGELOG</h1>
 		<div class="card" v-for="change in changelog" :key="change.id">
 			<v-card>
-				<v-badge color="blue"><span slot="badge" v-if="change.beta">B</span><v-card-title primary-title><span class="headline">{{ change.title }}</span></v-card-title></v-badge>
-				
+				<v-card-title primary-title>
+					<div>
+						<h3 class="headline mb-0">{{ change.title }}</h3>
+					</div>
+				</v-card-title>
+				<v-divider></v-divider>
 				<v-card-text>
 					<ul>
 						<li v-for="(list, index) in change.body" :key="index">{{ list }}</li>
@@ -56,5 +60,13 @@ div.gap {
 li {
 	list-style: none;
 	padding-bottom: 10px;
+	padding-left: 0;
+	margin-left: 0;
+	position: relative;
+	left: -23px;
+}
+
+li:last-of-type {
+	padding-bottom: 0;
 }
 </style>

@@ -7,11 +7,10 @@
 			<div v-if="item.uploaded">
 				<v-img :src="item.cover"></v-img>
 
-
 				<v-card-title primary-title>
 					<div>
-					<h3 class="headline mb-0">{{ item.title }}</h3>
-					<h4 class="subheading grey--text">{{ item.author }} | {{ item.timestamp }}</h4>
+						<h3 class="headline mb-0">{{ item.title }}</h3>
+						<h4 class="subheading grey--text">{{ item.author }} | {{ item.timestamp }}</h4>
 					</div>
 				</v-card-title>
 				<v-divider></v-divider>

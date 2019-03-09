@@ -1,17 +1,22 @@
 <template>
 	<div class="index">
-  	<div class="home">
-      <h2 class="display-3 font-weight-thin text-uppercase" style="position: relative; text-align: center; margin: auto; padding-top: 15%;">Welcome to<br>the future</h2>
-			<v-btn router to="flamechat" style="margin-top: 20px;" color="primary">Open Flamechat</v-btn>
-  	</div>
+		<v-parallax dark :src="homebg" class="paralax">
+			<div class="home">
+				<h2 class="display-3 font-weight-thin text-uppercase" style="position: relative; text-align: center; margin: auto; padding-top: 30vh;">Welcome to<br>the future</h2>
+				<v-btn router to="flamechat" style="margin-top: 20px;" color="primary">Open Flamechat</v-btn>
+			</div>
+		</v-parallax>
 		<h3 class="display-2" style="text-align: center; margin-top: 20px;">Announcements</h3>
-		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 500px; margin: 20px auto">
+		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 60vw; margin: 20px auto">
 			<v-card-title primary-title>
 				<div>
 					<h3 class="headline mb-0">{{ announcement.title }}</h3>
-					<div v-for="item in announcement.detail" :key="item" class="item">{{ item }}</div>
 				</div>
 			</v-card-title>
+			<v-divider></v-divider>
+			<v-card-text>
+				<div v-for="item in announcement.detail" :key="item" class="item">{{ item }}</div>
+			</v-card-text>
 		</v-card>
 	</div>
 </template>
@@ -23,12 +28,8 @@ export default {
   name: 'Home',
   data() {
     return {
-			announcements: []
-		}
-  },
-	methods: {
-		reload() {
-			location.reload()
+			announcements: [],
+			homebg: 'https://firebasestorage.googleapis.com/v0/b/paradigm-a1bc9.appspot.com/o/home_bg.jpg?alt=media&token=5c022d32-c59f-4e35-a6c9-34a5b998f1a0'
 		}
 	},
   created() {
@@ -45,11 +46,13 @@ export default {
 </script>
 
 <style scoped>
+.paralax {
+	height: 100% !important;
+}
+
 .home {
 	text-align: center;
 	height: calc(100vh - 56px);
-	background: url('./../assets/home_bg.jpg') center center;
-	background-attachment: fixed;
 }
 
 h1 {
@@ -57,6 +60,10 @@ h1 {
 }
 
 .item {
-	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.item:last-of-type {
+	padding-bottom: 0px;
 }
 </style>
