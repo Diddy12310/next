@@ -1,7 +1,7 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">Hex</h1>
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">The Homework Exchange</h1>
 			<div class="hex">
 				<v-card v-for="(hw, index) in hex" :key="index">
 
