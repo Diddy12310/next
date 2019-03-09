@@ -78,7 +78,8 @@ export default {
 				{ text: 'The Paradox', route: '/paradox' },
 				{ text: 'Scorecard', route: '/scorecard' },
 				{ text: 'Satellite', route: '/satellite'},
-				{ text: 'Movies', route: '/movies' }
+				{ text: 'Movies', route: '/movies' },
+				{ text: 'Music', route: '/music' }
 			]
 		}
 	},

@@ -16,6 +16,7 @@ import PageNotFound from './views/404'
 import News from './views/News'
 import Satellite from './views/Satellite'
 import Movies from './views/Movies'
+import Music from './views/Music'
 
 Vue.use(Router)
 
@@ -109,6 +110,11 @@ export default new Router({
 			path: '/movies',
 			name: 'Movies',
 			component: Movies
+		},
+		{
+			path: '/music',
+			name: 'Music',
+			component: Music
 		},
 		{
 			path:'*',

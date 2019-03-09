@@ -9,7 +9,7 @@
 					<v-card-title primary-title>
 						<div>
 							<h3 class="headline mb-0">{{ hw.title }}</h3>
-							<h4 class="subheading grey--text">{{ hw.date }} | {{ hw.cost }}</h4>
+							<h4 class="subheading grey--text">{{ hw.date }}&nbsp;&nbsp;|&nbsp;&nbsp;{ hw.cost }}</h4>
 						</div>
 					</v-card-title>
 					<v-divider></v-divider>
