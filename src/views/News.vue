@@ -39,7 +39,6 @@ export default {
     db.collection('news').get().then(snapshot => {
       snapshot.forEach(doc => {
 				let item = doc.data()
-				item.timestamp = moment(item.timestamp.miliseconds).format('LL')
         item.id = doc.id
         this.news.push(item)
       })
