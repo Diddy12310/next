@@ -1,7 +1,7 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">Bookshelf</h1>
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px;">Bookshelf</h1>
 			<div class="bookshelf">
 				<v-card v-for="(book, index) in bookshelf" :key="index">
 					<v-img :src="book.cover"></v-img>

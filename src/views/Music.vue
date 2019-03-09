@@ -1,7 +1,7 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">Music</h1>
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px;">Music</h1>
 			<div class="music">
 				<v-card v-for="(item, index) in music" :key="index">
 					<v-img :src="item.cover"></v-img>

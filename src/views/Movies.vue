@@ -1,7 +1,7 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">Movies</h1>
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px;">Movies</h1>
 			<div class="movies">
 				<v-card v-for="(movie, index) in movies" :key="index">
 					<v-img :src="movie.cover"></v-img>
