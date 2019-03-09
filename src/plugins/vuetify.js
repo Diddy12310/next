@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
-import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
+import 'vuetify/src/stylus/app.styl'
 
 Vue.use(Vuetify, {
   iconfont: 'md',
