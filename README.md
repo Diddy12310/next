@@ -6,12 +6,12 @@ Upon successful cloning of this repository, the following steps should be taken.
 npm install
 ```
 
-### Compiles for development
+#### Compiles for development
 ```
 npm run serve
 ```
 
-### Compiles for production
+#### Compiles for production
 ```
 npm run build
 ```
