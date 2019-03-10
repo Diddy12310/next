@@ -4,7 +4,7 @@
 
 		<div class="card" v-for="change in roadmap" :key="change.id">
 			<v-card>
-				<v-card-title primary-title>
+				<v-card-title primary-title :class="{ 'green--text': change.future, 'blue--text': change.beta }">
 					<div>
 						<h3 class="headline mb-0">{{ change.title }}</h3>
 					</div>
