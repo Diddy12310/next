@@ -1,4 +1,4 @@
-# Paradigm Next
+# Paradigm
 Upon successful cloning of this repository, the following steps should be taken.
 
 ## Project setup
