@@ -9,13 +9,14 @@
 					<v-card-title primary-title>
 						<div>
 							<h3 class="headline mb-0">{{ hw.title }}</h3>
-							<h4 class="subheading grey--text">{{ hw.date }}&nbsp;&nbsp;|&nbsp;&nbsp;{ hw.cost }}</h4>
+							<h4 class="subheading grey--text">{{ hw.date }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ hw.cost }}</h4>
 						</div>
 					</v-card-title>
 					<v-divider></v-divider>
 					<v-card-text>{{ hw.detail }}</v-card-text>
 					<v-card-actions>
-						<v-btn flat color="accent" :href="hw.buylink">Buy</v-btn>
+						<v-btn v-if="hw.available" flat color="accent" :href="hw.link">Buy</v-btn>
+						<span v-if="!hw.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
 					</v-card-actions>
 				</v-card>
 			</div>

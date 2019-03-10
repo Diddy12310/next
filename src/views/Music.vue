@@ -1,7 +1,7 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px;">Music</h1>
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px 0px 50px 0px;">Music</h1>
 			<div class="music">
 				<v-card v-for="(item, index) in music" :key="index">
 					<v-img :src="item.cover"></v-img>
@@ -17,11 +17,10 @@
 					<v-card-text></v-card-text>
 
 					<v-card-actions>
-						<audio controls class="control">
+						<span v-if="!item.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
+						<audio controls class="control" v-if="item.available">
 							<source :src="item.link" type='audio/mp4'>
-							<!-- The next two lines are only executed if the browser doesn't support MP4 files -->
 							<source :src="item.link" type='audio/ogg; codecs=vorbis'>
-							<!-- The next line will only be executed if the browser doesn't support the <audio> tag-->
 							<p>Your user agent does not support the HTML5 Audio element.</p>
 						</audio>
 					</v-card-actions>

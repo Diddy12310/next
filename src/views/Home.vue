@@ -29,7 +29,8 @@ export default {
   data() {
     return {
 			announcements: [],
-			homebg: 'https://firebasestorage.googleapis.com/v0/b/paradigm-a1bc9.appspot.com/o/home_bg.jpg?alt=media&token=5c022d32-c59f-4e35-a6c9-34a5b998f1a0'
+			homebg: 'https://firebasestorage.googleapis.com/v0/b/paradigm-a1bc9.appspot.com/o/home_bg.jpg?alt=media&token=5c022d32-c59f-4e35-a6c9-34a5b998f1a0',
+			page: 1
 		}
 	},
   created() {
@@ -65,5 +66,10 @@ h1 {
 
 .item:last-of-type {
 	padding-bottom: 0px;
+}
+
+.v-parallax {
+	background: url('./../assets/home_bg.jpg') center center;
+	background-attachment: fixed;
 }
 </style>

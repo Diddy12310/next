@@ -1,7 +1,8 @@
 <template>
   <div class="changelog">
-  	<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">CHANGELOG</h1>
-		<div class="card" v-for="change in changelog" :key="change.id">
+  	<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">Roadmap</h1>
+
+		<div class="card" v-for="change in roadmap" :key="change.id">
 			<v-card>
 				<v-card-title primary-title>
 					<div>
@@ -24,10 +25,10 @@
 import db from '@/firebase/init'
 
 export default {
-  name:'Changelog',
+  name:'Roadmap',
   data() {
     return {
-      changelog: []
+      roadmap: []
     }
   },
   created() {
@@ -35,7 +36,7 @@ export default {
       snapshot.forEach(doc => {
         let change = doc.data()
         change.id = doc.id
-        this.changelog.push(change)
+        this.roadmap.push(change)
       })
     })
   }

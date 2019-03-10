@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home'
 import Flamechat from './views/Flamechat'
 import FlamechatChatroom from './views/FlamechatChatroom'
-import Changelog from './views/Changelog'
+import Roadmap from './views/Roadmap'
 import Terms from './views/Terms'
 import Notice from './views/Notice'
 import Bookshelf from './views/Bookshelf'
@@ -52,9 +52,9 @@ export default new Router({
 			}
 		},
     {
-      path: '/company/changelog',
-      name: 'Changelog',
-      component: Changelog
+      path: '/company/roadmap',
+      name: 'Roadmap',
+      component: Roadmap
     },
     {
       path: '/company/terms',

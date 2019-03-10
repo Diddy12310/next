@@ -1,7 +1,7 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px;">Movies</h1>
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px 0px 50px 0px;">Movies</h1>
 			<div class="movies">
 				<v-card v-for="(movie, index) in movies" :key="index">
 					<v-img :src="movie.cover"></v-img>
@@ -16,12 +16,12 @@
 					<v-card-text>{{ movie.summary }}</v-card-text>
 
 					<v-card-actions>
-						<v-btn flat color="accent" :href="movie.link">Play</v-btn>
+						<v-btn v-if="movie.available" flat color="accent" :href="movie.link">Watch</v-btn>
+						<span v-if="!movie.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
 					</v-card-actions>
 				</v-card>
 			</div>
 		</v-container>
-
   </div>
 </template>
 

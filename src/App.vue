@@ -6,7 +6,7 @@
 			<v-toolbar-title><img style="height: 45px; top: 5px; position: relative;" src="./assets/paradigmlogo.png"></v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-toolbar-items class="hidden-xs-only">
-				<h6 class="clock title font-weight-light">{{ time }}</h6>
+				<h6 class="clock title font-weight-light">{{ version }}</h6>
 			</v-toolbar-items>
 		</v-toolbar>
 
@@ -35,8 +35,8 @@
 						<v-list-tile-title class="white--text font-weight-light">Notice</v-list-tile-title>
 					</v-list-tile>
 
-					<v-list-tile router to="/company/changelog" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text font-weight-light">Changelog</v-list-tile-title>
+					<v-list-tile router to="/company/roadmap" :ripple="{ class: 'white--text' }">
+						<v-list-tile-title class="white--text font-weight-light">Roadmap</v-list-tile-title>
 					</v-list-tile>
 
 					<v-list-tile router to="/company/terms" :ripple="{ class: 'white--text' }">
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import db from '@/firebase/init'
 
 export default {
 	data() {
@@ -80,11 +80,14 @@ export default {
 				{ text: 'Satellite', route: '/satellite'},
 				{ text: 'Movies', route: '/movies' },
 				{ text: 'Music', route: '/music' }
-			]
+			],
+			version: ''
 		}
 	},
 	created() {
-		this.time = moment(Date.now()).format('LL')
+		db.collection('meta').doc('version').get().then((doc) => {
+			this.version = doc.data().version
+		})
 	}
 }
 </script>
@@ -121,4 +124,14 @@ html {
   background: #555;
 }
 
+.error-card {
+	margin: auto;
+	padding: 16px;
+	text-align: center;
+}
+
+.error-card p {
+	margin: 0;
+	padding: 0;
+}
 </style>

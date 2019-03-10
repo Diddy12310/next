@@ -1,7 +1,7 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px;">Bookshelf</h1>
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px 0px 50px 0px;">Bookshelf</h1>
 			<div class="bookshelf">
 				<v-card v-for="(book, index) in bookshelf" :key="index">
 					<v-img :src="book.cover"></v-img>
@@ -16,7 +16,8 @@
 					<v-card-text>{{ book.summary }}</v-card-text>
 
 					<v-card-actions>
-						<v-btn flat color="accent" :href="book.link">Read</v-btn>
+						<v-btn v-if="book.available" flat color="accent" :href="book.link">Read</v-btn>
+						<span v-if="!book.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
 					</v-card-actions>
 				</v-card>
 			</div>
