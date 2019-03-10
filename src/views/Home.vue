@@ -29,8 +29,7 @@ export default {
   data() {
     return {
 			announcements: [],
-			homebg: 'https://firebasestorage.googleapis.com/v0/b/paradigm-a1bc9.appspot.com/o/home_bg.jpg?alt=media&token=5c022d32-c59f-4e35-a6c9-34a5b998f1a0',
-			page: 1
+			homebg: 'http://file.theparadigm.ga/img/home_bg.jpg'
 		}
 	},
   created() {

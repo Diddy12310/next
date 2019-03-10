@@ -15,7 +15,7 @@
 				</v-card-title>
 				<v-divider></v-divider>
 				<v-card-text>
-					<div class="detitem" style="" v-for="(detitem, index) in item.detail" :key="index">{{ detitem }}</div>
+					<div class="detitem" v-html="detitem" v-for="(detitem, index) in item.detail" :key="index"></div>
 				</v-card-text>
 			</div>
     </v-card>
