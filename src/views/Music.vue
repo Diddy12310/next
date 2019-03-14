@@ -1,7 +1,10 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px 0px 50px 0px;">Music</h1>
+			<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
+				<h1 class="display-3 blue--text font-weight-thin text-uppercase">Music</h1>
+				<h6 class="headline red--text font-weight-thin">Rights to the items listed below are reserved for their creators.</h6>
+			</div>
 			<div class="music">
 				<v-card v-for="(item, index) in music" :key="index">
 					<v-img :src="item.cover"></v-img>

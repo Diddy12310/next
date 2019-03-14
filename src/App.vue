@@ -17,7 +17,6 @@
 			</v-toolbar>
 			
 			<v-list>
-
 				<v-list-tile v-for="link in links" :key="link.route" router :to="link.route" :ripple="{ class: 'white--text' }">
 					<v-list-tile-title class="white--text font-weight-light">{{ link.text }}</v-list-tile-title>
 				</v-list-tile>
@@ -42,9 +41,7 @@
 					<v-list-tile router to="/company/terms" :ripple="{ class: 'white--text' }">
 						<v-list-tile-title class="white--text font-weight-light">Terms</v-list-tile-title>
 					</v-list-tile>
-					
 				</v-list-group>
-
 			</v-list>
     </v-navigation-drawer>
 

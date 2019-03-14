@@ -45,6 +45,8 @@
 							<v-checkbox v-model="terms" label="I have read and accepted the Terms and Conditions"></v-checkbox>
 							<v-btn flat router to="/company/terms">View Terms and Conditions</v-btn><br>
 
+							<p class="subheading red--text">Do not create more than one account.</p>
+
 							<v-btn @click="signUp()">Sign Up</v-btn>
 						</v-tab-item>
 					</v-tabs-items>
@@ -106,6 +108,8 @@ export default {
 				firebase.auth().createUserWithEmailAndPassword(this.username + '@theparadigm.ga', this.password).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
+					} else {
+						console.log(error.message)
 					}
 				})
 			} else {

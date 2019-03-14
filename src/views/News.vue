@@ -35,7 +35,7 @@ export default {
 		}
 	},
 	created() {
-    db.collection('news').get().then(snapshot => {
+    db.collection('news').orderBy("stamp", "desc").get().then(snapshot => {
       snapshot.forEach(doc => {
 				let item = doc.data()
         item.id = doc.id

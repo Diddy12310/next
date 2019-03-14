@@ -29,11 +29,11 @@ export default {
   data() {
     return {
 			announcements: [],
-			homebg: 'http://file.theparadigm.ga/img/home_bg.jpg'
+			homebg: 'http://relay.theparadigm.ga/img/home_bg.jpg'
 		}
 	},
   created() {
-		var dbRef = db.collection('announcements').orderBy('time', 'desc')
+		var dbRef = db.collection('announcements').orderBy('time', 'desc').limit(5)
     dbRef.get().then(snapshot => {
       snapshot.forEach(doc => {
         let announcement = doc.data()

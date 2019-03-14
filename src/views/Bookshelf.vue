@@ -1,11 +1,14 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px 0px 50px 0px;">Bookshelf</h1>
+			<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
+				<h1 class="display-3 blue--text font-weight-thin text-uppercase">Bookshelf</h1>
+				<h6 class="headline red--text font-weight-thin">Rights to the items listed below are reserved for their creators.</h6>
+			</div>
+
 			<div class="bookshelf">
 				<v-card v-for="(book, index) in bookshelf" :key="index">
 					<v-img :src="book.cover"></v-img>
-
 					<v-card-title primary-title>
 						<div>
 							<h3 class="headline mb-0">{{ book.title }}</h3>
@@ -14,7 +17,6 @@
 					</v-card-title>
 					<v-divider></v-divider>
 					<v-card-text>{{ book.summary }}</v-card-text>
-
 					<v-card-actions>
 						<v-btn v-if="book.available" flat color="accent" :href="book.link">Read</v-btn>
 						<span v-if="!book.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
