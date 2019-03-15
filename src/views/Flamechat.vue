@@ -62,8 +62,8 @@
 				<ul class="messages" v-chat-scroll>
 					<p v-if="!messages">There are no messages posted on this room.</p>
 					<li v-for="message in messages" :key="message.id">
-						<span :style="{ color: message.color }" class="name"><strong>{{ message.name }}</strong></span>
-						<span> {{ message.content }}</span>
+						<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
+						<span v-html="message.content"></span>
 						<span class="time">{{ message.timestamp }}</span>
 					</li>
 				</ul>
@@ -148,7 +148,6 @@ export default {
 				}
 			})
 		})
-
 
 		var dbRef = db.collection('colors')
 
@@ -235,7 +234,8 @@ export default {
 
 .messages {
 	height: calc(100vh - 300px);
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .chat-card .name {

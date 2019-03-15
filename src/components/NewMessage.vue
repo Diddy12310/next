@@ -5,10 +5,9 @@
         <v-icon>send</v-icon>
       </v-btn>
 			<v-text-field class="message" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field>
-			<p style="color: #F44336;" v-if="feedback">{{ feedback }}</p>
 		</form>
 
-		<!-- <v-snackbar v-model="snackbar" bottom left timeout="6000">{{ snackbarMessage }}</v-snackbar> -->
+		<v-snackbar v-model="snackbar" bottom left timeout="6000">{{ snackbarMessage }}</v-snackbar>
 	</div>
 </template>
 
@@ -21,13 +20,13 @@ export default {
 	data() {
 		return {
 			newMessage: null,
-			feedback: null,
-			snackbar: null
+			snackbar: null,
+			snackbarMessage: ''
 		}
 	},
 	methods: {
 		addMessage() {
-			if(this.newMessage) {
+			if(this.newMessage && this.username != '' && this.color != null) {
 				db.collection('messages').add({
 					name: this.username,
 					content: this.newMessage,
@@ -35,15 +34,16 @@ export default {
 					timestamp: Date.now()
 				}).catch(err => {
 					console.log(err)
-					this.snackbarMessage = 'Your message did not send successfully.'
+					this.snackbarMessage = 'Your message did not send successfully!'
+					this.snackbar = true
 				})
-				this.snackbarMessage = 'Your message sent successfully.'
+				this.snackbarMessage = 'Your message sent successfully!'
 				this.snackbar = true
 				this.$ga.event('Flamechat', this.username + ' sent ' + this.newMessage)
 				this.newMessage = null
-				this.feedback = null
 			} else {
-				this.feedback = 'You must enter a message in order to send one!'
+				this.snackbarMessage = 'Your message did not send sucessfully! Try signing out and back in.'
+				this.snackbar = true
 			}
 		}
 	}
