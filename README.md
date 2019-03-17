@@ -18,6 +18,9 @@ npm run build
 
 ## Links
 Vue.js: https://www.vuejs.org/
+
 Vuetify.js: https://www.vuetifyjs.com/
+
 Firebase: https://firebase.google.com/
+
 Deployed Site: https://www.theparadigm.ga/
