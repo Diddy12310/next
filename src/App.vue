@@ -41,6 +41,10 @@
 					<v-list-tile router to="/company/terms" :ripple="{ class: 'white--text' }">
 						<v-list-tile-title class="white--text font-weight-light">Terms</v-list-tile-title>
 					</v-list-tile>
+
+					<v-list-tile router to="/company/status" :ripple="{ class: 'white--text' }">
+						<v-list-tile-title class="white--text font-weight-light">System Status</v-list-tile-title>
+					</v-list-tile>
 				</v-list-group>
 			</v-list>
     </v-navigation-drawer>
@@ -69,14 +73,15 @@ export default {
 				{ text: 'Home', route: '/home' },
 				{ text: 'Flamechat', route: '/flamechat' },
 				{ text: 'Hex', route: '/hex' },
-				{ text: 'Drawer', route: '/drawer' },
-				{ text: 'Launchpad', route: '/launchpad' },
+				// { text: 'Drawer', route: '/drawer' },
+				// { text: 'Launchpad', route: '/launchpad' },
 				{ text: 'Bookshelf', route: '/bookshelf' },
 				{ text: 'The Paradox', route: '/paradox' },
-				{ text: 'Scorecard', route: '/scorecard' },
+				// { text: 'Scorecard', route: '/scorecard' },
 				{ text: 'Satellite', route: '/satellite'},
 				{ text: 'Movies', route: '/movies' },
-				{ text: 'Music', route: '/music' }
+				{ text: 'Music', route: '/music' },
+				{ text: 'Downloads', route: '/downloads' }
 			],
 			version: ''
 		}

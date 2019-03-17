@@ -17,6 +17,8 @@ import News from './views/News'
 import Satellite from './views/Satellite'
 import Movies from './views/Movies'
 import Music from './views/Music'
+import Downloads from './views/Downloads'
+import SystemStatus from './views/SystemStatus'
 
 Vue.use(Router)
 
@@ -115,6 +117,16 @@ export default new Router({
 			path: '/music',
 			name: 'Music',
 			component: Music
+		},
+		{
+			path: '/downloads',
+			name: 'Downloads',
+			component: Downloads
+		},
+		{
+			path: '/company/status',
+			name: 'System Status',
+			component: SystemStatus
 		},
 		{
 			path:'*',
