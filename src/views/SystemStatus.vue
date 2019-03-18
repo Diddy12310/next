@@ -2,10 +2,11 @@
 	<div class="system-status">
 		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px; text-align: center;">System Status</h1>
 		<div class="detail">
-			<p>Main Site: <span :class="{ ok: main == 'OK', down: main == 'Down' }">{{ main }}</span></p>
-			<p>Relay: <span :class="{ ok: relay == 'OK', down: relay == 'Down' }">{{ relay }}</span></p>
-			<p>Development Server: <span :class="{ ok: dev == 'OK', down: dev == 'Down' }">{{ dev }}</span></p>
-			<p>Electron: <span :class="{ ok: electron == 'OK', down: electron == 'Down' }">{{ electron }}</span></p>
+			<p>Main Site: <kbd :class="{ ok: main == 'OK', down: main == 'Down', maintenence: main == 'Maintenence' }">{{ main }}</kbd></p>
+			<p>Relay: <kbd :class="{ ok: relay == 'OK', down: relay == 'Down', maintenence: relay == 'Maintenence' }">{{ relay }}</kbd></p>
+			<p>Development Server: <kbd :class="{ ok: dev == 'OK', down: dev == 'Down', maintenence: dev == 'Maintenence' }">{{ dev }}</kbd></p>
+			<p>Neutron: <kbd :class="{ ok: neutron == 'OK', down: neutron == 'Down', maintenence: neutron == 'Maintenence' }">{{ neutron }}</kbd></p>
+			<p>Museum: <kbd :class="{ ok: museum == 'OK', down: museum == 'Down', maintenence: museum == 'Maintenence' }">{{ museum }}</kbd></p>
 		</div>
 	</div>
 </template>
@@ -20,7 +21,8 @@ export default {
 			main: '',
 			relay: '',
 			dev: '',
-			electron: ''
+			neutron: '',
+			museum: ''
 		}
 	},
 	created() {
@@ -28,7 +30,8 @@ export default {
 			this.main = doc.data().main
 			this.relay = doc.data().relay
 			this.dev = doc.data().dev
-			this.electron = doc.data().electron
+			this.neutron = doc.data().neutron
+			this.museum = doc.data().museum
 		})
 	}
 }
@@ -36,7 +39,7 @@ export default {
 
 <style scoped>
 div.detail {
-	width: 300px;
+	width: 350px;
 	margin: auto;
 }
 
@@ -48,13 +51,23 @@ p {
 
 .ok {
 	color: #4CAF50;
-	font-size: 30px;
+	font-size: 25px;
 	font-weight: bold;
 }
 
 .down {
 	color: #F44336;
-	font-size: 30px;
+	font-size: 25px;
 	font-weight: bold;
+}
+
+.maintenence {
+	color: #FF9800;
+	font-size: 25px;
+	font-weight: bold;
+}
+
+kbd {
+	margin: 5px;
 }
 </style>

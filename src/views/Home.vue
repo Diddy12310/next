@@ -29,7 +29,7 @@ export default {
   data() {
     return {
 			announcements: [],
-			homebg: 'http://relay.theparadigm.ga/img/home_bg.jpg'
+			homebg: 'http://relay.theparadigmdev.com/img/home_bg.jpg'
 		}
 	},
   created() {

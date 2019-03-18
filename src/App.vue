@@ -81,7 +81,7 @@ export default {
 				{ text: 'Satellite', route: '/satellite'},
 				{ text: 'Movies', route: '/movies' },
 				{ text: 'Music', route: '/music' },
-				{ text: 'Downloads', route: '/downloads' }
+				{ text: 'Neutron', route: '/neutron' }
 			],
 			version: ''
 		}
