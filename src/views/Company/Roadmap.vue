@@ -32,7 +32,7 @@ export default {
     }
   },
   created() {
-    db.collection('changelog').get().then(snapshot => {
+    db.collection('changelog').orderBy('order', 'desc').get().then(snapshot => {
       snapshot.forEach(doc => {
         let change = doc.data()
         change.id = doc.id

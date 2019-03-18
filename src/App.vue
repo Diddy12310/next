@@ -17,35 +17,30 @@
 			</v-toolbar>
 			
 			<v-list>
-				<v-list-tile v-for="link in links" :key="link.route" router :to="link.route" :ripple="{ class: 'white--text' }">
+				<v-list-tile v-for="link in apps" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
 					<v-list-tile-title class="white--text font-weight-light">{{ link.text }}</v-list-tile-title>
 				</v-list-tile>
 
-				<v-list-group value="true">
+				<v-list-group>
 					<v-list-tile slot="activator">
 						<v-list-tile-title class="font-weight-black">Company</v-list-tile-title>
 					</v-list-tile>
 
-					<v-list-tile router to="/company/support" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text font-weight-light">Support</v-list-tile-title>
-					</v-list-tile>
-
-					<v-list-tile router to="/company/notice" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text font-weight-light">Notice</v-list-tile-title>
-					</v-list-tile>
-
-					<v-list-tile router to="/company/roadmap" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text font-weight-light">Roadmap</v-list-tile-title>
-					</v-list-tile>
-
-					<v-list-tile router to="/company/terms" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text font-weight-light">Terms</v-list-tile-title>
-					</v-list-tile>
-
-					<v-list-tile router to="/company/status" :ripple="{ class: 'white--text' }">
-						<v-list-tile-title class="white--text font-weight-light">System Status</v-list-tile-title>
+					<v-list-tile v-for="link in company" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
+						<v-list-tile-title class="white--text font-weight-light">{{ link.text }}</v-list-tile-title>
 					</v-list-tile>
 				</v-list-group>
+
+				<v-list-group>
+					<v-list-tile slot="activator">
+						<v-list-tile-title class="font-weight-black">Latest</v-list-tile-title>
+					</v-list-tile>
+
+					<v-list-tile v-for="link in latest" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
+						<v-list-tile-title class="white--text font-weight-light">{{ link.text }}</v-list-tile-title>
+					</v-list-tile>
+				</v-list-group>
+
 			</v-list>
     </v-navigation-drawer>
 
@@ -68,8 +63,7 @@ export default {
 	data() {
 		return {
 			drawer: false,
-			time: null,
-			links: [
+			apps: [
 				{ text: 'Home', route: '/home' },
 				{ text: 'Flamechat', route: '/flamechat' },
 				{ text: 'Hex', route: '/hex' },
@@ -82,6 +76,17 @@ export default {
 				{ text: 'Movies', route: '/movies' },
 				{ text: 'Music', route: '/music' },
 				{ text: 'Neutron', route: '/neutron' }
+			],
+			company: [
+				{ text: 'Support', route: '/company/support' },
+				{ text: 'Notice', route: '/company/notice' },
+				{ text: 'Roadmap', route: '/company/roadmap' },
+				{ text: 'Terms', route: '/company/terms' },
+				{ text: 'Network Status', route: '/company/status' }
+			],
+			latest: [
+				{ text: 'Memes', route: '/latest/memes' },
+				{ text: 'Vines', route: '/latest/vines' }
 			],
 			version: ''
 		}

@@ -1,6 +1,6 @@
 <template>
-	<div class="system-status">
-		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px; text-align: center;">System Status</h1>
+	<div class="network-status">
+		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px; text-align: center;">Network Status</h1>
 		<div class="detail">
 			<p>Main Site: <kbd :class="{ ok: main == 'OK', down: main == 'Down', maintenence: main == 'Maintenence' }">{{ main }}</kbd></p>
 			<p>Relay: <kbd :class="{ ok: relay == 'OK', down: relay == 'Down', maintenence: relay == 'Maintenence' }">{{ relay }}</kbd></p>
@@ -15,7 +15,7 @@
 import db from '@/firebase/init'
 
 export default {
-	name: 'System Status',
+	name: 'Network Status',
 	data() {
 		return {
 			main: '',

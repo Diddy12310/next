@@ -6,7 +6,8 @@
 				<v-btn router to="flamechat" style="margin-top: 20px;" color="primary">Open Flamechat</v-btn>
 			</div>
 		</v-parallax>
-		<h3 class="display-2" style="text-align: center; margin-top: 20px;">Announcements</h3>
+
+		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 25px; text-align: center;">Announcements</h1>
 		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 60vw; margin: 20px auto">
 			<v-card-title primary-title>
 				<div>
@@ -23,17 +24,19 @@
 
 <script>
 import db from '@/firebase/init'
+import axios from 'axios'
 
 export default {
   name: 'Home',
   data() {
     return {
 			announcements: [],
+			meirl: [],
 			homebg: 'http://relay.theparadigmdev.com/img/home_bg.jpg'
 		}
 	},
   created() {
-		var dbRef = db.collection('announcements').orderBy('time', 'desc').limit(5)
+		var dbRef = db.collection('announcements').orderBy('time', 'desc').limit(3)
     dbRef.get().then(snapshot => {
       snapshot.forEach(doc => {
         let announcement = doc.data()
