@@ -1,6 +1,7 @@
 {
-  "name": "paradigm",
-  "version": "0.0.3",
+  "name": "Paradigm",
+	"version": "0.0.3",
+	"author": "Paradigm Development, Inc.",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

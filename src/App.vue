@@ -6,7 +6,9 @@
 			<v-toolbar-title><img style="height: 45px; top: 5px; position: relative;" src="./assets/paradigmlogo.png"></v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-toolbar-items class="hidden-xs-only">
-				<h6 class="clock title font-weight-light">{{ version }}</h6>
+				<v-btn icon @click="refresh">
+          <v-icon>refresh</v-icon>
+        </v-btn>
 			</v-toolbar-items>
 		</v-toolbar>
 
@@ -75,7 +77,7 @@ export default {
 				{ text: 'Satellite', route: '/satellite'},
 				{ text: 'Movies', route: '/movies' },
 				{ text: 'Music', route: '/music' },
-				{ text: 'Neutron', route: '/neutron' }
+				{ text: 'Pluto', route: '/pluto' }
 			],
 			company: [
 				{ text: 'Support', route: '/company/support' },
@@ -91,10 +93,10 @@ export default {
 			version: ''
 		}
 	},
-	created() {
-		db.collection('meta').doc('version').get().then((doc) => {
-			this.version = doc.data().version
-		})
+	methods: {
+		refresh() {
+			location.reload()
+		}
 	}
 }
 </script>

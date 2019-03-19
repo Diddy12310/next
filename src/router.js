@@ -17,7 +17,7 @@ import News from './views/News'
 import Satellite from './views/Satellite'
 import Movies from './views/Movies'
 import Music from './views/Music'
-import Neutron from './views/Neutron'
+import Pluto from './views/Pluto'
 import NetworkStatus from './views/Company/NetworkStatus'
 import LatestMemes from './views/Latest/Memes'
 import LatestVines from './views/Latest/Vines'
@@ -121,9 +121,9 @@ export default new Router({
 			component: Music
 		},
 		{
-			path: '/neutron',
-			name: 'Neutron',
-			component: Neutron
+			path: '/pluto',
+			name: 'Pluto',
+			component: Pluto
 		},
 		{
 			path: '/company/status',

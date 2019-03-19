@@ -1,7 +1,6 @@
 <template>
-	<div class="neutron">
-		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px; text-align: center;">Neutron</h1>
-
+	<div class="pluto">
+		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px; text-align: center;">Pluto</h1>
 		<v-card>
 			<v-card-title primary-title>
 				<div>
@@ -36,7 +35,7 @@
 import db from '@/firebase/init'
 
 export default {
-	name: 'Neutron',
+	name: 'Pluto',
 	data() {
 		return {
 			windows: '',
