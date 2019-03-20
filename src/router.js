@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home'
 import Flamechat from './views/Flamechat'
-import FlamechatChatroom from './views/FlamechatChatroom'
 import Roadmap from './views/Company/Roadmap'
 import Terms from './views/Company/Terms'
 import Notice from './views/Company/Notice'
@@ -17,7 +16,7 @@ import News from './views/News'
 import Satellite from './views/Satellite'
 import Movies from './views/Movies'
 import Music from './views/Music'
-import Pluto from './views/Pluto'
+import Asteroid from './views/Asteroid'
 import NetworkStatus from './views/Company/NetworkStatus'
 import LatestMemes from './views/Latest/Memes'
 import LatestVines from './views/Latest/Vines'
@@ -41,19 +40,6 @@ export default new Router({
       path: '/flamechat',
       name: 'Flamechat',
       component: Flamechat
-		},
-		{
-			path: '/flamechat/chatroom',
-			name: 'FlamechatChatroom',
-			component: FlamechatChatroom,
-			props: true,
-			beforeEnter: (to, from, next) => {
-				if(to.params.name) {
-					next()
-				} else {
-					next({ name: 'Flamechat' })
-				}
-			}
 		},
     {
       path: '/company/roadmap',
@@ -121,9 +107,9 @@ export default new Router({
 			component: Music
 		},
 		{
-			path: '/pluto',
-			name: 'Pluto',
-			component: Pluto
+			path: '/asteroid',
+			name: 'Asteroid',
+			component: Asteroid
 		},
 		{
 			path: '/company/status',

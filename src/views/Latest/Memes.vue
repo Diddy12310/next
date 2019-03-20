@@ -2,8 +2,9 @@
 	<div class="memes">
 		<v-container>
 			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px 0px 50px 0px; text-align: center;">Latest Memes</h1>
+			<v-select style="width: 300px; margin: auto;" :items="sort" label="Sort by" v-model="sortedby" @change="changeSort" default="Hot"></v-select>
 			<div v-for="post in meirl" :key="post.data.id">
-				<v-card v-if="!post.data.is_video" style="max-width: 800px; margin: 20px auto">
+				<v-card v-if="!post.data.is_video && post.data.title != 'me irl is not an edgy meme board'" style="max-width: 800px; margin: 20px auto">
 					<v-img :src="post.data.url"></v-img>
 					<v-card-title primary-title>
 						<div>
@@ -24,23 +25,80 @@ export default {
 	name: 'Latest Memes',
 	data() {
 		return {
-			meirl: []
+			meirl: [],
+			sort: ['Hot', 'New', 'Controversial', 'Top', 'Rising'],
+			sortedby: 'Hot'
 		}
 	},
 	created() {
-		axios.get('https://www.reddit.com/r/me_irl.json')
-			.then(response => {
-				let data = response.data.data.children
-				this.meirl = data
-			})
-			.catch(function (error) {
-				// handle error
-				console.log(error)
-			})
-			.then(function () {
-				// always executed
-			})
-
+		axios.get('https://www.reddit.com/r/me_irl.json').then(response => {
+			let data = response.data.data.children
+			this.meirl = data
+		}).catch(function (error) {
+			// handle error
+			console.log(error)
+		}).then(function () {
+			// always executed
+		})
+	},
+	methods: {
+		changeSort() {
+			if(this.sortedby == 'Hot') {
+				axios.get('https://www.reddit.com/r/me_irl.json').then(response => {
+					let data = response.data.data.children
+					this.meirl = data
+				}).catch(function (error) {
+					// handle error
+					console.log(error)
+				}).then(function () {
+					// always executed
+				})
+			}
+			if(this.sortedby == 'New') {
+				axios.get('https://www.reddit.com/r/me_irl/new.json').then(response => {
+					let data = response.data.data.children
+					this.meirl = data
+				}).catch(function (error) {
+					// handle error
+					console.log(error)
+				}).then(function () {
+					// always executed
+				})
+			}
+			if(this.sortedby == 'Controversial') {
+				axios.get('https://www.reddit.com/r/me_irl/controversial.json').then(response => {
+					let data = response.data.data.children
+					this.meirl = data
+				}).catch(function (error) {
+					// handle error
+					console.log(error)
+				}).then(function () {
+					// always executed
+				})
+			}
+			if(this.sortedby == 'Top') {
+				axios.get('https://www.reddit.com/r/me_irl/top.json').then(response => {
+					let data = response.data.data.children
+					this.meirl = data
+				}).catch(function (error) {
+					// handle error
+					console.log(error)
+				}).then(function () {
+					// always executed
+				})
+			}
+			if(this.sortedby == 'Rising') {
+				axios.get('https://www.reddit.com/r/me_irl/rising.json').then(response => {
+					let data = response.data.data.children
+					this.meirl = data
+				}).catch(function (error) {
+					// handle error
+					console.log(error)
+				}).then(function () {
+					// always executed
+				})
+			}
+		}
 	}
 }
 </script>

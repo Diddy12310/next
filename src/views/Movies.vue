@@ -4,9 +4,10 @@
 			<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
 				<h1 class="display-3 blue--text font-weight-thin text-uppercase">Movies</h1>
 				<h6 class="headline red--text font-weight-thin">Rights to the items listed below are reserved for their creators.</h6>
+				<v-text-field v-model="searchMovie" label="Search..." style="width: 300px; margin: 50px auto 0px auto;" hint="Case sensitive"></v-text-field>
 			</div>
 			<div class="movies">
-				<v-card v-for="(movie, index) in movies" :key="index">
+				<v-card v-for="(movie, index) in filteredMovie" :key="index">
 					<v-img :src="movie.cover"></v-img>
 
 					<v-card-title primary-title>
@@ -36,7 +37,8 @@ export default {
   name: 'Movies',
   data() {
     return {
-			movies: []
+			movies: [],
+			searchMovie: ''
     }
   },
   created() {
@@ -48,6 +50,13 @@ export default {
         this.movies.push(movie)
       })
 		})
+	},
+	computed: {
+		filteredMovie() {
+			return this.movies.filter(movie => {
+				return movie.title.match(this.searchMovie)
+			})
+		}
 	}
 }
 </script>

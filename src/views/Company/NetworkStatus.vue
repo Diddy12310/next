@@ -5,7 +5,7 @@
 			<p>Main Site: <kbd :class="{ ok: main == 'OK', down: main == 'Down', maintenence: main == 'Maintenence' }">{{ main }}</kbd></p>
 			<p>Relay: <kbd :class="{ ok: relay == 'OK', down: relay == 'Down', maintenence: relay == 'Maintenence' }">{{ relay }}</kbd></p>
 			<p>Development Server: <kbd :class="{ ok: dev == 'OK', down: dev == 'Down', maintenence: dev == 'Maintenence' }">{{ dev }}</kbd></p>
-			<p>Neutron: <kbd :class="{ ok: neutron == 'OK', down: neutron == 'Down', maintenence: neutron == 'Maintenence' }">{{ neutron }}</kbd></p>
+			<p>Asteroid: <kbd :class="{ ok: asteroid == 'OK', down: asteroid == 'Down', maintenence: asteroid == 'Maintenence' }">{{ asteroid }}</kbd></p>
 			<p>Museum: <kbd :class="{ ok: museum == 'OK', down: museum == 'Down', maintenence: museum == 'Maintenence' }">{{ museum }}</kbd></p>
 		</div>
 	</div>
@@ -21,7 +21,7 @@ export default {
 			main: '',
 			relay: '',
 			dev: '',
-			neutron: '',
+			asteroid: '',
 			museum: ''
 		}
 	},
@@ -30,7 +30,7 @@ export default {
 			this.main = doc.data().main
 			this.relay = doc.data().relay
 			this.dev = doc.data().dev
-			this.neutron = doc.data().neutron
+			this.asteroid = doc.data().asteroid
 			this.museum = doc.data().museum
 		})
 	}

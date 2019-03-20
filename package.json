@@ -1,14 +1,14 @@
 {
   "name": "Paradigm",
-	"version": "0.0.3",
-	"author": "Paradigm Development, Inc.",
+  "version": "0.0.3",
+  "author": "Paradigm Development, Inc.",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --modern",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
-    "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=dist_electron --flatten",
+    "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
@@ -22,7 +22,9 @@
     "vue-analytics": "^5.16.2",
     "vue-chat-scroll": "^1.3.5",
     "vue-friendly-iframe": "^0.11.0",
+    "vue-pdf": "^4.0.6",
     "vue-router": "^3.0.1",
+    "vuelidate": "^0.7.4",
     "vuetify": "^1.5.5",
     "vuex": "^3.0.1"
   },
@@ -49,5 +51,9 @@
     "last 2 versions",
     "not ie <= 8"
   ],
-  "main": "background.js"
+  "main": "background.js",
+  "bugs": "https://github.com/Paradigm-Dev/paradigm/issues",
+  "homepage": "https://www.theparadigmdev.com/home",
+  "repository": "github:Paradigm-Dev/paradigm",
+  "description": "Paradigm"
 }

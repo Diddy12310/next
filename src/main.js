@@ -8,6 +8,9 @@ import VueChatScroll from 'vue-chat-scroll'
 import VueFriendlyIframe from 'vue-friendly-iframe';
 import VueAnalytics from 'vue-analytics'
 import store from './store'
+import Vuelidate from 'vuelidate'
+
+Vue.use(Vuelidate)
 
 Vue.use(VueAnalytics, {
 	id: 'UA-52752236-3',

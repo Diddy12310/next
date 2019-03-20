@@ -4,9 +4,10 @@
 			<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
 				<h1 class="display-3 blue--text font-weight-thin text-uppercase">Music</h1>
 				<h6 class="headline red--text font-weight-thin">Rights to the items listed below are reserved for their creators.</h6>
+				<v-text-field v-model="searchMusic" label="Search..." style="width: 300px; margin: 50px auto 0px auto;" hint="Case sensitive"></v-text-field>
 			</div>
 			<div class="music">
-				<v-card v-for="(item, index) in music" :key="index">
+				<v-card v-for="(item, index) in filteredMusic" :key="index">
 					<v-img :src="item.cover"></v-img>
 
 					<v-card-title primary-title>
@@ -24,7 +25,7 @@
 						<audio controls class="control" v-if="item.available">
 							<source :src="item.link" type='audio/mp4'>
 							<source :src="item.link" type='audio/ogg; codecs=vorbis'>
-							<p>Your user agent does not support the HTML5 Audio element.</p>
+							<p>Your browser does not support Music.</p>
 						</audio>
 					</v-card-actions>
 				</v-card>
@@ -41,7 +42,8 @@ export default {
   name: 'Music',
   data() {
     return {
-			music: []
+			music: [],
+			searchMusic: ''
     }
   },
   created() {
@@ -52,6 +54,13 @@ export default {
         this.music.push(item)
       })
 		})
+	},
+	computed: {
+		filteredMusic() {
+			return this.music.filter(item => {
+				return item.title.match(this.searchMusic) || item.album.match(this.searchMusic) || item.author.match(this.searchMusic)
+			})
+		}
 	}
 }
 </script>
