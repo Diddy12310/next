@@ -1,49 +1,50 @@
 <template>
-	<div class="welcome">
+	<div class="flamechat">
 		<v-toolbar dense color="deep-orange darken-2">
-      <v-toolbar-title>Flamechat</v-toolbar-title>
+			<v-toolbar-title>Flamechat</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-btn class="hidden" id="btnLogout" flat @click="signOut()">Sign Out</v-btn>
-    </v-toolbar>
+		</v-toolbar>
+
+		<v-container>
+
+			<!-- Account card -->
+			<v-card class="welcome-card" v-if="!username || !color || !ready">
+				<v-card-title>
+					<h3 class="headline mb-0">Welcome to Flamechat!</h3>
+				</v-card-title>
+				<v-card-text>
+					<v-radio-group v-model="color" column>
+						<v-radio :label="color.label" :color="color.value" :value="color.value" v-for="color in colors" :key="color.value"></v-radio>
+						<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'diddy12310'"></v-radio>
+						<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'paradigm'"></v-radio>
+					</v-radio-group>
+					<p style="color: #F44336;" v-if="feedback">{{ feedback }}</p>
+				</v-card-text>
+				<v-card-actions>
+					<v-btn flat @click.stop="ready = true" color="accent">Join</v-btn>
+				</v-card-actions>
+			</v-card>
 
 
-		<!-- Account card -->
-		<v-card class="welcome-card" v-if="!username || !color || !ready">
-			<v-card-title>
-				<h3 class="headline mb-0">Welcome to Flamechat!</h3>
-			</v-card-title>
-			<v-card-text>
-				<v-radio-group v-model="color" column>
-					<v-radio :label="color.label" :color="color.value" :value="color.value" v-for="color in colors" :key="color.value"></v-radio>
-					<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'diddy12310'"></v-radio>
-					<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'paradigm'"></v-radio>
-				</v-radio-group>
-				<p style="color: #F44336;" v-if="feedback">{{ feedback }}</p>
-			</v-card-text>
-			<v-card-actions>
-				<v-btn flat @click.stop="ready = true" color="accent">Join</v-btn>
-			</v-card-actions>
-		</v-card>
+			<!-- Chat card -->
+			<v-card class="chat-card" v-if="username && color && ready">
+				<v-card-text>
+					<ul class="messages" v-chat-scroll>
+						<p v-if="!messages">There are no messages posted on this room.</p>
+						<li v-for="message in messages" :key="message.id">
+							<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
+							<span v-html="message.content"></span>
+							<span class="time">{{ message.timestamp }}</span>
+						</li>
+					</ul>
+				</v-card-text>
 
-
-		<!-- Chat card -->
-		<v-card class="chat-card" v-if="username && color && ready">
-			<v-card-text>
-				<ul class="messages" v-chat-scroll>
-					<p v-if="!messages">There are no messages posted on this room.</p>
-					<li v-for="message in messages" :key="message.id">
-						<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
-						<span v-html="message.content"></span>
-						<span class="time">{{ message.timestamp }}</span>
-					</li>
-				</ul>
-			</v-card-text>
-
-			<v-card-actions>
-				<NewMessage :username="username" :color="color" />
-			</v-card-actions>
-		</v-card>
-
+				<v-card-actions>
+					<NewMessage :username="username" :color="color" />
+				</v-card-actions>
+			</v-card>
+		</v-container>
 	</div>
 </template>
 
@@ -102,8 +103,9 @@ export default {
 
 <style scoped>
 .welcome-card {
-	margin: 100px auto;
-	width: 55vw;
+	margin: 50px auto;
+	width: 100%;
+	max-width: 500px;
 	text-align: center;
 }
 
@@ -122,12 +124,10 @@ export default {
 }
 
 .chat-card {
-	margin-top: 16px;
-	margin-bottom: 16px;
-	margin-left: auto;
-	margin-right: auto;
-	width: 75vw;
+	margin: auto;
+	width: 100%;
 	height: 100%;
+	max-width: 1250px;
 }
 
 .chat-card h2 {

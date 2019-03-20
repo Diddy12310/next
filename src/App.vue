@@ -53,23 +53,33 @@
 			<v-card>
 				<v-card-title primary-title>
 					<h3 class="headline mb-0">Account</h3>
+					<v-spacer></v-spacer>
+					<v-btn icon @click="dialog = false" class="dialog-close-btn">
+						<v-icon>close</v-icon>
+					</v-btn>
 				</v-card-title>
 
 				<v-card-text>
 					<v-form v-if="!userPresent">
 						<v-text-field autocomplete="off" type="text" name="username" v-model="username" label="Username" :rules="usernameRules"></v-text-field>
-						<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password"></v-text-field>
+						<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
 					</v-form>
 
 					<div v-if="userPresent">
-						<p>Logged in</p>
+						<p><strong>Status:</strong> Signed in</p>
+						<p><strong>Username:</strong> {{ username }}</p>
+						<p><strong>Last Sign In:</strong> {{ userInfo.metadata.lastSignInTime }}</p>
+						<p><strong>Account Creation:</strong> {{ userInfo.metadata.creationTime }}</p>
+						<p><strong>User ID:</strong> {{ userInfo.uid }}</p>
+						<v-text-field v-model="newPassword" label="New password" :rules="passRules" autocomplete="off" type="password" name="newpass"></v-text-field>
 					</div>
 				</v-card-text>
 
 				<v-card-actions>
-					<v-btn v-if="!userPresent" color="primary" @click="signIn()">Login</v-btn>
-					<v-btn v-if="!userPresent" @click="dialog = false">Cancel</v-btn>
-					<v-btn v-if="userPresent" @click="signOut">Logout</v-btn>
+					<v-btn v-if="!userPresent" @click="signIn" color="primary" >Sign In</v-btn>
+					<v-btn v-if="userPresent" @click="signOut">Sign Out</v-btn>
+					<v-btn v-if="userPresent" @click="changePass" flat color="warning">Change Password</v-btn>
+					<v-btn v-if="userPresent" @click="deleteUser" flat color="error">Delete Account</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -85,6 +95,10 @@
 			</v-container>
 		</v-content>
 
+		<v-snackbar v-if="feedback" v-model="snackbar" bottom left :timeout="snackTO">
+      {{ feedback }}
+    </v-snackbar>
+
 		<v-footer>
 			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm Development. All Rights Reserved.</span></div>
 		</v-footer>
@@ -95,6 +109,7 @@
 import db from '@/firebase/init'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import moment from 'moment'
 
 export default {
 	name: 'Paradigm',
@@ -132,8 +147,16 @@ export default {
 			userPresent: null,
 			dialog: false,
 			usernameRules: [
-				v => v.length >= 3 || 'Minimum length is 3 characters',
-			]
+				value => value.length >= 3 || 'Minimum length is 3 characters',
+			],
+			passRules: [
+				value => value.length >= 8 || 'Minimum length is 8 characters'
+			],
+			userInfo: null,
+			newPassword: null,
+			feedback: null,
+			snackTO: 6000,
+			snackbar: false
 		}
 	},
 	methods: {
@@ -145,11 +168,16 @@ export default {
 				firebase.auth().signInWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
+						this.snackbar = true
+					}
+					if(error.code == 'auth/wrong-password') {
+						this.feedback = 'Please check your password.'
+						this.snackbar = true
 					}
 				})
-				this.dialog = false
 			} else {
 				this.feedback = 'Please fill in the required fields.'
+				this.snackbar = true
 			}
 		},
 		signUp() {
@@ -157,27 +185,56 @@ export default {
 				firebase.auth().createUserWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
-					} else {
-						console.log(error.message)
+						this.snackbar = true
+					}
+					if(error.code == 'auth/wrong-password') {
+						this.feedback = 'Please check your password.'
+						this.snackbar = true
 					}
 				})
-				this.dialog = false
 			} else {
 				this.feedback = 'Please fill in the required fields.'
+				this.snackbar = true
 			}
 		},
 		signOut() {
 			firebase.auth().signOut()
+			this.feedback = 'Signed out successfully.'
+			this.snackbar = true
+		},
+		changePass() {
+			firebase.auth().currentUser.updatePassword(this.newPassword).then(function() {
+				// Update successful.
+			}).catch(function(error) {
+				// An error happened.
+				console.log(error)
+			})
+			this.newPassword = null
+		},
+		deleteUser() {
+			firebase.auth().currentUser.delete().then(function() {
+				// User deleted.
+				this.username = null
+				this.userInfo = null
+				this.userPresent = false
+			}).catch(function(error) {
+				// An error happened.
+				console.log(error)
+			})
 		}
 	},
 	created() {
 		firebase.auth().onAuthStateChanged(firebaseUser => {
 			if(firebaseUser) {
+				this.feedback = 'Signed in successfully.'
+				this.snackbar = true
 				this.userPresent = true
 				this.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
+				this.userInfo = firebaseUser
 			} else {
 				this.userPresent = false
-				this.username = null
+				this.username = ''
+				this.password = ''
 			}
 		})
 	}
@@ -225,5 +282,9 @@ html {
 .error-card p {
 	margin: 0;
 	padding: 0;
+}
+
+.dialog-close-btn {
+	margin-top: 0px !important;
 }
 </style>
