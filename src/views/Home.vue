@@ -2,13 +2,13 @@
 	<div class="index">
 		<v-parallax dark :src="homebg" class="paralax">
 			<div class="home">
-				<h2 class="display-3 font-weight-thin text-uppercase" style="position: relative; text-align: center; margin: auto; padding-top: 30vh;">Welcome to<br>the future</h2>
+				<h2 class="display-3 font-weight-light text-uppercase" style="position: relative; text-align: center; margin: auto; padding-top: 30vh;">Welcome to<br>the future</h2>
 				<v-btn router to="flamechat" style="margin-top: 20px;" color="primary">Open Flamechat</v-btn>
 			</div>
 		</v-parallax>
 
 		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 25px; text-align: center;">Announcements</h1>
-		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 60vw; margin: 20px auto">
+		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 100%; margin: 20px auto; max-width: 600px;">
 			<v-card-title primary-title>
 				<div>
 					<h3 class="headline mb-0">{{ announcement.title }}</h3>
@@ -31,7 +31,6 @@ export default {
   data() {
     return {
 			announcements: [],
-			meirl: [],
 			homebg: 'http://relay.theparadigmdev.com/img/home_bg.jpg'
 		}
 	},
@@ -51,6 +50,8 @@ export default {
 <style scoped>
 .paralax {
 	height: 100% !important;
+	background: url('./../assets/home_bg.jpg') center center;
+	background-attachment: fixed;
 }
 
 .home {
@@ -68,10 +69,5 @@ h1 {
 
 .item:last-of-type {
 	padding-bottom: 0px;
-}
-
-.v-parallax {
-	background: url('./../assets/home_bg.jpg') center center;
-	background-attachment: fixed;
 }
 </style>

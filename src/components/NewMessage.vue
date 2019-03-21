@@ -7,7 +7,7 @@
 			<v-text-field class="message" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field>
 		</form>
 
-		<v-snackbar v-model="snackbar" bottom left timeout="6000">{{ snackbarMessage }}</v-snackbar>
+		<v-snackbar v-model="snackbar" bottom left :timeout="6000">{{ snackbarMessage }}</v-snackbar>
 	</div>
 </template>
 

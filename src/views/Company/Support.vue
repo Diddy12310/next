@@ -32,7 +32,8 @@ export default {
 
 <style scoped>
 div.v-card {
-	width: 500px;
-	margin: auto;
+	width: 100%;
+	max-width: 500px;
+	margin: 16px auto;
 }
 </style>

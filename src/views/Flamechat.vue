@@ -3,15 +3,16 @@
 		<v-toolbar dense color="deep-orange darken-2">
 			<v-toolbar-title>Flamechat</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-btn class="hidden" id="btnLogout" flat @click="signOut()">Sign Out</v-btn>
+			<v-switch v-if="username == 'diddy12310'" @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;"></v-switch>
+			<v-btn v-if="username == 'diddy12310'" flat @click="clearAllMessages()">Clear All</v-btn>
 		</v-toolbar>
 
 		<v-container>
 
-			<!-- Account card -->
+			<!-- Welcome card -->
 			<v-card class="welcome-card" v-if="!username || !color || !ready">
 				<v-card-title>
-					<h3 class="headline mb-0">Welcome to Flamechat!</h3>
+					<h3 class="headline mb-0 text-xs-center">Welcome to Flamechat!</h3>
 				</v-card-title>
 				<v-card-text>
 					<v-radio-group v-model="color" column>
@@ -19,7 +20,6 @@
 						<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'diddy12310'"></v-radio>
 						<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'paradigm'"></v-radio>
 					</v-radio-group>
-					<p style="color: #F44336;" v-if="feedback">{{ feedback }}</p>
 				</v-card-text>
 				<v-card-actions>
 					<v-btn flat @click.stop="ready = true" color="accent">Join</v-btn>
@@ -32,26 +32,39 @@
 				<v-card-text>
 					<ul class="messages" v-chat-scroll>
 						<p v-if="!messages">There are no messages posted on this room.</p>
-						<li v-for="message in messages" :key="message.id">
+						<li v-for="message in messages" :key="message.id" :id="message.id">
 							<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
 							<span v-html="message.content"></span>
 							<span class="time">{{ message.timestamp }}</span>
+							<v-btn class="admin-btn" flat color="error" v-if="username == 'diddy12310'" @click="deleteChat(message.id)">Delete</v-btn>
+							<v-btn class="admin-btn" flat color="warning" v-if="username == 'diddy12310'" @click="editChat()">Edit</v-btn>
 						</li>
 					</ul>
 				</v-card-text>
 
 				<v-card-actions>
-					<NewMessage :username="username" :color="color" />
+					<form @submit.prevent="sendChat" class="new-message">
+						<v-btn :disabled="!flamechatEnable" id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
+							<v-icon>send</v-icon>
+						</v-btn>
+						<v-text-field :disabled="!flamechatEnable" class="message-box" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field>
+					</form>
+					<!-- <form @submit.prevent="editChat" class="new-message" v-if="editor">
+						<v-btn id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
+							<v-icon>edit</v-icon>
+						</v-btn>
+						<v-text-field class="message-box" autocomplete="off" label="Edit Message"></v-text-field>
+					</form> -->
 				</v-card-actions>
 			</v-card>
 		</v-container>
+		<v-snackbar v-model="snackbar" bottom left :timeout="2000">{{ feedback }}</v-snackbar>
 	</div>
 </template>
 
 <script>
 import db from '@/firebase/init'
 import moment from 'moment'
-import NewMessage from './../components/NewMessage'
 
 export default {
 	name: 'Flamechat',
@@ -64,11 +77,11 @@ export default {
 			colors: [],
 			username: null,
 			user: [],
-			messages: []
+			messages: [],
+			snackbar: false,
+			newMessage: '',
+			flamechatEnable: null
     }
-	},
-	components: {
-		NewMessage
 	},
 	created() {
 		this.username = this.$parent.$parent.$parent.username
@@ -86,6 +99,10 @@ export default {
 						timestamp: moment(doc.data().timestamp).format('lll')
 					})
 				}
+				if(change.type == 'removed') {
+					let doc = change.doc
+					this.messages.splice(change.oldIndex, 1)
+				}
 			})
 		})
 
@@ -97,6 +114,70 @@ export default {
         this.colors.push(color)
       })
 		})
+
+		var metaRef = db.collection('meta')
+		metaRef.doc('auth').get().then((doc) => {
+			this.flamechatEnable = doc.data().flamechatEnable
+		})
+
+		metaRef.onSnapshot(snapshot => {
+			snapshot.docChanges().forEach(change => {
+				if(change.type === "modified") {
+					let doc = change.doc
+					this.flamechatEnable = doc.data().flamechatEnable
+				}
+			})
+		})
+	},
+	methods: {
+		deleteChat(id) {
+			db.collection('messages').doc(id).delete().then(() => {
+				this.feedback = 'Message deleted successfully.'
+				this.snackbar = true
+			})
+		},
+		clearAllMessages() {
+			var message
+			for(message in this.messages) {
+				db.collection('messages').get().then(snapshot => {
+					snapshot.forEach(doc => {
+						doc.ref.delete()
+						this.feedback = 'All messages cleared.'
+						this.snackbar = true
+					})
+				})
+			}
+		},
+		sendChat() {
+			if(this.newMessage && this.username != '' && this.color != null) {
+				db.collection('messages').add({
+					name: this.username,
+					content: this.newMessage,
+					color: this.color,
+					timestamp: Date.now()
+				}).catch(err => {
+					console.log(err)
+					this.feedback = 'Your message did not send successfully!'
+					this.snackbar = true
+				})
+				this.feedback = 'Your message sent successfully!'
+				this.snackbar = true
+				this.$ga.event('Flamechat', this.username + ' sent ' + this.newMessage)
+				this.newMessage = null
+			} else {
+				this.feedback = 'Your message did not send sucessfully! Try signing out and back in.'
+				this.snackbar = true
+			}
+		},
+		editChat() {
+			this.feedback = 'Functionality not implemented yet.'
+			this.snackbar = true
+		},
+		toggleFc() {
+			db.collection('meta').doc('auth').update({
+				flamechatEnable: !this.flamechatEnable
+			})
+		}
 	}
 }
 </script>
@@ -105,7 +186,7 @@ export default {
 .welcome-card {
 	margin: 50px auto;
 	width: 100%;
-	max-width: 500px;
+	max-width: 550px;
 	text-align: center;
 }
 
@@ -155,7 +236,7 @@ export default {
 }
 
 .messages {
-	height: calc(100vh - 300px);
+	height: calc(100vh - 312px);
 	overflow-y: auto;
 	overflow-x: hidden;
 }
@@ -170,5 +251,19 @@ div.v-input__slot {
 
 div.v-messages {
 	height: 0px !important;
+}
+
+.admin-btn {
+	margin-left: 2px !important;
+}
+
+.message-box {
+	width: 92.5% !important;
+}
+
+.v-input--switch {
+	flex: none !important;
+	position: relative;
+	top: +10px;
 }
 </style>
