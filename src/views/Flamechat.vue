@@ -37,24 +37,24 @@
 							<span v-html="message.content"></span>
 							<span class="time">{{ message.timestamp }}</span>
 							<v-btn class="admin-btn" flat color="error" v-if="username == 'diddy12310'" @click="deleteChat(message.id)">Delete</v-btn>
-							<v-btn class="admin-btn" flat color="warning" v-if="username == 'diddy12310'" @click="editChat()">Edit</v-btn>
+							<v-btn class="admin-btn" flat color="warning" v-if="username == 'diddy12310'" @click="editor = true, editing = message.id, editMessage = message.content">Edit</v-btn>
 						</li>
 					</ul>
 				</v-card-text>
 
 				<v-card-actions>
-					<form @submit.prevent="sendChat" class="new-message">
+					<form @submit.prevent="sendChat" class="new-message" v-if="!editor">
 						<v-btn :disabled="!flamechatEnable" id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
 							<v-icon>send</v-icon>
 						</v-btn>
 						<v-text-field :disabled="!flamechatEnable" class="message-box" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field>
 					</form>
-					<!-- <form @submit.prevent="editChat" class="new-message" v-if="editor">
+					<form @submit.prevent="editChat" class="new-message" v-if="editor">
 						<v-btn id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
 							<v-icon>edit</v-icon>
 						</v-btn>
-						<v-text-field class="message-box" autocomplete="off" label="Edit Message"></v-text-field>
-					</form> -->
+						<v-text-field v-model="editMessage" class="message-box" autocomplete="off" label="Edit Message"></v-text-field>
+					</form>
 				</v-card-actions>
 			</v-card>
 		</v-container>
@@ -80,7 +80,10 @@ export default {
 			messages: [],
 			snackbar: false,
 			newMessage: '',
-			flamechatEnable: null
+			editMessage: '',
+			flamechatEnable: null,
+			editor: false,
+			editing: null
     }
 	},
 	created() {
@@ -102,6 +105,17 @@ export default {
 				if(change.type == 'removed') {
 					let doc = change.doc
 					this.messages.splice(change.oldIndex, 1)
+				}
+				if(change.type == 'modified') {
+					let doc = change.doc
+					this.messages.splice(change.oldIndex, 1)
+					this.messages.push({
+						id: doc.id,
+						name: doc.data().name,
+						content: doc.data().content,
+						color: doc.data().color,
+						timestamp: moment(doc.data().timestamp).format('lll')
+					})
 				}
 			})
 		})
@@ -169,9 +183,16 @@ export default {
 				this.snackbar = true
 			}
 		},
-		editChat() {
-			this.feedback = 'Functionality not implemented yet.'
-			this.snackbar = true
+		editChat(id) {
+			db.collection('messages').doc(this.editing).update({
+				content: this.editMessage
+			}).then(() => {
+				this.feedback = 'Message edited successfully.'
+				this.snackbar = true
+				this.editing = null
+				this.editMessage = ''
+				this.editor = false
+			})
 		},
 		toggleFc() {
 			db.collection('meta').doc('auth').update({
