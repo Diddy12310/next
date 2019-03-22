@@ -3,7 +3,6 @@
 		<v-toolbar dense color="deep-orange darken-2">
 			<v-toolbar-title>Flamechat</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-switch v-if="username == 'diddy12310'" @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;"></v-switch>
 			<v-btn v-if="username == 'diddy12310'" flat @click="clearAllMessages()">Clear All</v-btn>
 		</v-toolbar>
 
@@ -81,9 +80,9 @@ export default {
 			snackbar: false,
 			newMessage: '',
 			editMessage: '',
-			flamechatEnable: null,
 			editor: false,
-			editing: null
+			editing: null,
+			flamechatEnable: null
     }
 	},
 	created() {
@@ -92,7 +91,7 @@ export default {
 
 		ref.onSnapshot(snapshot => {
 			snapshot.docChanges().forEach(change => {
-				if(change.type == 'added') {
+				if(change.type === "added") {
 					let doc = change.doc
 					this.messages.push({
 						id: doc.id,
@@ -102,19 +101,19 @@ export default {
 						timestamp: moment(doc.data().timestamp).format('lll')
 					})
 				}
-				if(change.type == 'removed') {
+				if(change.type === "removed") {
 					let doc = change.doc
 					this.messages.splice(change.oldIndex, 1)
 				}
-				if(change.type == 'modified') {
+				if(change.type === "modified") {
 					let doc = change.doc
-					this.messages[change.oldIndex] = {
+					this.messages.splice(change.oldIndex, 1, {
 						id: doc.id,
 						name: doc.data().name,
 						content: doc.data().content,
 						color: doc.data().color,
 						timestamp: moment(doc.data().timestamp).format('lll')
-					}
+					})
 				}
 			})
 		})
@@ -195,18 +194,6 @@ export default {
 				this.editMessage = ''
 				this.editor = false
 			})
-		},
-		toggleFc() {
-			db.collection('meta').doc('auth').update({
-				flamechatEnable: !this.flamechatEnable
-			}).then(() => {
-				if (this.flamechatEnable) {
-					this.$ga.event(this.username, 'enabled Flamechat')
-				}
-				if (!this.flamechatEnable) {
-					this.$ga.event(this.username, 'disabled Flamechat')
-				}
-			})
 		}
 	}
 }
@@ -247,7 +234,7 @@ export default {
 }
 
 .chat-card span {
-	font-size: 1.25em;
+	font-size: 1.1em;
 }
 
 .chat-card ul {
@@ -262,7 +249,7 @@ export default {
 
 .chat-card .time {
 	display: block;
-	font-size: .85em;
+	font-size: .8em;
 }
 
 .messages {
@@ -272,7 +259,7 @@ export default {
 }
 
 .chat-card .name {
-	font-size: 20px;
+	font-size: 17.5px;
 }
 
 div.v-input__slot {
@@ -289,11 +276,5 @@ div.v-messages {
 
 .message-box {
 	width: 92.5% !important;
-}
-
-.v-input--switch {
-	flex: none !important;
-	position: relative;
-	top: +10px;
 }
 </style>

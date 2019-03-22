@@ -1,14 +1,14 @@
 <template>
 	<v-app dark>
 		<div ref="approot"></div>
-		<v-toolbar app style="background: linear-gradient(to right, #542478 0%, #011949 100%);">
-			<v-toolbar-side-icon @click="drawer = !drawer" v-if="userPresent"></v-toolbar-side-icon>
+		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
+			<v-toolbar-side-icon @click="drawer = !drawer" v-if="userPresent && !lockdown"></v-toolbar-side-icon>
 			<v-toolbar-title>
 				<img style="height: 45px; top: 5px; position: relative;" src="./assets/paradigmlogo.png" class="hidden-xs-only">
 				<img style="height: 45px; top: 3.65px; position: relative;" src="./assets/plogo.png" class="hidden-sm-and-up">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-toolbar-items v-if="userPresent">
+			<v-toolbar-items v-if="userPresent && !lockdown">
 				<v-btn icon @click="dialog = true">
 					<v-icon>person</v-icon>
 				</v-btn>
@@ -16,6 +16,9 @@
           <v-icon>refresh</v-icon>
         </v-btn>
 			</v-toolbar-items>
+			<!-- <v-toolbar-items v-if="username == 'diddy12310' && lockdown">
+				<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important;"></v-switch>
+			</v-toolbar-items> -->
 		</v-toolbar>
 
 		<v-navigation-drawer v-model="drawer" app temporary floating>
@@ -97,10 +100,11 @@
 						<v-divider></v-divider>
 						<!-- <v-text-field v-model="newPassword" label="Change password" :rules="passRules" autocomplete="off" type="password" name="newpass"></v-text-field> -->
 						<v-btn @click="changePass" flat color="warning">Change Password</v-btn>
-						<v-divider></v-divider>
 						<v-btn @click="deleteDialog = true" flat color="error">Delete Account</v-btn>
 						<v-divider v-if="username == 'diddy12310'"></v-divider>
 						<v-switch v-if="username == 'diddy12310'" @click="toggleSignUp" v-model="signUpAvail" style="flex: none !important;" label="Sign up availability"></v-switch>
+						<v-switch v-if="username == 'diddy12310'" @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Lockdown" color="red"></v-switch>
+						<v-switch v-if="username == 'diddy12310'" @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;" label="Flamechat"></v-switch>
 					</div>
 				</v-card-text>
 
@@ -116,19 +120,23 @@
 				<v-card-title><h3 class="headline mb-0">Delete Account</h3></v-card-title>
 				<v-card-text>Are you sure you want to delete your account?</v-card-text>
 				<v-card-actions>
-					<v-btn @click="deleteUser" color="error">Yes</v-btn>
-					<v-btn @click="deleteDialog = false" flat color="green">No</v-btn>
+					<v-btn @click="deleteUser" color="error" flat>Yes</v-btn>
+					<v-btn @click="deleteDialog = false" color="green">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
 
 		<v-content>
 			<v-container fluid style="padding: 0;">
-				<router-view v-if="userPresent"></router-view>
-				<div class="noUser" v-if="!userPresent" style="text-align: center;">
+				<router-view v-if="userPresent && !lockdown"></router-view>
+				<div class="noUser" v-if="!userPresent &&!lockdown" style="text-align: center;">
 					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">No User is Logged In</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
 					<v-btn color="primary" @click="dialog = true">Login</v-btn>
+				</div>
+				<div class="lockdown" v-if="lockdown" style="text-align: center;">
+					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">Lockdown</h1>
+					<h3 class="headline font-weight-light" style="margin: 25px;">No users logged in.</h3>
 				</div>
 			</v-container>
 		</v-content>
@@ -196,7 +204,9 @@ export default {
 			snackbar: false,
 			signUpAvail: null,
 			terms: false,
-			deleteDialog: false
+			deleteDialog: false,
+			lockdown: null,
+			flamechatEnable: null
 		}
 	},
 	methods: {
@@ -250,9 +260,10 @@ export default {
 		},
 		signOut() {
 			this.$ga.event(this.username, 'signed out')
-			firebase.auth().signOut()
-			this.feedback = 'Signed out successfully.'
-			this.snackbar = true
+			firebase.auth().signOut().then(() => {
+				this.feedback = 'Signed out successfully.'
+				this.snackbar = true
+			})
 		},
 		changePass() {
 			// firebase.auth().currentUser.updatePassword(this.newPassword).then(function() {
@@ -289,6 +300,27 @@ export default {
 					this.$ga.event(this.username, 'disabled sign ups')
 				}
 			})
+		},
+		lockdownToggle() {
+			db.collection('meta').doc('auth').update({
+				lockdown: !this.lockdown
+			}).then(() => {
+				this.$ga.event(this.username, 'locked down')
+				this.feedback = 'Locked down successfully.'
+				this.snackbar = true
+			})
+		},
+		toggleFc() {
+			db.collection('meta').doc('auth').update({
+				flamechatEnable: !this.flamechatEnable
+			}).then(() => {
+				if (this.flamechatEnable) {
+					this.$ga.event(this.username, 'enabled Flamechat')
+				}
+				if (!this.flamechatEnable) {
+					this.$ga.event(this.username, 'disabled Flamechat')
+				}
+			})
 		}
 	},
 	created() {
@@ -311,13 +343,17 @@ export default {
 		var metaRef = db.collection('meta')
 		metaRef.doc('auth').get().then((doc) => {
 			this.signUpAvail = doc.data().signUpAvail
+			this.lockdown = doc.data().lockdown
+			this.flamechatEnable = doc.data().flamechatEnable
 		})
 
 		metaRef.onSnapshot(snapshot => {
 			snapshot.docChanges().forEach(change => {
-				if(change.type == 'modified') {
+				if(change.type === "modified") {
 					let doc = change.doc
 					this.signUpAvail = doc.data().signUpAvail
+					this.lockdown = doc.data().lockdown
+					this.flamechatEnable = doc.data().flamechatEnable
 				}
 			})
 		})
@@ -370,5 +406,15 @@ html {
 
 .dialog-close-btn {
 	margin-top: 0px !important;
+}
+
+.toolbar-no-ld {
+	background: linear-gradient(to right, #542478 0%, #011949 100%);
+}
+
+.v-input--switch {
+	flex: none !important;
+	position: relative;
+	height: 30px;
 }
 </style>
