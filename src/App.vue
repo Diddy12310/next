@@ -235,9 +235,12 @@ export default {
 						this.feedback = 'Please check your password.'
 						this.snackbar = true
 					}
-					if(error.code == 'auth/invalid-email' || 'auth/wrong-password') {
+					if(error.code != 'auth/invalid-email' || 'auth/wrong-password') {
 						this.feedback = error.message
 						this.snackbar = true
+					}
+					if(error == null) {
+						this.$ga.event(this.username, 'signed up')
 					}
 				})
 			} else {
@@ -246,6 +249,7 @@ export default {
 			}
 		},
 		signOut() {
+			this.$ga.event(this.username, 'signed out')
 			firebase.auth().signOut()
 			this.feedback = 'Signed out successfully.'
 			this.snackbar = true
@@ -262,6 +266,7 @@ export default {
 			this.snackbar = true
 		},
 		deleteUser() {
+			this.$ga.event(this.username, 'deleted their account')
 			firebase.auth().currentUser.delete().then(function() {
 				// User deleted.
 				this.username = null
@@ -271,10 +276,18 @@ export default {
 				// An error happened.
 				console.log(error)
 			})
+			this.deleteDialog = false
+			this.dialog = false
 		},
 		toggleSignUp() {
 			db.collection('meta').doc('auth').update({
 				signUpAvail: !this.signUpAvail
+			}).then(() => {
+				if(this.signUpAvail == true) {
+					this.$ga.event(this.username, 'enabled sign ups')
+				} else {
+					this.$ga.event(this.username, 'disabled sign ups')
+				}
 			})
 		}
 	},
@@ -286,10 +299,12 @@ export default {
 				this.userPresent = true
 				this.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
 				this.userInfo = firebaseUser
+				this.$ga.event(this.username, 'signed in')
 			} else {
 				this.userPresent = false
 				this.username = ''
 				this.password = ''
+				this.$ga.event(this.username, 'signed out')
 			}
 		})
 

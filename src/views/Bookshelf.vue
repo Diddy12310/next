@@ -18,7 +18,7 @@
 					<v-divider></v-divider>
 					<v-card-text>{{ book.summary }}</v-card-text>
 					<v-card-actions>
-						<v-btn v-if="book.available" flat color="accent" :href="book.link">Read</v-btn>
+						<v-btn v-if="book.available" flat color="accent" :href="book.link" @click="logBook(book.title)">Read</v-btn>
 						<span v-if="!book.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
 					</v-card-actions>
 				</v-card>
@@ -29,17 +29,19 @@
 
 <script>
 import db from '@/firebase/init'
-import firebase from 'firebase'
+import firebase,{ messaging } from 'firebase'
 
 export default {
   name: 'Bookshelf',
   data() {
     return {
 			bookshelf: [],
-			searchBook: ''
+			searchBook: '',
+			username: ''
     }
 	},
   created() {
+		this.username = this.$parent.$parent.$parent.username
     db.collection('bookshelf').orderBy("title", "asc").get().then(snapshot => {
       snapshot.forEach(doc => {
         let book = doc.data()
@@ -53,6 +55,11 @@ export default {
 			return this.bookshelf.filter(book => {
 				return book.title.match(this.searchBook) || book.author.match(this.searchBook)
 			})
+		}
+	},
+	methods: {
+		logBook(book) {
+			this.$ga.event(this.username,  + 'is reading ' + book)
 		}
 	}
 }
@@ -87,8 +94,8 @@ h1 {
 
 div.v-card {
 	margin: 16px auto;
-	max-width: 375px;
-	width: 400px;
+	max-width: 400px;
+	width: 100%;
 	height: 100%;
 }
 

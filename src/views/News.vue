@@ -56,8 +56,8 @@ export default {
 }
 
 div.v-card {
-	max-width: 850px;
-	min-width: 400px;
+	max-width: 750px;
+	width: 100%;
 	margin: 20px auto;
 }
 </style>

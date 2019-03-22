@@ -20,7 +20,7 @@
 					<v-card-text>{{ movie.summary }}</v-card-text>
 
 					<v-card-actions>
-						<v-btn v-if="movie.available" flat color="accent" :href="movie.link">Watch</v-btn>
+						<v-btn v-if="movie.available" flat color="accent" :href="movie.link" @click="logMovie(movie.title)">Watch</v-btn>
 						<span v-if="!movie.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
 					</v-card-actions>
 				</v-card>
@@ -31,17 +31,19 @@
 
 <script>
 import db from '@/firebase/init'
-import firebase from 'firebase'
+import firebase,{ messaging } from 'firebase'
 
 export default {
   name: 'Movies',
   data() {
     return {
 			movies: [],
-			searchMovie: ''
+			searchMovie: '',
+			username: ''
     }
   },
   created() {
+		this.username = this.$parent.$parent.$parent.username
     db.collection('movies').orderBy("title", "asc").get().then(snapshot => {
       snapshot.forEach(doc => {
         let movie = doc.data()
@@ -56,6 +58,11 @@ export default {
 			return this.movies.filter(movie => {
 				return movie.title.match(this.searchMovie)
 			})
+		}
+	},
+	methods: {
+		logMovie(movie) {
+			this.$ga.event(this.username, 'is watching ' + movie)
 		}
 	}
 }
@@ -90,8 +97,8 @@ h1 {
 
 div.v-card {
 	margin: 16px auto;
-	max-width: 375px;
-	width: 400px;
+	max-width: 400px;
+	width: 100%;
 	height: 100%;
 }
 

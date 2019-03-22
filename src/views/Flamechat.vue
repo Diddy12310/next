@@ -30,14 +30,14 @@
 			<!-- Chat card -->
 			<v-card class="chat-card" v-if="username && color && ready">
 				<v-card-text>
-					<ul class="messages" v-chat-scroll>
+					<ul class="messages" v-chat-scroll="{ always: false }">
 						<p v-if="!messages">There are no messages posted on this room.</p>
 						<li v-for="message in messages" :key="message.id" :id="message.id">
 							<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
 							<span v-html="message.content"></span>
 							<span class="time">{{ message.timestamp }}</span>
-							<v-btn class="admin-btn" flat color="error" v-if="username == 'diddy12310'" @click="deleteChat(message.id)">Delete</v-btn>
-							<v-btn class="admin-btn" flat color="warning" v-if="username == 'diddy12310'" @click="editor = true, editing = message.id, editMessage = message.content">Edit</v-btn>
+							<v-btn class="admin-btn" flat color="error" v-if="username == 'diddy12310'" @click.prevent="deleteChat(message.id)">Delete</v-btn>
+							<v-btn class="admin-btn" flat color="warning" v-if="username == 'diddy12310'" @click.prevent="editor = true, editing = message.id, editMessage = message.content">Edit</v-btn>
 						</li>
 					</ul>
 				</v-card-text>
@@ -108,14 +108,13 @@ export default {
 				}
 				if(change.type == 'modified') {
 					let doc = change.doc
-					this.messages.splice(change.oldIndex, 1)
-					this.messages.push({
+					this.messages[change.oldIndex] = {
 						id: doc.id,
 						name: doc.data().name,
 						content: doc.data().content,
 						color: doc.data().color,
 						timestamp: moment(doc.data().timestamp).format('lll')
-					})
+					}
 				}
 			})
 		})
@@ -148,6 +147,7 @@ export default {
 			db.collection('messages').doc(id).delete().then(() => {
 				this.feedback = 'Message deleted successfully.'
 				this.snackbar = true
+				this.$ga.event(this.username, 'deleted a message')
 			})
 		},
 		clearAllMessages() {
@@ -161,6 +161,7 @@ export default {
 					})
 				})
 			}
+			this.$ga.event(this.username, 'cleared all messages')
 		},
 		sendChat() {
 			if(this.newMessage && this.username != '' && this.color != null) {
@@ -176,7 +177,7 @@ export default {
 				})
 				this.feedback = 'Your message sent successfully!'
 				this.snackbar = true
-				this.$ga.event('Flamechat', this.username + ' sent ' + this.newMessage)
+				this.$ga.event(this.username, 'sent ' + this.newMessage)
 				this.newMessage = null
 			} else {
 				this.feedback = 'Your message did not send sucessfully! Try signing out and back in.'
@@ -189,6 +190,7 @@ export default {
 			}).then(() => {
 				this.feedback = 'Message edited successfully.'
 				this.snackbar = true
+				this.$ga.event(this.username, 'edited ' + this.editMessage)
 				this.editing = null
 				this.editMessage = ''
 				this.editor = false
@@ -197,6 +199,13 @@ export default {
 		toggleFc() {
 			db.collection('meta').doc('auth').update({
 				flamechatEnable: !this.flamechatEnable
+			}).then(() => {
+				if (this.flamechatEnable) {
+					this.$ga.event(this.username, 'enabled Flamechat')
+				}
+				if (!this.flamechatEnable) {
+					this.$ga.event(this.username, 'disabled Flamechat')
+				}
 			})
 		}
 	}

@@ -22,7 +22,7 @@
 
 					<v-card-actions>
 						<span v-if="!item.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
-						<audio controls class="control" v-if="item.available">
+						<audio controls class="control" v-if="item.available" @click="logMusic(item.title, item.author)">
 							<source :src="item.link" type='audio/mp4'>
 							<source :src="item.link" type='audio/ogg; codecs=vorbis'>
 							<p>Your browser does not support Music.</p>
@@ -43,10 +43,12 @@ export default {
   data() {
     return {
 			music: [],
-			searchMusic: ''
+			searchMusic: '',
+			username: ''
     }
   },
   created() {
+		this.username = this.$parent.$parent.$parent.username
     db.collection('music').get().then(snapshot => {
       snapshot.forEach(doc => {
 				let item = doc.data()
@@ -60,6 +62,11 @@ export default {
 			return this.music.filter(item => {
 				return item.title.match(this.searchMusic) || item.album.match(this.searchMusic) || item.author.match(this.searchMusic)
 			})
+		}
+	},
+	methods: {
+		logMusic(music, artist) {
+			this.$ga.event('Music', this.username + ' is listening to ' + music + ' by ' + artist)
 		}
 	}
 }
@@ -94,8 +101,8 @@ h1 {
 
 div.v-card {
 	margin: 16px auto;
-	max-width: 375px;
-	width: 400px;
+	max-width: 400px;
+	width: 100%;
 	height: 100%;
 }
 
