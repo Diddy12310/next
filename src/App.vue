@@ -16,9 +16,9 @@
           <v-icon>refresh</v-icon>
         </v-btn>
 			</v-toolbar-items>
-			<!-- <v-toolbar-items v-if="username == 'diddy12310' && lockdown">
-				<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important;"></v-switch>
-			</v-toolbar-items> -->
+			<v-toolbar-items v-if="username == 'diddy12310' && lockdown">
+				<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important; top: +16px;"></v-switch>
+			</v-toolbar-items>
 		</v-toolbar>
 
 		<v-navigation-drawer v-model="drawer" app temporary floating>
@@ -135,7 +135,8 @@
 					<v-btn color="primary" @click="dialog = true">Login</v-btn>
 				</div>
 				<div class="lockdown" v-if="lockdown" style="text-align: center;">
-					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">Lockdown</h1>
+					<v-icon style="font-size: 75px; margin-top: 100px;" color="red">block</v-icon>
+					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Lockdown</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">No users logged in.</h3>
 				</div>
 			</v-container>
@@ -305,9 +306,15 @@ export default {
 			db.collection('meta').doc('auth').update({
 				lockdown: !this.lockdown
 			}).then(() => {
-				this.$ga.event(this.username, 'locked down')
-				this.feedback = 'Locked down successfully.'
-				this.snackbar = true
+				if (this.lockdown == true) {
+					this.$ga.event(this.username, 'locked down')
+					this.feedback = 'Locked down successfully.'
+					this.snackbar = true
+				} else {
+					this.$ga.event(this.username, 'ended the lockdown')
+					this.feedback = 'Lockdown ended successfully.'
+					this.snackbar = true
+				}
 			})
 		},
 		toggleFc() {
