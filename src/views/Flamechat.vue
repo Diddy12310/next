@@ -87,7 +87,7 @@ export default {
 	},
 	created() {
 		this.username = this.$parent.$parent.$parent.username
-		let ref = db.collection('messages').orderBy('timestamp', 'desc')
+		let ref = db.collection('messages').orderBy('timestamp', 'asc')
 
 		ref.onSnapshot(snapshot => {
 			snapshot.docChanges().forEach(change => {
