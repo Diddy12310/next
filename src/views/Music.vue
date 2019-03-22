@@ -48,14 +48,51 @@ export default {
     }
   },
   created() {
-		this.username = this.$parent.$parent.$parent.username
-    db.collection('music').get().then(snapshot => {
-      snapshot.forEach(doc => {
-				let item = doc.data()
-        item.id = doc.id
-        this.music.push(item)
-      })
+		let ref = db.collection('music').orderBy("title", "asc")
+
+		ref.onSnapshot(snapshot => {
+			snapshot.docChanges().forEach(change => {
+				if(change.type === "added") {
+					let doc = change.doc
+					this.music.push({
+						id: doc.id,
+						album: doc.data().album,
+						author: doc.data().author,
+						cover: doc.data().cover,
+						duration: doc.data().duration,
+						link: doc.data().link,
+						title: doc.data().title,
+						available: doc.data().available
+					})
+				}
+				if(change.type === "removed") {
+					let doc = change.doc
+					this.music.splice(change.oldIndex, 1)
+				}
+				if(change.type === "modified") {
+					let doc = change.doc
+					this.music.splice(change.oldIndex, 1, {
+						id: doc.id,
+						album: doc.data().album,
+						author: doc.data().author,
+						cover: doc.data().cover,
+						duration: doc.data().duration,
+						link: doc.data().link,
+						title: doc.data().title,
+						available: doc.data().available
+					})
+				}
+			})
 		})
+
+		this.username = this.$parent.$parent.$parent.username
+    // db.collection('music').get().then(snapshot => {
+    //   snapshot.forEach(doc => {
+		// 		let item = doc.data()
+    //     item.id = doc.id
+    //     this.music.push(item)
+    //   })
+		// })
 	},
 	computed: {
 		filteredMusic() {
@@ -115,6 +152,6 @@ audio {
 	position: relative;
 	top: +8px;
 	left: -8px;
-	width: 375px !important;
+	width: 400px !important;
 }
 </style>

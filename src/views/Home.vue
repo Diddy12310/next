@@ -40,7 +40,7 @@ export default {
       snapshot.forEach(doc => {
         let announcement = doc.data()
 				announcement.id = doc.id
-        this.announcements.push(announcement)
+				this.announcements.push(announcement)
       })
 		})
   }

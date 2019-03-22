@@ -30,7 +30,7 @@
 			<v-card class="chat-card" v-if="username && color && ready">
 				<v-card-text>
 					<ul class="messages" v-chat-scroll="{ always: false }">
-						<p v-if="!messages">There are no messages posted on this room.</p>
+						<p v-if="messages === []">There are no messages posted on this room.</p>
 						<li v-for="message in messages" :key="message.id" :id="message.id">
 							<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
 							<span v-html="message.content"></span>
@@ -87,7 +87,7 @@ export default {
 	},
 	created() {
 		this.username = this.$parent.$parent.$parent.username
-		let ref = db.collection('messages').orderBy('timestamp')
+		let ref = db.collection('messages').orderBy('timestamp', 'desc')
 
 		ref.onSnapshot(snapshot => {
 			snapshot.docChanges().forEach(change => {

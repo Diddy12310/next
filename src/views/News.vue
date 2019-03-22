@@ -28,21 +28,50 @@ import db from '@/firebase/init'
 import moment from 'moment'
 
 export default {
-	name: 'News',
+	name: 'Paradox',
 	data() {
 		return {
-			news: []
+			news: [],
+			username: ''
 		}
 	},
 	created() {
-    db.collection('news').orderBy("stamp", "desc").get().then(snapshot => {
-      snapshot.forEach(doc => {
-				let item = doc.data()
-        item.id = doc.id
-        this.news.push(item)
-      })
-    })
-  }
+		this.username = this.$parent.$parent.$parent.username
+		let ref = db.collection('news').orderBy("stamp", "desc")
+
+		ref.onSnapshot(snapshot => {
+			snapshot.docChanges().forEach(change => {
+				if(change.type === "added") {
+					let doc = change.doc
+					this.news.push({
+						id: doc.id,
+						author: doc.data().author,
+						cover: doc.data().cover,
+						detail: doc.data().detail,
+						timestamp: doc.data().timestamp,
+						title: doc.data().title,
+						uploaded: doc.data().uploaded,
+					})
+				}
+				if(change.type === "removed") {
+					let doc = change.doc
+					this.news.splice(change.oldIndex, 1)
+				}
+				if(change.type === "modified") {
+					let doc = change.doc
+					this.news.splice(change.oldIndex, 1, {
+						id: doc.id,
+						author: doc.data().author,
+						cover: doc.data().cover,
+						detail: doc.data().detail,
+						timestamp: doc.data().timestamp,
+						title: doc.data().title,
+						uploaded: doc.data().uploaded
+					})
+				}
+			})
+		})
+	}
 }
 </script>
 

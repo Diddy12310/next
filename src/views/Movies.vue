@@ -44,13 +44,39 @@ export default {
   },
   created() {
 		this.username = this.$parent.$parent.$parent.username
-    db.collection('movies').orderBy("title", "asc").get().then(snapshot => {
-      snapshot.forEach(doc => {
-        let movie = doc.data()
-				movie.id = doc.id
-				
-        this.movies.push(movie)
-      })
+		let ref = db.collection('movies').orderBy("title", "asc")
+
+		ref.onSnapshot(snapshot => {
+			snapshot.docChanges().forEach(change => {
+				if(change.type === "added") {
+					let doc = change.doc
+					this.movies.push({
+						id: doc.id,
+						cover: doc.data().cover,
+						duration: doc.data().duration,
+						link: doc.data().link,
+						summary: doc.data().summary,
+						title: doc.data().title,
+						available: doc.data().available
+					})
+				}
+				if(change.type === "removed") {
+					let doc = change.doc
+					this.movies.splice(change.oldIndex, 1)
+				}
+				if(change.type === "modified") {
+					let doc = change.doc
+					this.movies.splice(change.oldIndex, 1, {
+						id: doc.id,
+						cover: doc.data().cover,
+						duration: doc.data().duration,
+						link: doc.data().link,
+						summary: doc.data().summary,
+						title: doc.data().title,
+						available: doc.data().available
+					})
+				}
+			})
 		})
 	},
 	computed: {

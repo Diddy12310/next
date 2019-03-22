@@ -42,12 +42,39 @@ export default {
 	},
   created() {
 		this.username = this.$parent.$parent.$parent.username
-    db.collection('bookshelf').orderBy("title", "asc").get().then(snapshot => {
-      snapshot.forEach(doc => {
-        let book = doc.data()
-				book.id = doc.id
-        this.bookshelf.push(book)
-      })
+		let ref = db.collection('bookshelf').orderBy("title", "asc")
+
+		ref.onSnapshot(snapshot => {
+			snapshot.docChanges().forEach(change => {
+				if(change.type === "added") {
+					let doc = change.doc
+					this.bookshelf.push({
+						id: doc.id,
+						author: doc.data().author,
+						cover: doc.data().cover,
+						link: doc.data().link,
+						summary: doc.data().summary,
+						title: doc.data().title,
+						available: doc.data().available
+					})
+				}
+				if(change.type === "removed") {
+					let doc = change.doc
+					this.bookshelf.splice(change.oldIndex, 1)
+				}
+				if(change.type === "modified") {
+					let doc = change.doc
+					this.bookshelf.splice(change.oldIndex, 1, {
+						id: doc.id,
+						author: doc.data().author,
+						cover: doc.data().cover,
+						link: doc.data().link,
+						summary: doc.data().summary,
+						title: doc.data().title,
+						available: doc.data().available
+					})
+				}
+			})
 		})
 	},
 	computed: {

@@ -15,7 +15,7 @@
 import db from '@/firebase/init'
 
 export default {
-	name: 'Network Status',
+	name: 'NetworkStatus',
 	data() {
 		return {
 			main: '',
@@ -26,6 +26,7 @@ export default {
 		}
 	},
 	created() {
+		this.username = this.$parent.$parent.$parent.username
 		db.collection('meta').doc('status').get().then((doc) => {
 			this.main = doc.data().main
 			this.relay = doc.data().relay
