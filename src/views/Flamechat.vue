@@ -3,34 +3,40 @@
 		<v-toolbar dense color="deep-orange darken-2">
 			<v-toolbar-title>Flamechat</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-btn v-if="username == 'diddy12310'" flat @click="clearAllMessages()">Clear All</v-btn>
+			<v-btn v-if="username && color && ready && chatroom" @click="leaveRoom()" flat>Leave</v-btn>
+			<v-btn v-if="username == 'diddy12310' && color && ready && chatroom" flat @click="clearAllMessages()">Clear All</v-btn>
 		</v-toolbar>
 
 		<v-container>
 
 			<!-- Welcome card -->
-			<v-card class="welcome-card" v-if="!username || !color || !ready">
+			<v-card class="welcome-card" v-if="!username || !color || !ready || !chatroom">
 				<v-card-title>
 					<h3 class="headline mb-0 text-xs-center">Welcome to Flamechat!</h3>
 				</v-card-title>
 				<v-card-text>
+					<h6 class="title">Color</h6>
 					<v-radio-group v-model="color" column>
 						<v-radio :label="color.label" :color="color.value" :value="color.value" v-for="color in colors" :key="color.value"></v-radio>
 						<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'diddy12310'"></v-radio>
 						<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'paradigm'"></v-radio>
 					</v-radio-group>
+					<h6 class="title">Chatroom</h6>
+					<v-radio-group v-model="chatroom" column>
+						<v-radio :label="room.name" :value="room.db" v-for="room in chatrooms" :key="room.id" :disabled="!room.available" v-if="room.id !== 'chatrooms'"></v-radio>
+					</v-radio-group>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn flat @click.stop="ready = true" color="accent">Join</v-btn>
+					<v-btn :disabled="!chatroom || !color" flat @click.stop="ready = true, setChatroom()" color="accent">Join</v-btn>
 				</v-card-actions>
 			</v-card>
 
 
 			<!-- Chat card -->
-			<v-card class="chat-card" v-if="username && color && ready">
+			<v-card class="chat-card" v-if="username && color && ready && chatroom">
 				<v-card-text>
 					<ul class="messages" v-chat-scroll="{ always: false }">
-						<p v-if="messages === []">There are no messages posted on this room.</p>
+						<p v-if="messages == []">There are no messages posted on this room.</p>
 						<li v-for="message in messages" :key="message.id" :id="message.id">
 							<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
 							<span v-html="message.content"></span>
@@ -64,6 +70,7 @@
 <script>
 import db from '@/firebase/init'
 import moment from 'moment'
+import { constants } from 'fs';
 
 export default {
 	name: 'Flamechat',
@@ -82,42 +89,45 @@ export default {
 			editMessage: '',
 			editor: false,
 			editing: null,
-			flamechatEnable: null
+			flamechatEnable: null,
+			chatroom: null,
+			chatrooms: []
     }
 	},
 	created() {
 		this.username = this.$parent.$parent.$parent.username
-		let ref = db.collection('messages').orderBy('timestamp', 'asc')
+		this.chatroom = null
 
-		ref.onSnapshot(snapshot => {
+		var chatroomsRef = db.collection('flamechat')
+		chatroomsRef.onSnapshot(snapshot => {
 			snapshot.docChanges().forEach(change => {
-				if(change.type === "added") {
-					let doc = change.doc
-					this.messages.push({
-						id: doc.id,
-						name: doc.data().name,
-						content: doc.data().content,
-						color: doc.data().color,
-						timestamp: moment(doc.data().timestamp).format('lll')
-					})
-				}
-				if(change.type === "removed") {
-					let doc = change.doc
-					this.messages.splice(change.oldIndex, 1)
-				}
-				if(change.type === "modified") {
-					let doc = change.doc
-					this.messages.splice(change.oldIndex, 1, {
-						id: doc.id,
-						name: doc.data().name,
-						content: doc.data().content,
-						color: doc.data().color,
-						timestamp: moment(doc.data().timestamp).format('lll')
-					})
-				}
+				// if (change.doc.id != 'chatrooms') {
+				// 	console.log(change)
+					if (change.type === "added") {
+						let doc = change.doc
+						this.chatrooms.push({
+							id: doc.id,
+							name: doc.data().name,
+							db: doc.data().db,
+							available: doc.data().available,
+						})
+					}
+					if (change.type === "removed") {
+						let doc = change.doc
+						this.chatrooms.splice(change.oldIndex, 1)
+					}
+					if (change.type === "modified") {
+						let doc = change.doc
+						this.chatrooms.splice(change.oldIndex, 1, {
+							id: doc.id,
+							name: doc.data().name,
+							db: doc.data().db,
+							available: doc.data().available
+						})
+					}
+				// }
 			})
 		})
-
 		var dbRef = db.collection('colors')
 
     dbRef.get().then(snapshot => {
@@ -143,16 +153,16 @@ export default {
 	},
 	methods: {
 		deleteChat(id) {
-			db.collection('messages').doc(id).delete().then(() => {
+			db.collection('flamechat').doc('chatrooms').collection(this.chatroom).doc(id).delete().then(() => {
 				this.feedback = 'Message deleted successfully.'
 				this.snackbar = true
-				this.$ga.event(this.username, 'deleted a message')
+				this.$ga.event(this.username, 'deleted a message on ' + this.chatroom)
 			})
 		},
 		clearAllMessages() {
 			var message
 			for(message in this.messages) {
-				db.collection('messages').get().then(snapshot => {
+				db.collection('flamechat').doc('chatrooms').collection(this.chatroom).get().then(snapshot => {
 					snapshot.forEach(doc => {
 						doc.ref.delete()
 						this.feedback = 'All messages cleared.'
@@ -164,7 +174,7 @@ export default {
 		},
 		sendChat() {
 			if(this.newMessage && this.username != '' && this.color != null) {
-				db.collection('messages').add({
+				db.collection('flamechat').doc('chatrooms').collection(this.chatroom).add({
 					name: this.username,
 					content: this.newMessage,
 					color: this.color,
@@ -176,7 +186,7 @@ export default {
 				})
 				this.feedback = 'Your message sent successfully!'
 				this.snackbar = true
-				this.$ga.event(this.username, 'sent ' + this.newMessage)
+				this.$ga.event(this.username, 'sent ' + this.newMessage + ' on ' + this.chatroom)
 				this.newMessage = null
 			} else {
 				this.feedback = 'Your message did not send sucessfully! Try signing out and back in.'
@@ -184,16 +194,52 @@ export default {
 			}
 		},
 		editChat(id) {
-			db.collection('messages').doc(this.editing).update({
+			db.collection('flamechat').doc('chatrooms').collection(this.chatroom).doc(this.editing).update({
 				content: this.editMessage
 			}).then(() => {
 				this.feedback = 'Message edited successfully.'
 				this.snackbar = true
-				this.$ga.event(this.username, 'edited ' + this.editMessage)
+				this.$ga.event(this.username, 'edited ' + this.editMessage + ' on ' + this.chatroom)
 				this.editing = null
 				this.editMessage = ''
 				this.editor = false
 			})
+		},
+		setChatroom() {
+			let ref = db.collection('flamechat').doc('chatrooms').collection(this.chatroom).orderBy('timestamp', 'asc')
+
+			ref.onSnapshot(snapshot => {
+				snapshot.docChanges().forEach(change => {
+					if(change.type === "added") {
+						let doc = change.doc
+						this.messages.push({
+							id: doc.id,
+							name: doc.data().name,
+							content: doc.data().content,
+							color: doc.data().color,
+							timestamp: moment(doc.data().timestamp).format('lll')
+						})
+					}
+					if(change.type === "removed") {
+						let doc = change.doc
+						this.messages.splice(change.oldIndex, 1)
+					}
+					if(change.type === "modified") {
+						let doc = change.doc
+						this.messages.splice(change.oldIndex, 1, {
+							id: doc.id,
+							name: doc.data().name,
+							content: doc.data().content,
+							color: doc.data().color,
+							timestamp: moment(doc.data().timestamp).format('lll')
+						})
+					}
+				})
+			})
+		},
+		leaveRoom() {
+			this.chatroom = null
+			this.ready = false
 		}
 	}
 }
@@ -204,7 +250,6 @@ export default {
 	margin: 50px auto;
 	width: 100%;
 	max-width: 550px;
-	text-align: center;
 }
 
 .hidden {
@@ -234,7 +279,7 @@ export default {
 }
 
 .chat-card span {
-	font-size: 1.1em;
+	font-size: 1.25em;
 }
 
 .chat-card ul {
@@ -249,7 +294,7 @@ export default {
 
 .chat-card .time {
 	display: block;
-	font-size: .8em;
+	font-size: .85em;
 }
 
 .messages {
@@ -259,7 +304,7 @@ export default {
 }
 
 .chat-card .name {
-	font-size: 17.5px;
+	font-size: 20px;
 }
 
 div.v-input__slot {

@@ -217,6 +217,7 @@ export default {
 		signIn() {
 			if(this.username && this.password) {
 				firebase.auth().signInWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).catch(error => {
+					console.log(error)
 					if(error.code == 'auth/invalid-email') {
 						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
 						this.snackbar = true
