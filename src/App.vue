@@ -1,6 +1,5 @@
 <template>
 	<v-app dark>
-		<div ref="approot"></div>
 		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
 			<v-toolbar-side-icon @click="drawer = !drawer" v-if="userPresent && !lockdown"></v-toolbar-side-icon>
 			<v-toolbar-title>

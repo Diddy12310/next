@@ -3,14 +3,14 @@
     <div style="padding-top: 50px; width: 75%; margin: auto;">
       <span class="display-3 blue--text font-weight-thin text-uppercase">NOTICE</span>
 			<v-divider style="margin: 25px 0px;"></v-divider>
-      <h2 class="display-1 font-weight-regular">There is no guarantee that...</h2>
+      <h2 class="display-1 font-weight-regular pa-2">There is no guarantee that...</h2>
       <h2 class="headline font-weight-light">... this software will work.</h2>
       <h2 class="headline font-weight-light">... your data will be fully protected at all times.</h2>
       <h2 class="headline font-weight-light">... this software will be fully released.</h2>
       <h2 class="headline font-weight-light">... customer service will be available.</h2>
       <h2 class="headline font-weight-light">... our customers will be at the forefront of our decisions.</h2>
       <br><v-divider></v-divider><br>
-      <h2 class="display-1 font-weight-regular">We reserve the right to...</h2>
+      <h2 class="display-1 font-weight-regular pa-2">We reserve the right to...</h2>
       <h2 class="headline font-weight-light">... terminate your account.</h2>
       <h2 class="headline font-weight-light">... search and seize any account, without cause, at any time.</h2>
       <h2 class="headline font-weight-light">... refuse account creation.</h2>

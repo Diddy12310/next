@@ -24,6 +24,7 @@
 					<h6 class="title">Chatroom</h6>
 					<v-radio-group v-model="chatroom" column>
 						<v-radio :label="room.name" :value="room.db" :disabled="!room.available" v-if="room.id !== 'chatrooms'" v-for="room in chatrooms" :key="room.id"></v-radio>
+						<v-radio label="The Inner Core" value="the-inner-core" v-if="username == 'diddy12310' || username == 'mylichius' || usernmae == '???'"></v-radio>
 					</v-radio-group>
 				</v-card-text>
 				<v-card-actions>
@@ -41,8 +42,8 @@
 							<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
 							<span v-html="message.content"></span>
 							<span class="time">{{ message.timestamp }}</span>
-							<v-btn class="admin-btn" flat color="error" v-if="username == 'diddy12310'" @click.prevent="deleteChat(message.id)">Delete</v-btn>
-							<v-btn class="admin-btn" flat color="warning" v-if="username == 'diddy12310'" @click.prevent="editor = true, editing = message.id, editMessage = message.content">Edit</v-btn>
+							<v-btn class="admin-btn" icon flat color="error" v-if="username == 'diddy12310'" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
+							<v-btn class="admin-btn" icon flat color="warning" v-if="username == 'diddy12310'" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn>
 						</li>
 					</ul>
 				</v-card-text>
@@ -70,7 +71,6 @@
 <script>
 import db from '@/firebase/init'
 import moment from 'moment'
-import { constants } from 'fs';
 
 export default {
 	name: 'Flamechat',
@@ -147,6 +147,7 @@ export default {
 				if(change.type === "modified") {
 					let doc = change.doc
 					this.flamechatEnable = doc.data().flamechatEnable
+					this.newMessage = null
 				}
 			})
 		})

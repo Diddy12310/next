@@ -7,6 +7,7 @@ import VueChatScroll from 'vue-chat-scroll'
 import VueFriendlyIframe from 'vue-friendly-iframe';
 import VueAnalytics from 'vue-analytics'
 import store from './store'
+import firebase from 'firebase'
 
 Vue.use(VueAnalytics, {
 	id: 'UA-52752236-3',
@@ -18,8 +19,13 @@ Vue.config.productionTip = false
 
 Vue.use(VueChatScroll)
 
-new Vue({
-  router,
-  store,
-  render: function (h) { return h(App) }
-}).$mount('#app')
+let app = null
+firebase.auth().onAuthStateChanged(() => {
+  if (!app) {
+    new Vue({
+      router,
+      store,
+      render: function (h) { return h(App) }
+    }).$mount('div#app')    
+  }
+})
