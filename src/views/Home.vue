@@ -7,7 +7,7 @@
 			</div>
 		</v-parallax>
 		<div style="text-align: center; padding: 25px;" class="grey darken-4">
-	  	<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin-bottom: 25px;">Question</h1>
+	  	<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin-bottom: 25px;">HEY!</h1>
 		  <h5 class="headline pb-2">Have <span class="font-weight-bold">YOU</span> read the notice?</h5>
 		  <p>It contains vital information pertaining to your Paradigm account. Be sure to read and acknowledge it.</p>
 		  <v-btn router to="/company/notice" color="deep-purple">Read the Notice</v-btn>

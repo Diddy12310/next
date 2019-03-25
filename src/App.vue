@@ -25,7 +25,8 @@
 
 		<v-navigation-drawer v-model="drawer" app temporary floating>
 			<v-toolbar>
-				<v-toolbar-title><img style="height: 45px; top: 5px; left: -10px; position: relative;" src="./assets/launchlogo.png"></v-toolbar-title>
+				<v-toolbar-side-icon @click.prevent="drawer = false"><v-icon>close</v-icon></v-toolbar-side-icon>
+				<v-toolbar-title>Menu</v-toolbar-title>
 			</v-toolbar>
 			
 			<v-list>
@@ -94,21 +95,19 @@
 					</v-form>
 
 					<div v-if="userPresent">
-						<p><strong>Status:</strong> Signed in</p>
 						<p><strong>Username:</strong> {{ username }}</p>
 						<p><strong>Last Sign In:</strong> {{ userInfo.metadata.lastSignInTime }}</p>
 						<p><strong>Account Creation:</strong> {{ userInfo.metadata.creationTime }}</p>
 						<p><strong>User ID:</strong> {{ userInfo.uid }}</p>
 						<v-divider></v-divider>
-						<!-- <v-text-field v-model="newPassword" label="Change password" :rules="passRules" autocomplete="off" type="password" name="newpass"></v-text-field> -->
-						<v-btn @click="changePass" flat color="warning">Change Password</v-btn>
+						<v-btn @click="newPasswordDialog = true" flat color="warning">Change Password</v-btn>
 						<v-btn @click="deleteDialog = true" flat color="error">Delete Account</v-btn>
 						<v-divider v-if="username == 'diddy12310'"></v-divider>
 						<v-switch v-if="username == 'diddy12310'" @click="toggleSignUp" v-model="signUpAvail" style="flex: none !important;" label="Sign up availability"></v-switch>
 						<v-switch v-if="username == 'diddy12310'" @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Lockdown" color="red"></v-switch>
 						<v-switch v-if="username == 'diddy12310'" @click="fourofourToggle" v-model="fourofour" style="flex: none !important;" label="404" color="deep-purple"></v-switch>
-						<v-switch v-if="username == 'diddy12310'" @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;" label="Flamechat"></v-switch>
-						<v-switch v-if="username == 'diddy12310'" @click="toggleFcHTML" v-model="flamechatHTML" style="flex: none !important;" label="Flamechat HTML"></v-switch>
+						<v-switch v-if="username == 'diddy12310'" @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;" label="Flamechat" color="deep-orange"></v-switch>
+						<v-switch v-if="username == 'diddy12310'" @click="toggleFcHTML" v-model="flamechatHTML" style="flex: none !important;" label="Flamechat HTML" color="deep-orange"></v-switch>
 					</div>
 				</v-card-text>
 
@@ -126,6 +125,19 @@
 				<v-card-actions>
 					<v-btn @click="deleteUser" color="error" flat>Yes</v-btn>
 					<v-btn @click="deleteDialog = false" color="green">Cancel</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+
+		<v-dialog v-model="newPasswordDialog" max-width="400">
+			<v-card>
+				<v-card-title><h3 class="headline mb-0">Change Password</h3></v-card-title>
+				<v-card-text>
+					<v-text-field autocomplete="off" type="password" name="newPassword" v-model="newPassword" label="New Password" :rules="passRules"></v-text-field>
+				</v-card-text>
+				<v-card-actions>
+					<v-btn @click="changePass" color="warning" flat>Change Password</v-btn>
+					<v-btn @click="newPasswordDialog = false" flat color="accent">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -218,7 +230,8 @@ export default {
 			lockdown: null,
 			flamechatEnable: null,
 			fourofour: null,
-			flamechatHTML: null
+			flamechatHTML: null,
+			newPasswordDialog: false
 		}
 	},
 	methods: {
@@ -279,15 +292,17 @@ export default {
 			})
 		},
 		changePass() {
-			// firebase.auth().currentUser.updatePassword(this.newPassword).then(function() {
-			// 	// Update successful.
-			// }).catch(function(error) {
-			// 	// An error happened.
-			// 	console.log(error)
-			// })
-			// this.newPassword = null
-			this.feedback = 'Function not implemented yet.'
-			this.snackbar = true
+			firebase.auth().currentUser.updatePassword(this.newPassword).then(function() {
+				// Update successful.
+				this.newPasswordDialog = false,
+				this.feedback = 'Password changed successfully.'
+				this.snackbar = true
+			}).catch(function(error) {
+				// An error happened.
+				this.feedback = 'Password changed unsuccessfully.'
+				this.snackbar = true
+			})
+			this.newPassword = null
 		},
 		deleteUser() {
 			this.$ga.event(this.username, 'deleted their account')
