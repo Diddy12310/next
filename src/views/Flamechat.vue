@@ -23,7 +23,7 @@
 					</v-radio-group>
 					<h6 class="title">Chatroom</h6>
 					<v-radio-group v-model="chatroom" column>
-						<v-radio :label="room.name" :value="room.db" v-for="room in chatrooms" :key="room.id" :disabled="!room.available" v-if="room.id !== 'chatrooms'"></v-radio>
+						<v-radio :label="room.name" :value="room.db" :disabled="!room.available" v-if="room.id !== 'chatrooms'" v-for="room in chatrooms" :key="room.id"></v-radio>
 					</v-radio-group>
 				</v-card-text>
 				<v-card-actions>
@@ -207,6 +207,7 @@ export default {
 		},
 		setChatroom() {
 			let ref = db.collection('flamechat').doc('chatrooms').collection(this.chatroom).orderBy('timestamp', 'asc')
+			this.messages = []
 
 			ref.onSnapshot(snapshot => {
 				snapshot.docChanges().forEach(change => {
