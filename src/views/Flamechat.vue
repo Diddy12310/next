@@ -1,6 +1,6 @@
 <template>
 	<div class="flamechat">
-		<v-toolbar dense color="deep-orange darken-2">
+		<v-toolbar dense color="deep-orange darken-2" v-if="flamechatEnable">
 			<v-toolbar-title>Flamechat</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-btn v-if="username && color && ready && chatroom" @click="leaveRoom()" flat>Leave</v-btn>
@@ -9,60 +9,69 @@
 
 		<v-container>
 
+			<!-- Disabled card -->
+			<v-card class="disabled-card" v-if="!flamechatEnable">
+				<h1 class="display-4 red--text font-weight-bold">:(</h1><br><br>
+				<p class="headline font-weight-light">Flamechat is off.<br>It will remain off indefinitely.</p>
+			</v-card>
+
 			<!-- Welcome card -->
-			<v-card class="welcome-card" v-if="!username || !color || !ready || !chatroom">
-				<v-card-title>
-					<h3 class="headline mb-0 text-xs-center">Welcome to Flamechat!</h3>
-				</v-card-title>
-				<v-card-text>
-					<h6 class="title">Color</h6>
-					<v-radio-group v-model="color" column>
-						<v-radio :label="color.label" :color="color.value" :value="color.value" v-for="color in colors" :key="color.value"></v-radio>
-						<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'diddy12310'"></v-radio>
-						<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'paradigm'"></v-radio>
-					</v-radio-group>
-					<h6 class="title">Chatroom</h6>
-					<v-radio-group v-model="chatroom" column>
-						<v-radio :label="room.name" :value="room.db" :disabled="!room.available" v-if="room.id !== 'chatrooms'" v-for="room in chatrooms" :key="room.id"></v-radio>
-						<v-radio label="The Inner Core" value="the-inner-core" v-if="username == 'diddy12310' || username == 'mylichius' || usernmae == '???'"></v-radio>
-					</v-radio-group>
-				</v-card-text>
-				<v-card-actions>
-					<v-btn :disabled="!chatroom || !color" flat @click.stop="ready = true, setChatroom()" color="accent">Join</v-btn>
-				</v-card-actions>
-			</v-card>
+			<div v-if="flamechatEnable">
+				<v-card class="welcome-card" v-if="!username || !color || !ready || !chatroom">
+					<v-card-title>
+						<h3 class="headline mb-0 text-xs-center">Welcome to Flamechat!</h3>
+					</v-card-title>
+					<v-card-text>
+						<h6 class="title">Color</h6>
+						<v-radio-group v-model="color" column>
+							<v-radio :label="color.label" :color="color.value" :value="color.value" v-for="color in colors" :key="color.value"></v-radio>
+							<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'diddy12310'"></v-radio>
+							<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'paradigm'"></v-radio>
+						</v-radio-group>
+						<h6 class="title">Chatroom</h6>
+						<v-radio-group v-model="chatroom" column>
+							<v-radio :label="room.name" :value="room.db" :disabled="!room.available" v-if="room.id !== 'chatrooms'" v-for="room in chatrooms" :key="room.id"></v-radio>
+							<v-radio label="The Inner Core" value="the-inner-core" v-if="username == 'diddy12310' || username == 'mylichius' || usernmae == '???'"></v-radio>
+						</v-radio-group>
+					</v-card-text>
+					<v-card-actions>
+						<v-btn :disabled="!chatroom || !color" flat @click.stop="ready = true, setChatroom()" color="accent">Join</v-btn>
+					</v-card-actions>
+				</v-card>
 
 
-			<!-- Chat card -->
-			<v-card class="chat-card" v-if="username && color && ready && chatroom">
-				<v-card-text>
-					<ul class="messages" v-chat-scroll="{ always: false }">
-						<p v-if="messages == []">There are no messages posted on this room.</p>
-						<li v-for="message in messages" :key="message.id" :id="message.id">
-							<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
-							<span v-html="message.content"></span>
-							<span class="time">{{ message.timestamp }}</span>
-							<v-btn class="admin-btn" icon flat color="error" v-if="username == 'diddy12310'" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
-							<v-btn class="admin-btn" icon flat color="warning" v-if="username == 'diddy12310'" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn>
-						</li>
-					</ul>
-				</v-card-text>
+				<!-- Chat card -->
+				<v-card class="chat-card" v-if="username && color && ready && chatroom">
+					<v-card-text>
+						<ul class="messages" v-chat-scroll="{ always: false }">
+							<p v-if="messages == []">There are no messages posted on this room.</p>
+							<li v-for="message in messages" :key="message.id" :id="message.id">
+								<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
+								<span v-html="message.content"></span>
+								<span class="time">{{ message.timestamp }}</span>
+								<v-btn class="admin-btn" icon flat color="error" v-if="username == 'diddy12310'" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
+								<v-btn class="admin-btn" icon flat color="warning" v-if="username == 'diddy12310'" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn>
+							</li>
+						</ul>
+					</v-card-text>
 
-				<v-card-actions>
-					<form @submit.prevent="sendChat" class="new-message" v-if="!editor">
-						<v-btn :disabled="!flamechatEnable" id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
-							<v-icon>send</v-icon>
-						</v-btn>
-						<v-text-field :disabled="!flamechatEnable" class="message-box" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field>
-					</form>
-					<form @submit.prevent="editChat" class="new-message" v-if="editor">
-						<v-btn id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
-							<v-icon>edit</v-icon>
-						</v-btn>
-						<v-text-field v-model="editMessage" class="message-box" autocomplete="off" label="Edit Message"></v-text-field>
-					</form>
-				</v-card-actions>
-			</v-card>
+					<v-card-actions>
+						<form @submit.prevent="sendChat" class="new-message" v-if="!editor">
+							<v-btn :disabled="!flamechatEnable" id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
+								<v-icon>send</v-icon>
+							</v-btn>
+							<v-text-field :disabled="!flamechatEnable" class="message-box" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field>
+						</form>
+						<form @submit.prevent="editChat" class="new-message" v-if="editor">
+							<v-btn id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
+								<v-icon>edit</v-icon>
+							</v-btn>
+							<v-text-field v-model="editMessage" class="message-box" autocomplete="off" label="Edit Message"></v-text-field>
+						</form>
+					</v-card-actions>
+				</v-card>
+
+			</div>
 		</v-container>
 		<v-snackbar v-model="snackbar" bottom left :timeout="2000">{{ feedback }}</v-snackbar>
 	</div>
@@ -323,5 +332,13 @@ div.v-messages {
 
 .message-box {
 	width: 92.5% !important;
+}
+
+.disabled-card {
+	width: 100%;
+	max-width: 350px;
+	text-align: center;
+	padding: 8px;
+	margin: 64px auto;
 }
 </style>
