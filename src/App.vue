@@ -1,13 +1,13 @@
 <template>
 	<v-app dark>
 		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
-			<v-toolbar-side-icon @click="drawer = !drawer" v-if="userPresent && !lockdown"></v-toolbar-side-icon>
+			<v-toolbar-side-icon @click="drawer = !drawer" v-if="userPresent && !lockdown && !fourofour"></v-toolbar-side-icon>
 			<v-toolbar-title>
 				<img style="height: 45px; top: 5px; position: relative;" src="./assets/paradigmlogo.png" class="hidden-xs-only">
 				<img style="height: 45px; top: 3.65px; position: relative;" src="./assets/plogo.png" class="hidden-sm-and-up">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-toolbar-items v-if="userPresent && !lockdown">
+			<v-toolbar-items v-if="userPresent && !lockdown && !fourofour">
 				<v-btn icon @click="dialog = true">
 					<v-icon>person</v-icon>
 				</v-btn>
@@ -17,6 +17,9 @@
 			</v-toolbar-items>
 			<v-toolbar-items v-if="username == 'diddy12310' && lockdown">
 				<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important; top: +16px;"></v-switch>
+			</v-toolbar-items>
+			<v-toolbar-items v-if="username == 'diddy12310' && fourofour">
+				<v-switch @click="fourofourToggle" v-model="fourofour" style="flex: none !important; top: +16px;"></v-switch>
 			</v-toolbar-items>
 		</v-toolbar>
 
@@ -103,7 +106,9 @@
 						<v-divider v-if="username == 'diddy12310'"></v-divider>
 						<v-switch v-if="username == 'diddy12310'" @click="toggleSignUp" v-model="signUpAvail" style="flex: none !important;" label="Sign up availability"></v-switch>
 						<v-switch v-if="username == 'diddy12310'" @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Lockdown" color="red"></v-switch>
+						<v-switch v-if="username == 'diddy12310'" @click="fourofourToggle" v-model="fourofour" style="flex: none !important;" label="404" color="deep-purple"></v-switch>
 						<v-switch v-if="username == 'diddy12310'" @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;" label="Flamechat"></v-switch>
+						<v-switch v-if="username == 'diddy12310'" @click="toggleFcHTML" v-model="flamechatHTML" style="flex: none !important;" label="Flamechat HTML"></v-switch>
 					</div>
 				</v-card-text>
 
@@ -127,8 +132,8 @@
 
 		<v-content>
 			<v-container fluid style="padding: 0;">
-				<router-view v-if="userPresent && !lockdown"></router-view>
-				<div class="noUser" v-if="!userPresent &&!lockdown" style="text-align: center;">
+				<router-view v-if="userPresent && !lockdown && !fourofour"></router-view>
+				<div class="noUser" v-if="!userPresent &&!lockdown && !fourofour" style="text-align: center;">
 					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">No User is Logged In</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
 					<v-btn color="primary" @click="dialog = true">Login</v-btn>
@@ -137,6 +142,11 @@
 					<v-icon style="font-size: 75px; margin-top: 100px;" color="red">block</v-icon>
 					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Lockdown</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">No users logged in.</h3>
+				</div>
+				<div class="fourofour" v-if="fourofour" style="text-align: center;">
+					<v-icon style="font-size: 75px; margin-top: 100px;" color="purple darken-3">warning</v-icon>
+					<h1 class="display-3 deep-purple--text darken-3 font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">404</h1>
+					<h3 class="headline font-weight-light" style="margin: 25px;">Page Not Found</h3>
 				</div>
 			</v-container>
 		</v-content>
@@ -164,7 +174,7 @@ export default {
 			drawer: false,
 			apps: [
 				{ text: 'Home', route: '/home' },
-				{ text: 'Flamechat', route: '/flamechat' },
+				{ text: 'Flamechat', route: '/flame' },
 				{ text: 'Hex', route: '/hex' },
 				// { text: 'Drawer', route: '/drawer' },
 				// { text: 'Launchpad', route: '/launchpad' },
@@ -206,7 +216,9 @@ export default {
 			terms: false,
 			deleteDialog: false,
 			lockdown: null,
-			flamechatEnable: null
+			flamechatEnable: null,
+			fourofour: null,
+			flamechatHTML: null
 		}
 	},
 	methods: {
@@ -302,6 +314,17 @@ export default {
 				}
 			})
 		},
+		toggleFcHTML() {
+			db.collection('meta').doc('auth').update({
+				flamechatHTML: !this.flamechatHTML
+			}).then(() => {
+				if(this.flamechatHTML == true) {
+					this.$ga.event(this.username, 'enabled Flamechat HTML')
+				} else {
+					this.$ga.event(this.username, 'disabled Flamechat HTML')
+				}
+			})
+		},
 		lockdownToggle() {
 			db.collection('meta').doc('auth').update({
 				lockdown: !this.lockdown
@@ -313,6 +336,21 @@ export default {
 				} else {
 					this.$ga.event(this.username, 'ended the lockdown')
 					this.feedback = 'Lockdown ended successfully.'
+					this.snackbar = true
+				}
+			})
+		},
+		fourofourToggle() {
+			db.collection('meta').doc('auth').update({
+				fourofour: !this.fourofour
+			}).then(() => {
+				if (this.fourofour == true) {
+					this.$ga.event(this.username, '404ed')
+					this.feedback = '404 successfully.'
+					this.snackbar = true
+				} else {
+					this.$ga.event(this.username, 'ended the 404')
+					this.feedback = '404 ended successfully.'
 					this.snackbar = true
 				}
 			})
@@ -351,7 +389,9 @@ export default {
 		metaRef.doc('auth').get().then((doc) => {
 			this.signUpAvail = doc.data().signUpAvail
 			this.lockdown = doc.data().lockdown
-			this.flamechatEnable = doc.data().flamechatEnable
+			this.flamechatEnable = doc.data().flamechatEnable,
+			this.fourofour = doc.data().fourofour,
+			this.flamechatHTML = doc.data().flamechatHTML
 		})
 
 		metaRef.onSnapshot(snapshot => {
@@ -360,7 +400,9 @@ export default {
 					let doc = change.doc
 					this.signUpAvail = doc.data().signUpAvail
 					this.lockdown = doc.data().lockdown
-					this.flamechatEnable = doc.data().flamechatEnable
+					this.flamechatEnable = doc.data().flamechatEnable,
+					this.fourofour = doc.data().fourofour,
+					this.flamechatHTML = doc.data().flamechatHTML
 				}
 			})
 		})

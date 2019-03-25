@@ -1,10 +1,9 @@
 <template>
 	<div class="404">
-		<div style="text-align: center; padding-top: 15vh; width: 75%; margin: auto;">
-      <span class="blue--text font-weight-light text-uppercase display-4">¯\_(ツ)_/¯</span>
-			<v-divider style="width: 750px; margin: auto; margin-bottom: 25px; margin-top: 25px;"></v-divider>
-      <h4 class="display-1">Error 404: Page Not Found</h4>
-      <h5 class="headline" style="margin-top: 10px;">Sorry, but you've hit a dead end.</h5>
+		<div style="text-align: center;">
+			<v-icon style="font-size: 75px; margin-top: 100px;" color="purple darken-3">warning</v-icon>
+			<h1 class="display-3 deep-purple--text darken-3 font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">404</h1>
+			<h3 class="headline font-weight-light" style="margin: 25px;">Page Not Found</h3>
     </div>
 	</div>
 </template>

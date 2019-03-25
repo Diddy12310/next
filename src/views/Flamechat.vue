@@ -47,7 +47,8 @@
 							<p v-if="messages == []">There are no messages posted on this room.</p>
 							<li v-for="message in messages" :key="message.id" :id="message.id">
 								<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
-								<span v-html="message.content"></span>
+								<span v-if="flamechatHTML" v-html="message.content"></span>
+								<span v-if="!flamechatHTML">{{ message.content }}</span>
 								<span class="time">{{ message.timestamp }}</span>
 								<v-btn class="admin-btn" icon flat color="error" v-if="username == 'diddy12310'" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
 								<v-btn class="admin-btn" icon flat color="warning" v-if="username == 'diddy12310'" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn>
@@ -100,7 +101,8 @@ export default {
 			editing: null,
 			flamechatEnable: null,
 			chatroom: null,
-			chatrooms: []
+			chatrooms: [],
+			flamechatHTML: null
     }
 	},
 	created() {
@@ -149,6 +151,7 @@ export default {
 		var metaRef = db.collection('meta')
 		metaRef.doc('auth').get().then((doc) => {
 			this.flamechatEnable = doc.data().flamechatEnable
+			this.flamechatHTML = doc.data().flamechatHTML
 		})
 
 		metaRef.onSnapshot(snapshot => {
@@ -156,6 +159,7 @@ export default {
 				if(change.type === "modified") {
 					let doc = change.doc
 					this.flamechatEnable = doc.data().flamechatEnable
+					this.flamechatHTML = doc.data().flamechatHTML
 					this.newMessage = null
 				}
 			})

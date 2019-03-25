@@ -3,7 +3,7 @@
 		<v-parallax dark :src="homebg" class="paralax">
 			<div class="home">
 				<h2 class="display-3 font-weight-light text-uppercase" style="position: relative; text-align: center; margin: auto; padding-top: 30vh;">Welcome to<br>the future</h2>
-				<v-btn router to="flamechat" style="margin-top: 20px;" color="primary">Open Flamechat</v-btn>
+				<v-btn router to="flame" style="margin-top: 20px;" color="primary">Open Flamechat</v-btn>
 			</div>
 		</v-parallax>
 		<div style="text-align: center; padding: 25px;" class="grey darken-4">
@@ -29,7 +29,6 @@
 
 <script>
 import db from '@/firebase/init'
-import axios from 'axios'
 
 export default {
   name: 'Home',

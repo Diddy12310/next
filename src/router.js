@@ -37,7 +37,7 @@ export default new Router({
 			component: Home
 		},
     {
-      path: '/flamechat',
+      path: '/flame',
       name: 'Flamechat',
       component: Flamechat
 		},
