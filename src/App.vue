@@ -8,6 +8,9 @@
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-toolbar-items v-if="userPresent && !lockdown && !fourofour">
+				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="username == 'diddy12310' || username == 'paradigm'">
+					<v-icon>settings</v-icon>
+				</v-btn>
 				<v-btn icon @click="dialog = true">
 					<v-icon>person</v-icon>
 				</v-btn>
@@ -102,12 +105,6 @@
 						<v-divider></v-divider>
 						<v-btn @click="newPasswordDialog = true" flat color="warning">Change Password</v-btn>
 						<v-btn @click="deleteDialog = true" flat color="error">Delete Account</v-btn>
-						<v-divider v-if="username == 'diddy12310'"></v-divider>
-						<v-switch v-if="username == 'diddy12310'" @click="toggleSignUp" v-model="signUpAvail" style="flex: none !important;" label="Sign up availability"></v-switch>
-						<v-switch v-if="username == 'diddy12310'" @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Lockdown" color="red"></v-switch>
-						<v-switch v-if="username == 'diddy12310'" @click="fourofourToggle" v-model="fourofour" style="flex: none !important;" label="404" color="deep-purple"></v-switch>
-						<v-switch v-if="username == 'diddy12310'" @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;" label="Flamechat" color="deep-orange"></v-switch>
-						<v-switch v-if="username == 'diddy12310'" @click="toggleFcHTML" v-model="flamechatHTML" style="flex: none !important;" label="Flamechat HTML" color="deep-orange"></v-switch>
 					</div>
 				</v-card-text>
 
@@ -142,6 +139,26 @@
 			</v-card>
 		</v-dialog>
 
+		<v-dialog v-model="adminDialog" max-width="500" v-if="username == 'diddy12310' || username == 'paradigm'">
+			<v-card>
+				<v-card-title>
+					<h3 class="headline mb-0">Admin Panel</h3>
+					<v-spacer></v-spacer>
+					<v-btn icon @click="adminDialog = false" class="dialog-close-btn">
+						<v-icon>close</v-icon>
+					</v-btn>
+				</v-card-title>
+				<v-card-text>
+					<v-switch @click="toggleSignUp" v-model="signUpAvail" style="flex: none !important;" label="Sign up availability"></v-switch>
+					<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Lockdown" color="red"></v-switch>
+					<v-switch @click="fourofourToggle" v-model="fourofour" style="flex: none !important;" label="404" color="deep-purple"></v-switch>
+					<v-switch @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;" label="Flamechat" color="deep-orange"></v-switch>
+					<v-switch @click="toggleFcHTML" v-model="flamechatHTML" style="flex: none !important;" label="Flamechat HTML" color="deep-orange"></v-switch>
+				</v-card-text>
+				<v-card-actions></v-card-actions>
+			</v-card>
+		</v-dialog>
+
 		<v-content>
 			<v-container fluid style="padding: 0;">
 				<router-view v-if="userPresent && !lockdown && !fourofour"></router-view>
@@ -168,7 +185,7 @@
     </v-snackbar>
 
 		<v-footer>
-			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm Development. All Rights Reserved.</span></div>
+			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm Development.</span></div>
 		</v-footer>
 	</v-app>
 </template>
@@ -231,7 +248,8 @@ export default {
 			flamechatEnable: null,
 			fourofour: null,
 			flamechatHTML: null,
-			newPasswordDialog: false
+			newPasswordDialog: false,
+			adminDialog: false
 		}
 	},
 	methods: {

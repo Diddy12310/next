@@ -1,16 +1,19 @@
 <template>
 	<div class="news">
-		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin-top: 50px; text-align: center;">The Paradox</h1>
-		<h3 class="display-1 blue-grey--text font-weight-light text-uppercase font-italic" style="text-align: center; margin-bottom: 50px;">Accuracy. Transparency. Legitimacy.</h3>
+		<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin-top: 50px; text-align: center;">The Paradox</h1>
+			<h3 class="display-1 blue-grey--text font-weight-light text-uppercase font-italic" style="text-align: center; margin-bottom: 50px;">Accuracy. Transparency. Legitimacy.</h3>
+			<v-text-field v-model="searchNews" label="Search..." style="width: 300px; margin: 50px auto 0px auto;" hint="For now, you cannot search within articles."></v-text-field>
+		</div>
 
-		<v-card v-for="item in news" :key="item.timestamp">
+		<v-card v-for="item in filteredNews" :key="item.timestamp">
 			<div v-if="item.uploaded">
 				<v-img :src="item.cover"></v-img>
 
 				<v-card-title primary-title>
 					<div>
 						<h3 class="headline mb-0">{{ item.title }}</h3>
-						<h4 class="subheading grey--text">{{ item.author }} | {{ item.timestamp }}</h4>
+						<h4 class="subheading grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.timestamp }}</h4>
 					</div>
 				</v-card-title>
 				<v-divider></v-divider>
@@ -32,6 +35,7 @@ export default {
 	data() {
 		return {
 			news: [],
+			searchNews: '',
 			username: ''
 		}
 	},
@@ -71,6 +75,13 @@ export default {
 				}
 			})
 		})
+	},
+	computed: {
+		filteredNews() {
+			return this.news.filter(item => {
+				return item.title.match(this.searchNews) || item.author.match(this.searchNews) || item.timestamp.match(this.searchNews)
+			})
+		}
 	}
 }
 </script>

@@ -17,8 +17,15 @@
       <h2 class="headline font-weight-light">... block or censor sent messages.</h2>
       <h2 class="headline font-weight-light">... refuse customer service.</h2>
       <br><v-divider></v-divider><br>
+      <h2 class="display-1 font-weight-regular pa-2">Be sure to...</h2>
+      <h2 class="headline font-weight-light">... not use your real name as a username.</h2>
+      <h2 class="headline font-weight-light">... read the terms and conditions.</h2>
+      <h2 class="headline font-weight-light">... report bugs to the development team.</h2>
+      <h2 class="headline font-weight-light">... keep the site a secret.</h2>
+      <h2 class="headline font-weight-light">... be aware of what you are sending.</h2>
+      <br><v-divider></v-divider><br>
     </div>
-		<h2 class="display-1 font-weight-medium red--text">Failure to accept these terms will result in account termination.</h2>
+		<h2 class="display-1 font-weight-medium red--text">Failure to accept this notice will result in account termination.</h2>
     <br>
   </div>
 </template>
