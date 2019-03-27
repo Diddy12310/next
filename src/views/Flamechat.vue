@@ -4,7 +4,7 @@
 			<v-toolbar-title>Flamechat</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-btn v-if="username && color && ready && chatroom" @click="leaveRoom()" flat>Leave</v-btn>
-			<v-btn v-if="username == 'diddy12310' && color && ready && chatroom" flat @click="clearAllMessages()">Clear All</v-btn>
+			<v-btn v-if="username == 'diddy12310' && color && ready && chatroom" flat @click="clearAllMessages()">Purge</v-btn>
 		</v-toolbar>
 
 		<v-container>
@@ -31,7 +31,7 @@
 						<h6 class="title">Chatroom</h6>
 						<v-radio-group v-model="chatroom" column>
 							<v-radio :label="room.name" :value="room.db" :disabled="!room.available" v-if="room.id !== 'chatrooms'" v-for="room in chatrooms" :key="room.id"></v-radio>
-							<v-radio label="The Inner Core" value="the-inner-core" v-if="username == 'diddy12310' || username == 'mylichius' || username == '???'"></v-radio>
+							<v-radio color="#C0C0C0" label="The Inner Core" value="the-inner-core" v-if="username == 'diddy12310' || username == 'mylichius' || username == '???'"></v-radio>
 						</v-radio-group>
 					</v-card-text>
 					<v-card-actions>
@@ -99,7 +99,7 @@ export default {
 			editMessage: '',
 			editor: false,
 			editing: null,
-			flamechatEnable: null,
+			flamechatEnable: true,
 			chatroom: null,
 			chatrooms: [],
 			flamechatHTML: null
