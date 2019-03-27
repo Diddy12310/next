@@ -27,7 +27,7 @@
     </v-card>
 
 
-		<v-dialog v-model="newsDialog" max-width="800" v-if="currentNews">
+		<v-dialog v-model="newsDialog" max-width="800" v-if="currentNews" transition="slide-y-reverse-transition">
 			<v-card>
 				<v-img :src="currentNews.cover"></v-img>
 				<v-card-title primary-title>
