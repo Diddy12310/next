@@ -31,7 +31,7 @@
 				<v-toolbar-side-icon @click.prevent="drawer = false"><v-icon>close</v-icon></v-toolbar-side-icon>
 				<v-toolbar-title>Menu</v-toolbar-title>
 			</v-toolbar>
-			
+
 			<v-list>
 				<v-list-tile v-for="link in apps" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
 					<v-list-tile-title class="white--text font-weight-light">{{ link.text }}</v-list-tile-title>
