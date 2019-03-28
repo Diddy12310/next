@@ -173,7 +173,7 @@
 					<h3 class="headline font-weight-light" style="margin: 25px;">No users logged in.</h3>
 				</div>
 				<div class="fourofour" v-if="fourofour" style="text-align: center;">
-					<v-icon style="font-size: 75px; margin-top: 100px;" color="purple darken-3">warning</v-icon>
+					<v-icon style="font-size: 75px; margin-top: 100px;" color="deep-purple darken-3">warning</v-icon>
 					<h1 class="display-3 deep-purple--text darken-3 font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">404</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Page Not Found</h3>
 				</div>
