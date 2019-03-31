@@ -335,6 +335,7 @@ export default {
 						isInnerCore: false,
 						isAsteroid: false
 					})
+					this.$ga.event(this.username, 'signed up')
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
@@ -348,9 +349,6 @@ export default {
 						this.feedback = error.message
 						this.snackbar = true
 					}
-					if(error == null) {
-						this.$ga.event(this.username, 'signed up')
-					}
 				})
 			} else {
 				this.feedback = 'Please fill in the required fields.'
@@ -362,6 +360,7 @@ export default {
 			firebase.auth().signOut().then(() => {
 				this.feedback = 'Signed out successfully.'
 				this.snackbar = true
+				this.$ga.event(this.username, 'signed out')
 			})
 		},
 		changePass() {
@@ -370,6 +369,7 @@ export default {
 				this.newPasswordDialog = false,
 				this.feedback = 'Password changed successfully.'
 				this.snackbar = true
+				this.$ga.event(this.username, 'changed their password')
 			}).catch(function(error) {
 				// An error happened.
 				this.feedback = 'Password changed unsuccessfully.'
@@ -509,21 +509,10 @@ export default {
 						}
 					})
 				})
-
-
-				
-				// usersRef.get().then(doc => {
-				// 	this.accountBio = doc.data().bio
-				// 	this.accountColor = doc.data().color
-				// 	this.moonrocks = doc.data().moonrocks
-				// 	this.isAdmin = doc.data().isAdmin
-				// 	this.isInnerCore = doc.data().isInnerCore
-				// })
 			} else {
 				this.userPresent = false
 				this.username = ''
 				this.password = ''
-				this.$ga.event(this.username, 'signed out')
 			}
 		})
 
