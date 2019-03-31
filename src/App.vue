@@ -8,7 +8,7 @@
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-toolbar-items v-if="userPresent && !lockdown && !fourofour">
-				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="username == 'diddy12310' || username == 'paradigm'">
+				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
 				<v-btn icon @click="dialog = true">
@@ -87,11 +87,7 @@
 								<v-text-field autocomplete="off" type="text" name="username" v-model="username" label="Username" :rules="usernameRules"></v-text-field>
 								<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
 								<v-text-field autocomplete="off" type="text" name="bio" v-model="accountBio" label="Bio"></v-text-field>
-								<v-radio-group v-model="accountColor" column>
-									<v-radio :label="color.label" :color="color.value" :value="color.value" v-for="color in colors" :key="color.value"></v-radio>
-									<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'diddy12310'"></v-radio>
-									<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'paradigm'"></v-radio>
-								</v-radio-group>
+								<swatches style="width: 100%; height: 100%; background-color: #2E2E2E;" v-model="accountColor" />
 								<v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms"></v-checkbox>
 								<v-btn href="http://relay.theparadigmdev.com/terms.html">View Terms</v-btn>
 								<v-btn @click="signUp" color="primary">Sign Up</v-btn>
@@ -149,7 +145,7 @@
 			</v-card>
 		</v-dialog>
 
-		<v-dialog v-model="adminDialog" max-width="500" v-if="username == 'diddy12310' || username == 'paradigm'">
+		<v-dialog v-model="adminDialog" max-width="500" v-if="isAdmin">
 			<v-card>
 				<v-card-title>
 					<h3 class="headline mb-0">Admin Panel</h3>
@@ -205,9 +201,13 @@ import db from '@/firebase/init'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import moment from 'moment'
+import { Swatches } from 'vue-color'
 
 export default {
 	name: 'Paradigm',
+	components: {
+		Swatches
+	},
 	data() {
 		return {
 			drawer: false,
@@ -263,7 +263,9 @@ export default {
 			accountBio: '',
 			accountColor: '',
 			moonrocks: '',
-			colors: []
+			colors: [],
+			isAdmin: false,
+			isInnerCore: false
 		}
 	},
 	methods: {
@@ -294,13 +296,16 @@ export default {
 			}
 		},
 		signUp() {
-			if(this.username && this.password && this.terms) {
+			if(this.username && this.password && this.terms && this.accountColor && this.accountBio) {
 				firebase.auth().createUserWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).then(user => {
 					db.collection('users').doc(this.username).set({
 						// uid: user.uid,
 						bio: this.accountBio,
-						color: this.accountColor,
-						moonrocks: 1
+						color: this.accountColor.hex,
+						moonrocks: 1,
+						isAdmin: false,
+						isInnerCore: false,
+						isAsteroid: false
 					})
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
@@ -352,10 +357,9 @@ export default {
 					this.username = null
 					this.userInfo = null
 					this.userPresent = false
-				}).catch(error => {
-					console.log(error.message)
 				})
-				
+				this.feedback = 'Account deleted sucessfully.'
+				this.snackbar = true
 			}).catch(function(error) {
 				// An error happened.
 				console.log(error)
@@ -441,6 +445,8 @@ export default {
 					this.accountBio = doc.data().bio
 					this.accountColor = doc.data().color
 					this.moonrocks = doc.data().moonrocks
+					this.isAdmin = doc.data().isAdmin
+					this.isInnerCore = doc.data().isInnerCore
 				})
 
 			} else {

@@ -3,8 +3,8 @@
 		<v-toolbar dense color="deep-orange darken-2" v-if="flamechatEnable">
 			<v-toolbar-title>Flamechat</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-btn v-if="username && color && ready && chatroom" @click="leaveRoom()" flat>Leave</v-btn>
-			<v-btn v-if="username == 'diddy12310' && color && ready && chatroom" flat @click="clearAllMessages()">Purge</v-btn>
+			<v-btn v-if="username && color && ready && chatroom" flat @click="leaveRoom()">Leave</v-btn>
+			<v-btn v-if="isAdmin && color && ready && chatroom" flat @click="clearAllMessages()">Purge</v-btn>
 		</v-toolbar>
 
 		<v-container>
@@ -24,7 +24,7 @@
 					<v-card-text>
 						<v-radio-group v-model="chatroom" column>
 							<v-radio :label="room.name" :value="room.db" :disabled="!room.available" v-if="room.id !== 'chatrooms'" v-for="room in chatrooms" :key="room.id"></v-radio>
-							<v-radio color="#C0C0C0" label="The Inner Core" value="the-inner-core" v-if="username == 'diddy12310' || username == 'mylichius' || username == '???'"></v-radio>
+							<v-radio color="#C0C0C0" label="The Inner Core" value="the-inner-core" v-if="isInnerCore"></v-radio>
 						</v-radio-group>
 					</v-card-text>
 					<v-card-actions>
@@ -40,8 +40,8 @@
 							<p v-if="messages == []">There are no messages posted on this room.</p>
 							<li v-for="message in messages" :key="message.id" :id="message.id">
 								<v-btn :style="{ color: message.color }" class="name" flat @click="openUsernamePopup(message.name)">{{ message.name }}</v-btn>
-								<v-btn class="admin-btn" icon flat color="error" v-if="username == 'diddy12310'" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
-								<v-btn class="admin-btn" icon flat color="warning" v-if="username == 'diddy12310'" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn><br>
+								<v-btn class="admin-btn" icon flat color="error" v-if="isAdmin || username == message.name" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
+								<v-btn class="admin-btn" icon flat color="warning" v-if="isAdmin || username == message.name" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn><br>
 								<span v-if="flamechatHTML" v-html="message.content" class="message"></span>
 								<span v-if="!flamechatHTML" class="message">{{ message.content }}</span>
 								<span class="time">{{ message.timestamp }}</span>
@@ -83,6 +83,8 @@
 					</v-card-title>
 					<v-card-text>
 						<p>{{ profilePopupBio }}</p>
+						<img src="@/assets/isAdmin.png" alt="Administrator" class="moonrock-img" v-if="profilePopupAdmin">
+						<img src="@/assets/asteroid.png" alt="Asteroid" class="moonrock-img" v-if="profilePopupAsteroid"><br>
 						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ profilePopupMoonrocks }}</span>
 					</v-card-text>
 					<v-card-actions>
@@ -126,7 +128,11 @@ export default {
 			profilePopupBio: '',
 			profilePopupColor: '',
 			profilePopupMoonrocks: '',
-			usersDbDownloaded: false
+			usersDbDownloaded: false,
+			profilePopupAdmin: false,
+			profilePopupAsteroid: false,
+			isAdmin: false,
+			isInnerCore: false
     }
 	},
 	created() {
@@ -182,6 +188,8 @@ export default {
 
 		db.collection('users').doc(this.username).get().then(doc => {
 			this.color = doc.data().color
+			this.isInnerCore = doc.data().isInnerCore
+			this.isAdmin = doc.data().isAdmin
 		})
 	},
 	methods: {
@@ -282,6 +290,8 @@ export default {
 				this.profilePopupColor = doc.data().color
 				this.profilePopupMoonrocks = doc.data().moonrocks
 				this.profilePopupUsername = username
+				this.profilePopupAdmin = doc.data().isAdmin
+				this.profilePopupAsteroid = doc.data().isAsteroid
 				this.usersDbDownloaded = true
 			})
 			this.profilePopupEnable = true
@@ -291,7 +301,9 @@ export default {
 			this.profilePopupUsername = ''
 			this.profilePopupBio = ''
 			this.profilePopupColor = ''
-			this.profilePopupMoonrocks = '',
+			this.profilePopupMoonrocks = ''
+			this.profilePopupAdmin = false,
+			this.profilePopupAsteroid = false
 			this.usersDbDownloaded = false
 		},
 		noDM() {
