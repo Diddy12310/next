@@ -515,7 +515,7 @@ export default {
 
 				usersRef.onSnapshot(snapshot => {
 					snapshot.docChanges().forEach(change => {
-						if(change.type === "modified" && doc.id == this.username) {
+						if(change.type === "modified" && change.doc.id == this.username) {
 							let doc = change.doc
 							this.accountBio = doc.data().bio
 							this.accountColor = doc.data().color

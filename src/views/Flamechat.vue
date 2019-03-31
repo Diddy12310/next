@@ -248,6 +248,9 @@ export default {
 		setChatroom() {
 			let ref = db.collection('flamechat').doc('chatrooms').collection(this.chatroom).orderBy('timestamp', 'asc')
 			this.messages = []
+			this.editing = null
+			this.editMessage = ''
+			this.editor = false
 
 			ref.onSnapshot(snapshot => {
 				snapshot.docChanges().forEach(change => {
