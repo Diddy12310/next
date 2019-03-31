@@ -1,5 +1,6 @@
 <template>
 	<v-app dark>
+		<!-- Toolbar -->
 		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
 			<v-toolbar-side-icon @click="drawer = !drawer" v-if="userPresent && !lockdown && !fourofour"></v-toolbar-side-icon>
 			<v-toolbar-title>
@@ -26,6 +27,7 @@
 			</v-toolbar-items>
 		</v-toolbar>
 
+		<!-- Navigation drawer -->
 		<v-navigation-drawer v-model="drawer" app temporary floating>
 			<v-toolbar>
 				<v-toolbar-side-icon @click.prevent="drawer = false"><v-icon>close</v-icon></v-toolbar-side-icon>
@@ -60,6 +62,7 @@
 			</v-list>
     </v-navigation-drawer>
 
+		<!-- Account dialog -->
 		<v-dialog v-model="dialog" max-width="500">
 			<v-card>
 				<v-card-title primary-title>
@@ -121,6 +124,7 @@
 			</v-card>
 		</v-dialog>
 
+		<!-- Delete account dialog -->
 		<v-dialog v-model="deleteDialog" max-width="400">
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Delete Account</h3></v-card-title>
@@ -132,6 +136,7 @@
 			</v-card>
 		</v-dialog>
 
+		<!-- New password dialog -->
 		<v-dialog v-model="newPasswordDialog" max-width="400">
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Change Password</h3></v-card-title>
@@ -145,6 +150,7 @@
 			</v-card>
 		</v-dialog>
 
+		<!-- New color dialog -->
 		<v-dialog v-model="newColorDialog" max-width="400">
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Change Color</h3></v-card-title>
@@ -158,6 +164,7 @@
 			</v-card>
 		</v-dialog>
 
+		<!-- New bio dialog -->
 		<v-dialog v-model="newBioDialog" max-width="400">
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Change Bio</h3></v-card-title>
@@ -171,6 +178,7 @@
 			</v-card>
 		</v-dialog>
 
+		<!-- Admin dialog -->
 		<v-dialog v-model="adminDialog" max-width="500" v-if="isAdmin">
 			<v-card>
 				<v-card-title>
@@ -191,6 +199,7 @@
 			</v-card>
 		</v-dialog>
 
+		<!-- Site content -->
 		<v-content>
 			<v-container fluid style="padding: 0;">
 				<router-view v-if="userPresent && !lockdown && !fourofour"></router-view>
@@ -212,8 +221,10 @@
 			</v-container>
 		</v-content>
 
+		<!-- Snackbar -->
 		<v-snackbar v-if="feedback" v-model="snackbar" bottom left :timeout="2000">{{ feedback }}</v-snackbar>
 
+		<!-- Footer -->
 		<v-footer>
 			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm Development.</span></div>
 		</v-footer>
