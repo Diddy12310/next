@@ -6,6 +6,7 @@
 ### Firebase Patch ###
 .runtimeconfig.json
 .firebase/
+firebase-debug.log
 
 ### VisualStudioCode ###
 .vscode/*
@@ -23,4 +24,4 @@ node_modules
 .DS_Store
 docs/_book
 test/
-dist
+dist/

@@ -32,7 +32,6 @@
 					</v-card-actions>
 				</v-card>
 
-
 				<!-- Chat card -->
 				<v-card class="chat-card" v-if="username && color && ready && chatroom">
 					<v-card-text>
