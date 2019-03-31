@@ -9,6 +9,9 @@ import VueFriendlyIframe from 'vue-friendly-iframe';
 import VueAnalytics from 'vue-analytics'
 import store from './store'
 import firebase from 'firebase'
+import LogRocket from 'logrocket'
+
+LogRocket.init('uvh8hk/paradigm')
 
 Vue.use(VueAnalytics, {
 	id: 'UA-52752236-3',

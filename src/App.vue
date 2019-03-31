@@ -237,6 +237,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import moment from 'moment'
 import { Swatches } from 'vue-color'
+import LogRocket from 'logrocket'
 
 export default {
 	name: 'Paradigm',
@@ -492,6 +493,7 @@ export default {
 				this.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
 				this.userInfo = firebaseUser
 				this.$ga.event(this.username, 'signed in')
+			
 
 				var usersRef = db.collection('users')
 				usersRef.doc(this.username).get().then(doc => {
@@ -500,6 +502,15 @@ export default {
 					this.moonrocks = doc.data().moonrocks
 					this.isAdmin = doc.data().isAdmin
 					this.isInnerCore = doc.data().isInnerCore
+
+					LogRocket.identify(this.userInfo.uid, {
+						name: this.username,
+						isAdmin: this.isAdmin,
+						isAsteroid: this.isAsteroid,
+						bio: this.accountBio,
+						color: this.accountColor,
+						moonrocks: this.moonrocks
+					})
 				})
 
 				usersRef.onSnapshot(snapshot => {
