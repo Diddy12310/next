@@ -110,10 +110,10 @@
 						<p><strong>Account Creation:</strong> {{ userInfo.metadata.creationTime }}</p>
 						<p><strong>User ID:</strong> {{ userInfo.uid }}</p>
 						<v-divider></v-divider>
-						<v-btn @click="newPasswordDialog = true" flat color="warning">Change Password</v-btn>
-						<v-btn @click="deleteDialog = true" flat color="error">Delete Account</v-btn>
 						<v-btn @click="newBioDialog = true" flat color="accent">Edit Bio</v-btn>
 						<v-btn @click="newColorDialog = true" flat color="accent">Change Color</v-btn>
+						<v-btn @click="newPasswordDialog = true" flat color="warning">Change Password</v-btn>
+						<v-btn @click="deleteDialog = true" flat color="error">Delete Account</v-btn>
 					</div>
 				</v-card-text>
 

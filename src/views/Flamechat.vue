@@ -285,7 +285,8 @@ export default {
 		},
 		openUsernamePopup(username, color) {
 			this.usersDbDownloaded = false
-			db.collection('users').doc(username).get().then(doc => {
+			var usersRef = db.collection('users')
+			usersRef.doc(username).get().then((doc) => {
 				this.profilePopupBio = doc.data().bio,
 				this.profilePopupColor = doc.data().color
 				this.profilePopupMoonrocks = doc.data().moonrocks
@@ -294,7 +295,22 @@ export default {
 				this.profilePopupAsteroid = doc.data().isAsteroid
 				this.usersDbDownloaded = true
 			})
-			this.profilePopupEnable = true
+
+			usersRef.onSnapshot(snapshot => {
+				snapshot.docChanges().forEach(change => {
+					if(change.type === "modified") {
+						let doc = change.doc
+						this.profilePopupBio = doc.data().bio,
+						this.profilePopupColor = doc.data().color
+						this.profilePopupMoonrocks = doc.data().moonrocks
+						this.profilePopupUsername = username
+						this.profilePopupAdmin = doc.data().isAdmin
+						this.profilePopupAsteroid = doc.data().isAsteroid
+						this.usersDbDownloaded = true
+					}
+				})
+			})
+			this.profilePopupEnable = true			
 		},
 		closeUsernamePopup() {
 			this.profilePopupEnable = false
