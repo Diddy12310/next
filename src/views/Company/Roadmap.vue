@@ -51,7 +51,8 @@ h1 {
 div.card {
   margin: auto;
   margin-bottom: 20px;
-  width: 750px;
+  width: 100%;
+	max-width: 500px;
 }
 
 div.gap {
