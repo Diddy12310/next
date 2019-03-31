@@ -113,6 +113,8 @@
 						<v-divider></v-divider>
 						<v-btn @click="newPasswordDialog = true" flat color="warning">Change Password</v-btn>
 						<v-btn @click="deleteDialog = true" flat color="error">Delete Account</v-btn>
+						<v-btn @click="feedback = 'Function not implemented.', snackbar = true" flat color="accent">Edit Bio</v-btn>
+						<v-btn @click="feedback = 'Function not implemented.', snackbar = true" flat color="accent">Change Color</v-btn>
 					</div>
 				</v-card-text>
 
