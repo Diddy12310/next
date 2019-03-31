@@ -3,7 +3,6 @@ import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
-import './plugins/vuetify'
 import VueChatScroll from 'vue-chat-scroll'
 import VueFriendlyIframe from 'vue-friendly-iframe';
 import VueAnalytics from 'vue-analytics'
@@ -11,7 +10,12 @@ import store from './store'
 import firebase from 'firebase'
 import LogRocket from 'logrocket'
 
-LogRocket.init('uvh8hk/paradigm')
+LogRocket.init('uvh8hk/paradigm', {
+  dom: {
+    baseHref: 'https://theparadigmdev.com/',
+  },
+  rootHostname: 'theparadigmdev.com',
+})
 
 Vue.use(VueAnalytics, {
 	id: 'UA-52752236-3',

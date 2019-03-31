@@ -6,7 +6,7 @@
 import BlankSpace from '@/components/BlankSpace'
 
 export default {
-	name: 'Latest Vines',
+	name: 'LatestVines',
 	components: {
 		BlankSpace
 	}

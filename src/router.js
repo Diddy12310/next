@@ -114,7 +114,7 @@ export default new Router({
 		},
 		{
 			path: '/company/status',
-			name: 'Network Status',
+			name: 'NetworkStatus',
 			component: NetworkStatus
 		},
 		{
@@ -123,12 +123,12 @@ export default new Router({
 		},
 		{
 			path: '/latest/memes',
-			name: 'Latest Memes',
+			name: 'LatestMemes',
 			component: LatestMemes
 		},
 		{
 			path: '/latest/vines',
-			name: 'Latest Vines',
+			name: 'LatestVines',
 			component: LatestVines
 		},
 		{

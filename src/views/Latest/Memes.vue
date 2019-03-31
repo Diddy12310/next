@@ -25,7 +25,7 @@
 import axios from 'axios'
 
 export default {
-	name: 'Latest Memes',
+	name: 'LatestMemes',
 	data() {
 		return {
 			meirl: [],
