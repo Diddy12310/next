@@ -70,20 +70,25 @@
 
 		<v-dialog v-model="profilePopupEnable" max-width="350">
 			<v-card>
-				<v-card-title>
-					<h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ color: profilePopupColor }">{{ profilePopupUsername }}</h3>
-					<v-spacer></v-spacer>
-					<v-btn icon @click="closeUsernamePopup" class="dialog-close-btn">
-						<v-icon>close</v-icon>
-					</v-btn>
-				</v-card-title>
-				<v-card-text>
-					<p>{{ profilePopupBio }}</p>
-					<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ profilePopupMoonrocks }}</span>
-				</v-card-text>
-				<v-card-actions>
-					<v-btn flat @click="noDM()" color="accent">Message</v-btn>
-				</v-card-actions>
+				<div v-if="!usersDbDownloaded" style="height: 250px; text-align: center;">
+					<v-progress-circular indeterminate color="primary" style="margin-top: 110px;"></v-progress-circular>
+				</div>
+				<div v-if="usersDbDownloaded">
+					<v-card-title>
+						<h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ color: profilePopupColor }">{{ profilePopupUsername }}</h3>
+						<v-spacer></v-spacer>
+						<v-btn icon @click="closeUsernamePopup" class="dialog-close-btn">
+							<v-icon>close</v-icon>
+						</v-btn>
+					</v-card-title>
+					<v-card-text>
+						<p>{{ profilePopupBio }}</p>
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ profilePopupMoonrocks }}</span>
+					</v-card-text>
+					<v-card-actions>
+						<v-btn flat @click="noDM()" color="accent">Message</v-btn>
+					</v-card-actions>
+				</div>
 			</v-card>
 		</v-dialog>
 
@@ -120,7 +125,8 @@ export default {
 			profilePopupEnable: false,
 			profilePopupBio: '',
 			profilePopupColor: '',
-			profilePopupMoonrocks: ''
+			profilePopupMoonrocks: '',
+			usersDbDownloaded: false
     }
 	},
 	created() {
@@ -270,11 +276,13 @@ export default {
 			this.ready = false
 		},
 		openUsernamePopup(username, color) {
+			this.usersDbDownloaded = false
 			db.collection('users').doc(username).get().then(doc => {
 				this.profilePopupBio = doc.data().bio,
 				this.profilePopupColor = doc.data().color
 				this.profilePopupMoonrocks = doc.data().moonrocks
 				this.profilePopupUsername = username
+				this.usersDbDownloaded = true
 			})
 			this.profilePopupEnable = true
 		},
@@ -283,6 +291,8 @@ export default {
 			this.profilePopupUsername = ''
 			this.profilePopupBio = ''
 			this.profilePopupColor = ''
+			this.profilePopupMoonrocks = '',
+			this.usersDbDownloaded = false
 		},
 		noDM() {
 			this.feedback = 'Function not implemented yet.'
