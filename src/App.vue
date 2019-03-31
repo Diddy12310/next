@@ -109,8 +109,8 @@
 						<v-divider></v-divider>
 						<v-btn @click="newPasswordDialog = true" flat color="warning">Change Password</v-btn>
 						<v-btn @click="deleteDialog = true" flat color="error">Delete Account</v-btn>
-						<v-btn @click="feedback = 'Function not implemented.', snackbar = true" flat color="accent">Edit Bio</v-btn>
-						<v-btn @click="feedback = 'Function not implemented.', snackbar = true" flat color="accent">Change Color</v-btn>
+						<v-btn @click="newBioDialog = true" flat color="accent">Edit Bio</v-btn>
+						<v-btn @click="newColorDialog = true" flat color="accent">Change Color</v-btn>
 					</div>
 				</v-card-text>
 
@@ -141,6 +141,32 @@
 				<v-card-actions>
 					<v-btn @click="changePass" color="warning" flat>Change Password</v-btn>
 					<v-btn @click="newPasswordDialog = false" flat color="accent">Cancel</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+
+		<v-dialog v-model="newColorDialog" max-width="400">
+			<v-card>
+				<v-card-title><h3 class="headline mb-0">Change Color</h3></v-card-title>
+				<v-card-text>
+					<swatches style="width: 100%; height: 100%; background-color: #2E2E2E;" v-model="accountColor" />
+				</v-card-text>
+				<v-card-actions>
+					<v-btn @click="changeColor(accountColor.hex)" color="warning" flat>Change Color</v-btn>
+					<v-btn @click="newColorDialog = false" flat color="accent">Cancel</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+
+		<v-dialog v-model="newBioDialog" max-width="400">
+			<v-card>
+				<v-card-title><h3 class="headline mb-0">Change Bio</h3></v-card-title>
+				<v-card-text>
+					<v-text-field autocomplete="off" type="text" name="bio" v-model="accountBio" label="Bio"></v-text-field>
+				</v-card-text>
+				<v-card-actions>
+					<v-btn @click="changeBio(accountBio)" color="warning" flat>Change Bio</v-btn>
+					<v-btn @click="newBioDialog = false" flat color="accent">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -265,7 +291,9 @@ export default {
 			moonrocks: '',
 			colors: [],
 			isAdmin: false,
-			isInnerCore: false
+			isInnerCore: false,
+			newColorDialog: false,
+			newBioDialog: false
 		}
 	},
 	methods: {
@@ -430,6 +458,24 @@ export default {
 					this.$ga.event(this.username, 'disabled Flamechat')
 				}
 			})
+		},
+		changeColor(newColor) {
+			db.collection('users').doc(this.username).update({
+				color: newColor
+			}).then(() => {
+				this.accountColor = newColor
+				this.newColorDialog = false
+				this.$ga.event(this.username, 'changed their color to ' + this.accountColor)
+			})
+		},
+		changeBio(newBio) {
+			db.collection('users').doc(this.username).update({
+				bio: newBio
+			}).then(() => {
+				this.accountBio = newBio
+				this.newBioDialog = false
+				this.$ga.event(this.username, 'changed their bio to ' + this.accountBio)
+			})
 		}
 	},
 	created() {
@@ -441,7 +487,9 @@ export default {
 				this.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
 				this.userInfo = firebaseUser
 				this.$ga.event(this.username, 'signed in')
-				db.collection('users').doc(this.username).get().then(doc => {
+
+				var usersRef = db.collection('users')
+				usersRef.doc(this.username).get().then((doc) => {
 					this.accountBio = doc.data().bio
 					this.accountColor = doc.data().color
 					this.moonrocks = doc.data().moonrocks
@@ -449,6 +497,28 @@ export default {
 					this.isInnerCore = doc.data().isInnerCore
 				})
 
+				usersRef.onSnapshot(snapshot => {
+					snapshot.docChanges().forEach(change => {
+						if(change.type === "modified") {
+							let doc = change.doc
+							this.accountBio = doc.data().bio
+							this.accountColor = doc.data().color
+							this.moonrocks = doc.data().moonrocks
+							this.isAdmin = doc.data().isAdmin
+							this.isInnerCore = doc.data().isInnerCore
+						}
+					})
+				})
+
+
+				
+				// usersRef.get().then(doc => {
+				// 	this.accountBio = doc.data().bio
+				// 	this.accountColor = doc.data().color
+				// 	this.moonrocks = doc.data().moonrocks
+				// 	this.isAdmin = doc.data().isAdmin
+				// 	this.isInnerCore = doc.data().isInnerCore
+				// })
 			} else {
 				this.userPresent = false
 				this.username = ''
