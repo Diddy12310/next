@@ -90,7 +90,7 @@
 								<v-text-field autocomplete="off" type="text" name="username" v-model="username" label="Username" :rules="usernameRules"></v-text-field>
 								<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
 								<v-text-field autocomplete="off" type="text" name="bio" v-model="accountBio" label="Bio"></v-text-field>
-								<swatches style="width: 100%; height: 100%; background-color: #2E2E2E;" v-model="accountColor" />
+								<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="accountColor" />
 								<v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms"></v-checkbox>
 								<v-btn href="http://relay.theparadigmdev.com/terms.html">View Terms</v-btn>
 								<v-btn @click="signUp" color="primary">Sign Up</v-btn>
@@ -155,7 +155,7 @@
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Change Color</h3></v-card-title>
 				<v-card-text>
-					<swatches style="width: 100%; height: 100%; background-color: #2E2E2E;" v-model="accountColor" />
+					<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="accountColor" />
 				</v-card-text>
 				<v-card-actions>
 					<v-btn @click="changeColor(accountColor.hex)" color="warning" flat>Change Color</v-btn>
@@ -369,13 +369,13 @@ export default {
 			})
 		},
 		changePass() {
-			firebase.auth().currentUser.updatePassword(this.newPassword).then(function() {
+			firebase.auth().currentUser.updatePassword(this.newPassword).then(() => {
 				// Update successful.
 				this.newPasswordDialog = false,
 				this.feedback = 'Password changed successfully.'
 				this.snackbar = true
 				this.$ga.event(this.username, 'changed their password')
-			}).catch(function(error) {
+			}).catch(error => {
 				// An error happened.
 				this.feedback = 'Password changed unsuccessfully.'
 				this.snackbar = true
@@ -393,7 +393,7 @@ export default {
 				})
 				this.feedback = 'Account deleted sucessfully.'
 				this.snackbar = true
-			}).catch(function(error) {
+			}).catch(error => {
 				// An error happened.
 				console.log(error)
 			})
