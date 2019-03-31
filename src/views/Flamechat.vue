@@ -82,8 +82,8 @@
 					</v-card-title>
 					<v-card-text>
 						<p>{{ profilePopupBio }}</p>
-						<img src="@/assets/isAdmin.png" alt="Administrator" class="moonrock-img" v-if="profilePopupAdmin">
-						<img src="@/assets/asteroid.png" alt="Asteroid" class="moonrock-img" v-if="profilePopupAsteroid"><br>
+						<img src="@/assets/isAdmin.png" alt="Administrator" class="moonrock-img" v-if="profilePopupAdmin" style="height: 25px !important;">
+						<img src="@/assets/asteroid.png" alt="Asteroid" class="moonrock-img" v-if="profilePopupAsteroid" style="height: 25px !important;"><br>
 						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ profilePopupMoonrocks }}</span>
 					</v-card-text>
 					<v-card-actions>
