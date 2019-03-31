@@ -22,13 +22,6 @@
 						<h3 class="headline mb-0 text-xs-center">Welcome to Flamechat!</h3>
 					</v-card-title>
 					<v-card-text>
-						<h6 class="title">Color</h6>
-						<v-radio-group v-model="color" column>
-							<v-radio :label="color.label" :color="color.value" :value="color.value" v-for="color in colors" :key="color.value"></v-radio>
-							<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'diddy12310'"></v-radio>
-							<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'paradigm'"></v-radio>
-						</v-radio-group>
-						<h6 class="title">Chatroom</h6>
 						<v-radio-group v-model="chatroom" column>
 							<v-radio :label="room.name" :value="room.db" :disabled="!room.available" v-if="room.id !== 'chatrooms'" v-for="room in chatrooms" :key="room.id"></v-radio>
 							<v-radio color="#C0C0C0" label="The Inner Core" value="the-inner-core" v-if="username == 'diddy12310' || username == 'mylichius' || username == '???'"></v-radio>
@@ -46,12 +39,12 @@
 						<ul class="messages" v-chat-scroll="{ always: false }">
 							<p v-if="messages == []">There are no messages posted on this room.</p>
 							<li v-for="message in messages" :key="message.id" :id="message.id">
-								<span :style="{ color: message.color }" class="name"><strong>{{ message.name }} </strong></span>
-								<span v-if="flamechatHTML" v-html="message.content"></span>
-								<span v-if="!flamechatHTML">{{ message.content }}</span>
-								<span class="time">{{ message.timestamp }}</span>
+								<v-btn :style="{ color: message.color }" class="name" flat @click="openUsernamePopup(message.name)">{{ message.name }}</v-btn>
 								<v-btn class="admin-btn" icon flat color="error" v-if="username == 'diddy12310'" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
-								<v-btn class="admin-btn" icon flat color="warning" v-if="username == 'diddy12310'" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn>
+								<v-btn class="admin-btn" icon flat color="warning" v-if="username == 'diddy12310'" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn><br>
+								<span v-if="flamechatHTML" v-html="message.content" class="message"></span>
+								<span v-if="!flamechatHTML" class="message">{{ message.content }}</span>
+								<span class="time">{{ message.timestamp }}</span>
 							</li>
 						</ul>
 					</v-card-text>
@@ -74,6 +67,27 @@
 
 			</div>
 		</v-container>
+
+		<v-dialog v-model="profilePopupEnable" max-width="350">
+			<v-card>
+				<v-card-title>
+					<h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ color: profilePopupColor }">{{ profilePopupUsername }}</h3>
+					<v-spacer></v-spacer>
+					<v-btn icon @click="closeUsernamePopup" class="dialog-close-btn">
+						<v-icon>close</v-icon>
+					</v-btn>
+				</v-card-title>
+				<v-card-text>
+					<p>{{ profilePopupBio }}</p>
+					<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ profilePopupMoonrocks }}</span>
+				</v-card-text>
+				<v-card-actions>
+					<v-btn flat @click="noDM()" color="accent">Message</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+
+
 		<v-snackbar v-model="snackbar" bottom left :timeout="2000">{{ feedback }}</v-snackbar>
 	</div>
 </template>
@@ -88,10 +102,9 @@ export default {
     return {
 			ready: false,
 			terms: false,
-			color: null,
+			color: this.$parent.$parent.$parent.accountColor,
 			feedback: null,
-			colors: [],
-			username: null,
+			username: this.$parent.$parent.$parent.username,
 			user: [],
 			messages: [],
 			snackbar: false,
@@ -102,11 +115,15 @@ export default {
 			flamechatEnable: true,
 			chatroom: null,
 			chatrooms: [],
-			flamechatHTML: null
+			flamechatHTML: null,
+			profilePopupUsername: '',
+			profilePopupEnable: false,
+			profilePopupBio: '',
+			profilePopupColor: '',
+			profilePopupMoonrocks: ''
     }
 	},
 	created() {
-		this.username = this.$parent.$parent.$parent.username
 		this.chatroom = null
 
 		var chatroomsRef = db.collection('flamechat')
@@ -139,14 +156,6 @@ export default {
 				// }
 			})
 		})
-		var dbRef = db.collection('colors')
-
-    dbRef.get().then(snapshot => {
-      snapshot.forEach(doc => {
-        let color = doc.data()
-        this.colors.push(color)
-      })
-		})
 
 		var metaRef = db.collection('meta')
 		metaRef.doc('auth').get().then((doc) => {
@@ -163,6 +172,10 @@ export default {
 					this.newMessage = null
 				}
 			})
+		})
+
+		db.collection('users').doc(this.username).get().then(doc => {
+			this.color = doc.data().color
 		})
 	},
 	methods: {
@@ -255,6 +268,25 @@ export default {
 		leaveRoom() {
 			this.chatroom = null
 			this.ready = false
+		},
+		openUsernamePopup(username, color) {
+			db.collection('users').doc(username).get().then(doc => {
+				this.profilePopupBio = doc.data().bio,
+				this.profilePopupColor = doc.data().color
+				this.profilePopupMoonrocks = doc.data().moonrocks
+				this.profilePopupUsername = username
+			})
+			this.profilePopupEnable = true
+		},
+		closeUsernamePopup() {
+			this.profilePopupEnable = false
+			this.profilePopupUsername = ''
+			this.profilePopupBio = ''
+			this.profilePopupColor = ''
+		},
+		noDM() {
+			this.feedback = 'Function not implemented yet.'
+			this.snackbar = true
 		}
 	}
 }
@@ -320,6 +352,7 @@ export default {
 
 .chat-card .name {
 	font-size: 20px;
+	margin: 0px 3px 3px 0px;
 }
 
 div.v-input__slot {
@@ -331,7 +364,7 @@ div.v-messages {
 }
 
 .admin-btn {
-	margin-left: 2px !important;
+	margin: auto;
 }
 
 .message-box {

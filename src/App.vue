@@ -63,7 +63,8 @@
 		<v-dialog v-model="dialog" max-width="500">
 			<v-card>
 				<v-card-title primary-title>
-					<h3 class="headline mb-0">Account</h3>
+					<h3 v-if="!userPresent" class="headline mb-0">Account</h3>
+					<h3 v-if="userPresent" class="headline mb-0 font-weight-medium text-uppercase" :style="{ color: accountColor }">{{ username }}</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="dialog = false" class="dialog-close-btn">
 						<v-icon>close</v-icon>
@@ -85,6 +86,12 @@
 							<v-form>
 								<v-text-field autocomplete="off" type="text" name="username" v-model="username" label="Username" :rules="usernameRules"></v-text-field>
 								<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
+								<v-text-field autocomplete="off" type="text" name="bio" v-model="accountBio" label="Bio"></v-text-field>
+								<v-radio-group v-model="accountColor" column>
+									<v-radio :label="color.label" :color="color.value" :value="color.value" v-for="color in colors" :key="color.value"></v-radio>
+									<v-radio label="Gold" color="#bf9b30" value="#bf9b30" v-if="username == 'diddy12310'"></v-radio>
+									<v-radio label="Bot" color="#00796B" value="#00796B" v-if="username == 'paradigm'"></v-radio>
+								</v-radio-group>
 								<v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms"></v-checkbox>
 								<v-btn href="http://relay.theparadigmdev.com/terms.html">View Terms</v-btn>
 								<v-btn @click="signUp" color="primary">Sign Up</v-btn>
@@ -98,7 +105,8 @@
 					</v-form>
 
 					<div v-if="userPresent">
-						<p><strong>Username:</strong> {{ username }}</p>
+						<p>{{ accountBio }}</p>
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ moonrocks }}</span>
 						<p><strong>Last Sign In:</strong> {{ userInfo.metadata.lastSignInTime }}</p>
 						<p><strong>Account Creation:</strong> {{ userInfo.metadata.creationTime }}</p>
 						<p><strong>User ID:</strong> {{ userInfo.uid }}</p>
@@ -249,7 +257,11 @@ export default {
 			fourofour: null,
 			flamechatHTML: null,
 			newPasswordDialog: false,
-			adminDialog: false
+			adminDialog: false,
+			accountBio: '',
+			accountColor: '',
+			moonrocks: '',
+			colors: []
 		}
 	},
 	methods: {
@@ -258,8 +270,9 @@ export default {
 		},
 		signIn() {
 			if(this.username && this.password) {
-				firebase.auth().signInWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).catch(error => {
-					console.log(error)
+				firebase.auth().signInWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).then(() => {
+					
+				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
 						this.snackbar = true
@@ -280,7 +293,14 @@ export default {
 		},
 		signUp() {
 			if(this.username && this.password && this.terms) {
-				firebase.auth().createUserWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).catch(error => {
+				firebase.auth().createUserWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).then(user => {
+					db.collection('users').doc(this.username).set({
+						// uid: user.uid,
+						bio: this.accountBio,
+						color: this.accountColor,
+						moonrocks: 1
+					})
+				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
 						this.snackbar = true
@@ -324,11 +344,16 @@ export default {
 		},
 		deleteUser() {
 			this.$ga.event(this.username, 'deleted their account')
-			firebase.auth().currentUser.delete().then(function() {
+			firebase.auth().currentUser.delete().then(() => {
 				// User deleted.
-				this.username = null
-				this.userInfo = null
-				this.userPresent = false
+				db.collection('users').doc(this.username).delete().then(() => {
+					this.username = null
+					this.userInfo = null
+					this.userPresent = false
+				}).catch(error => {
+					console.log(error.message)
+				})
+				
 			}).catch(function(error) {
 				// An error happened.
 				console.log(error)
@@ -410,6 +435,12 @@ export default {
 				this.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
 				this.userInfo = firebaseUser
 				this.$ga.event(this.username, 'signed in')
+				db.collection('users').doc(this.username).get().then(doc => {
+					this.accountBio = doc.data().bio
+					this.accountColor = doc.data().color
+					this.moonrocks = doc.data().moonrocks
+				})
+
 			} else {
 				this.userPresent = false
 				this.username = ''
@@ -439,6 +470,16 @@ export default {
 				}
 			})
 		})
+
+		var dbRef = db.collection('colors')
+
+    dbRef.get().then(snapshot => {
+      snapshot.forEach(doc => {
+        let color = doc.data()
+        this.colors.push(color)
+      })
+		})
+
 	}
 }
 </script>
@@ -498,5 +539,16 @@ html {
 	flex: none !important;
 	position: relative;
 	height: 30px;
+}
+
+.moonrock-img {
+	height: 50px;
+	margin-bottom: 16px;
+}
+
+.moonrock-count {
+	position: relative;
+	bottom: +36px;
+	padding-left: 5px;
 }
 </style>
