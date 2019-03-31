@@ -25,7 +25,7 @@
 			</v-card-title>
 			<v-divider></v-divider>
 			<v-card-text>
-				<div v-for="item in announcement.detail" :key="item" class="item">{{ item }}</div>
+				<div v-for="item in announcement.detail" :key="item" class="item" v-html="item"></div>
 			</v-card-text>
 		</v-card>
 	</div>
