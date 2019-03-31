@@ -212,9 +212,7 @@
 			</v-container>
 		</v-content>
 
-		<v-snackbar v-if="feedback" v-model="snackbar" bottom left :timeout="2000">
-      {{ feedback }}
-    </v-snackbar>
+		<v-snackbar v-if="feedback" v-model="snackbar" bottom left :timeout="2000">{{ feedback }}</v-snackbar>
 
 		<v-footer>
 			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm Development.</span></div>
