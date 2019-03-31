@@ -571,7 +571,7 @@
           <br>
           If you are resident in the European Economic Area and you believe we are unlawfully processing your personal information,
           you also have the right to complain to your local data protection supervisory authority. You can find their contact details
-          here: <a href="https://ec.europa.eu/justice/data-protection/bodies/authorities/index_en.html">ec.europa.eu/justice/data-protection/bodies/authorities/index_en.html</a>
+          <a href="https://ec.europa.eu/justice/data-protection/bodies/authorities/index_en.html">here</a>.
           <br>
         </p>
         <h6 class="subheading pb-2">Account Information</h6>

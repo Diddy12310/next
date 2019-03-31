@@ -152,6 +152,7 @@ audio {
 	position: relative;
 	top: +8px;
 	left: -8px;
-	width: 400px !important;
+	width: 100% !important;
+	margin: auto;
 }
 </style>

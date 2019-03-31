@@ -249,16 +249,13 @@ export default {
 			apps: [
 				{ text: 'Home', route: '/home' },
 				{ text: 'Flamechat', route: '/flame' },
-				{ text: 'Hex', route: '/hex' },
-				// { text: 'Drawer', route: '/drawer' },
-				// { text: 'Launchpad', route: '/launchpad' },
-				{ text: 'Bookshelf', route: '/bookshelf' },
 				{ text: 'The Paradox', route: '/paradox' },
-				// { text: 'Scorecard', route: '/scorecard' },
+				{ text: 'Hex', route: '/hex' },
 				{ text: 'Satellite', route: '/satellite'},
+				{ text: 'Asteroid', route: '/asteroid' },
+				{ text: 'Bookshelf', route: '/bookshelf' },
 				{ text: 'Movies', route: '/movies' },
-				{ text: 'Music', route: '/music' },
-				{ text: 'Asteroid', route: '/asteroid' }
+				{ text: 'Music', route: '/music' }
 			],
 			company: [
 				{ text: 'Support', route: '/company/support' },
@@ -268,8 +265,7 @@ export default {
 				{ text: 'Network Status', route: '/company/status' }
 			],
 			latest: [
-				{ text: 'Memes', route: '/latest/memes' },
-				{ text: 'Vines', route: '/latest/vines' }
+				{ text: 'Memes', route: '/latest/memes' }
 			],
 			version: '',
 			username: '',

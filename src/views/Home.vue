@@ -7,8 +7,9 @@
 			</div>
 		</v-parallax>
 		<div style="text-align: center; padding: 25px;" class="blue-grey darken-4">
-			<h1 class="display-3 blue-grey--text font-weight-thin" style="margin-bottom: 25px;">pär.ə.dīm</h1>
+			<h1 class="display-3 blue-grey--text font-weight-thin" style="margin-bottom: 25px;">pär ə dīm</h1>
 			<h5 class="headline pb-2 font-weight-thin grey--text">a typical example or pattern of something, a model</h5>
+			<p class="grey--text lighten-4 font-weight-light pt-2">We strive to create consistent and well-made products for our users while adopting the newest and best web development standards.</p>
 		</div>
 		<div style="text-align: center; padding: 25px;" class="grey darken-4">
 	  	<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin-bottom: 25px;">HEY!</h1>
