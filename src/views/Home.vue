@@ -6,6 +6,10 @@
 				<v-btn router to="flame" style="margin-top: 20px;" color="primary">Open Flamechat</v-btn>
 			</div>
 		</v-parallax>
+		<div style="text-align: center; padding: 25px;" class="blue-grey darken-4">
+			<h1 class="display-3 blue-grey--text font-weight-thin" style="margin-bottom: 25px;">pär.ə.dīm</h1>
+			<h5 class="headline pb-2 font-weight-thin grey--text">a typical example or pattern of something, a model</h5>
+		</div>
 		<div style="text-align: center; padding: 25px;" class="grey darken-4">
 	  	<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin-bottom: 25px;">HEY!</h1>
 		  <h5 class="headline pb-2">Have <span class="font-weight-bold">YOU</span> read the notice?</h5>

@@ -226,7 +226,7 @@
 
 		<!-- Footer -->
 		<v-footer>
-			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm Development.</span></div>
+			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm Development, Inc.</span></div>
 		</v-footer>
 	</v-app>
 </template>
