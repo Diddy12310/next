@@ -494,7 +494,7 @@ export default {
 				this.$ga.event(this.username, 'signed in')
 
 				var usersRef = db.collection('users')
-				usersRef.doc(this.username).get().then((doc) => {
+				usersRef.doc(this.username).get().then(doc => {
 					this.accountBio = doc.data().bio
 					this.accountColor = doc.data().color
 					this.moonrocks = doc.data().moonrocks
@@ -504,7 +504,7 @@ export default {
 
 				usersRef.onSnapshot(snapshot => {
 					snapshot.docChanges().forEach(change => {
-						if(change.type === "modified") {
+						if(change.type === "modified" && doc.id == this.username) {
 							let doc = change.doc
 							this.accountBio = doc.data().bio
 							this.accountColor = doc.data().color
