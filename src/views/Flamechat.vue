@@ -205,12 +205,12 @@ export default {
 				db.collection('flamechat').doc('chatrooms').collection(this.chatroom).get().then(snapshot => {
 					snapshot.forEach(doc => {
 						doc.ref.delete()
-						this.feedback = 'All messages cleared.'
+						this.feedback = 'All messages purged.'
 						this.snackbar = true
 					})
 				})
 			}
-			this.$ga.event(this.username, 'cleared all messages')
+			this.$ga.event(this.username, 'purged all messages')
 		},
 		sendChat() {
 			if(this.newMessage && this.username != '' && this.color != null) {
