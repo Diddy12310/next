@@ -1,4 +1,3 @@
-import '@babel/polyfill'
 import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
@@ -10,13 +9,6 @@ import store from './store'
 import firebase from 'firebase'
 import LogRocket from 'logrocket'
 import db from '@/firebase/init'
-
-LogRocket.init('uvh8hk/paradigm', {
-  dom: {
-    baseHref: 'https://theparadigmdev.com/',
-  },
-  rootHostname: 'theparadigmdev.com',
-})
 
 Vue.use(VueAnalytics, {
 	id: 'UA-52752236-3',
@@ -64,4 +56,11 @@ firebase.auth().onAuthStateChanged(() => {
       render: function (h) { return h(App) }
     }).$mount('div#app')    
   }
+})
+
+LogRocket.init('uvh8hk/paradigm', {
+  dom: {
+    baseHref: 'https://theparadigmdev.com/',
+  },
+  rootHostname: 'theparadigmdev.com',
 })

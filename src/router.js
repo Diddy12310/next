@@ -22,6 +22,9 @@ import LatestMemes from './views/Latest/Memes'
 import LatestVines from './views/Latest/Vines'
 import Debate from './views/Debate'
 import Inquiry from './views/Admin/Inquiry'
+import Contracts from './views/Devs/Contracts'
+import Databank from './views/Devs/Databank'
+import Relay from './views/Devs/Relay'
 
 Vue.use(Router)
 
@@ -141,6 +144,21 @@ export default new Router({
 			path: '/admin/inquiry',
 			name: 'Inquiry',
 			component: Inquiry
+		},
+		{
+			path: '/dev/contracts',
+			name: 'Contracts',
+			component: Contracts
+		},
+		{
+			path: '/dev/relay',
+			name: 'Relay',
+			component: Relay
+		},
+		{
+			path: '/dev/databank',
+			name: 'Databank',
+			component: Databank
 		}
   ]
 })

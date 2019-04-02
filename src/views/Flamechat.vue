@@ -131,7 +131,9 @@ export default {
 			profilePopupAdmin: false,
 			profilePopupAsteroid: false,
 			isAdmin: false,
-			isInnerCore: false
+			isInnerCore: false,
+			lockdown: null,
+			fourofour: null
     }
 	},
 	created() {
@@ -172,6 +174,8 @@ export default {
 		metaRef.doc('auth').get().then((doc) => {
 			this.flamechatEnable = doc.data().flamechatEnable
 			this.flamechatHTML = doc.data().flamechatHTML
+			this.lockdown = doc.data().lockdown
+			this.fourofour = doc.data().fourofour
 		})
 
 		metaRef.onSnapshot(snapshot => {
@@ -180,7 +184,20 @@ export default {
 					let doc = change.doc
 					this.flamechatEnable = doc.data().flamechatEnable
 					this.flamechatHTML = doc.data().flamechatHTML
+					this.lockdown = doc.data().lockdown
+					this.fourofour = doc.data().fourofour
 					this.newMessage = null
+				}
+
+				if (this.lockdown || this.fourofour) {
+					this.profilePopupUsername = ''
+					this.profilePopupMoonrocks = ''
+					this.profilePopupColor = ''
+					this.profilePopupAdmin = false
+					this.profilePopupBio = ''
+					this.profilePopupEnable = false
+					this.ready = false
+					this.chatroom = ''
 				}
 			})
 		})

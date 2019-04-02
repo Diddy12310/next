@@ -1,44 +1,53 @@
 <template>
   <div class="inquiry">
     <v-container>
-      <div v-for="event in events" :key="event.id">
-        <v-expansion-panel>
-          <v-expansion-panel-content v-if="event.type == 'event'" class="blue-grey darken-2">
-            <div slot="header">
-              <h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ 'color': event.color }">{{ event.user }}</h3>
-							<h4 class="subheading">{{ event.event }}</h4>
-            </div>
-            <v-card>
-              <v-card-text>at {{ event.timestamp }} on {{ event.location }}</v-card-text>
-            </v-card>
-          </v-expansion-panel-content>
+      <div v-if="isAdmin">
+        <div v-for="event in events" :key="event.id">
+          <v-expansion-panel>
+            <v-expansion-panel-content v-if="event.type == 'event'" class="blue-grey darken-2">
+              <div slot="header">
+                <h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ 'color': event.color }">{{ event.user }}</h3>
+                <h4 class="subheading">{{ event.event }}</h4>
+              </div>
+              <v-card>
+                <v-card-text>at {{ event.timestamp }} on {{ event.location }}</v-card-text>
+              </v-card>
+            </v-expansion-panel-content>
 
-          <v-expansion-panel-content v-if="event.type == 'error'" class="red accent-4">
-            <div slot="header">
-              <h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ 'color': event.color }">{{ event.user }}</h3>
-							<h4 class="subheading">{{ event.error }}</h4>
-            </div>
-            <v-card>
-              <v-card-text>at {{ event.timestamp }} on {{ event.location }} in {{ event.fileLocation }}</v-card-text>
-            </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
+            <v-expansion-panel-content v-if="event.type == 'error'" class="red accent-4">
+              <div slot="header">
+                <h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ 'color': event.color }">{{ event.user }}</h3>
+                <h4 class="subheading">{{ event.error }}</h4>
+              </div>
+              <v-card>
+                <v-card-text>at {{ event.timestamp }} on {{ event.location }} in {{ event.fileLocation }}</v-card-text>
+              </v-card>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </div>
       </div>
-
     </v-container>
+
+    <div style="text-align: center; margin: 50px 0px;" v-if="!isAdmin">
+			<h1 class="display-3 red--text font-weight-thin text-uppercase">Unavailable</h1>
+			<h6 class="headline white--text font-weight-thin mt-3">Please navigate away from this page.</h6>
+		</div>
+
   </div>
 </template>
 
 <script>
 import db from '@/firebase/init'
 import moment from 'moment'
+import firebase from 'firebase'
 
 export default {
   name: 'Inquiry',
   data() {
     return {
       events: [],
-      username: this.$parent.$parent.$parent.username
+      username: this.$parent.$parent.$parent.username,
+      isAdmin: this.$parent.$parent.$parent.isAdmin
     }
   },
   created() {

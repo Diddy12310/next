@@ -59,6 +59,15 @@
 					</v-list-tile>
 				</v-list-group>
 
+				<v-list-group>
+					<v-list-tile slot="activator">
+						<v-list-tile-title class="font-weight-black">Developers</v-list-tile-title>
+					</v-list-tile>
+
+					<v-list-tile v-for="link in developers" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
+						<v-list-tile-title class="white--text font-weight-light">{{ link.text }}</v-list-tile-title>
+					</v-list-tile>
+				</v-list-group>
 			</v-list>
     </v-navigation-drawer>
 
@@ -190,11 +199,10 @@
 				</v-card-title>
 				<v-card-text>
 					<v-switch @click="toggleSignUp" v-model="signUpAvail" style="flex: none !important;" label="Sign up availability"></v-switch>
-					<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Sequestration" color="red"></v-switch>
+					<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Lockdown" color="red"></v-switch>
 					<v-switch @click="fourofourToggle" v-model="fourofour" style="flex: none !important;" label="404" color="deep-purple"></v-switch>
 					<v-switch @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;" label="Flamechat" color="deep-orange"></v-switch>
 					<v-switch @click="toggleFcHTML" v-model="flamechatHTML" style="flex: none !important;" label="Flamechat HTML" color="deep-orange"></v-switch>
-					<v-switch v-model="tracking" style="flex: none !important;" label="Local LogRocket tracking" v-if="username == 'diddy12310'"></v-switch>
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
@@ -217,7 +225,7 @@
 				</div>
 				<div class="lockdown" v-if="lockdown" style="text-align: center;">
 					<v-icon style="font-size: 75px; margin-top: 100px;" color="red">block</v-icon>
-					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">This page has been sequestered</h1>
+					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Nope.</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Entry is not permitted.</h3>
 				</div>
 				<div class="fourofour" v-if="fourofour" style="text-align: center;">
@@ -275,6 +283,12 @@ export default {
 			latest: [
 				{ text: 'Memes', route: '/latest/memes' }
 			],
+			developers: [
+				{ text: 'Contracts', route: '/dev/contracts' },
+				{ text: 'Relay', route: '/dev/relay' },
+				{ text: 'Databank', route: '/dev/databank' },
+				// { text: '', route: '/dev/' },
+			],
 			version: '',
 			username: '',
 			password: '',
@@ -306,8 +320,7 @@ export default {
 			isAdmin: false,
 			isInnerCore: false,
 			newColorDialog: false,
-			newBioDialog: false,
-			tracking: false
+			newBioDialog: false
 		}
 	},
 	methods: {
@@ -443,14 +456,14 @@ export default {
 				lockdown: !this.lockdown
 			}).then(() => {
 				if (this.lockdown == true) {
-					this.$ga.event(this.username, 'sequestered')
-					this.inquiryEvent(this.username, 'sequestered', '$admin', this.accountColor)
-					this.feedback = 'Sequestered successfully.'
+					this.$ga.event(this.username, 'locked down')
+					this.inquiryEvent(this.username, 'locked down', '$admin', this.accountColor)
+					this.feedback = 'Locked down successfully.'
 					this.snackbar = true
 				} else {
-					this.$ga.event(this.username, 'ended the sequestration')
-					this.inquiryEvent(this.username, 'ended the sequestration', '$admin', this.accountColor)
-					this.feedback = 'Sequestration ended successfully.'
+					this.$ga.event(this.username, 'ended the lockdown')
+					this.inquiryEvent(this.username, 'ended the lockdown', '$admin', this.accountColor)
+					this.feedback = 'Lockdown ended successfully.'
 					this.snackbar = true
 				}
 			})
@@ -525,16 +538,14 @@ export default {
 					this.isAdmin = doc.data().isAdmin
 					this.isInnerCore = doc.data().isInnerCore
 					this.inquiryEvent(this.username, 'signed in', '$account', this.accountColor)
-					if (this.tracking && !this.fourofour && !this.lockdown) {
-						LogRocket.identify(this.userInfo.uid, {
-							name: this.username,
-							isAdmin: this.isAdmin,
-							isAsteroid: this.isAsteroid,
-							bio: this.accountBio,
-							color: this.accountColor,
-							moonrocks: this.moonrocks
-						})
-					}
+					LogRocket.identify(this.userInfo.uid, {
+						name: this.username,
+						isAdmin: this.isAdmin,
+						isAsteroid: this.isAsteroid,
+						bio: this.accountBio,
+						color: this.accountColor,
+						moonrocks: this.moonrocks
+					})
 				})
 
 				usersRef.onSnapshot(snapshot => {
@@ -574,6 +585,15 @@ export default {
 					this.flamechatEnable = doc.data().flamechatEnable,
 					this.fourofour = doc.data().fourofour,
 					this.flamechatHTML = doc.data().flamechatHTML
+				}
+
+				if (this.lockdown || this.fourofour) {
+					this.newBioDialog = false
+					this.newColorDialog = false
+					this.adminDialog = false
+					this.newPasswordDialog = false
+					this.deleteDialog = false
+					this.dialog = false
 				}
 			})
 		})
