@@ -9,7 +9,7 @@
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-toolbar-items v-if="userPresent && !lockdown && !fourofour">
-				<v-btn flat icon @click="adminDialog = true, inquiryError(username, 'opened admin dialog', 'global', 'App.vue @ 12', accountColor)" slot="activator" v-if="isAdmin">
+				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
 				<v-btn icon @click="dialog = true">
@@ -207,9 +207,9 @@
 				<v-divider></v-divider>
 				<v-card-actions>
 					<v-btn flat color="deep-orange" href="https://console.firebase.google.com/project/paradigm-a1bc9/overview">Firebase</v-btn>
-					<v-btn flat color="red" href="https://analytics.google.com/analytics/web/#/report-home/a52752236w189895081p186199787">Analytics</v-btn>
 					<v-btn flat color="deep-purple lighten-1" href="https://app.logrocket.com/uvh8hk/paradigm">LogRocket</v-btn>
 					<v-btn flat color="blue" href="https://search.google.com/search-console?resource_id=sc-domain:theparadigmdev.com">Search</v-btn>
+					<v-btn flat color="deep-purple lighten-1" router to="/admin/inquiry" @click="adminDialog = false">Inquiry</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -360,7 +360,8 @@ export default {
 						moonrocks: 1,
 						isAdmin: false,
 						isInnerCore: false,
-						isAsteroid: false
+						isAsteroid: false,
+						isAnalytics: false
 					})
 					this.$ga.event(this.username, 'signed up')
 					this.inquiryEvent(this.username, 'signed up', '$account', this.accountColor)

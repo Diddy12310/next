@@ -1,7 +1,7 @@
 <template>
   <div class="inquiry">
     <v-container>
-      <div v-if="isAdmin">
+      <div v-if="isAnalytics">
         <div v-for="event in events" :key="event.id">
           <v-expansion-panel>
             <v-expansion-panel-content v-if="event.type == 'event'" class="blue-grey darken-2">
@@ -20,7 +20,7 @@
                 <h4 class="subheading">{{ event.error }}</h4>
               </div>
               <v-card>
-                <v-card-text>at {{ event.timestamp }} on {{ event.location }} in {{ event.fileLocation }}</v-card-text>
+                <v-card-text>at {{ event.timestamp }} on {{ event.location }}</v-card-text>
               </v-card>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -28,7 +28,7 @@
       </div>
     </v-container>
 
-    <div style="text-align: center; margin: 50px 0px;" v-if="!isAdmin">
+    <div style="text-align: center; margin: 50px 0px;" v-if="!isAnalytics">
 			<h1 class="display-3 red--text font-weight-thin text-uppercase">Unavailable</h1>
 			<h6 class="headline white--text font-weight-thin mt-3">Please navigate away from this page.</h6>
 		</div>
@@ -47,11 +47,11 @@ export default {
     return {
       events: [],
       username: this.$parent.$parent.$parent.username,
-      isAdmin: this.$parent.$parent.$parent.isAdmin
+      isAnalytics: null
     }
   },
   created() {
-		var inquiryRef = db.collection('analytics').orderBy('timestamp', 'asc')
+    var inquiryRef = db.collection('analytics').orderBy('timestamp', 'asc')
     inquiryRef.onSnapshot(snapshot => {
       snapshot.docChanges().forEach(change => {
         if (change.doc.data().type == 'event') {
@@ -121,6 +121,10 @@ export default {
         }
       })
     })
+
+    db.collection('users').doc(this.username).get().then(doc => {
+			this.isAnalytics = doc.data().isAnalytics
+		})
   }
 }
 </script>
