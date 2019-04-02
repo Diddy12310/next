@@ -9,7 +9,7 @@
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-toolbar-items v-if="userPresent && !lockdown && !fourofour">
-				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="isAdmin">
+				<v-btn flat icon @click="adminDialog = true, inquiryError(username, 'opened admin dialog', 'global', 'App.vue @ 12', accountColor)" slot="activator" v-if="isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
 				<v-btn icon @click="dialog = true">
@@ -190,12 +190,19 @@
 				</v-card-title>
 				<v-card-text>
 					<v-switch @click="toggleSignUp" v-model="signUpAvail" style="flex: none !important;" label="Sign up availability"></v-switch>
-					<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Lockdown" color="red"></v-switch>
+					<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Sequestration" color="red"></v-switch>
 					<v-switch @click="fourofourToggle" v-model="fourofour" style="flex: none !important;" label="404" color="deep-purple"></v-switch>
 					<v-switch @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;" label="Flamechat" color="deep-orange"></v-switch>
 					<v-switch @click="toggleFcHTML" v-model="flamechatHTML" style="flex: none !important;" label="Flamechat HTML" color="deep-orange"></v-switch>
+					<v-switch v-model="tracking" style="flex: none !important;" label="Local LogRocket tracking" v-if="username == 'diddy12310'"></v-switch>
 				</v-card-text>
-				<v-card-actions></v-card-actions>
+				<v-divider></v-divider>
+				<v-card-actions>
+					<v-btn flat color="deep-orange" href="https://console.firebase.google.com/project/paradigm-a1bc9/overview">Firebase</v-btn>
+					<v-btn flat color="red" href="https://analytics.google.com/analytics/web/#/report-home/a52752236w189895081p186199787">Analytics</v-btn>
+					<v-btn flat color="deep-purple lighten-1" href="https://app.logrocket.com/uvh8hk/paradigm">LogRocket</v-btn>
+					<v-btn flat color="blue" href="https://search.google.com/search-console?resource_id=sc-domain:theparadigmdev.com">Search</v-btn>
+				</v-card-actions>
 			</v-card>
 		</v-dialog>
 
@@ -210,8 +217,8 @@
 				</div>
 				<div class="lockdown" v-if="lockdown" style="text-align: center;">
 					<v-icon style="font-size: 75px; margin-top: 100px;" color="red">block</v-icon>
-					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Lockdown</h1>
-					<h3 class="headline font-weight-light" style="margin: 25px;">No users logged in.</h3>
+					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">This page has been sequestered</h1>
+					<h3 class="headline font-weight-light" style="margin: 25px;">Entry is not permitted.</h3>
 				</div>
 				<div class="fourofour" v-if="fourofour" style="text-align: center;">
 					<v-icon style="font-size: 75px; margin-top: 100px;" color="deep-purple darken-3">warning</v-icon>
@@ -299,7 +306,8 @@ export default {
 			isAdmin: false,
 			isInnerCore: false,
 			newColorDialog: false,
-			newBioDialog: false
+			newBioDialog: false,
+			tracking: false
 		}
 	},
 	methods: {
@@ -309,7 +317,7 @@ export default {
 		signIn() {
 			if(this.username && this.password) {
 				firebase.auth().signInWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).then(() => {
-					
+				  
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
@@ -342,6 +350,7 @@ export default {
 						isAsteroid: false
 					})
 					this.$ga.event(this.username, 'signed up')
+					this.inquiryEvent(this.username, 'signed up', '$account', this.accountColor)
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
@@ -363,10 +372,10 @@ export default {
 		},
 		signOut() {
 			this.$ga.event(this.username, 'signed out')
+			this.inquiryEvent(this.username, 'signed out', '$account', this.accountColor)
 			firebase.auth().signOut().then(() => {
 				this.feedback = 'Signed out successfully.'
 				this.snackbar = true
-				this.$ga.event(this.username, 'signed out')
 			})
 		},
 		changePass() {
@@ -376,6 +385,7 @@ export default {
 				this.feedback = 'Password changed successfully.'
 				this.snackbar = true
 				this.$ga.event(this.username, 'changed their password')
+				this.inquiryEvent(this.username, 'changed their password', '$account', this.accountColor)
 			}).catch(error => {
 				// An error happened.
 				this.feedback = 'Password changed unsuccessfully.'
@@ -385,6 +395,7 @@ export default {
 		},
 		deleteUser() {
 			this.$ga.event(this.username, 'deleted their account')
+			this.inquiryEvent(this.username, 'deleted their account', '$account', this.accountColor)
 			firebase.auth().currentUser.delete().then(() => {
 				// User deleted.
 				db.collection('users').doc(this.username).delete().then(() => {
@@ -407,8 +418,10 @@ export default {
 			}).then(() => {
 				if(this.signUpAvail == true) {
 					this.$ga.event(this.username, 'enabled sign ups')
+					this.inquiryEvent(this.username, 'enabled sign ups', '$admin', this.accountColor)
 				} else {
 					this.$ga.event(this.username, 'disabled sign ups')
+					this.inquiryEvent(this.username, 'disabled sign ups', '$admin', this.accountColor)
 				}
 			})
 		},
@@ -418,8 +431,10 @@ export default {
 			}).then(() => {
 				if(this.flamechatHTML == true) {
 					this.$ga.event(this.username, 'enabled Flamechat HTML')
+					this.inquiryEvent(this.username, 'enabled Flamechat HTML rendering', '$admin', this.accountColor)
 				} else {
 					this.$ga.event(this.username, 'disabled Flamechat HTML')
+					this.inquiryEvent(this.username, 'disabled Flamechat HTML rendering', '$admin', this.accountColor)
 				}
 			})
 		},
@@ -428,12 +443,14 @@ export default {
 				lockdown: !this.lockdown
 			}).then(() => {
 				if (this.lockdown == true) {
-					this.$ga.event(this.username, 'locked down')
-					this.feedback = 'Locked down successfully.'
+					this.$ga.event(this.username, 'sequestered')
+					this.inquiryEvent(this.username, 'sequestered', '$admin', this.accountColor)
+					this.feedback = 'Sequestered successfully.'
 					this.snackbar = true
 				} else {
-					this.$ga.event(this.username, 'ended the lockdown')
-					this.feedback = 'Lockdown ended successfully.'
+					this.$ga.event(this.username, 'ended the sequestration')
+					this.inquiryEvent(this.username, 'ended the sequestration', '$admin', this.accountColor)
+					this.feedback = 'Sequestration ended successfully.'
 					this.snackbar = true
 				}
 			})
@@ -444,10 +461,12 @@ export default {
 			}).then(() => {
 				if (this.fourofour == true) {
 					this.$ga.event(this.username, '404ed')
+					this.inquiryEvent(this.username, '404ed', '$admin', this.accountColor)
 					this.feedback = '404 successfully.'
 					this.snackbar = true
 				} else {
 					this.$ga.event(this.username, 'ended the 404')
+					this.inquiryEvent(this.username, 'ended the 404', '$admin', this.accountColor)
 					this.feedback = '404 ended successfully.'
 					this.snackbar = true
 				}
@@ -459,9 +478,11 @@ export default {
 			}).then(() => {
 				if (this.flamechatEnable) {
 					this.$ga.event(this.username, 'enabled Flamechat')
+					this.inquiryEvent(this.username, 'enabled Flamechat', '$admin', this.accountColor)
 				}
 				if (!this.flamechatEnable) {
 					this.$ga.event(this.username, 'disabled Flamechat')
+					this.inquiryEvent(this.username, 'disabled Flamechat', '$admin', this.accountColor)
 				}
 			})
 		},
@@ -472,6 +493,7 @@ export default {
 				this.accountColor = newColor
 				this.newColorDialog = false
 				this.$ga.event(this.username, 'changed their color to ' + this.accountColor)
+				this.inquiryEvent(this.username, 'changed their color to ' + this.accountColor, '$account', this.accountColor)
 			})
 		},
 		changeBio(newBio) {
@@ -481,6 +503,7 @@ export default {
 				this.accountBio = newBio
 				this.newBioDialog = false
 				this.$ga.event(this.username, 'changed their bio to ' + this.accountBio)
+				this.inquiryEvent(this.username, 'changed their bio to ' + this.accountBio, '$account', this.accountColor)
 			})
 		}
 	},
@@ -493,7 +516,6 @@ export default {
 				this.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
 				this.userInfo = firebaseUser
 				this.$ga.event(this.username, 'signed in')
-			
 
 				var usersRef = db.collection('users')
 				usersRef.doc(this.username).get().then(doc => {
@@ -502,15 +524,17 @@ export default {
 					this.moonrocks = doc.data().moonrocks
 					this.isAdmin = doc.data().isAdmin
 					this.isInnerCore = doc.data().isInnerCore
-
-					LogRocket.identify(this.userInfo.uid, {
-						name: this.username,
-						isAdmin: this.isAdmin,
-						isAsteroid: this.isAsteroid,
-						bio: this.accountBio,
-						color: this.accountColor,
-						moonrocks: this.moonrocks
-					})
+					this.inquiryEvent(this.username, 'signed in', '$account', this.accountColor)
+					if (this.tracking && !this.fourofour && !this.lockdown) {
+						LogRocket.identify(this.userInfo.uid, {
+							name: this.username,
+							isAdmin: this.isAdmin,
+							isAsteroid: this.isAsteroid,
+							bio: this.accountBio,
+							color: this.accountColor,
+							moonrocks: this.moonrocks
+						})
+					}
 				})
 
 				usersRef.onSnapshot(snapshot => {

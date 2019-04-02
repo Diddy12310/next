@@ -104,6 +104,7 @@ export default {
 	methods: {
 		logMusic(music, artist) {
 			this.$ga.event('Music', this.username + ' is listening to ' + music + ' by ' + artist)
+			this.inquiryEvent(this.username, 'is listening to ' + music + ' by ' + artist, 'Music', this.accountColor)
 		}
 	}
 }

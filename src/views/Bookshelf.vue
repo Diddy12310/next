@@ -87,6 +87,7 @@ export default {
 	methods: {
 		logBook(book) {
 			this.$ga.event(this.username,  + 'is reading ' + book)
+			this.inquiryEvent(this.username, 'is reading ' + book, 'Bookshelf', this.accountColor)
 		}
 	}
 }

@@ -1,0 +1,121 @@
+<template>
+  <div class="inquiry">
+    <v-container>
+      <div v-for="event in events" :key="event.id">
+        <v-expansion-panel>
+          <v-expansion-panel-content v-if="event.type == 'event'" class="blue-grey darken-2">
+            <div slot="header">
+              <h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ 'color': event.color }">{{ event.user }}</h3>
+							<h4 class="subheading">{{ event.event }}</h4>
+            </div>
+            <v-card>
+              <v-card-text>at {{ event.timestamp }} on {{ event.location }}</v-card-text>
+            </v-card>
+          </v-expansion-panel-content>
+
+          <v-expansion-panel-content v-if="event.type == 'error'" class="red accent-4">
+            <div slot="header">
+              <h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ 'color': event.color }">{{ event.user }}</h3>
+							<h4 class="subheading">{{ event.error }}</h4>
+            </div>
+            <v-card>
+              <v-card-text>at {{ event.timestamp }} on {{ event.location }} in {{ event.fileLocation }}</v-card-text>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </div>
+
+    </v-container>
+  </div>
+</template>
+
+<script>
+import db from '@/firebase/init'
+import moment from 'moment'
+
+export default {
+  name: 'Inquiry',
+  data() {
+    return {
+      events: [],
+      username: this.$parent.$parent.$parent.username
+    }
+  },
+  created() {
+		var inquiryRef = db.collection('analytics').orderBy('timestamp', 'asc')
+    inquiryRef.onSnapshot(snapshot => {
+      snapshot.docChanges().forEach(change => {
+        if (change.doc.data().type == 'event') {
+          if(change.type === "added") {
+            let doc = change.doc
+            this.events.push({
+              user: doc.data().user,
+              event: doc.data().event,
+              location: doc.data().location,
+              timestamp: moment(doc.data().timestamp).format('lll'),
+              type: doc.data().type,
+              color: doc.data().color
+            })
+          }
+          if(change.type === "removed") {
+            let doc = change.doc
+            this.events.splice(change.oldIndex, 1)
+          }
+          if(change.type === "modified") {
+            let doc = change.doc
+            this.events.splice(change.oldIndex, 1, {
+              user: doc.data().user,
+              event: doc.data().event,
+              location: doc.data().location,
+              timestamp: moment(doc.data().timestamp).format('lll'),
+              type: doc.data().type,
+              color: doc.data().color
+            })
+          }
+        }
+
+        if (change.doc.data().type == 'error') {
+          if(change.type === "added") {
+            let doc = change.doc
+            this.events.push({
+              user: doc.data().user,
+              error: doc.data().error,
+              location: doc.data().location,
+              timestamp: moment(doc.data().timestamp).format('lll'),
+              type: doc.data().type,
+              color: doc.data().color,
+              fileLocation: doc.data().fileLocation
+            })
+            var container = document.querySelector('.inquiry')
+            container.scrollTop = container.scrollHeight
+          }
+          if(change.type === "removed") {
+            let doc = change.doc
+            this.events.splice(change.oldIndex, 1)
+          }
+          if(change.type === "modified") {
+            let doc = change.doc
+            this.events.splice(change.oldIndex, 1, {
+              user: doc.data().user,
+              error: doc.data().error,
+              location: doc.data().location,
+              timestamp: moment(doc.data().timestamp).format('lll'),
+              type: doc.data().type,
+              color: doc.data().color,
+              fileLocation: doc.data().fileLocation
+            })
+          }
+        }
+
+        if (change.doc.data().type == 'route') {
+
+        }
+      })
+    })
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

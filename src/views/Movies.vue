@@ -89,6 +89,7 @@ export default {
 	methods: {
 		logMovie(movie) {
 			this.$ga.event(this.username, 'is watching ' + movie)
+			this.inquiryEvent(this.username, 'is watching ' + movie, 'Movies', this.accountColor)
 		}
 	}
 }

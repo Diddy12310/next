@@ -108,7 +108,7 @@ export default {
     return {
 			ready: false,
 			terms: false,
-			color: this.$parent.$parent.$parent.accountColor,
+			color: '',
 			feedback: null,
 			username: this.$parent.$parent.$parent.username,
 			user: [],
@@ -190,6 +190,17 @@ export default {
 			this.isInnerCore = doc.data().isInnerCore
 			this.isAdmin = doc.data().isAdmin
 		})
+
+		db.collection('users').onSnapshot(snapshot => {
+			snapshot.docChanges().forEach(change => {
+				if(change.type === "modified" && change.doc.id == this.username) {
+					let doc = change.doc
+					this.color = doc.data().color
+					this.isAdmin = doc.data().isAdmin
+					this.isInnerCore = doc.data().isInnerCore
+				}
+			})
+		})
 	},
 	methods: {
 		deleteChat(id) {
@@ -197,6 +208,9 @@ export default {
 				this.feedback = 'Message deleted successfully.'
 				this.snackbar = true
 				this.$ga.event(this.username, 'deleted a message on ' + this.chatroom)
+				this.inquiryEvent(this.username, 'deleted a message on ' + this.chatroom, 'Flamechat', this.color)
+			}).catch(error => {
+				this.inquiryError(this.username, error.message + this.chatroom, 'Flamechat', this.color)
 			})
 		},
 		clearAllMessages() {
@@ -207,10 +221,13 @@ export default {
 						doc.ref.delete()
 						this.feedback = 'All messages purged.'
 						this.snackbar = true
+					}).catch(error => {
+						this.inquiryError(this.username, error.message + this.chatroom, 'Flamechat', this.color)
 					})
 				})
 			}
 			this.$ga.event(this.username, 'purged all messages')
+			this.inquiryEvent(this.username, 'purged all messages', 'Flamechat', this.color)
 		},
 		sendChat() {
 			if(this.newMessage && this.username != '' && this.color != null) {
@@ -223,13 +240,16 @@ export default {
 					console.log(err)
 					this.feedback = 'Your message did not send successfully!'
 					this.snackbar = true
+					this.inquiryError(this.username, err.message + this.chatroom, 'Flamechat', this.color)
 				})
 				this.feedback = 'Your message sent successfully!'
 				this.snackbar = true
 				this.$ga.event(this.username, 'sent ' + this.newMessage + ' on ' + this.chatroom)
+				this.inquiryEvent(this.username, 'sent "' + this.newMessage + '" on ' + this.chatroom, 'Flamechat', this.color)
 				this.newMessage = null
 			} else {
-				this.feedback = 'Your message did not send sucessfully! Try signing out and back in.'
+				this.feedback = 'Your message did not send sucessfully!'
+				this.inquiryError(this.username, 'tried to send a message on ' + this.chatroom, 'Flamechat', this.color)
 				this.snackbar = true
 			}
 		},
@@ -240,9 +260,12 @@ export default {
 				this.feedback = 'Message edited successfully.'
 				this.snackbar = true
 				this.$ga.event(this.username, 'edited ' + this.editMessage + ' on ' + this.chatroom)
+				this.inquiryEvent(this.username, 'edited ' + this.editMessage + ' on ' + this.chatroom, 'Flamechat', this.color)
 				this.editing = null
 				this.editMessage = ''
 				this.editor = false
+			}).catch(error => {
+				this.inquiryError(this.username, error.message + this.chatroom, 'Flamechat', this.color)
 			})
 		},
 		setChatroom() {

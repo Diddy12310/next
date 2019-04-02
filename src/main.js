@@ -9,6 +9,7 @@ import VueAnalytics from 'vue-analytics'
 import store from './store'
 import firebase from 'firebase'
 import LogRocket from 'logrocket'
+import db from '@/firebase/init'
 
 LogRocket.init('uvh8hk/paradigm', {
   dom: {
@@ -26,6 +27,33 @@ Vue.component('vue-friendly-iframe', VueFriendlyIframe);
 Vue.config.productionTip = false
 
 Vue.use(VueChatScroll)
+
+Vue.mixin({
+  methods: {
+    inquiryEvent(user, event, location, color) {
+      console.log(user, event, location, color)
+      db.collection('analytics').add({
+        user: user,
+        event: event,
+        location: location,
+        timestamp: Date.now(),
+        type: 'event',
+        color: color
+      })
+    },
+    inquiryError(user, error, location, color) {
+      console.error(user, error, location, color)
+      db.collection('analytics').add({
+        user: user,
+        error: error,
+        location: location,
+        timestamp: Date.now(),
+        type: 'error',
+        color: color
+      })
+    }
+  }
+})
 
 let app = null
 firebase.auth().onAuthStateChanged(() => {
