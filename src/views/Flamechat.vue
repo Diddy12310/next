@@ -244,7 +244,7 @@ export default {
 				})
 			}
 			this.$ga.event(this.username, 'purged all messages')
-			this.inquiryEvent(this.username, 'purged all messages', 'Flamechat', this.color)
+			this.inquiryEvent(this.username, 'purged all messages on ' + this.chatroom, 'Flamechat', this.color)
 		},
 		sendChat() {
 			if(this.newMessage && this.username != '' && this.color != null) {
