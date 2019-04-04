@@ -26,7 +26,6 @@ export default {
   name: 'Debate',
   data() {
     return {
-      username: this.$parent.$parent.$parent.username,
       debateTitle: '',
       debateTime: '',
       text: []

@@ -25,9 +25,7 @@ export default {
   name: 'Databank',
   data() {
     return {
-      testData: [],
-      username: this.$parent.$parent.$parent.username,
-      color: this.$parent.$parent.$parent.accountColor
+      testData: []
     }
   },
   created() {

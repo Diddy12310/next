@@ -43,8 +43,7 @@ export default {
   data() {
     return {
 			music: [],
-			searchMusic: '',
-			username: ''
+			searchMusic: ''
     }
   },
   created() {
@@ -84,15 +83,6 @@ export default {
 				}
 			})
 		})
-
-		this.username = this.$parent.$parent.$parent.username
-    // db.collection('music').get().then(snapshot => {
-    //   snapshot.forEach(doc => {
-		// 		let item = doc.data()
-    //     item.id = doc.id
-    //     this.music.push(item)
-    //   })
-		// })
 	},
 	computed: {
 		filteredMusic() {
@@ -103,8 +93,8 @@ export default {
 	},
 	methods: {
 		logMusic(music, artist) {
-			this.$ga.event('Music', this.username + ' is listening to ' + music + ' by ' + artist)
-			this.inquiryEvent(this.username, 'is listening to ' + music + ' by ' + artist, 'Music', this.accountColor)
+			this.$ga.event('Music', this.$root.username + ' is listening to ' + music + ' by ' + artist)
+			this.inquiryEvent(this.$root.username, 'is listening to ' + music + ' by ' + artist, 'Music', this.accountColor)
 		}
 	}
 }

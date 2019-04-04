@@ -38,12 +38,10 @@ export default {
   data() {
     return {
 			movies: [],
-			searchMovie: '',
-			username: ''
+			searchMovie: ''
     }
   },
   created() {
-		this.username = this.$parent.$parent.$parent.username
 		let ref = db.collection('movies').orderBy("title", "asc")
 
 		ref.onSnapshot(snapshot => {
@@ -88,8 +86,8 @@ export default {
 	},
 	methods: {
 		logMovie(movie) {
-			this.$ga.event(this.username, 'is watching ' + movie)
-			this.inquiryEvent(this.username, 'is watching ' + movie, 'Movies', this.accountColor)
+			this.$ga.event(this.$root.username, 'is watching ' + movie)
+			this.inquiryEvent(this.$root.username, 'is watching ' + movie, 'Movies', this.accountColor)
 		}
 	}
 }

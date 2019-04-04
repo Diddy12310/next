@@ -3,8 +3,8 @@
 		<v-toolbar dense color="deep-orange darken-2" v-if="flamechatEnable">
 			<v-toolbar-title>Flamechat</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-btn v-if="username && color && ready && chatroom" flat @click="leaveRoom()">Leave</v-btn>
-			<v-btn v-if="isAdmin && color && ready && chatroom" flat @click="clearAllMessages()">Purge</v-btn>
+			<v-btn v-if="$root.isAdmin && $root.accountColor && ready && chatroom" flat @click="clearAllMessages()">Purge</v-btn>
+			<v-btn v-if="$root.username && $root.accountColor && ready && chatroom" flat @click="leaveRoom()">Leave</v-btn>
 		</v-toolbar>
 
 		<v-container>
@@ -17,30 +17,30 @@
 
 			<!-- Welcome card -->
 			<div v-if="flamechatEnable">
-				<v-card class="welcome-card" v-if="!username || !color || !ready || !chatroom">
+				<v-card class="welcome-card" v-if="!$root.username || !$root.accountColor || !ready || !chatroom">
 					<v-card-title>
 						<h3 class="headline mb-0 text-xs-center">Welcome to Flamechat!</h3>
 					</v-card-title>
 					<v-card-text>
 						<v-radio-group v-model="chatroom" column>
 							<v-radio :label="room.name" :value="room.db" :disabled="!room.available" v-if="room.id !== 'chatrooms'" v-for="room in chatrooms" :key="room.id"></v-radio>
-							<v-radio color="#C0C0C0" label="The Inner Core" value="the-inner-core" v-if="isInnerCore"></v-radio>
+							<v-radio color="#C0C0C0" label="The Inner Core" value="the-inner-core" v-if="$root.isInnerCore"></v-radio>
 						</v-radio-group>
 					</v-card-text>
 					<v-card-actions>
-						<v-btn :disabled="!chatroom || !color" flat @click.stop="ready = true, setChatroom()" color="accent">Join</v-btn>
+						<v-btn :disabled="!chatroom || !$root.accountColor" flat @click.stop="ready = true, setChatroom()" color="accent">Join</v-btn>
 					</v-card-actions>
 				</v-card>
 
 				<!-- Chat card -->
-				<v-card class="chat-card" v-if="username && color && ready && chatroom">
+				<v-card class="chat-card" v-if="$root.username && $root.accountColor && ready && chatroom">
 					<v-card-text>
 						<ul class="messages" v-chat-scroll="{ always: false }">
 							<p v-if="messages == []">There are no messages posted on this room.</p>
 							<li v-for="message in messages" :key="message.id" :id="message.id">
 								<v-btn :style="{ color: message.color }" class="name" flat @click="openUsernamePopup(message.name)">{{ message.name }}</v-btn>
-								<v-btn class="admin-btn" icon flat color="error" v-if="isAdmin || username == message.name" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
-								<v-btn class="admin-btn" icon flat color="warning" v-if="isAdmin || username == message.name" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn><br>
+								<v-btn class="admin-btn" icon flat color="error" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
+								<v-btn class="admin-btn" icon flat color="warning" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn><br>
 								<span v-if="flamechatHTML" v-html="message.content" class="message"></span>
 								<span v-if="!flamechatHTML" class="message">{{ message.content }}</span>
 								<span class="time">{{ message.timestamp }}</span>
@@ -107,11 +107,7 @@ export default {
   data() {
     return {
 			ready: false,
-			terms: false,
-			color: '',
 			feedback: null,
-			username: this.$parent.$parent.$parent.username,
-			user: [],
 			messages: [],
 			snackbar: false,
 			newMessage: '',
@@ -130,8 +126,6 @@ export default {
 			usersDbDownloaded: false,
 			profilePopupAdmin: false,
 			profilePopupAsteroid: false,
-			isAdmin: false,
-			isInnerCore: false,
 			lockdown: null,
 			fourofour: null
     }
@@ -201,33 +195,16 @@ export default {
 				}
 			})
 		})
-
-		db.collection('users').doc(this.username).get().then(doc => {
-			this.color = doc.data().color
-			this.isInnerCore = doc.data().isInnerCore
-			this.isAdmin = doc.data().isAdmin
-		})
-
-		db.collection('users').onSnapshot(snapshot => {
-			snapshot.docChanges().forEach(change => {
-				if(change.type === "modified" && change.doc.id == this.username) {
-					let doc = change.doc
-					this.color = doc.data().color
-					this.isAdmin = doc.data().isAdmin
-					this.isInnerCore = doc.data().isInnerCore
-				}
-			})
-		})
 	},
 	methods: {
 		deleteChat(id) {
 			db.collection('flamechat').doc('chatrooms').collection(this.chatroom).doc(id).delete().then(() => {
 				this.feedback = 'Message deleted successfully.'
 				this.snackbar = true
-				this.$ga.event(this.username, 'deleted a message on ' + this.chatroom)
-				this.inquiryEvent(this.username, 'deleted a message on ' + this.chatroom, 'Flamechat', this.color)
+				this.$ga.event(this.$root.username, 'deleted a message on ' + this.chatroom)
+				this.inquiryEvent(this.$root.username, 'deleted a message on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 			}).catch(error => {
-				this.inquiryError(this.username, error.message + this.chatroom, 'Flamechat', this.color)
+				this.inquiryError(this.$root.username, error.message + this.chatroom, 'Flamechat', this.$root.accountColor)
 			})
 		},
 		clearAllMessages() {
@@ -239,34 +216,34 @@ export default {
 						this.feedback = 'All messages purged.'
 						this.snackbar = true
 					}).catch(error => {
-						this.inquiryError(this.username, error.message + this.chatroom, 'Flamechat', this.color)
+						this.inquiryError(this.$root.username, error.message + this.chatroom, 'Flamechat', this.$root.accountColor)
 					})
 				})
 			}
-			this.$ga.event(this.username, 'purged all messages')
-			this.inquiryEvent(this.username, 'purged all messages on ' + this.chatroom, 'Flamechat', this.color)
+			this.$ga.event(this.$root.username, 'purged all messages')
+			this.inquiryEvent(this.$root.username, 'purged all messages on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 		},
 		sendChat() {
-			if(this.newMessage && this.username != '' && this.color != null) {
+			if(this.newMessage && this.$root.username != '' && this.$root.accountColor != null) {
 				db.collection('flamechat').doc('chatrooms').collection(this.chatroom).add({
-					name: this.username,
+					name: this.$root.username,
 					content: this.newMessage,
-					color: this.color,
+					color: this.$root.accountColor,
 					timestamp: Date.now()
 				}).catch(err => {
 					console.log(err)
 					this.feedback = 'Your message did not send successfully!'
 					this.snackbar = true
-					this.inquiryError(this.username, err.message + this.chatroom, 'Flamechat', this.color)
+					this.inquiryError(this.$root.username, err.message + this.chatroom, 'Flamechat', this.$root.accountColor)
 				})
 				this.feedback = 'Your message sent successfully!'
 				this.snackbar = true
-				this.$ga.event(this.username, 'sent ' + this.newMessage + ' on ' + this.chatroom)
-				this.inquiryEvent(this.username, 'sent "' + this.newMessage + '" on ' + this.chatroom, 'Flamechat', this.color)
+				this.$ga.event(this.$root.username, 'sent ' + this.newMessage + ' on ' + this.chatroom)
+				this.inquiryEvent(this.$root.username, 'sent "' + this.newMessage + '" on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 				this.newMessage = null
 			} else {
 				this.feedback = 'Your message did not send sucessfully!'
-				this.inquiryError(this.username, 'tried to send a message on ' + this.chatroom, 'Flamechat', this.color)
+				this.inquiryError(this.$root.username, 'tried to send a message on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 				this.snackbar = true
 			}
 		},
@@ -276,13 +253,13 @@ export default {
 			}).then(() => {
 				this.feedback = 'Message edited successfully.'
 				this.snackbar = true
-				this.$ga.event(this.username, 'edited ' + this.editMessage + ' on ' + this.chatroom)
-				this.inquiryEvent(this.username, 'edited ' + this.editMessage + ' on ' + this.chatroom, 'Flamechat', this.color)
+				this.$ga.event(this.$root.username, 'edited ' + this.editMessage + ' on ' + this.chatroom)
+				this.inquiryEvent(this.$root.username, 'edited ' + this.editMessage + ' on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 				this.editing = null
 				this.editMessage = ''
 				this.editor = false
 			}).catch(error => {
-				this.inquiryError(this.username, error.message + this.chatroom, 'Flamechat', this.color)
+				this.inquiryError(this.$root.username, error.message + this.chatroom, 'Flamechat', this.$root.accountColor)
 			})
 		},
 		setChatroom() {

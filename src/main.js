@@ -44,6 +44,20 @@ Vue.mixin({
         color: color
       })
     }
+  },
+  created() {
+
+  },
+  data() {
+    return {
+      username: null,
+      accountBio: null,
+      accountColor: null,
+      isAdmin: false,
+      isInnerCore: false,
+      isAnalytics: false,
+      userPresent: false
+    }
   }
 })
 
@@ -58,9 +72,4 @@ firebase.auth().onAuthStateChanged(() => {
   }
 })
 
-LogRocket.init('uvh8hk/paradigm', {
-  dom: {
-    baseHref: 'https://theparadigmdev.com/',
-  },
-  rootHostname: 'theparadigmdev.com',
-})
+LogRocket.init('uvh8hk/paradigm')

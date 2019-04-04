@@ -1,7 +1,7 @@
 <template>
   <div class="inquiry">
     <v-container>
-      <div v-if="isAnalytics">
+      <div v-if="$root.isAnalytics">
         <div v-for="event in events" :key="event.id">
           <v-expansion-panel>
             <v-expansion-panel-content v-if="event.type == 'event'" class="blue-grey darken-2">
@@ -28,7 +28,7 @@
       </div>
     </v-container>
 
-    <div style="text-align: center; margin: 50px 0px;" v-if="!isAnalytics">
+    <div style="text-align: center; margin: 50px 0px;" v-if="!$root.isAnalytics">
 			<h1 class="display-3 red--text font-weight-thin text-uppercase">Unavailable</h1>
 			<h6 class="headline white--text font-weight-thin mt-3">Please navigate away from this page.</h6>
 		</div>
@@ -45,9 +45,7 @@ export default {
   name: 'Inquiry',
   data() {
     return {
-      events: [],
-      username: this.$parent.$parent.$parent.username,
-      isAnalytics: null
+      events: []
     }
   },
   created() {
@@ -121,10 +119,6 @@ export default {
         }
       })
     })
-
-    db.collection('users').doc(this.username).get().then(doc => {
-			this.isAnalytics = doc.data().isAnalytics
-		})
   }
 }
 </script>

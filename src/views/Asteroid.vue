@@ -1,6 +1,6 @@
 <template>
 	<div class="asteroid">
-		<div v-if="isAsteroid">
+		<div v-if="$root.isAsteroid">
 			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px; text-align: center;">Asteroid</h1>
 			<v-card>
 				<v-card-title primary-title>
@@ -31,7 +31,7 @@
 			</v-card>
 		</div>
 
-		<div style="text-align: center; margin: 50px 0px;" v-if="!isAsteroid">
+		<div style="text-align: center; margin: 50px 0px;" v-if="!$root.isAsteroid">
 			<h1 class="display-3 red--text font-weight-thin text-uppercase">Unavailable</h1>
 			<h6 class="headline white--text font-weight-thin mt-3">Please navigate away from this page.</h6>
 		</div>
@@ -48,9 +48,7 @@ export default {
 			windows: '',
 			macos: '',
 			winavail: null,
-			macavail: null,
-			isAsteroid: false,
-			username: this.$parent.$parent.$parent.username
+			macavail: null
 		}
 	},
 	created() {
@@ -59,10 +57,6 @@ export default {
 			this.macos = doc.data().macos
 			this.winavail = doc.data().winavail
 			this.macavail = doc.data().macavail
-		})
-
-		db.collection('users').doc(this.username).get().then(doc => {
-			this.isAsteroid = doc.data().isAsteroid
 		})
 	}
 }

@@ -2,14 +2,14 @@
 	<v-app dark>
 		<!-- Toolbar -->
 		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
-			<v-toolbar-side-icon @click="drawer = !drawer" v-if="userPresent && !lockdown && !fourofour"></v-toolbar-side-icon>
+			<v-toolbar-side-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !fourofour"></v-toolbar-side-icon>
 			<v-toolbar-title>
 				<img style="height: 45px; top: 5px; position: relative;" src="./assets/paradigmlogo.png" class="hidden-xs-only">
 				<img style="height: 45px; top: 3.65px; position: relative;" src="./assets/plogo.png" class="hidden-sm-and-up">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-toolbar-items v-if="userPresent && !lockdown && !fourofour">
-				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="isAdmin">
+			<v-toolbar-items v-if="$root.userPresent && !lockdown && !fourofour">
+				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="$root.isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
 				<v-btn icon @click="dialog = true">
@@ -19,10 +19,10 @@
           <v-icon>refresh</v-icon>
         </v-btn>
 			</v-toolbar-items>
-			<v-toolbar-items v-if="username == 'diddy12310' && lockdown">
+			<v-toolbar-items v-if="$root.username == 'diddy12310' && lockdown">
 				<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important; top: +16px;"></v-switch>
 			</v-toolbar-items>
-			<v-toolbar-items v-if="username == 'diddy12310' && fourofour">
+			<v-toolbar-items v-if="$root.username == 'diddy12310' && fourofour">
 				<v-switch @click="fourofourToggle" v-model="fourofour" style="flex: none !important; top: +16px;"></v-switch>
 			</v-toolbar-items>
 		</v-toolbar>
@@ -75,8 +75,8 @@
 		<v-dialog v-model="dialog" max-width="500">
 			<v-card>
 				<v-card-title primary-title>
-					<h3 v-if="!userPresent" class="headline mb-0">Account</h3>
-					<h3 v-if="userPresent" class="headline mb-0 font-weight-medium text-uppercase" :style="{ color: accountColor }">{{ username }}</h3>
+					<h3 v-if="!$root.userPresent" class="headline mb-0">Account</h3>
+					<h3 v-if="$root.userPresent" class="headline mb-0 font-weight-medium text-uppercase" :style="{ color: $root.accountColor }">{{ $root.username }}</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="dialog = false" class="dialog-close-btn">
 						<v-icon>close</v-icon>
@@ -84,11 +84,11 @@
 				</v-card-title>
 
 				<v-card-text>
-					<v-tabs fixed-tabs v-if="!userPresent && signUpAvail">
+					<v-tabs fixed-tabs v-if="!$root.userPresent && signUpAvail">
 						<v-tab>Sign In</v-tab>
 						<v-tab-item>
 							<v-form>
-								<v-text-field autocomplete="off" type="text" name="username" v-model="username" label="Username" :rules="usernameRules"></v-text-field>
+								<v-text-field autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
 								<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
 								<v-btn @click="signIn" color="primary">Sign In</v-btn>
 							</v-form>
@@ -96,10 +96,10 @@
 						<v-tab>Sign Up</v-tab>
 						<v-tab-item>
 							<v-form>
-								<v-text-field autocomplete="off" type="text" name="username" v-model="username" label="Username" :rules="usernameRules"></v-text-field>
+								<v-text-field autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
 								<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
 								<v-text-field autocomplete="off" type="text" name="bio" v-model="accountBio" label="Bio"></v-text-field>
-								<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="accountColor" />
+								<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="$root.accountColor" />
 								<v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms"></v-checkbox>
 								<v-btn href="http://relay.theparadigmdev.com/terms.html">View Terms</v-btn>
 								<v-btn @click="signUp" color="primary">Sign Up</v-btn>
@@ -107,14 +107,14 @@
 						</v-tab-item>
 					</v-tabs>
 
-					<v-form v-if="!userPresent && !signUpAvail">
-						<v-text-field autocomplete="off" type="text" name="username" v-model="username" label="Username" :rules="usernameRules"></v-text-field>
+					<v-form v-if="!$root.userPresent && !signUpAvail">
+						<v-text-field autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
 						<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
 					</v-form>
 
-					<div v-if="userPresent">
-						<p>{{ accountBio }}</p>
-						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ moonrocks }}</span>
+					<div v-if="$root.userPresent">
+						<p>{{ $root.accountBio }}</p>
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ $root.moonrocks }}</span>
 						<p><strong>Last Sign In:</strong> {{ userInfo.metadata.lastSignInTime }}</p>
 						<p><strong>Account Creation:</strong> {{ userInfo.metadata.creationTime }}</p>
 						<p><strong>User ID:</strong> {{ userInfo.uid }}</p>
@@ -127,8 +127,8 @@
 				</v-card-text>
 
 				<v-card-actions>
-					<v-btn v-if="!userPresent && !signUpAvail" @click="signIn" color="primary">Sign In</v-btn>
-					<v-btn v-if="userPresent" @click="signOut">Sign Out</v-btn>
+					<v-btn v-if="!$root.userPresent && !signUpAvail" @click="signIn" color="primary">Sign In</v-btn>
+					<v-btn v-if="$root.userPresent" @click="signOut">Sign Out</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -164,10 +164,10 @@
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Change Color</h3></v-card-title>
 				<v-card-text>
-					<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="accountColor" />
+					<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="$root.accountColor" />
 				</v-card-text>
 				<v-card-actions>
-					<v-btn @click="changeColor(accountColor.hex)" color="warning" flat>Change Color</v-btn>
+					<v-btn @click="changeColor($root.accountColor.hex)" color="warning" flat>Change Color</v-btn>
 					<v-btn @click="newColorDialog = false" flat color="accent">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
@@ -178,17 +178,17 @@
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Change Bio</h3></v-card-title>
 				<v-card-text>
-					<v-text-field autocomplete="off" type="text" name="bio" v-model="accountBio" label="Bio"></v-text-field>
+					<v-text-field autocomplete="off" type="text" name="bio" v-model="$root.accountBio" label="Bio"></v-text-field>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn @click="changeBio(accountBio)" color="warning" flat>Change Bio</v-btn>
+					<v-btn @click="changeBio($root.accountBio)" color="warning" flat>Change Bio</v-btn>
 					<v-btn @click="newBioDialog = false" flat color="accent">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
 
 		<!-- Admin dialog -->
-		<v-dialog v-model="adminDialog" max-width="500" v-if="isAdmin">
+		<v-dialog v-model="adminDialog" max-width="500" v-if="$root.isAdmin">
 			<v-card>
 				<v-card-title>
 					<h3 class="headline mb-0">Admin Panel</h3>
@@ -217,8 +217,8 @@
 		<!-- Site content -->
 		<v-content>
 			<v-container fluid style="padding: 0;">
-				<router-view v-if="userPresent && !lockdown && !fourofour"></router-view>
-				<div class="noUser" v-if="!userPresent &&!lockdown && !fourofour" style="text-align: center;">
+				<router-view v-if="$root.userPresent && !lockdown && !fourofour"></router-view>
+				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !fourofour" style="text-align: center;">
 					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">No User is Logged In</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
 					<v-btn color="primary" @click="dialog = true">Login</v-btn>
@@ -289,10 +289,7 @@ export default {
 				{ text: 'Databank', route: '/dev/databank' },
 				// { text: '', route: '/dev/' },
 			],
-			version: '',
-			username: '',
 			password: '',
-			userPresent: null,
 			dialog: false,
 			usernameRules: [
 				value => value.length >= 3 || 'Minimum length is 3 characters',
@@ -313,12 +310,6 @@ export default {
 			flamechatHTML: null,
 			newPasswordDialog: false,
 			adminDialog: false,
-			accountBio: '',
-			accountColor: '',
-			moonrocks: '',
-			colors: [],
-			isAdmin: false,
-			isInnerCore: false,
 			newColorDialog: false,
 			newBioDialog: false
 		}
@@ -328,8 +319,8 @@ export default {
 			location.reload()
 		},
 		signIn() {
-			if(this.username && this.password) {
-				firebase.auth().signInWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).then(() => {
+			if(this.$root.username && this.password) {
+				firebase.auth().signInWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(() => {
 				  
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
@@ -351,20 +342,20 @@ export default {
 			}
 		},
 		signUp() {
-			if(this.username && this.password && this.terms && this.accountColor && this.accountBio) {
-				firebase.auth().createUserWithEmailAndPassword(this.username + '@theparadigmdev.com', this.password).then(user => {
-					db.collection('users').doc(this.username).set({
+			if(this.$root.username && this.password && this.terms && this.$root.accountColor && this.$root.accountBio) {
+				firebase.auth().createUserWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(user => {
+					db.collection('users').doc(this.$root.username).set({
 						// uid: user.uid,
-						bio: this.accountBio,
-						color: this.accountColor.hex,
+						bio: this.$root.accountBio,
+						color: this.$root.accountColor.hex,
 						moonrocks: 1,
 						isAdmin: false,
 						isInnerCore: false,
 						isAsteroid: false,
 						isAnalytics: false
 					})
-					this.$ga.event(this.username, 'signed up')
-					this.inquiryEvent(this.username, 'signed up', '$account', this.accountColor)
+					this.$ga.event(this.$root.username, 'signed up')
+					this.inquiryEvent(this.$root.username, 'signed up', '$account', this.$root.accountColor)
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
@@ -385,8 +376,8 @@ export default {
 			}
 		},
 		signOut() {
-			this.$ga.event(this.username, 'signed out')
-			this.inquiryEvent(this.username, 'signed out', '$account', this.accountColor)
+			this.$ga.event(this.$root.username, 'signed out')
+			this.inquiryEvent(this.$root.username, 'signed out', '$account', this.$root.accountColor)
 			firebase.auth().signOut().then(() => {
 				this.feedback = 'Signed out successfully.'
 				this.snackbar = true
@@ -398,8 +389,8 @@ export default {
 				this.newPasswordDialog = false,
 				this.feedback = 'Password changed successfully.'
 				this.snackbar = true
-				this.$ga.event(this.username, 'changed their password')
-				this.inquiryEvent(this.username, 'changed their password', '$account', this.accountColor)
+				this.$ga.event(this.$root.username, 'changed their password')
+				this.inquiryEvent(this.$root.username, 'changed their password', '$account', this.$root.accountColor)
 			}).catch(error => {
 				// An error happened.
 				this.feedback = 'Password changed unsuccessfully.'
@@ -408,14 +399,14 @@ export default {
 			this.newPassword = null
 		},
 		deleteUser() {
-			this.$ga.event(this.username, 'deleted their account')
-			this.inquiryEvent(this.username, 'deleted their account', '$account', this.accountColor)
+			this.$ga.event(this.$root.username, 'deleted their account')
+			this.inquiryEvent(this.$root.username, 'deleted their account', '$account', this.$root.accountColor)
 			firebase.auth().currentUser.delete().then(() => {
 				// User deleted.
-				db.collection('users').doc(this.username).delete().then(() => {
-					this.username = null
+				db.collection('users').doc(this.$root.username).delete().then(() => {
+					this.$root.username = null
 					this.userInfo = null
-					this.userPresent = false
+					this.$root.userPresent = false
 				})
 				this.feedback = 'Account deleted sucessfully.'
 				this.snackbar = true
@@ -431,11 +422,11 @@ export default {
 				signUpAvail: !this.signUpAvail
 			}).then(() => {
 				if(this.signUpAvail == true) {
-					this.$ga.event(this.username, 'enabled sign ups')
-					this.inquiryEvent(this.username, 'enabled sign ups', '$admin', this.accountColor)
+					this.$ga.event(this.$root.username, 'enabled sign ups')
+					this.inquiryEvent(this.$root.username, 'enabled sign ups', '$admin', this.$root.accountColor)
 				} else {
-					this.$ga.event(this.username, 'disabled sign ups')
-					this.inquiryEvent(this.username, 'disabled sign ups', '$admin', this.accountColor)
+					this.$ga.event(this.$root.username, 'disabled sign ups')
+					this.inquiryEvent(this.$root.username, 'disabled sign ups', '$admin', this.$root.accountColor)
 				}
 			})
 		},
@@ -444,11 +435,11 @@ export default {
 				flamechatHTML: !this.flamechatHTML
 			}).then(() => {
 				if(this.flamechatHTML == true) {
-					this.$ga.event(this.username, 'enabled Flamechat HTML')
-					this.inquiryEvent(this.username, 'enabled Flamechat HTML rendering', '$admin', this.accountColor)
+					this.$ga.event(this.$root.username, 'enabled Flamechat HTML')
+					this.inquiryEvent(this.$root.username, 'enabled Flamechat HTML rendering', '$admin', this.$root.accountColor)
 				} else {
-					this.$ga.event(this.username, 'disabled Flamechat HTML')
-					this.inquiryEvent(this.username, 'disabled Flamechat HTML rendering', '$admin', this.accountColor)
+					this.$ga.event(this.$root.username, 'disabled Flamechat HTML')
+					this.inquiryEvent(this.$root.username, 'disabled Flamechat HTML rendering', '$admin', this.$root.accountColor)
 				}
 			})
 		},
@@ -457,13 +448,13 @@ export default {
 				lockdown: !this.lockdown
 			}).then(() => {
 				if (this.lockdown == true) {
-					this.$ga.event(this.username, 'locked down')
-					this.inquiryEvent(this.username, 'locked down', '$admin', this.accountColor)
+					this.$ga.event(this.$root.username, 'locked down')
+					this.inquiryEvent(this.$root.username, 'locked down', '$admin', this.$root.accountColor)
 					this.feedback = 'Locked down successfully.'
 					this.snackbar = true
 				} else {
-					this.$ga.event(this.username, 'ended the lockdown')
-					this.inquiryEvent(this.username, 'ended the lockdown', '$admin', this.accountColor)
+					this.$ga.event(this.$root.username, 'ended the lockdown')
+					this.inquiryEvent(this.$root.username, 'ended the lockdown', '$admin', this.$root.accountColor)
 					this.feedback = 'Lockdown ended successfully.'
 					this.snackbar = true
 				}
@@ -474,13 +465,13 @@ export default {
 				fourofour: !this.fourofour
 			}).then(() => {
 				if (this.fourofour == true) {
-					this.$ga.event(this.username, '404ed')
-					this.inquiryEvent(this.username, '404ed', '$admin', this.accountColor)
+					this.$ga.event(this.$root.username, '404ed')
+					this.inquiryEvent(this.$root.username, '404ed', '$admin', this.$root.accountColor)
 					this.feedback = '404 successfully.'
 					this.snackbar = true
 				} else {
-					this.$ga.event(this.username, 'ended the 404')
-					this.inquiryEvent(this.username, 'ended the 404', '$admin', this.accountColor)
+					this.$ga.event(this.$root.username, 'ended the 404')
+					this.inquiryEvent(this.$root.username, 'ended the 404', '$admin', this.$root.accountColor)
 					this.feedback = '404 ended successfully.'
 					this.snackbar = true
 				}
@@ -491,33 +482,33 @@ export default {
 				flamechatEnable: !this.flamechatEnable
 			}).then(() => {
 				if (this.flamechatEnable) {
-					this.$ga.event(this.username, 'enabled Flamechat')
-					this.inquiryEvent(this.username, 'enabled Flamechat', '$admin', this.accountColor)
+					this.$ga.event(this.$root.username, 'enabled Flamechat')
+					this.inquiryEvent(this.$root.username, 'enabled Flamechat', '$admin', this.$root.accountColor)
 				}
 				if (!this.flamechatEnable) {
-					this.$ga.event(this.username, 'disabled Flamechat')
-					this.inquiryEvent(this.username, 'disabled Flamechat', '$admin', this.accountColor)
+					this.$ga.event(this.$root.username, 'disabled Flamechat')
+					this.inquiryEvent(this.$root.username, 'disabled Flamechat', '$admin', this.$root.accountColor)
 				}
 			})
 		},
 		changeColor(newColor) {
-			db.collection('users').doc(this.username).update({
+			db.collection('users').doc(this.$root.username).update({
 				color: newColor
 			}).then(() => {
-				this.accountColor = newColor
+				this.$root.accountColor = newColor
 				this.newColorDialog = false
-				this.$ga.event(this.username, 'changed their color to ' + this.accountColor)
-				this.inquiryEvent(this.username, 'changed their color to ' + this.accountColor, '$account', this.accountColor)
+				this.$ga.event(this.$root.username, 'changed their color to ' + this.$root.accountColor)
+				this.inquiryEvent(this.$root.username, 'changed their color to ' + this.$root.accountColor, '$account', this.$root.accountColor)
 			})
 		},
 		changeBio(newBio) {
-			db.collection('users').doc(this.username).update({
+			db.collection('users').doc(this.$root.username).update({
 				bio: newBio
 			}).then(() => {
 				this.accountBio = newBio
 				this.newBioDialog = false
-				this.$ga.event(this.username, 'changed their bio to ' + this.accountBio)
-				this.inquiryEvent(this.username, 'changed their bio to ' + this.accountBio, '$account', this.accountColor)
+				this.$ga.event(this.$root.username, 'changed their bio to ' + this.$root.accountBio)
+				this.inquiryEvent(this.$root.username, 'changed their bio to ' + this.$root.accountBio, '$account', this.$root.accountColor)
 			})
 		}
 	},
@@ -526,44 +517,46 @@ export default {
 			if(firebaseUser) {
 				this.feedback = 'Signed in successfully.'
 				this.snackbar = true
-				this.userPresent = true
-				this.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
+				this.$root.userPresent = true
+				this.$root.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
 				this.userInfo = firebaseUser
-				this.$ga.event(this.username, 'signed in')
+				this.$ga.event(this.$root.username, 'signed in')
 
 				var usersRef = db.collection('users')
-				usersRef.doc(this.username).get().then(doc => {
-					this.accountBio = doc.data().bio
-					this.accountColor = doc.data().color
-					this.moonrocks = doc.data().moonrocks
-					this.isAdmin = doc.data().isAdmin
-					this.isInnerCore = doc.data().isInnerCore
-					this.inquiryEvent(this.username, 'signed in', '$account', this.accountColor)
+				usersRef.doc(this.$root.username).get().then(doc => {
+					this.$root.accountBio = doc.data().bio
+					this.$root.accountColor = doc.data().color
+					this.$root.moonrocks = doc.data().moonrocks
+					this.$root.isAdmin = doc.data().isAdmin
+					this.$root.isInnerCore = doc.data().isInnerCore
+					this.$root.isAnalytics = doc.data().isAnalytics
+					this.inquiryEvent(this.$root.username, 'signed in', '$account', this.$root.accountColor)
 					LogRocket.identify(this.userInfo.uid, {
-						name: this.username,
-						isAdmin: this.isAdmin,
-						isAsteroid: this.isAsteroid,
-						bio: this.accountBio,
-						color: this.accountColor,
-						moonrocks: this.moonrocks
+						name: this.$root.username,
+						isAdmin: this.$root.isAdmin,
+						isAsteroid: this.$root.isAsteroid,
+						bio: this.$root.accountBio,
+						color: this.$root.accountColor,
+						moonrocks: this.$root.moonrocks
 					})
 				})
 
 				usersRef.onSnapshot(snapshot => {
 					snapshot.docChanges().forEach(change => {
-						if(change.type === "modified" && change.doc.id == this.username) {
+						if(change.type === "modified" && change.doc.id == this.$root.username) {
 							let doc = change.doc
-							this.accountBio = doc.data().bio
-							this.accountColor = doc.data().color
-							this.moonrocks = doc.data().moonrocks
-							this.isAdmin = doc.data().isAdmin
-							this.isInnerCore = doc.data().isInnerCore
+							this.$root.accountBio = doc.data().bio
+							this.$root.accountColor = doc.data().color
+							this.$root.moonrocks = doc.data().moonrocks
+							this.$root.isAdmin = doc.data().isAdmin
+							this.$root.isInnerCore = doc.data().isInnerCore
+							this.$root.isAnalytics = doc.data().isAnalytics
 						}
 					})
 				})
 			} else {
-				this.userPresent = false
-				this.username = ''
+				this.$root.userPresent = false
+				this.$root.username = ''
 				this.password = ''
 			}
 		})
@@ -598,16 +591,6 @@ export default {
 				}
 			})
 		})
-
-		var dbRef = db.collection('colors')
-
-    dbRef.get().then(snapshot => {
-      snapshot.forEach(doc => {
-        let color = doc.data()
-        this.colors.push(color)
-      })
-		})
-
 	}
 }
 </script>

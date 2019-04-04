@@ -58,13 +58,11 @@ export default {
 		return {
 			news: [],
 			searchNews: '',
-			username: '',
 			currentNews: null,
 			newsDialog: false
 		}
 	},
 	created() {
-		this.username = this.$parent.$parent.$parent.username
 		let ref = db.collection('news').orderBy("stamp", "desc").limit(25)
 
 		ref.onSnapshot(snapshot => {

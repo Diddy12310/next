@@ -36,12 +36,10 @@ export default {
   data() {
     return {
 			bookshelf: [],
-			searchBook: '',
-			username: ''
+			searchBook: ''
     }
 	},
   created() {
-		this.username = this.$parent.$parent.$parent.username
 		let ref = db.collection('bookshelf').orderBy("title", "asc")
 
 		ref.onSnapshot(snapshot => {
@@ -86,8 +84,8 @@ export default {
 	},
 	methods: {
 		logBook(book) {
-			this.$ga.event(this.username,  + 'is reading ' + book)
-			this.inquiryEvent(this.username, 'is reading ' + book, 'Bookshelf', this.accountColor)
+			this.$ga.event(this.$root.username,  + 'is reading ' + book)
+			this.inquiryEvent(this.$root.username, 'is reading ' + book, 'Bookshelf', this.accountColor)
 		}
 	}
 }
