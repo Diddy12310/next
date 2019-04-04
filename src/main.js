@@ -56,7 +56,8 @@ Vue.mixin({
       isAdmin: false,
       isInnerCore: false,
       isAnalytics: false,
-      userPresent: false
+      userPresent: false,
+      isAsteroid: false
     }
   }
 })

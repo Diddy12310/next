@@ -530,6 +530,7 @@ export default {
 					this.$root.isAdmin = doc.data().isAdmin
 					this.$root.isInnerCore = doc.data().isInnerCore
 					this.$root.isAnalytics = doc.data().isAnalytics
+					this.$root.isAsteroid = doc.data().isAsteroid
 					this.inquiryEvent(this.$root.username, 'signed in', '$account', this.$root.accountColor)
 					LogRocket.identify(this.userInfo.uid, {
 						name: this.$root.username,
@@ -551,6 +552,7 @@ export default {
 							this.$root.isAdmin = doc.data().isAdmin
 							this.$root.isInnerCore = doc.data().isInnerCore
 							this.$root.isAnalytics = doc.data().isAnalytics
+							this.$root.isAsteroid = doc.data().isAsteroid
 						}
 					})
 				})
