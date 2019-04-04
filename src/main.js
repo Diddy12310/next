@@ -8,7 +8,7 @@ import VueAnalytics from 'vue-analytics'
 import store from './store'
 import firebase from 'firebase'
 import LogRocket from 'logrocket'
-import db from '@/firebase/init'
+import db from '@/firebase'
 
 Vue.use(VueAnalytics, {
 	id: 'UA-52752236-3',
@@ -45,9 +45,6 @@ Vue.mixin({
       })
     }
   },
-  created() {
-
-  },
   data() {
     return {
       username: null,
@@ -57,7 +54,8 @@ Vue.mixin({
       isInnerCore: false,
       isAnalytics: false,
       userPresent: false,
-      isAsteroid: false
+      isAsteroid: false,
+      isBanned: false
     }
   }
 })

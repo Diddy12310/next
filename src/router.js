@@ -25,6 +25,8 @@ import Inquiry from './views/Admin/Inquiry'
 import Contracts from './views/Devs/Contracts'
 import Databank from './views/Devs/Databank'
 import Relay from './views/Devs/Relay'
+import About from './views/Company/About'
+import UserControl from './views/Admin/UserControl'
 
 Vue.use(Router)
 
@@ -159,6 +161,16 @@ export default new Router({
 			path: '/dev/databank',
 			name: 'Databank',
 			component: Databank
+		},
+		{
+			path: '/company/about',
+			name: 'About',
+			component: About
+		},
+		{
+			path: '/admin/users',
+			name: 'UserControl',
+			component: UserControl
 		}
   ]
 })

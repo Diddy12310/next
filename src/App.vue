@@ -2,13 +2,13 @@
 	<v-app dark>
 		<!-- Toolbar -->
 		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
-			<v-toolbar-side-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !fourofour"></v-toolbar-side-icon>
+			<v-toolbar-side-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></v-toolbar-side-icon>
 			<v-toolbar-title>
 				<img style="height: 45px; top: 5px; position: relative;" src="./assets/paradigmlogo.png" class="hidden-xs-only">
 				<img style="height: 45px; top: 3.65px; position: relative;" src="./assets/plogo.png" class="hidden-sm-and-up">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-toolbar-items v-if="$root.userPresent && !lockdown && !fourofour">
+			<v-toolbar-items v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned">
 				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="$root.isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
@@ -217,7 +217,7 @@
 		<!-- Site content -->
 		<v-content>
 			<v-container fluid style="padding: 0;">
-				<router-view v-if="$root.userPresent && !lockdown && !fourofour"></router-view>
+				<router-view v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></router-view>
 				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !fourofour" style="text-align: center;">
 					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">No User is Logged In</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
@@ -228,7 +228,12 @@
 					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Nope.</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Entry is not permitted.</h3>
 				</div>
-				<div class="fourofour" v-if="fourofour" style="text-align: center;">
+				<div class="banned" v-if="$root.isBanned && !lockdown && !fourofour" style="text-align: center;">
+					<v-icon style="font-size: 75px; margin-top: 100px;" color="red">block</v-icon>
+					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Sorry!</h1>
+					<h3 class="headline font-weight-light" style="margin: 25px;">But, you've been banned.</h3>
+				</div>
+				<div class="fourofour" v-if="fourofour && !lockdown" style="text-align: center;">
 					<v-icon style="font-size: 75px; margin-top: 100px;" color="deep-purple darken-3">warning</v-icon>
 					<h1 class="display-3 deep-purple--text darken-3 font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">404</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Page not found.<br>There is probably an issue with the server.</h3>
@@ -247,7 +252,7 @@
 </template>
 
 <script>
-import db from '@/firebase/init'
+import db from '@/firebase'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import moment from 'moment'
@@ -278,7 +283,8 @@ export default {
 				{ text: 'Notice', route: '/company/notice' },
 				{ text: 'Roadmap', route: '/company/roadmap' },
 				{ text: 'Terms', route: '/company/terms' },
-				{ text: 'Network Status', route: '/company/status' }
+				{ text: 'Network Status', route: '/company/status' },
+				{ text: 'About', route: '/company/about' }
 			],
 			latest: [
 				{ text: 'Memes', route: '/latest/memes' }
@@ -352,7 +358,10 @@ export default {
 						isAdmin: false,
 						isInnerCore: false,
 						isAsteroid: false,
-						isAnalytics: false
+						isAnalytics: false,
+						uid: user.uid,
+						isBanned: false,
+						strikes: 0
 					})
 					this.$ga.event(this.$root.username, 'signed up')
 					this.inquiryEvent(this.$root.username, 'signed up', '$account', this.$root.accountColor)
@@ -531,6 +540,16 @@ export default {
 					this.$root.isInnerCore = doc.data().isInnerCore
 					this.$root.isAnalytics = doc.data().isAnalytics
 					this.$root.isAsteroid = doc.data().isAsteroid
+					this.$root.isBanned = doc.data().isBanned
+					this.$root.strikes = doc.data().strikes
+					if (doc.data().strikes >= 3) {
+						this.$root.isBanned = true
+						if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {
+							db.collection('users').doc(this.$root.username).update({ isBanned: true })
+						}
+					} else {
+						db.collection('users').doc(this.$root.username).update({ isBanned: false })
+					}
 					this.inquiryEvent(this.$root.username, 'signed in', '$account', this.$root.accountColor)
 					LogRocket.identify(this.userInfo.uid, {
 						name: this.$root.username,
@@ -553,6 +572,16 @@ export default {
 							this.$root.isInnerCore = doc.data().isInnerCore
 							this.$root.isAnalytics = doc.data().isAnalytics
 							this.$root.isAsteroid = doc.data().isAsteroid
+							this.$root.isBanned = doc.data().isBanned
+							this.$root.strikes = doc.data().strikes
+							if (doc.data().strikes >= 3) {
+								this.$root.isBanned = true
+								if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {
+									db.collection('users').doc(this.$root.username).update({ isBanned: true })
+								}
+							} else {
+								db.collection('users').doc(this.$root.username).update({ isBanned: false })
+							}
 						}
 					})
 				})

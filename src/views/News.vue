@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import db from '@/firebase/init'
+import db from '@/firebase'
 import moment from 'moment'
 
 export default {

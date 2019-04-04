@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import db from '@/firebase/init'
+import db from '@/firebase'
 import firebase,{ messaging } from 'firebase'
 
 export default {
@@ -85,7 +85,7 @@ export default {
 	methods: {
 		logBook(book) {
 			this.$ga.event(this.$root.username,  + 'is reading ' + book)
-			this.inquiryEvent(this.$root.username, 'is reading ' + book, 'Bookshelf', this.accountColor)
+			this.inquiryEvent(this.$root.username, 'is reading ' + book, 'Bookshelf', this.$root.accountColor)
 		}
 	}
 }

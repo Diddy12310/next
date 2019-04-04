@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import db from '@/firebase/init'
+import db from '@/firebase'
 
 export default {
   name: 'Debate',

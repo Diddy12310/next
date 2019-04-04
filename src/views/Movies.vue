@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import db from '@/firebase/init'
+import db from '@/firebase'
 import firebase,{ messaging } from 'firebase'
 
 export default {
@@ -87,7 +87,7 @@ export default {
 	methods: {
 		logMovie(movie) {
 			this.$ga.event(this.$root.username, 'is watching ' + movie)
-			this.inquiryEvent(this.$root.username, 'is watching ' + movie, 'Movies', this.accountColor)
+			this.inquiryEvent(this.$root.username, 'is watching ' + movie, 'Movies', this.$root.accountColor)
 		}
 	}
 }

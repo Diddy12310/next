@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import db from '@/firebase/init'
+import db from '@/firebase'
 import firebase from 'firebase'
 export default {
   name: 'Music',
@@ -94,7 +94,7 @@ export default {
 	methods: {
 		logMusic(music, artist) {
 			this.$ga.event('Music', this.$root.username + ' is listening to ' + music + ' by ' + artist)
-			this.inquiryEvent(this.$root.username, 'is listening to ' + music + ' by ' + artist, 'Music', this.accountColor)
+			this.inquiryEvent(this.$root.username, 'is listening to ' + music + ' by ' + artist, 'Music', this.$root.accountColor)
 		}
 	}
 }
