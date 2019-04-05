@@ -113,22 +113,12 @@ export default {
 				  if (db.collection('users').doc(username).get().then(doc => doc.data().isBanned)) {
 						db.collection('users').doc(username).update({ isBanned: true })
 					}
-				} else {
-					db.collection('users').doc(username).update({ isBanned: false })
 				}
       })
     },
     subStrike(username, currentSetting) {
       db.collection('users').doc(username).update({
         strikes: currentSetting - 1
-      }).then(() => {
-        if (currentSetting - 1 >= 3) {
-				  if (db.collection('users').doc(username).get().then(doc => doc.data().isBanned)) {
-						db.collection('users').doc(username).update({ isBanned: true })
-					}
-				} else {
-					db.collection('users').doc(username).update({ isBanned: false })
-				}
       })
     }
   }

@@ -7,7 +7,7 @@
 				<v-text-field v-model="searchBook" label="Search..." style="width: 300px; margin: 50px auto 0px auto;" hint="Case sensitive"></v-text-field>
 			</div>
 			<div class="bookshelf">
-				<v-card v-for="(book, index) in filteredBook" :key="index">
+				<v-card v-for="(book, index) in filteredBook" :key="index" class="book-item">
 					<v-img :src="book.cover"></v-img>
 					<v-card-title primary-title>
 						<div>
@@ -24,19 +24,52 @@
 				</v-card>
 			</div>
 		</v-container>
+		<v-btn color="deep-purple" fab fixed bottom right @click="newBookDialog = true">
+      <v-icon>add</v-icon>
+    </v-btn>
+		<v-dialog v-model="newBookDialog" max-width="500">
+			<v-card>
+				<v-card-title>
+					<h3 class="headline mb-0">Add Book</h3>
+					<v-spacer></v-spacer>
+					<v-btn icon @click="newBookDialog = false" class="dialog-close-btn">
+						<v-icon>close</v-icon>
+					</v-btn>
+				</v-card-title>
+				<v-card-text>
+					<v-text-field label="Book" v-model="newBookTitle"></v-text-field>
+					<v-text-field label="Author" v-model="newBookAuthor"></v-text-field>
+					<v-text-field label="Genre" v-model="newBookGenre"></v-text-field>
+					<v-textarea label="Summary" v-model="newBookSummary"></v-textarea>
+					<v-text-field label="Cover URL" v-model="newBookCover"></v-text-field>
+					<p class="grey--text font-weight-light" v-if="newBookCover">Does the book's cover display correctly?</p>
+					<v-img max-width="200" :src="newBookCover" v-if="newBookCover"></v-img>
+				</v-card-text>
+				<v-divider></v-divider>
+				<v-card-actions>
+					<v-btn :disabled="!newBookTitle || !newBookGenre || !newBookSummary || !newBookCover || !newBookGenre" flat color="accent" @click="submitBook()">Submit</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
   </div>
 </template>
 
 <script>
 import db from '@/firebase'
-import firebase,{ messaging } from 'firebase'
+import firebase from 'firebase'
 
 export default {
   name: 'Bookshelf',
   data() {
     return {
 			bookshelf: [],
-			searchBook: ''
+			searchBook: '',
+			newBookDialog: false,
+			newBookTitle: '',
+			newBookGenre: '',
+			newBookSummary: '',
+			newBookCover: '',
+			newBookAuthor: ''
     }
 	},
   created() {
@@ -46,7 +79,7 @@ export default {
 			snapshot.docChanges().forEach(change => {
 				if(change.type === "added") {
 					let doc = change.doc
-					this.bookshelf.push({
+					this.bookshelf.splice(change.newIndex, 0, {
 						id: doc.id,
 						author: doc.data().author,
 						cover: doc.data().cover,
@@ -86,6 +119,30 @@ export default {
 		logBook(book) {
 			this.$ga.event(this.$root.username,  + 'is reading ' + book)
 			this.inquiryEvent(this.$root.username, 'is reading ' + book, 'Bookshelf', this.$root.accountColor)
+		},
+		submitBook() {
+			if (this.newBookTitle && this.newBookAuthor && this.newBookCover && this.newBookGenre && this.newBookSummary) {
+				db.collection('bookshelf').add({
+					title: this.newBookTitle,
+					author: this.newBookAuthor,
+					cover: this.newBookCover,
+					available: false,
+					link: '',
+					genre: this.newBookGenre,
+					summary: this.newBookSummary
+				}).then(() => {
+					this.inquiryEvent(this.$root.username, 'requested ' + this.newBookTitle + ' by ' + this.newBookAuthor + ' to be added', 'Bookshelf', this.$root.accountColor)
+					this.newBookDialog = false
+					this.newBookTitle = ''
+					this.newBookAuthor = ''
+					this.newBookCover = ''
+					this.newBookGenre = ''
+					this.newBookSummary = ''
+				})
+			} else {
+				this.$root.feedback = 'Fill in all of the fields'
+				this.$root.snackbar = true
+			}
 		}
 	}
 }
@@ -106,7 +163,7 @@ export default {
 		margin-bottom: 32px;
 	}
 
-	div.v-card__text {
+	.book-item div.v-card__text {
 		margin-bottom: 30px;
 		margin-top: 30px;
 		position: relative;
@@ -118,14 +175,14 @@ h1 {
   text-align: center;
 }
 
-div.v-card {
+.book-item div.v-card {
 	margin: 16px auto;
 	max-width: 400px;
 	width: 100%;
 	height: 100%;
 }
 
-div.v-card__actions {
+.book-item div.v-card__actions {
 	position: absolute;
 	bottom: 0px;
 	margin-top: 16px;

@@ -92,9 +92,6 @@
 				</div>
 			</v-card>
 		</v-dialog>
-
-
-		<v-snackbar v-model="snackbar" bottom left :timeout="2000">{{ feedback }}</v-snackbar>
 	</div>
 </template>
 
@@ -107,9 +104,7 @@ export default {
   data() {
     return {
 			ready: false,
-			feedback: null,
 			messages: [],
-			snackbar: false,
 			newMessage: '',
 			editMessage: '',
 			editor: false,
@@ -199,8 +194,8 @@ export default {
 	methods: {
 		deleteChat(id) {
 			db.collection('flamechat').doc('chatrooms').collection(this.chatroom).doc(id).delete().then(() => {
-				this.feedback = 'Message deleted successfully.'
-				this.snackbar = true
+				this.$root.feedback = 'Message deleted successfully.'
+				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'deleted a message on ' + this.chatroom)
 				this.inquiryEvent(this.$root.username, 'deleted a message on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 			}).catch(error => {
@@ -213,8 +208,8 @@ export default {
 				db.collection('flamechat').doc('chatrooms').collection(this.chatroom).get().then(snapshot => {
 					snapshot.forEach(doc => {
 						doc.ref.delete()
-						this.feedback = 'All messages purged.'
-						this.snackbar = true
+						this.$root.feedback = 'All messages purged.'
+						this.$root.snackbar = true
 					}).catch(error => {
 						this.inquiryError(this.$root.username, error.message + this.chatroom, 'Flamechat', this.$root.accountColor)
 					})
@@ -232,27 +227,27 @@ export default {
 					timestamp: Date.now()
 				}).catch(err => {
 					console.log(err)
-					this.feedback = 'Your message did not send successfully!'
-					this.snackbar = true
+					this.$root.feedback = 'Your message did not send successfully!'
+					this.$root.snackbar = true
 					this.inquiryError(this.$root.username, err.message + this.chatroom, 'Flamechat', this.$root.accountColor)
 				})
-				this.feedback = 'Your message sent successfully!'
-				this.snackbar = true
+				this.$root.feedback = 'Your message sent successfully!'
+				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'sent ' + this.newMessage + ' on ' + this.chatroom)
 				this.inquiryEvent(this.$root.username, 'sent "' + this.newMessage + '" on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 				this.newMessage = null
 			} else {
-				this.feedback = 'Your message did not send sucessfully!'
+				this.$root.feedback = 'Your message did not send sucessfully!'
 				this.inquiryError(this.$root.username, 'tried to send a message on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
-				this.snackbar = true
+				this.$root.snackbar = true
 			}
 		},
 		editChat(id) {
 			db.collection('flamechat').doc('chatrooms').collection(this.chatroom).doc(this.editing).update({
 				content: this.editMessage
 			}).then(() => {
-				this.feedback = 'Message edited successfully.'
-				this.snackbar = true
+				this.$root.feedback = 'Message edited successfully.'
+				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'edited ' + this.editMessage + ' on ' + this.chatroom)
 				this.inquiryEvent(this.$root.username, 'edited ' + this.editMessage + ' on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 				this.editing = null
@@ -342,8 +337,8 @@ export default {
 			this.usersDbDownloaded = false
 		},
 		noDM() {
-			this.feedback = 'Function not implemented yet.'
-			this.snackbar = true
+			this.$root.feedback = 'Function not implemented yet.'
+			this.$root.snackbar = true
 		}
 	}
 }

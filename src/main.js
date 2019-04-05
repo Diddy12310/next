@@ -55,7 +55,9 @@ Vue.mixin({
       isAnalytics: false,
       userPresent: false,
       isAsteroid: false,
-      isBanned: false
+      isBanned: false,
+      feedback: '',
+      snackbar: false
     }
   }
 })

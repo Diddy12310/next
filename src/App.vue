@@ -242,7 +242,7 @@
 		</v-content>
 
 		<!-- Snackbar -->
-		<v-snackbar v-if="feedback" v-model="snackbar" bottom left :timeout="2000">{{ feedback }}</v-snackbar>
+		<v-snackbar v-model="$root.snackbar" bottom left :timeout="2000">{{ $root.feedback }}</v-snackbar>
 
 		<!-- Footer -->
 		<v-footer>
@@ -305,8 +305,6 @@ export default {
 			],
 			userInfo: null,
 			newPassword: null,
-			feedback: null,
-			snackbar: false,
 			signUpAvail: null,
 			terms: false,
 			deleteDialog: false,
@@ -330,21 +328,21 @@ export default {
 				  
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
-						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
-						this.snackbar = true
+						this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
+						this.$root.snackbar = true
 					}
 					if(error.code == 'auth/wrong-password') {
-						this.feedback = 'Please check your password.'
-						this.snackbar = true
+						this.$root.feedback = 'Please check your password.'
+						this.$root.snackbar = true
 					}
 					if(error.code == 'auth/invalid-email' || 'auth/wrong-password') {
-						this.feedback = error.message
-						this.snackbar = true
+						this.$root.feedback = error.message
+						this.$root.snackbar = true
 					}
 				})
 			} else {
-				this.feedback = 'Please fill in the required fields.'
-				this.snackbar = true
+				this.$root.feedback = 'Please fill in the required fields.'
+				this.$root.snackbar = true
 			}
 		},
 		signUp() {
@@ -366,43 +364,43 @@ export default {
 					this.inquiryEvent(this.$root.username, 'signed up', '$account', this.$root.accountColor)
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
-						this.feedback = 'Do not use spaces or characters disallowed in an email address.'
-						this.snackbar = true
+						this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
+						this.$root.snackbar = true
 					}
 					if(error.code == 'auth/wrong-password') {
-						this.feedback = 'Please check your password.'
-						this.snackbar = true
+						this.$root.feedback = 'Please check your password.'
+						this.$root.snackbar = true
 					}
 					if(error.code != 'auth/invalid-email' || 'auth/wrong-password') {
-						this.feedback = error.message
-						this.snackbar = true
+						this.$root.feedback = error.message
+						this.$root.snackbar = true
 					}
 				})
 			} else {
-				this.feedback = 'Please fill in the required fields.'
-				this.snackbar = true
+				this.$root.feedback = 'Please fill in the required fields.'
+				this.$root.snackbar = true
 			}
 		},
 		signOut() {
 			this.$ga.event(this.$root.username, 'signed out')
 			this.inquiryEvent(this.$root.username, 'signed out', '$account', this.$root.accountColor)
 			firebase.auth().signOut().then(() => {
-				this.feedback = 'Signed out successfully.'
-				this.snackbar = true
+				this.$root.feedback = 'Signed out successfully.'
+				this.$root.snackbar = true
 			})
 		},
 		changePass() {
 			firebase.auth().currentUser.updatePassword(this.newPassword).then(() => {
 				// Update successful.
 				this.newPasswordDialog = false,
-				this.feedback = 'Password changed successfully.'
-				this.snackbar = true
+				this.$root.feedback = 'Password changed successfully.'
+				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'changed their password')
 				this.inquiryEvent(this.$root.username, 'changed their password', '$account', this.$root.accountColor)
 			}).catch(error => {
 				// An error happened.
-				this.feedback = 'Password changed unsuccessfully.'
-				this.snackbar = true
+				this.$root.feedback = 'Password changed unsuccessfully.'
+				this.$root.snackbar = true
 			})
 			this.newPassword = null
 		},
@@ -416,8 +414,8 @@ export default {
 					this.userInfo = null
 					this.$root.userPresent = false
 				})
-				this.feedback = 'Account deleted sucessfully.'
-				this.snackbar = true
+				this.$root.feedback = 'Account deleted sucessfully.'
+				this.$root.snackbar = true
 			}).catch(error => {
 				// An error happened.
 				console.log(error)
@@ -458,13 +456,13 @@ export default {
 				if (this.lockdown == true) {
 					this.$ga.event(this.$root.username, 'locked down')
 					this.inquiryEvent(this.$root.username, 'locked down', '$admin', this.$root.accountColor)
-					this.feedback = 'Locked down successfully.'
-					this.snackbar = true
+					this.$root.feedback = 'Locked down successfully.'
+					this.$root.snackbar = true
 				} else {
 					this.$ga.event(this.$root.username, 'ended the lockdown')
 					this.inquiryEvent(this.$root.username, 'ended the lockdown', '$admin', this.$root.accountColor)
-					this.feedback = 'Lockdown ended successfully.'
-					this.snackbar = true
+					this.$root.feedback = 'Lockdown ended successfully.'
+					this.$root.snackbar = true
 				}
 			})
 		},
@@ -475,13 +473,13 @@ export default {
 				if (this.fourofour == true) {
 					this.$ga.event(this.$root.username, '404ed')
 					this.inquiryEvent(this.$root.username, '404ed', '$admin', this.$root.accountColor)
-					this.feedback = '404 successfully.'
-					this.snackbar = true
+					this.$root.feedback = '404 successfully.'
+					this.$root.snackbar = true
 				} else {
 					this.$ga.event(this.$root.username, 'ended the 404')
 					this.inquiryEvent(this.$root.username, 'ended the 404', '$admin', this.$root.accountColor)
-					this.feedback = '404 ended successfully.'
-					this.snackbar = true
+					this.$root.feedback = '404 ended successfully.'
+					this.$root.snackbar = true
 				}
 			})
 		},
@@ -523,8 +521,8 @@ export default {
 	created() {
 		firebase.auth().onAuthStateChanged(firebaseUser => {
 			if(firebaseUser) {
-				this.feedback = 'Signed in successfully.'
-				this.snackbar = true
+				this.$root.feedback = 'Signed in successfully.'
+				this.$root.snackbar = true
 				this.$root.userPresent = true
 				this.$root.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
 				this.userInfo = firebaseUser
