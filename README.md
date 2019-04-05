@@ -14,3 +14,6 @@ npm run serve
 ```
 npm run build
 ```
+
+### Note
+For proper use of the audio player, the component file will need to be updated. For this file, please contact us.
