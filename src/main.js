@@ -49,7 +49,7 @@ Vue.mixin({
     return {
       username: null,
       accountBio: null,
-      accountColor: null,
+      accountColor: '#1565C0',
       isAdmin: false,
       isInnerCore: false,
       isAnalytics: false,

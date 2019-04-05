@@ -348,13 +348,12 @@ export default {
 			}
 		},
 		signUp() {
-			if(this.$root.username && this.password && this.terms && this.$root.accountColor && this.$root.accountBio) {
+			if(this.$root.username && this.password && this.terms && this.$root.accountBio && this.$root.accountColor) {
 				firebase.auth().createUserWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(user => {
 					db.collection('users').doc(this.$root.username).set({
-						// uid: user.uid,
 						bio: this.$root.accountBio,
-						color: this.$root.accountColor.hex,
-						moonrocks: 1,
+						color: this.$root.accountColor,
+						moonrocks: 0,
 						isAdmin: false,
 						isInnerCore: false,
 						isAsteroid: false,

@@ -20,8 +20,8 @@
               <v-switch v-model="user.isInnerCore" label="The Inner Core" @click="toggleInnerCore(user.username, user.isInnerCore)"></v-switch>
               <v-switch v-model="user.isBanned" label="Banned" @click="toggleBanned(user.username, user.isBanned)" :disabled="user.strikes >= 3"></v-switch>
               <p class="my-3"><strong>Strikes:</strong> {{ user.strikes }}</p>
-              <v-btn icon :disabled="user.strikes >= 3" color="error" @click="addStrike(user.username, user.strikes)">+</v-btn>
-              <v-btn icon :disabled="user.strikes <= 0" color="success" @click="subStrike(user.username, user.strikes)">-</v-btn>
+              <v-btn flat icon :disabled="user.strikes >= 3" color="error" @click="addStrike(user.username, user.strikes)"><v-icon>add</v-icon></v-btn>
+              <v-btn flat icon :disabled="user.strikes <= 0" color="success" @click="subStrike(user.username, user.strikes)"><v-icon>remove</v-icon></v-btn>
             </v-card-text>
           </v-card>
         </v-expansion-panel-content>
