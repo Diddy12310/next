@@ -18,16 +18,10 @@
 						</div>
 					</v-card-title>
 					<v-divider></v-divider>
-					<v-card-text></v-card-text>
-
-					<v-card-actions>
+					<v-card-text>
+						<v-audio :file="item.link"></v-audio>
 						<span v-if="!item.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
-						<audio controls class="control" v-if="item.available" @click="logMusic(item.title, item.author)">
-							<source :src="item.link" type='audio/mp4'>
-							<source :src="item.link" type='audio/ogg; codecs=vorbis'>
-							<p>Your browser does not support Music.</p>
-						</audio>
-					</v-card-actions>
+					</v-card-text>
 				</v-card>
 			</div>
 		</v-container>
@@ -36,8 +30,9 @@
 </template>
 
 <script>
+import VuetifyAudio from 'vuetify-audio';
 import db from '@/firebase'
-import firebase from 'firebase'
+
 export default {
   name: 'Music',
   data() {
@@ -96,7 +91,10 @@ export default {
 			this.$ga.event('Music', this.$root.username + ' is listening to ' + music + ' by ' + artist)
 			this.inquiryEvent(this.$root.username, 'is listening to ' + music + ' by ' + artist, 'Music', this.$root.accountColor)
 		}
-	}
+	},
+  components: {
+    'v-audio': VuetifyAudio
+  },
 }
 </script>
 
@@ -134,16 +132,11 @@ div.v-card {
 	height: 100%;
 }
 
-div.v-card__actions {
-	position: absolute;
-	bottom: 0px;
-}
-
-audio {
+div.v-card__text {
+	margin-bottom: 0px !important;
 	position: relative;
-	top: +8px;
-	left: -8px;
-	width: 100% !important;
-	margin: auto;
+	bottom: -30px;
+	top: -30px;
+	padding-bottom: 0px !important;
 }
 </style>

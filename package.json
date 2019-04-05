@@ -23,6 +23,7 @@
     "vue-friendly-iframe": "^0.12.0",
     "vue-router": "^3.0.1",
     "vuetify": "^1.5.8",
+    "vuetify-audio": "0.0.8",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
