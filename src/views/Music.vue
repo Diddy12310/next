@@ -112,13 +112,6 @@ export default {
 	div.music {
 		margin-bottom: 32px;
 	}
-
-	div.v-card__text {
-		margin-bottom: 30px;
-		margin-top: 30px;
-		position: relative;
-		bottom: 30px;
-	}
 }
 
 h1 {
@@ -129,14 +122,13 @@ div.v-card {
 	margin: 16px auto;
 	max-width: 400px;
 	width: 100%;
-	height: 100%;
 }
 
 div.v-card__text {
 	margin-bottom: 0px !important;
 	position: relative;
 	bottom: -30px;
-	top: -30px;
+	top: -15px;
 	padding-bottom: 0px !important;
 }
 </style>
