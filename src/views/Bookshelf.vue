@@ -163,7 +163,7 @@ export default {
 		margin-bottom: 32px;
 	}
 
-	.book-item div.v-card__text {
+	div.v-card__text {
 		margin-bottom: 30px;
 		margin-top: 30px;
 		position: relative;
@@ -175,7 +175,7 @@ h1 {
   text-align: center;
 }
 
-.book-item div.v-card {
+.book-item {
 	margin: 16px auto;
 	max-width: 400px;
 	width: 100%;
