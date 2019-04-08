@@ -125,7 +125,7 @@
 						<v-btn @click="deleteDialog = true" flat color="error">Delete Account</v-btn>
 					</div>
 				</v-card-text>
-
+				<v-divider></v-divider>
 				<v-card-actions>
 					<v-btn v-if="!$root.userPresent && !signUpAvail" @click="signIn" color="primary">Sign In</v-btn>
 					<v-btn v-if="$root.userPresent" @click="signOut">Sign Out</v-btn>
@@ -138,6 +138,7 @@
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Delete Account</h3></v-card-title>
 				<v-card-text>Are you sure you want to delete your account?</v-card-text>
+				<v-divider></v-divider>
 				<v-card-actions>
 					<v-btn @click="deleteUser" color="error" flat>Yes</v-btn>
 					<v-btn @click="deleteDialog = false" color="green">Cancel</v-btn>
@@ -152,6 +153,7 @@
 				<v-card-text>
 					<v-text-field autocomplete="off" type="password" name="newPassword" v-model="newPassword" label="New Password" :rules="passRules"></v-text-field>
 				</v-card-text>
+				<v-divider></v-divider>
 				<v-card-actions>
 					<v-btn @click="changePass" color="warning" flat>Change Password</v-btn>
 					<v-btn @click="newPasswordDialog = false" flat color="accent">Cancel</v-btn>
@@ -166,6 +168,7 @@
 				<v-card-text>
 					<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="$root.accountColor" />
 				</v-card-text>
+				<v-divider></v-divider>
 				<v-card-actions>
 					<v-btn @click="changeColor($root.accountColor.hex)" color="warning" flat>Change Color</v-btn>
 					<v-btn @click="newColorDialog = false" flat color="accent">Cancel</v-btn>
@@ -180,6 +183,7 @@
 				<v-card-text>
 					<v-text-field autocomplete="off" type="text" name="bio" v-model="$root.accountBio" label="Bio"></v-text-field>
 				</v-card-text>
+				<v-divider></v-divider>
 				<v-card-actions>
 					<v-btn @click="changeBio($root.accountBio)" color="warning" flat>Change Bio</v-btn>
 					<v-btn @click="newBioDialog = false" flat color="accent">Cancel</v-btn>
@@ -358,7 +362,8 @@ export default {
 						isAnalytics: false,
 						uid: user.uid,
 						isBanned: false,
-						strikes: 0
+						strikes: 0,
+						isWriter: false
 					})
 					this.$ga.event(this.$root.username, 'signed up')
 					this.inquiryEvent(this.$root.username, 'signed up', '$account', this.$root.accountColor)
@@ -539,6 +544,7 @@ export default {
 					this.$root.isAsteroid = doc.data().isAsteroid
 					this.$root.isBanned = doc.data().isBanned
 					this.$root.strikes = doc.data().strikes
+					this.$root.isWriter = doc.data().isWriter
 					if (doc.data().strikes >= 3) {
 						this.$root.isBanned = true
 						if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {
@@ -571,6 +577,7 @@ export default {
 							this.$root.isAsteroid = doc.data().isAsteroid
 							this.$root.isBanned = doc.data().isBanned
 							this.$root.strikes = doc.data().strikes
+							this.$root.isWriter = doc.data().isWriter
 							if (doc.data().strikes >= 3) {
 								this.$root.isBanned = true
 								if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {

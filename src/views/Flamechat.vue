@@ -27,6 +27,7 @@
 							<v-radio color="#C0C0C0" label="The Inner Core" value="the-inner-core" v-if="$root.isInnerCore"></v-radio>
 						</v-radio-group>
 					</v-card-text>
+					<v-divider></v-divider>
 					<v-card-actions>
 						<v-btn :disabled="!chatroom || !$root.accountColor" flat @click.stop="ready = true, setChatroom()" color="accent">Join</v-btn>
 					</v-card-actions>
@@ -47,7 +48,7 @@
 							</li>
 						</ul>
 					</v-card-text>
-
+					<v-divider></v-divider>
 					<v-card-actions>
 						<form @submit.prevent="sendChat" class="new-message" v-if="!editor">
 							<v-btn :disabled="!flamechatEnable" id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
@@ -86,6 +87,7 @@
 						<img src="@/assets/asteroid.png" alt="Asteroid" class="moonrock-img" v-if="profilePopupAsteroid" style="height: 25px !important;"><br>
 						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ profilePopupMoonrocks }}</span>
 					</v-card-text>
+					<v-divider></v-divider>
 					<v-card-actions>
 						<v-btn flat @click="noDM()" color="accent">Message</v-btn>
 					</v-card-actions>

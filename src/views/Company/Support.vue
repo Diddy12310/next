@@ -9,7 +9,7 @@
 					<v-text-field type="email" name="Email" label="Email"></v-text-field>
 					<v-textarea name="Comment" label="Comment"></v-textarea>
 				</v-card-text>
-
+				<v-divider></v-divider>
 				<v-card-actions>
 					<v-btn type="submit" color="error">Send</v-btn>
 					<v-btn type="reset" color="info">Reset</v-btn>

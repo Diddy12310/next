@@ -12,6 +12,7 @@
       <v-card-text>
         <p v-for="(item, i) in text" :key="i" v-html="item"></p>
       </v-card-text>
+      <v-divider></v-divider>
       <v-card-actions>
         <v-btn flat color="accent">Join</v-btn>
       </v-card-actions>

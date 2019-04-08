@@ -57,7 +57,8 @@ Vue.mixin({
       isAsteroid: false,
       isBanned: false,
       feedback: '',
-      snackbar: false
+      snackbar: false,
+      isWriter: false
     }
   }
 })

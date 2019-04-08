@@ -15,11 +15,14 @@
           <v-card>
             <v-card-text>
               <p>{{ user.bio }}</p>
-              <v-switch v-model="user.isAdmin" label="Admin" @click="toggleAdmin(user.username, user.isAdmin)"></v-switch>
-              <v-switch v-model="user.isAsteroid" label="Asteroid" @click="toggleAsteroid(user.username, user.isAsteroid)"></v-switch>
-              <v-switch v-model="user.isInnerCore" label="The Inner Core" @click="toggleInnerCore(user.username, user.isInnerCore)"></v-switch>
-              <v-switch v-model="user.isBanned" label="Banned" @click="toggleBanned(user.username, user.isBanned)" :disabled="user.strikes >= 3"></v-switch>
-              <p class="my-3"><strong>Strikes:</strong> {{ user.strikes }}</p>
+              <v-layout row>
+                <v-switch v-model="user.isAdmin" label="Admin" @click="toggleAdmin(user.username, user.isAdmin)"></v-switch>
+                <v-switch v-model="user.isAsteroid" label="Asteroid" @click="toggleAsteroid(user.username, user.isAsteroid)"></v-switch>
+                <v-switch v-model="user.isInnerCore" label="The Inner Core" @click="toggleInnerCore(user.username, user.isInnerCore)"></v-switch>
+                <v-switch v-model="user.isBanned" label="Banned" @click="toggleBanned(user.username, user.isBanned)" :disabled="user.strikes >= 3"></v-switch>
+                <v-switch v-model="user.isWriter" label="Writer" @click="toggleWriter(user.username, user.isWriter)"></v-switch>
+              </v-layout>
+              <p><b>Strikes:</b> {{ user.strikes }}</p>
               <v-btn flat icon :disabled="user.strikes >= 3" color="error" @click="addStrike(user.username, user.strikes)"><v-icon>add</v-icon></v-btn>
               <v-btn flat icon :disabled="user.strikes <= 0" color="success" @click="subStrike(user.username, user.strikes)"><v-icon>remove</v-icon></v-btn>
             </v-card-text>
@@ -58,7 +61,8 @@ export default {
             moonrocks: doc.data().moonrocks,
             uid: doc.data().uid,
             isBanned: doc.data().isBanned,
-            strikes: doc.data().strikes
+            strikes: doc.data().strikes,
+            isWriter: doc.data().isWriter
           })
 				}
 				if(change.type === "removed") {
@@ -78,7 +82,8 @@ export default {
             moonrocks: doc.data().moonrocks,
             uid: doc.data().uid,
             isBanned: doc.data().isBanned,
-            strikes: doc.data().strikes
+            strikes: doc.data().strikes,
+            isWriter: doc.data().isWriter
 					})
 				}
 			})
@@ -105,6 +110,11 @@ export default {
         isBanned: !currentSetting
       })
     },
+    toggleWriter(username, currentSetting) {
+      db.collection('users').doc(username).update({
+        isWriter: !currentSetting
+      })
+    },
     addStrike(username, currentSetting) {
       db.collection('users').doc(username).update({
         strikes: currentSetting + 1
@@ -126,5 +136,7 @@ export default {
 </script>
 
 <style scoped>
-
+.v-input--switch {
+  margin: 0px 16px 16px 0px !important;
+}
 </style>
