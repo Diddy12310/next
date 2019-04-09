@@ -272,7 +272,7 @@ export default {
 							name: doc.data().name,
 							content: doc.data().content,
 							color: doc.data().color,
-							timestamp: moment(doc.data().timestamp).format('lll')
+							timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a')
 						})
 					}
 					if(change.type === "removed") {
@@ -286,7 +286,7 @@ export default {
 							name: doc.data().name,
 							content: doc.data().content,
 							color: doc.data().color,
-							timestamp: moment(doc.data().timestamp).format('lll')
+							timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a')
 						})
 					}
 				})

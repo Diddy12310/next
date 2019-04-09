@@ -528,7 +528,7 @@ export default {
 		},
 		startTime() {
 			var today = new Date()
-			this.currentDate = moment(today).format('LL')
+			this.currentDate = moment(today).format('MMMM Do YYYY')
 			this.currentTime = moment(today).format('LTS')
 			setTimeout(this.startTime, 500)
 		}
@@ -731,7 +731,7 @@ html {
 	margin: 0;
   position: absolute;
   top: 50%;
-  left: 140px;
+  left: 150px;
   transform: translate(-50%, -50%);
 }
 
