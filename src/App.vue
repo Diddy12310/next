@@ -291,13 +291,13 @@ export default {
 				{ text: 'About', route: '/company/about' }
 			],
 			latest: [
-				{ text: 'Memes', route: '/latest/memes' }
+				{ text: 'Memes', route: '/latest/memes' },
+				{ text: 'Rocco', route: '/latest/rocco' }
 			],
 			developers: [
 				{ text: 'Contracts', route: '/dev/contracts' },
 				{ text: 'Relay', route: '/dev/relay' },
 				{ text: 'Databank', route: '/dev/databank' },
-				// { text: '', route: '/dev/' },
 			],
 			password: '',
 			dialog: false,

@@ -27,6 +27,7 @@ import Databank from './views/Devs/Databank'
 import Relay from './views/Devs/Relay'
 import About from './views/Company/About'
 import UserControl from './views/Admin/UserControl'
+import LatestRocco from './views/Latest/Rocco'
 
 Vue.use(Router)
 
@@ -171,6 +172,11 @@ export default new Router({
 			path: '/admin/users',
 			name: 'UserControl',
 			component: UserControl
+		},
+		{
+			path: '/latest/rocco',
+			name: 'LatestRocco',
+			component: LatestRocco
 		}
   ]
 })
