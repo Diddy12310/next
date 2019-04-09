@@ -31,7 +31,7 @@ export default {
 	},
 	created() {
 		axios.get('http://relay.theparadigmdev.com/latest-rocco/latest-rocco.json').then(response => {
-			this.latestRocco = response.data.data
+			this.latestRocco = response.data
 		}).catch(error => {
 			// handle error
 			console.log(error)

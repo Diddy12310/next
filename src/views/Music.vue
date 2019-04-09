@@ -76,6 +76,7 @@ export default {
     }
   },
   created() {
+		this.$root.loadingBar = true
 		let ref = db.collection('music').orderBy("title", "asc")
 
 		ref.onSnapshot(snapshot => {
@@ -110,6 +111,7 @@ export default {
 						genre: doc.data().genre
 					})
 				}
+				this.$root.loadingBar = false
 			})
 		})
 	},

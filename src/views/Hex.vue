@@ -1,10 +1,10 @@
 <template>
   <div class="index">
 		<v-container>
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">The Homework Exchange</h1>
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 26px 0px 50px 0px; text-align: center;">The Homework Exchange</h1>
 			<div class="hex">
 				<v-card v-for="(hw, index) in hex" :key="index">
-					<v-img :src="hw.preview"></v-img>
+					<v-img :src="hw.preview" v-if="hw.preview"></v-img>
 
 					<v-card-title primary-title>
 						<div>
@@ -13,7 +13,7 @@
 						</div>
 					</v-card-title>
 					<v-divider></v-divider>
-					<v-card-text>{{ hw.detail }}</v-card-text>
+					<v-card-text v-html="hw.detail"></v-card-text>
 					<v-card-actions>
 						<v-btn v-if="hw.available" flat color="accent" :href="hw.link">Buy</v-btn>
 						<span v-if="!hw.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
@@ -27,7 +27,7 @@
 
 <script>
 import db from '@/firebase'
-import firebase from 'firebase'
+
 export default {
   name: 'Hex',
   data() {
@@ -36,12 +36,14 @@ export default {
     }
   },
   created() {
+		this.$root.loadingBar = true
     db.collection('hex').get().then(snapshot => {
       snapshot.forEach(doc => {
 				let item = doc.data()
         item.id = doc.id
         this.hex.push(item)
-      })
+			})
+			this.$root.loadingBar = false
 		})
 	}
 }
@@ -56,6 +58,7 @@ export default {
 		margin-bottom: 32px;
 	}
 }
+
 @media screen and (max-width: 1240px) {
 	div.Hex {
 		margin-bottom: 32px;
@@ -67,15 +70,14 @@ export default {
 		bottom: 30px;
 	}
 }
-h1 {
-  text-align: center;
-}
+
 div.v-card {
 	margin: 16px auto;
 	max-width: 375px;
 	width: 400px;
 	height: 100%;
 }
+
 div.v-card__actions {
 	position: absolute;
 	bottom: 0px;

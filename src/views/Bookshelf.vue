@@ -73,6 +73,7 @@ export default {
     }
 	},
   created() {
+		this.$root.loadingBar = true
 		let ref = db.collection('bookshelf').orderBy("title", "asc")
 
 		ref.onSnapshot(snapshot => {
@@ -105,6 +106,7 @@ export default {
 						available: doc.data().available
 					})
 				}
+				this.$root.loadingBar = false
 			})
 		})
 	},

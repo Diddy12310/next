@@ -1,12 +1,12 @@
 <template>
   <div class="user-control">
-    <div style="text-align: center; margin: 50px 0px;" v-if="!$root.isAdmin">
+    <div style="text-align: center; margin: 50px 0px;" v-if="!$root.isAdmin && users[1]">
 			<h1 class="display-3 red--text font-weight-thin text-uppercase">Unavailable</h1>
 			<h6 class="headline white--text font-weight-thin mt-3">Please navigate away from this page.</h6>
 		</div>
 
     <v-container>
-      <v-expansion-panel v-if="$root.isAdmin">
+      <v-expansion-panel v-if="$root.isAdmin && users[1]">
         <v-expansion-panel-content v-for="user in users" :key="user.username">
           <div slot="header">
             <h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ 'color': user.color }">{{ user.username }}</h3>

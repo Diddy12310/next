@@ -4,8 +4,8 @@
 		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
 			<v-toolbar-side-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></v-toolbar-side-icon>
 			<v-toolbar-title>
-				<img style="height: 45px; top: 5px; position: relative;" src="./assets/paradigmlogo.png" class="hidden-xs-only">
-				<img style="height: 45px; top: 3.65px; position: relative;" src="./assets/plogo.png" class="hidden-sm-and-up">
+				<img style="height: 45px;" src="./assets/paradigmlogo.png" class="hidden-xs-only logo">
+				<img style="height: 45px;" src="./assets/plogo.png" class="hidden-sm-and-up logo-sm">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-toolbar-items v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned">
@@ -18,6 +18,7 @@
 				<v-btn icon @click="refresh">
           <v-icon>refresh</v-icon>
         </v-btn>
+				<p class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 			</v-toolbar-items>
 			<v-toolbar-items v-if="$root.username == 'diddy12310' && lockdown">
 				<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important; top: +16px;"></v-switch>
@@ -243,6 +244,7 @@
 					<h3 class="headline font-weight-light" style="margin: 25px;">Page not found.<br>There is probably an issue with the server.</h3>
 				</div>
 			</v-container>
+			<v-progress-linear :indeterminate="true" v-if="$root.loadingBar" class="loading-bar"></v-progress-linear>
 		</v-content>
 
 		<!-- Snackbar -->
@@ -319,7 +321,9 @@ export default {
 			newPasswordDialog: false,
 			adminDialog: false,
 			newColorDialog: false,
-			newBioDialog: false
+			newBioDialog: false,
+			currentTime: '',
+			currentDate: ''
 		}
 	},
 	methods: {
@@ -521,6 +525,12 @@ export default {
 				this.$ga.event(this.$root.username, 'changed their bio to ' + this.$root.accountBio)
 				this.inquiryEvent(this.$root.username, 'changed their bio to ' + this.$root.accountBio, '$account', this.$root.accountColor)
 			})
+		},
+		startTime() {
+			var today = new Date()
+			this.currentDate = moment(today).format('LL')
+			this.currentTime = moment(today).format('LTS')
+			setTimeout(this.startTime, 500)
 		}
 	},
 	created() {
@@ -583,8 +593,6 @@ export default {
 								if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {
 									db.collection('users').doc(this.$root.username).update({ isBanned: true })
 								}
-							} else {
-								db.collection('users').doc(this.$root.username).update({ isBanned: false })
 							}
 						}
 					})
@@ -626,6 +634,7 @@ export default {
 				}
 			})
 		})
+		this.startTime()
 	}
 }
 </script>
@@ -703,4 +712,35 @@ html {
 	bottom: +36px;
 	padding-left: 5px;
 }
+
+.loading-bar {
+	position: absolute;
+	bottom: -14px;
+}
+
+.clock {
+	margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.logo {
+	margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 140px;
+  transform: translate(-50%, -50%);
+}
+
+.logo-sm {
+	margin: 0;
+  position: absolute;
+  top: 47%;
+  left: 80px;
+  transform: translate(-50%, -50%);
+}
+
 </style>

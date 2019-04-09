@@ -70,9 +70,6 @@
 
 		<v-dialog v-model="profilePopupEnable" max-width="350">
 			<v-card>
-				<div v-if="!usersDbDownloaded" style="height: 250px; text-align: center;">
-					<v-progress-circular indeterminate color="primary" style="margin-top: 110px;"></v-progress-circular>
-				</div>
 				<div v-if="usersDbDownloaded">
 					<v-card-title>
 						<h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ color: profilePopupColor }">{{ profilePopupUsername }}</h3>
@@ -300,6 +297,7 @@ export default {
 			this.ready = false
 		},
 		openUsernamePopup(username, color) {
+			this.$root.loadingBar = true
 			this.usersDbDownloaded = false
 			var usersRef = db.collection('users')
 			usersRef.doc(username).get().then((doc) => {
@@ -310,6 +308,7 @@ export default {
 				this.profilePopupAdmin = doc.data().isAdmin
 				this.profilePopupAsteroid = doc.data().isAsteroid
 				this.usersDbDownloaded = true
+				this.$root.loadingBar = false
 			})
 
 			usersRef.onSnapshot(snapshot => {
@@ -323,10 +322,11 @@ export default {
 						this.profilePopupAdmin = doc.data().isAdmin
 						this.profilePopupAsteroid = doc.data().isAsteroid
 						this.usersDbDownloaded = true
+						this.$root.loadingBar = false
 					}
 				})
 			})
-			this.profilePopupEnable = true			
+			this.profilePopupEnable = true
 		},
 		closeUsernamePopup() {
 			this.profilePopupEnable = false

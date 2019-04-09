@@ -53,12 +53,13 @@ Vue.mixin({
       isAdmin: false,
       isInnerCore: false,
       isAnalytics: false,
-      userPresent: false,
+      userPresent: null,
       isAsteroid: false,
       isBanned: false,
       feedback: '',
       snackbar: false,
-      isWriter: false
+      isWriter: false,
+      loadingBar: false
     }
   }
 })
