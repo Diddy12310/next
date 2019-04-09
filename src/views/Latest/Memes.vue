@@ -35,12 +35,11 @@ export default {
 	},
 	created() {
 		axios.get('https://www.reddit.com/r/me_irl.json').then(response => {
-			let data = response.data.data.children
-			this.meirl = data
-		}).catch(function (error) {
+			this.meirl = response.data.data.children
+		}).catch(error => {
 			// handle error
 			console.log(error)
-		}).then(function () {
+		}).then(() => {
 			// always executed
 		})
 	},
@@ -48,56 +47,51 @@ export default {
 		changeSort() {
 			if(this.sortedby == 'Hot') {
 				axios.get('https://www.reddit.com/r/me_irl.json').then(response => {
-					let data = response.data.data.children
-					this.meirl = data
-				}).catch(function (error) {
+					this.meirl = response.data.data.children
+				}).catch(error => {
 					// handle error
 					console.log(error)
-				}).then(function () {
+				}).then(() => {
 					// always executed
 				})
 			}
 			if(this.sortedby == 'New') {
 				axios.get('https://www.reddit.com/r/me_irl/new.json').then(response => {
-					let data = response.data.data.children
-					this.meirl = data
-				}).catch(function (error) {
+					this.meirl = response.data.data.children
+				}).catch(error => {
 					// handle error
 					console.log(error)
-				}).then(function () {
+				}).then(() => {
 					// always executed
 				})
 			}
 			if(this.sortedby == 'Controversial') {
 				axios.get('https://www.reddit.com/r/me_irl/controversial.json').then(response => {
-					let data = response.data.data.children
-					this.meirl = data
-				}).catch(function (error) {
+					this.meirl = response.data.data.children
+				}).catch(error => {
 					// handle error
 					console.log(error)
-				}).then(function () {
+				}).then(() => {
 					// always executed
 				})
 			}
 			if(this.sortedby == 'Top') {
 				axios.get('https://www.reddit.com/r/me_irl/top.json').then(response => {
-					let data = response.data.data.children
-					this.meirl = data
-				}).catch(function (error) {
+					this.meirl = response.data.data.children
+				}).catch(error => {
 					// handle error
 					console.log(error)
-				}).then(function () {
+				}).then(() => {
 					// always executed
 				})
 			}
 			if(this.sortedby == 'Rising') {
 				axios.get('https://www.reddit.com/r/me_irl/rising.json').then(response => {
-					let data = response.data.data.children
-					this.meirl = data
-				}).catch(function (error) {
+					this.meirl = response.data.data.children
+				}).catch(error => {
 					// handle error
 					console.log(error)
-				}).then(function () {
+				}).then(() => {
 					// always executed
 				})
 			}

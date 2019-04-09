@@ -6,7 +6,6 @@
 				<v-card style="max-width: 800px; margin: 20px auto">
 					<video width="100%" controls v-if="post.isVideo">
 						<source :src="post.link" type="video/mp4">
-						Your browser does not support video playback.
 					</video> 
 					<v-img :src="post.link" v-if="!post.isVideo"></v-img>
 					<v-card-title primary-title>
@@ -32,8 +31,7 @@ export default {
 	},
 	created() {
 		axios.get('http://relay.theparadigmdev.com/latest-rocco/latest-rocco.json').then(response => {
-			let data = response.data.data
-			this.latestRocco = data
+			this.latestRocco = response.data.data
 		}).catch(error => {
 			// handle error
 			console.log(error)
