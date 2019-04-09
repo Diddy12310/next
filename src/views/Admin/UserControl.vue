@@ -50,7 +50,7 @@ export default {
 			snapshot.docChanges().forEach(change => {
 				if(change.type === "added") {
 					let doc = change.doc
-					this.users.push({
+					this.users.splice(change.newIndex, 0, {
 						username: doc.id,
 						bio: doc.data().bio,
 						color: doc.data().color,

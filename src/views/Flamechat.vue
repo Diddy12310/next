@@ -137,7 +137,7 @@ export default {
 				// 	console.log(change)
 					if (change.type === "added") {
 						let doc = change.doc
-						this.chatrooms.push({
+						this.chatrooms.splice(change.newIndex, 0, {
 							id: doc.id,
 							name: doc.data().name,
 							db: doc.data().db,
@@ -270,7 +270,7 @@ export default {
 				snapshot.docChanges().forEach(change => {
 					if(change.type === "added") {
 						let doc = change.doc
-						this.messages.push({
+						this.messages.splice(change.newIndex, 0, {
 							id: doc.id,
 							name: doc.data().name,
 							content: doc.data().content,

@@ -49,13 +49,13 @@ export default {
     }
   },
   created() {
-    var inquiryRef = db.collection('analytics').orderBy('timestamp', 'asc')
+    var inquiryRef = db.collection('analytics').orderBy('timestamp', 'desc').limit(50)
     inquiryRef.onSnapshot(snapshot => {
       snapshot.docChanges().forEach(change => {
         if (change.doc.data().type == 'event') {
           if(change.type === "added") {
             let doc = change.doc
-            this.events.push({
+            this.events.splice(change.newIndex, 0, {
               user: doc.data().user,
               event: doc.data().event,
               location: doc.data().location,
@@ -84,7 +84,7 @@ export default {
         if (change.doc.data().type == 'error') {
           if(change.type === "added") {
             let doc = change.doc
-            this.events.push({
+            this.events.splice(change.newIndex, 0, {
               user: doc.data().user,
               error: doc.data().error,
               location: doc.data().location,
