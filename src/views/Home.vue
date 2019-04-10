@@ -1,6 +1,6 @@
 <template>
 	<div class="index">
-		<v-parallax dark :src="homebg" class="paralax">
+		<v-parallax :src="homebg" class="paralax">
 			<div class="home">
 				<h2 class="display-3 font-weight-light text-uppercase" style="position: relative; text-align: center; margin: auto; padding-top: 30vh;">Welcome to<br>the future</h2>
 				<v-btn router to="flame" style="margin-top: 20px;" color="primary">Open Flamechat</v-btn>
@@ -13,9 +13,9 @@
 		</div>
 		<div style="text-align: center; padding: 25px;" class="grey darken-4">
 	  	<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin-bottom: 25px;">HEY!</h1>
-		  <h5 class="headline pb-2">Have <span class="font-weight-bold">YOU</span> read the notice?</h5>
-		  <p>It contains vital information pertaining to your Paradigm account. Be sure to read and acknowledge it.</p>
-		  <v-btn router to="/company/notice" color="deep-purple">Read the Notice</v-btn>
+		  <h5 class="headline pb-2 white--text">Have <span class="font-weight-bold">YOU</span> read the notice?</h5>
+		  <p class="white--text">It contains vital information pertaining to your Paradigm account. Be sure to read and acknowledge it.</p>
+		  <v-btn dark router to="/company/notice" color="deep-purple">Read the Notice</v-btn>
 		</div>
 		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 25px; text-align: center;">Updates</h1>
 		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 100%; margin: 20px auto; max-width: 600px;">

@@ -17,7 +17,7 @@
         <v-icon v-else>get_app</v-icon>
       </v-btn>
       <v-switch style="margin: auto;" append-icon="repeat" v-model="repeat" :disabled="loaded === false"></v-switch>
-      <v-slider ref="slider" @click.native="setPosition()" v-model="percentage" dark></v-slider>
+      <v-slider ref="slider" @click.native="setPosition()" v-model="percentage"></v-slider>
       <p><strong>{{ currentTime }}</strong> / {{ duration }}</p>
     </v-card-text>
     <audio id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="file"></audio>
