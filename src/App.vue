@@ -534,6 +534,7 @@ export default {
 		}
 	},
 	created() {
+		this.$root.loadingBar = true
 		firebase.auth().onAuthStateChanged(firebaseUser => {
 			if(firebaseUser) {
 				this.$root.feedback = 'Signed in successfully.'
@@ -635,6 +636,7 @@ export default {
 			})
 		})
 		this.startTime()
+		this.$root.loadingBar = false
 	}
 }
 </script>

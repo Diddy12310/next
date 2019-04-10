@@ -9,12 +9,11 @@
 			<div class="music">
 				<v-card v-for="(item, index) in filteredMusic" :key="index" class="music-item">
 					<v-img :src="item.cover"></v-img>
-
 					<v-card-title primary-title>
 						<div>
 							<h3 class="headline mb-0">{{ item.title }}</h3>
-							<h4 class="subheading grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.genre }}</h4>
-							<h4 class="body-2 grey--text">{{ item.album }}</h4>
+							<h4 class="subheading grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.album }}</h4>
+							<h4 class="body-2 grey--text">{{ item.genre }}</h4>
 						</div>
 					</v-card-title>
 					<v-divider></v-divider>

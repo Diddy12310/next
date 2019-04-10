@@ -16,15 +16,17 @@
         <v-icon v-if="loaded === false">refresh</v-icon>
         <v-icon v-else>get_app</v-icon>
       </v-btn>
+      <v-switch style="margin: auto;" append-icon="repeat" v-model="repeat" :disabled="loaded === false"></v-switch>
       <v-slider ref="slider" @click.native="setPosition()" v-model="percentage" dark></v-slider>
       <p><strong>{{ currentTime }}</strong> / {{ duration }}</p>
     </v-card-text>
     <audio id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="file"></audio>
   </v-card>
 </template>
+
 <script>
-const formatTime = (secend) => {
-  let time = new Date(secend * 1000).toISOString().substr(11, 8)
+const formatTime = (second) => {
+  let time = new Date(second * 1000).toISOString().substr(11, 8)
   return time
 }
 export default {
@@ -62,6 +64,7 @@ export default {
       currentTime: '00:00:00',
     	audio: undefined,
       totalDuration: 0,
+      repeat: false
     }
   },
   methods: {
@@ -115,7 +118,10 @@ export default {
 			}
 		},
 		_handleEnded() {
-			this.paused = this.playing = false
+      this.paused = this.playing = false
+      if (this.repeat) {
+        this.play()
+      }
 		},
 		init() {
 			this.audio.addEventListener('timeupdate', this._handlePlayingUI)
