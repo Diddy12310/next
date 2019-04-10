@@ -26,9 +26,11 @@
 				</v-card>
 			</div>
 		</v-container>
+
 		<v-btn color="deep-purple" fab fixed bottom right @click="newMusicDialog = true">
       <v-icon>add</v-icon>
     </v-btn>
+		
 		<v-dialog v-model="newMusicDialog" max-width="500">
 			<v-card>
 				<v-card-title>
