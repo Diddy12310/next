@@ -25,3 +25,4 @@ node_modules
 docs/_book
 test/
 dist/
+dist_electron/

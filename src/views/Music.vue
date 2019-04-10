@@ -30,7 +30,7 @@
 		<v-btn color="deep-purple" fab fixed bottom right @click="newMusicDialog = true">
       <v-icon>add</v-icon>
     </v-btn>
-		
+
 		<v-dialog v-model="newMusicDialog" max-width="500">
 			<v-card>
 				<v-card-title>
@@ -180,9 +180,10 @@ h1 {
 }
 
 div.v-card.music-item {
-	margin: 16px auto;
 	max-width: 400px;
 	width: 100%;
+	margin: auto;
+	height: 100%;
 }
 
 .music-item div.v-card__text {
