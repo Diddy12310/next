@@ -121,6 +121,8 @@ export default {
       this.paused = this.playing = false
       if (this.repeat) {
         this.play()
+      } else {
+        this.stop()
       }
 		},
 		init() {

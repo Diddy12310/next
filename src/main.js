@@ -59,8 +59,7 @@ Vue.mixin({
       feedback: '',
       snackbar: false,
       isWriter: false,
-      loadingBar: false,
-      darkMode: true
+      loadingBar: false
     }
   }
 })

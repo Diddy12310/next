@@ -1,7 +1,7 @@
 <template>
-	<v-app :dark="$root.darkMode">
+	<v-app dark>
 		<!-- Toolbar -->
-		<v-toolbar dark app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
+		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
 			<v-toolbar-side-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></v-toolbar-side-icon>
 			<v-toolbar-title>
 				<img style="height: 45px;" src="./assets/paradigmlogo.png" class="hidden-xs-only logo">
@@ -30,7 +30,7 @@
 
 		<!-- Navigation drawer -->
 		<v-navigation-drawer v-model="drawer" app temporary floating>
-			<v-toolbar dark>
+			<v-toolbar>
 				<v-toolbar-side-icon @click.prevent="drawer = false"><v-icon>close</v-icon></v-toolbar-side-icon>
 				<v-toolbar-title>Menu</v-toolbar-title>
 			</v-toolbar>
@@ -124,7 +124,6 @@
 						<v-btn @click="newColorDialog = true" flat color="accent">Change Color</v-btn>
 						<v-btn @click="newPasswordDialog = true" flat color="warning">Change Password</v-btn>
 						<v-btn @click="deleteDialog = true" flat color="error">Delete Account</v-btn>
-						<v-switch v-model="$root.darkMode" label="Dark Mode" @click="toggleDark()"></v-switch>
 					</div>
 				</v-card-text>
 				<v-divider></v-divider>
@@ -252,7 +251,7 @@
 		<v-snackbar v-model="$root.snackbar" bottom left :timeout="2000">{{ $root.feedback }}</v-snackbar>
 
 		<!-- Footer -->
-		<v-footer dark>
+		<v-footer>
 			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm Development, Inc.</span></div>
 		</v-footer>
 	</v-app>
@@ -368,8 +367,7 @@ export default {
 						uid: user.uid,
 						isBanned: false,
 						strikes: 0,
-						isWriter: false,
-						darkMode: true
+						isWriter: false
 					})
 					this.$ga.event(this.$root.username, 'signed up')
 					this.inquiryEvent(this.$root.username, 'signed up', '$account', this.$root.accountColor)
@@ -533,12 +531,7 @@ export default {
 			this.currentDate = moment(today).format('MMMM Do YYYY')
 			this.currentTime = moment(today).format('LTS')
 			setTimeout(this.startTime, 500)
-		},
-		toggleDark() {
-      db.collection('users').doc(this.$root.username).update({
-        darkMode: !this.$root.darkMode
-      })
-    }
+		}
 	},
 	created() {
 		this.$root.loadingBar = true
@@ -563,7 +556,6 @@ export default {
 					this.$root.isBanned = doc.data().isBanned
 					this.$root.strikes = doc.data().strikes
 					this.$root.isWriter = doc.data().isWriter
-					this.$root.darkMode = doc.data().darkMode
 					if (doc.data().strikes >= 3) {
 						this.$root.isBanned = true
 						if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {
@@ -597,7 +589,6 @@ export default {
 							this.$root.isBanned = doc.data().isBanned
 							this.$root.strikes = doc.data().strikes
 							this.$root.isWriter = doc.data().isWriter
-							this.$root.darkMode = doc.data().darkMode
 							if (doc.data().strikes >= 3) {
 								this.$root.isBanned = true
 								if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {

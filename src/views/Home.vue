@@ -15,7 +15,7 @@
 	  	<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin-bottom: 25px;">HEY!</h1>
 		  <h5 class="headline pb-2 white--text">Have <span class="font-weight-bold">YOU</span> read the notice?</h5>
 		  <p class="white--text">It contains vital information pertaining to your Paradigm account. Be sure to read and acknowledge it.</p>
-		  <v-btn dark router to="/company/notice" color="deep-purple">Read the Notice</v-btn>
+		  <v-btn router to="/company/notice" color="deep-purple">Read the Notice</v-btn>
 		</div>
 		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 25px; text-align: center;">Updates</h1>
 		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 100%; margin: 20px auto; max-width: 600px;">
@@ -40,7 +40,7 @@ export default {
   data() {
     return {
 			announcements: [],
-			homebg: 'http://relay.theparadigmdev.com/img/home_bg.jpg'
+			homebg: 'https://relay.theparadigmdev.com/img/home_bg.jpg'
 		}
 	},
   created() {
