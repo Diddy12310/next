@@ -15,9 +15,6 @@
 				<v-btn icon @click="dialog = true">
 					<v-icon>person</v-icon>
 				</v-btn>
-				<v-btn icon @click="refresh">
-          <v-icon>refresh</v-icon>
-        </v-btn>
 				<p class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 			</v-toolbar-items>
 			<v-toolbar-items v-if="$root.username == 'diddy12310' && lockdown">
