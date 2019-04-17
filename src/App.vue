@@ -1,12 +1,14 @@
 <template>
 	<v-app dark>
-		<!-- Toolbar -->
+    <!-- Toolbar -->
 		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
 			<v-toolbar-side-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></v-toolbar-side-icon>
 			<v-toolbar-title>
 				<img style="height: 45px;" src="./assets/paradigmlogo.png" class="hidden-xs-only logo">
 				<img style="height: 45px;" src="./assets/plogo.png" class="hidden-sm-and-up logo-sm">
 			</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <p class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 			<v-spacer></v-spacer>
 			<v-toolbar-items v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned">
 				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="$root.isAdmin">
@@ -15,7 +17,6 @@
 				<v-btn icon @click="dialog = true">
 					<v-icon>person</v-icon>
 				</v-btn>
-				<p class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 			</v-toolbar-items>
 			<v-toolbar-items v-if="$root.username == 'diddy12310' && lockdown">
 				<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important; top: +16px;"></v-switch>
@@ -96,7 +97,7 @@
 							<v-form>
 								<v-text-field autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
 								<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
-								<v-text-field autocomplete="off" type="text" name="bio" v-model="accountBio" label="Bio"></v-text-field>
+								<v-text-field autocomplete="off" type="text" name="bio" v-model="$root.accountBio" label="Bio"></v-text-field>
 								<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="$root.accountColor" />
 								<v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms"></v-checkbox>
 								<v-btn href="http://relay.theparadigmdev.com/terms.html">View Terms</v-btn>
@@ -112,7 +113,7 @@
 
 					<div v-if="$root.userPresent">
 						<p>{{ $root.accountBio }}</p>
-						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ $root.moonrocks }}</span>
+						<img src="./assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ $root.moonrocks }}</span>
 						<p><strong>Last Sign In:</strong> {{ userInfo.metadata.lastSignInTime }}</p>
 						<p><strong>Account Creation:</strong> {{ userInfo.metadata.creationTime }}</p>
 						<p><strong>User ID:</strong> {{ userInfo.uid }}</p>
@@ -193,7 +194,7 @@
 		<v-dialog v-model="adminDialog" max-width="500" v-if="$root.isAdmin">
 			<v-card>
 				<v-card-title>
-					<h3 class="headline mb-0">Admin Panel</h3>
+					<h3 class="headline mb-0">Mission Control</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="adminDialog = false" class="dialog-close-btn">
 						<v-icon>close</v-icon>
@@ -279,7 +280,8 @@ export default {
 				{ text: 'Asteroid', route: '/asteroid' },
 				{ text: 'Bookshelf', route: '/bookshelf' },
 				{ text: 'Movies', route: '/movies' },
-				{ text: 'Music', route: '/music' }
+				{ text: 'Music', route: '/music' },
+				{ text: 'Scorecard', route: '/scorecard' }
 			],
 			company: [
 				{ text: 'Support', route: '/company/support' },
