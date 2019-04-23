@@ -1,7 +1,8 @@
 <template>
 	<div class="satellite">
-		<v-text-field label="Web Address" v-model="address"></v-text-field>
-		<embed crossorigin="anonymous" :src="address">
+		<v-text-field label="Web Address" v-model="input"></v-text-field>
+		<v-btn flat icon @click="changeURL()"><v-icon>send</v-icon></v-btn>
+		<iframe id="satellite-embed" crossorigin="anonymous" :src="output"></iframe>
 	</div>
 </template>
 
@@ -10,7 +11,14 @@ export default {
 	name: 'Satellite',
 	data() {
 		return {
-			address: 'https://www.bing.com/'
+			proxy: 'https://cors.io/?',
+			input: 'https://www.google.com/',
+			output: 'https://cors.io/?https://www.google.com/'
+		}
+	},
+	methods: {
+		changeURL() {
+			this.output = this.proxy + this.input
 		}
 	}
 }
@@ -20,10 +28,10 @@ export default {
 div.satellite {
 	height: 100%;
 	width: 100%;
-	margin: 16px;
+	margin: 16px !important;
 }
 
-embed {
+iframe {
 	height: calc(100vh - 202.5px);
 	width: 100%;
 }
