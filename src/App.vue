@@ -278,10 +278,8 @@ export default {
 				{ text: 'Hex', route: '/hex' },
 				{ text: 'Satellite', route: '/satellite'},
 				{ text: 'Asteroid', route: '/asteroid' },
-				{ text: 'Bookshelf', route: '/bookshelf' },
-				{ text: 'Movies', route: '/movies' },
-				{ text: 'Music', route: '/music' },
-				{ text: 'Scorecard', route: '/scorecard' }
+				{ text: 'Scorecard', route: '/scorecard' },
+				{ text: 'Media', route: '/music' }
 			],
 			company: [
 				{ text: 'Support', route: '/company/support' },
@@ -533,7 +531,7 @@ export default {
 		}
 	},
 	created() {
-		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
+		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
 		this.$root.loadingBar = true
 		firebase.auth().onAuthStateChanged(firebaseUser => {
 			if(firebaseUser) {

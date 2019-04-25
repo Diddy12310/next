@@ -58,7 +58,7 @@
 
 <script>
 import vAudio from './../components/vAudio'
-import db from './../firestore'
+import db from './../firebase'
 
 export default {
   name: 'Music',

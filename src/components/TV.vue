@@ -2,7 +2,7 @@
   <div class="index">
 		<v-container>
 			<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
-				<v-text-field v-model="searchTV" label="Search..." style="width: 300px; margin: 50px auto 0px auto;"></v-text-field>
+				<v-text-field v-model="searchShow" label="Search..." style="width: 300px; margin: 50px auto 0px auto;"></v-text-field>
 			</div>
 			<div class="shows">
 				<v-card v-for="(show, index) in filteredShows" :key="index" class="tv-item">
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import db from './../firestore'
+import db from './../firebase'
 import firebase from 'firebase'
 
 export default {
