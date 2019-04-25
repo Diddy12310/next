@@ -2,8 +2,6 @@
   <div class="index">
 		<v-container>
 			<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
-				<h1 class="display-3 blue--text font-weight-thin text-uppercase">Movies</h1>
-				<h6 class="headline red--text font-weight-thin">Rights to the items listed below are reserved for their creators.</h6>
 				<v-text-field v-model="searchMovie" label="Search..." style="width: 300px; margin: 50px auto 0px auto;"></v-text-field>
 			</div>
 			<div class="movies">
@@ -20,8 +18,7 @@
 					<v-card-text>{{ movie.summary }}</v-card-text>
 
 					<v-card-actions>
-						<v-btn v-if="movie.available" flat color="accent" @click="watchMovie(movie.title, movie.link, movie.cover)">Watch</v-btn>
-						<span v-if="!movie.available" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
+						<v-btn :disabled="!movie.available" flat color="accent" @click="watchMovie(movie.title, movie.link, movie.cover)">Watch</v-btn>
 					</v-card-actions>
 				</v-card>
 			</div>
@@ -52,7 +49,7 @@
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
-		
+
 		<v-dialog v-model="watchMovieDialog" max-width="1000">
 			<v-card>
 				<v-card-title>
@@ -65,12 +62,11 @@
 				<video autoplay :poster="watchMovieCover" width="1000" :src="watchMovieURL" controls></video>
 			</v-card>
 		</v-dialog>
-
   </div>
 </template>
 
 <script>
-import db from '@/firebase'
+import db from './../firestore'
 import firebase from 'firebase'
 
 export default {

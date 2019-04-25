@@ -5,17 +5,13 @@ import Flamechat from './views/Flamechat'
 import Roadmap from './views/Company/Roadmap'
 import Terms from './views/Company/Terms'
 import Notice from './views/Company/Notice'
-import Bookshelf from './views/Bookshelf'
 import Drawer from './views/Drawer'
 import Hex from './views/Hex'
 import Launchpad from './views/Launchpad'
 import Scorecard from './views/Scorecard'
 import Support from './views/Company/Support'
-import PageNotFound from './views/404'
 import News from './views/News'
 import Satellite from './views/Satellite'
-import Movies from './views/Movies'
-import Music from './views/Music'
 import Asteroid from './views/Asteroid'
 import NetworkStatus from './views/Company/NetworkStatus'
 import LatestMemes from './views/Latest/Memes'
@@ -28,6 +24,8 @@ import Relay from './views/Devs/Relay'
 import About from './views/Company/About'
 import UserControl from './views/Admin/UserControl'
 import LatestRocco from './views/Latest/Rocco'
+import Media from './views/Media'
+import PageNotFound from './views/404'
 
 Vue.use(Router)
 
@@ -65,11 +63,6 @@ export default new Router({
       component: Notice
 		},
 		{
-			path: '/bookshelf',
-			name: 'Bookshelf',
-			component: Bookshelf
-		},
-		{
 			path: '/drawer',
 			name: 'Drawer',
 			component: Drawer
@@ -105,16 +98,6 @@ export default new Router({
 			component: Satellite
 		},
 		{
-			path: '/movies',
-			name: 'Movies',
-			component: Movies
-		},
-		{
-			path: '/music',
-			name: 'Music',
-			component: Music
-		},
-		{
 			path: '/asteroid',
 			name: 'Asteroid',
 			component: Asteroid
@@ -126,6 +109,7 @@ export default new Router({
 		},
 		{
 			path:'*',
+			name: 'PageNotFound',
 			component: PageNotFound
 		},
 		{
@@ -177,6 +161,11 @@ export default new Router({
 			path: '/latest/rocco',
 			name: 'LatestRocco',
 			component: LatestRocco
+		},
+		{
+			path: '/media',
+			name: 'Media',
+			component: Media
 		}
   ]
 })
