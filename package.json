@@ -12,6 +12,8 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@uppy/core": "^0.30.5",
+    "@uppy/xhr-upload": "^0.30.5",
     "axios": "^0.18.0",
     "firebase": "^5.9.4",
     "logrocket": "^0.6.20",
