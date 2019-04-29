@@ -33,38 +33,56 @@
 				<v-toolbar-title>Menu</v-toolbar-title>
 			</v-toolbar>
 
-			<v-list>
+			<v-list two-line>
 				<v-list-tile v-for="link in apps" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
-					<v-list-tile-title class="font-weight-light">{{ link.text }}</v-list-tile-title>
+					<v-list-tile-content>
+            <v-list-tile-title v-html="link.app"></v-list-tile-title>
+            <v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
+          </v-list-tile-content>
 				</v-list-tile>
 
 				<v-list-group>
 					<v-list-tile slot="activator">
-						<v-list-tile-title class="font-weight-black">Company</v-list-tile-title>
+						<v-list-tile-content>
+							<v-list-tile-title>Company</v-list-tile-title>
+						</v-list-tile-content>
 					</v-list-tile>
 
 					<v-list-tile v-for="link in company" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
-						<v-list-tile-title class="font-weight-light">{{ link.text }}</v-list-tile-title>
+						<v-list-tile-content>
+							<v-list-tile-title v-html="link.app"></v-list-tile-title>
+							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
+						</v-list-tile-content>
 					</v-list-tile>
 				</v-list-group>
 
 				<v-list-group>
 					<v-list-tile slot="activator">
-						<v-list-tile-title class="font-weight-black">Latest</v-list-tile-title>
+						<v-list-tile-content>
+							<v-list-tile-title>Latest</v-list-tile-title>
+						</v-list-tile-content>
 					</v-list-tile>
 
 					<v-list-tile v-for="link in latest" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
-						<v-list-tile-title class="font-weight-light">{{ link.text }}</v-list-tile-title>
+						<v-list-tile-content>
+							<v-list-tile-title v-html="link.app"></v-list-tile-title>
+							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
+						</v-list-tile-content>
 					</v-list-tile>
 				</v-list-group>
 
 				<v-list-group>
 					<v-list-tile slot="activator">
-						<v-list-tile-title class="font-weight-black">Developers</v-list-tile-title>
+						<v-list-tile-content>
+							<v-list-tile-title>For developers</v-list-tile-title>
+						</v-list-tile-content>
 					</v-list-tile>
 
 					<v-list-tile v-for="link in developers" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
-						<v-list-tile-title class="font-weight-light">{{ link.text }}</v-list-tile-title>
+						<v-list-tile-content>
+							<v-list-tile-title v-html="link.app"></v-list-tile-title>
+							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
+						</v-list-tile-content>
 					</v-list-tile>
 				</v-list-group>
 			</v-list>
@@ -272,31 +290,32 @@ export default {
 		return {
 			drawer: false,
 			apps: [
-				{ text: 'Home', route: '/home' },
-				{ text: 'Flamechat', route: '/flame' },
-				{ text: 'The Paradox', route: '/paradox' },
-				{ text: 'Hex', route: '/hex' },
-				{ text: 'Satellite', route: '/satellite'},
-				{ text: 'Asteroid', route: '/asteroid' },
-				{ text: 'Scorecard', route: '/scorecard' },
-				{ text: 'Media', route: '/music' }
+				{ text: 'Home', route: '/home', app: 'Paradigm' },
+				{ text: 'Chat with a friend', route: '/flame', app: 'Flamechat' },
+				{ text: 'Read the news', route: '/paradox', app: 'The Paradox' },
+				{ text: 'Share your work', route: '/hex', app: 'Hex' },
+				{ text: 'Browse the Internet', route: '/satellite', app: 'Satellite' },
+				{ text: 'Paradigm premium subscription', route: '/asteroid', app: 'Asteroid' },
+				{ text: 'See the latest scores', route: '/scorecard', app: 'Scorecard' },
+				{ text: 'Store your files', route: '/drawer', app: 'Drawer' },
+				{ text: 'Books, movies, music, and TV shows', route: '/media', app: 'Media' }
 			],
 			company: [
-				{ text: 'Support', route: '/company/support' },
-				{ text: 'Notice', route: '/company/notice' },
-				{ text: 'Roadmap', route: '/company/roadmap' },
-				{ text: 'Terms', route: '/company/terms' },
-				{ text: 'Network Status', route: '/company/status' },
-				{ text: 'About', route: '/company/about' }
+				{ text: 'Get some help', route: '/company/support', app: 'Support' },
+				{ text: 'For your information', route: '/company/notice', app: 'Notice' },
+				{ text: 'What&#39s coming soon', route: '/company/roadmap', app: 'Roadmap' },
+				{ text: 'Read it', route: '/company/terms', app: 'Terms of Use, Service, and Privacy Policy' },
+				{ text: 'Company status', route: '/company/status', app: 'Network Status' },
+				{ text: 'About us', route: '/company/about', app: 'About' }
 			],
 			latest: [
-				{ text: 'Memes', route: '/latest/memes' },
-				{ text: 'Rocco', route: '/latest/rocco' }
+				{ text: 'Have a laugh', route: '/latest/memes', app: 'Latest Memes' },
+				{ text: 'Unavailable', route: '/latest/rocco', app: 'Latest of Rocco' }
 			],
 			developers: [
-				{ text: 'Contracts', route: '/dev/contracts' },
-				{ text: 'Relay', route: '/dev/relay' },
-				{ text: 'Databank', route: '/dev/databank' },
+				{ text: 'Have us build you a website', route: '/dev/contracts', app: 'Contracting' },
+				{ text: 'Host your website', route: '/dev/relay', app: 'Relay' },
+				{ text: 'Add a database to your website', route: '/dev/databank', app: 'Databank' },
 			],
 			password: '',
 			dialog: false,
