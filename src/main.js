@@ -45,7 +45,7 @@ Vue.mixin({
   },
   data() {
     return {
-      username: null,
+      username: '',
       accountBio: null,
       accountColor: '#1565C0',
       isAdmin: false,

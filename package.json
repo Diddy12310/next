@@ -12,12 +12,11 @@
   },
   "main": "background.js",
   "dependencies": {
-    "@paradigmdev/crater": "0.0.3",
     "@uppy/core": "^0.30.5",
     "@uppy/xhr-upload": "^0.30.5",
     "axios": "^0.18.0",
-    "firebase": "^5.10.0",
-    "logrocket": "^0.6.20",
+    "firebase": "^5.10.1",
+    "logrocket": "^0.6.21",
     "moment": "^2.24.0",
     "vue": "^2.6.6",
     "vue-analytics": "^5.16.4",
@@ -29,8 +28,8 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.6.0",
-    "@vue/cli-service": "^3.6.0",
+    "@vue/cli-plugin-babel": "^3.7.0",
+    "@vue/cli-service": "^3.7.0",
     "electron": "^4.1.5",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",

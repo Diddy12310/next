@@ -105,17 +105,17 @@
 						<v-tab>Sign In</v-tab>
 						<v-tab-item>
 							<v-form>
-								<v-text-field autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
-								<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
+								<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
+								<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
 								<v-btn @click="signIn" color="primary">Sign In</v-btn>
 							</v-form>
 						</v-tab-item>
 						<v-tab>Sign Up</v-tab>
 						<v-tab-item>
 							<v-form>
-								<v-text-field autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
-								<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
-								<v-text-field autocomplete="off" type="text" name="bio" v-model="$root.accountBio" label="Bio"></v-text-field>
+								<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
+								<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
+								<v-text-field clearable autocomplete="off" type="text" name="bio" v-model="$root.accountBio" label="Bio"></v-text-field>
 								<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="$root.accountColor" />
 								<v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms"></v-checkbox>
 								<v-btn href="http://relay.theparadigmdev.com/terms.html">View Terms</v-btn>
@@ -125,8 +125,8 @@
 					</v-tabs>
 
 					<v-form v-if="!$root.userPresent && !signUpAvail">
-						<v-text-field autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
-						<v-text-field autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
+						<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
+						<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
 					</v-form>
 
 					<div v-if="$root.userPresent">
@@ -298,7 +298,8 @@ export default {
 				{ text: 'Paradigm premium subscription', route: '/asteroid', app: 'Asteroid' },
 				{ text: 'See the latest scores', route: '/scorecard', app: 'Scorecard' },
 				{ text: 'Store your files', route: '/drawer', app: 'Drawer' },
-				{ text: 'Books, movies, music, and TV shows', route: '/media', app: 'Media' }
+				{ text: 'Books, movies, music, and TV shows', route: '/media', app: 'Media' },
+				{ text: 'Study the climate', route: '/weather', app: 'Weather' }
 			],
 			company: [
 				{ text: 'Get some help', route: '/company/support', app: 'Support' },
@@ -712,7 +713,7 @@ html {
 }
 
 .toolbar-no-ld {
-	background: linear-gradient(to right, #542478 0%, #011949 100%);
+	background: linear-gradient(135deg, #162fa1 0%, #50336e 100%);
 }
 
 .v-input--switch {
