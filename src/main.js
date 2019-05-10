@@ -5,9 +5,8 @@ import router from './router'
 import VueChatScroll from 'vue-chat-scroll'
 import VueAnalytics from 'vue-analytics'
 import store from './store'
-import firebase from 'firebase'
 import LogRocket from 'logrocket'
-import db from '@/firebase'
+import { perf } from 'firebase'
 
 Vue.use(VueAnalytics, {
 	id: 'UA-52752236-3',
@@ -19,30 +18,6 @@ Vue.config.productionTip = false
 Vue.use(VueChatScroll)
 
 Vue.mixin({
-  methods: {
-    inquiryEvent(user, event, location, color) {
-      console.log(user, event, location, color)
-      db.collection('analytics').add({
-        user: user,
-        event: event,
-        location: location,
-        timestamp: Date.now(),
-        type: 'event',
-        color: color
-      })
-    },
-    inquiryError(user, error, location, color) {
-      console.error(user, error, location, color)
-      db.collection('analytics').add({
-        user: user,
-        error: error,
-        location: location,
-        timestamp: Date.now(),
-        type: 'error',
-        color: color
-      })
-    }
-  },
   data() {
     return {
       username: '',
@@ -62,15 +37,10 @@ Vue.mixin({
   }
 })
 
-let app = null
-firebase.auth().onAuthStateChanged(() => {
-  if (!app) {
-    new Vue({
-      router,
-      store,
-      render: function (h) { return h(App) }
-    }).$mount('div#app')    
-  }
-})
+new Vue({
+  router,
+  store,
+  render: function(h) { return h(App) }
+}).$mount('div#app')    
 
 LogRocket.init('uvh8hk/paradigm')

@@ -58,7 +58,7 @@
 
 <script>
 import vAudio from './../components/vAudio'
-import db from './../firebase'
+import { db } from '@/firebase'
 
 export default {
   name: 'Music',
@@ -124,7 +124,6 @@ export default {
 	methods: {
 		logMusic(music) {
 			this.$ga.event('Music', this.$root.username + ' is listening to ' + music)
-			this.inquiryEvent(this.$root.username, 'is listening to ' + music, 'Music', this.$root.accountColor)
 		},
 		submitSong() {
 			if (this.newMusicTitle && this.newMusicAlbum && this.newMusicArtist && this.newMusicCover && this.newMusicGenre) {
@@ -137,7 +136,6 @@ export default {
 					link: '',
 					genre: this.newMusicGenre
 				}).then(() => {
-					this.inquiryEvent(this.$root.username, 'requested ' + this.newMusicTitle + ' by ' + this.newMusicArtist + ' to be added', 'Music', this.$root.accountColor)
 					this.newMusicDialog = false
 					this.newMusicTitle = ''
 					this.newMusicAlbum = ''

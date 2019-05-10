@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import db from './../firebase'
+import { db } from '@/firebase'
 import firebase from 'firebase'
 
 export default {
@@ -134,7 +134,6 @@ export default {
 	methods: {
 		logMovie(movie) {
 			this.$ga.event(this.$root.username, 'is watching ' + movie)
-			this.inquiryEvent(this.$root.username, 'is watching ' + movie, 'Movies', this.$root.accountColor)
 		},
 		submitMovie() {
 			if (this.newMovieTitle && this.newMovieSummary && this.newMovieCover && this.newMovieGenre) {
@@ -146,7 +145,6 @@ export default {
 					link: '',
 					genre: this.newMovieGenre
 				}).then(() => {
-					this.inquiryEvent(this.$root.username, 'requested ' + this.newMovieTitle + ' to be added', 'Movies', this.$root.accountColor)
 					this.newMovieDialog = false
 					this.newMovieTitle = ''
 					this.newMovieSummary = ''

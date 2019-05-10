@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import db from '@/firebase'
+import { db } from '@/firebase'
 import moment from 'moment'
 
 export default {
@@ -157,7 +157,6 @@ export default {
 					cover: this.newNewsCover,
 					timestamp: Date.now()
 				}).then(() => {
-					this.inquiryEvent(this.$root.username, 'wrote ' + this.newNewsTitle, 'The Paradox', this.$root.accountColor)
 					this.newNewsDialog = false
 					this.newNewsTitle = ''
 					this.newNewsDetail = ''

@@ -4,11 +4,11 @@
 		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
 			<v-toolbar-side-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></v-toolbar-side-icon>
 			<v-toolbar-title>
-				<img style="height: 45px;" src="./assets/paradigmlogo.png" class="hidden-xs-only logo">
-				<img style="height: 45px;" src="./assets/plogo.png" class="hidden-sm-and-up logo-sm">
+				<img style="height: 45px;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent, 'hidden-xs-only': $root.accountColor }">
+				<img style="height: 45px;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
 			</v-toolbar-title>
       <v-spacer></v-spacer>
-      <p class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
+      <p v-if="app_loaded" class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 			<v-spacer></v-spacer>
 			<v-toolbar-items v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned">
 				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="$root.isAdmin">
@@ -34,7 +34,13 @@
 			</v-toolbar>
 
 			<v-list two-line>
-				<v-list-tile v-for="link in apps" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
+				<v-list-tile @click="app = 'Home', drawer = false" :ripple="{ class: 'grey--text' }">
+					<v-list-tile-content>
+            <v-list-tile-title>Home</v-list-tile-title>
+          </v-list-tile-content>
+				</v-list-tile>
+
+				<v-list-tile v-for="link in apps" :key="link.route" @click="app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 					<v-list-tile-content>
             <v-list-tile-title v-html="link.app"></v-list-tile-title>
             <v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
@@ -48,7 +54,7 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-tile v-for="link in company" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
+					<v-list-tile v-for="link in company" :key="link.route" @click="app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 						<v-list-tile-content>
 							<v-list-tile-title v-html="link.app"></v-list-tile-title>
 							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
@@ -63,7 +69,7 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-tile v-for="link in latest" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
+					<v-list-tile v-for="link in latest" :key="link.route" @click="app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 						<v-list-tile-content>
 							<v-list-tile-title v-html="link.app"></v-list-tile-title>
 							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
@@ -78,7 +84,7 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-tile v-for="link in developers" :key="link.route" router :to="link.route" :ripple="{ class: 'grey--text' }">
+					<v-list-tile v-for="link in developers" :key="link.route" @click="app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 						<v-list-tile-content>
 							<v-list-tile-title v-html="link.app"></v-list-tile-title>
 							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
@@ -236,9 +242,31 @@
 		</v-dialog>
 
 		<!-- Site content -->
-		<v-content>
+		<v-content v-if="app_loaded">
 			<v-container fluid style="padding: 0;">
-				<router-view v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></router-view>
+				<!-- <router-view v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></router-view> -->
+				<Home v-if="app == 'Home' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Flamechat v-if="app == 'Flamechat' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Roadmap v-if="app == 'Roadmap' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Terms v-if="app == 'Terms' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Drawer v-if="app == 'Drawer' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Launchpad v-if="app == 'Launchpad' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Scorecard v-if="app == 'Scorecard' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Support v-if="app == 'Support' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<News v-if="app == 'News' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Satellite v-if="app == 'Satellite' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Asteroid v-if="app == 'Asteroid' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<NetworkStatus v-if="app == 'NetworkStatus' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<LatestMemes v-if="app == 'LatestMemes' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<LatestVines v-if="app == 'LatestVines' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Debate v-if="app == 'Debate' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Inquiry v-if="app == 'Inquiry' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Contracts v-if="app == 'Contracts' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Databank v-if="app == 'Databank' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Relay v-if="app == 'Relay' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<UserControl v-if="app == 'UserControl' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Media v-if="app == 'Media' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<PageNotFound v-if="app == 'PageNotFound' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
 				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !fourofour" style="text-align: center;">
 					<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">Welcome!</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
@@ -268,55 +296,77 @@
 
 		<!-- Footer -->
 		<v-footer>
-			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm Development, Inc.</span></div>
+			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm</span></div>
 		</v-footer>
 	</v-app>
 </template>
 
 <script>
-import db from '@/firebase'
+import { db } from '@/firebase'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import moment from 'moment'
 import { Swatches } from 'vue-color'
 import LogRocket from 'logrocket'
 
+// ------------------------------
+
+import Home from './views/Home'
+import Flamechat from './views/Flamechat'
+import Roadmap from './views/Company/Roadmap'
+import Terms from './views/Company/Terms'
+import Drawer from './views/Drawer'
+import Launchpad from './views/Launchpad'
+import Scorecard from './views/Scorecard'
+import Support from './views/Company/Support'
+import News from './views/News'
+import Satellite from './views/Satellite'
+import Asteroid from './views/Asteroid'
+import NetworkStatus from './views/Company/NetworkStatus'
+import LatestMemes from './views/Latest/Memes'
+import LatestVines from './views/Latest/Vines'
+import Debate from './views/Debate'
+import Inquiry from './views/Admin/Inquiry'
+import Contracts from './views/Devs/Contracts'
+import Databank from './views/Devs/Databank'
+import Relay from './views/Devs/Relay'
+import About from './views/Company/About'
+import UserControl from './views/Admin/UserControl'
+import Media from './views/Media'
+import PageNotFound from './views/404'
+
 export default {
 	name: 'Paradigm',
 	components: {
-		Swatches
+		Swatches, Home, Flamechat, Roadmap, Terms, Drawer, Launchpad, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
+		LatestVines, Debate, Inquiry, Contracts, Databank, Relay, UserControl, Media, PageNotFound
 	},
 	data() {
 		return {
+			app: 'Home',
 			drawer: false,
 			apps: [
-				{ text: 'Home', route: '/home', app: 'Paradigm' },
-				{ text: 'Chat with a friend', route: '/flame', app: 'Flamechat' },
-				{ text: 'Read the news', route: '/paradox', app: 'The Paradox' },
-				{ text: 'Share your work', route: '/hex', app: 'Hex' },
-				{ text: 'Browse the Internet', route: '/satellite', app: 'Satellite' },
-				{ text: 'Paradigm premium subscription', route: '/asteroid', app: 'Asteroid' },
-				{ text: 'See the latest scores', route: '/scorecard', app: 'Scorecard' },
-				{ text: 'Store your files', route: '/drawer', app: 'Drawer' },
-				{ text: 'Books, movies, music, and TV shows', route: '/media', app: 'Media' },
-				{ text: 'Study the climate', route: '/weather', app: 'Weather' }
+				{ text: 'Chat with a friend', route: 'Flamechat', app: 'Flamechat' },
+				{ text: 'Read the news', route: 'News', app: 'The Paradox' },
+				{ text: 'Browse the Internet', route: 'Satellite', app: 'Satellite' },
+				{ text: 'Paradigm premium subscription', route: 'Asteroid', app: 'Asteroid' },
+				{ text: 'See the latest scores', route: 'Scorecard', app: 'Scorecard' },
+				{ text: 'Store your files', route: 'Drawer', app: 'Drawer' },
+				{ text: 'Books, movies, music, and TV shows', route: 'Media', app: 'Media' },
 			],
 			company: [
-				{ text: 'Get some help', route: '/company/support', app: 'Support' },
-				{ text: 'For your information', route: '/company/notice', app: 'Notice' },
-				{ text: 'What&#39s coming soon', route: '/company/roadmap', app: 'Roadmap' },
-				{ text: 'Read it', route: '/company/terms', app: 'Terms of Use, Service, and Privacy Policy' },
-				{ text: 'Company status', route: '/company/status', app: 'Network Status' },
-				{ text: 'About us', route: '/company/about', app: 'About' }
+				{ text: 'Get some help', route: 'Support', app: 'Support' },
+				{ text: 'What&#39s coming soon', route: 'Roadmap', app: 'Roadmap' },
+				{ text: 'Read it', route: 'Terms', app: 'Terms of Use, Service, and Privacy Policy' },
+				{ text: 'Company status', route: 'NetworkStatus', app: 'Network Status' },
 			],
 			latest: [
-				{ text: 'Have a laugh', route: '/latest/memes', app: 'Latest Memes' },
-				{ text: 'Unavailable', route: '/latest/rocco', app: 'Latest of Rocco' }
+				{ text: 'Have a laugh', route: 'LatestMemes', app: 'Latest Memes' },
 			],
 			developers: [
-				{ text: 'Have us build you a website', route: '/dev/contracts', app: 'Contracting' },
-				{ text: 'Host your website', route: '/dev/relay', app: 'Relay' },
-				{ text: 'Add a database to your website', route: '/dev/databank', app: 'Databank' },
+				{ text: 'Have us build you a website', route: 'Contracts', app: 'Contracting' },
+				{ text: 'Host your website', route: 'Relay', app: 'Relay' },
+				{ text: 'Add a database to your website', route: 'Databank', app: 'Databank' },
 			],
 			password: '',
 			dialog: false,
@@ -340,7 +390,8 @@ export default {
 			newColorDialog: false,
 			newBioDialog: false,
 			currentTime: '',
-			currentDate: ''
+			currentDate: '',
+			app_loaded: false
 		}
 	},
 	methods: {
@@ -350,7 +401,7 @@ export default {
 		signIn() {
 			if(this.$root.username && this.password) {
 				firebase.auth().signInWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(() => {
-				  
+				  this.dialog = false
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
@@ -387,7 +438,6 @@ export default {
 						isWriter: false
 					})
 					this.$ga.event(this.$root.username, 'signed up')
-					this.inquiryEvent(this.$root.username, 'signed up', '$account', this.$root.accountColor)
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
@@ -409,7 +459,6 @@ export default {
 		},
 		signOut() {
 			this.$ga.event(this.$root.username, 'signed out')
-			this.inquiryEvent(this.$root.username, 'signed out', '$account', this.$root.accountColor)
 			firebase.auth().signOut().then(() => {
 				this.$root.feedback = 'Signed out successfully.'
 				this.$root.snackbar = true
@@ -422,7 +471,6 @@ export default {
 				this.$root.feedback = 'Password changed successfully.'
 				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'changed their password')
-				this.inquiryEvent(this.$root.username, 'changed their password', '$account', this.$root.accountColor)
 			}).catch(error => {
 				// An error happened.
 				this.$root.feedback = 'Password changed unsuccessfully.'
@@ -432,7 +480,6 @@ export default {
 		},
 		deleteUser() {
 			this.$ga.event(this.$root.username, 'deleted their account')
-			this.inquiryEvent(this.$root.username, 'deleted their account', '$account', this.$root.accountColor)
 			firebase.auth().currentUser.delete().then(() => {
 				// User deleted.
 				db.collection('users').doc(this.$root.username).delete().then(() => {
@@ -455,10 +502,8 @@ export default {
 			}).then(() => {
 				if(this.signUpAvail == true) {
 					this.$ga.event(this.$root.username, 'enabled sign ups')
-					this.inquiryEvent(this.$root.username, 'enabled sign ups', '$admin', this.$root.accountColor)
 				} else {
 					this.$ga.event(this.$root.username, 'disabled sign ups')
-					this.inquiryEvent(this.$root.username, 'disabled sign ups', '$admin', this.$root.accountColor)
 				}
 			})
 		},
@@ -468,10 +513,8 @@ export default {
 			}).then(() => {
 				if(this.flamechatHTML == true) {
 					this.$ga.event(this.$root.username, 'enabled Flamechat HTML')
-					this.inquiryEvent(this.$root.username, 'enabled Flamechat HTML rendering', '$admin', this.$root.accountColor)
 				} else {
 					this.$ga.event(this.$root.username, 'disabled Flamechat HTML')
-					this.inquiryEvent(this.$root.username, 'disabled Flamechat HTML rendering', '$admin', this.$root.accountColor)
 				}
 			})
 		},
@@ -481,12 +524,10 @@ export default {
 			}).then(() => {
 				if (this.lockdown == true) {
 					this.$ga.event(this.$root.username, 'locked down')
-					this.inquiryEvent(this.$root.username, 'locked down', '$admin', this.$root.accountColor)
 					this.$root.feedback = 'Locked down successfully.'
 					this.$root.snackbar = true
 				} else {
 					this.$ga.event(this.$root.username, 'ended the lockdown')
-					this.inquiryEvent(this.$root.username, 'ended the lockdown', '$admin', this.$root.accountColor)
 					this.$root.feedback = 'Lockdown ended successfully.'
 					this.$root.snackbar = true
 				}
@@ -498,12 +539,10 @@ export default {
 			}).then(() => {
 				if (this.fourofour == true) {
 					this.$ga.event(this.$root.username, '404ed')
-					this.inquiryEvent(this.$root.username, '404ed', '$admin', this.$root.accountColor)
 					this.$root.feedback = '404 successfully.'
 					this.$root.snackbar = true
 				} else {
 					this.$ga.event(this.$root.username, 'ended the 404')
-					this.inquiryEvent(this.$root.username, 'ended the 404', '$admin', this.$root.accountColor)
 					this.$root.feedback = '404 ended successfully.'
 					this.$root.snackbar = true
 				}
@@ -515,11 +554,9 @@ export default {
 			}).then(() => {
 				if (this.flamechatEnable) {
 					this.$ga.event(this.$root.username, 'enabled Flamechat')
-					this.inquiryEvent(this.$root.username, 'enabled Flamechat', '$admin', this.$root.accountColor)
 				}
 				if (!this.flamechatEnable) {
 					this.$ga.event(this.$root.username, 'disabled Flamechat')
-					this.inquiryEvent(this.$root.username, 'disabled Flamechat', '$admin', this.$root.accountColor)
 				}
 			})
 		},
@@ -530,7 +567,6 @@ export default {
 				this.$root.accountColor = newColor
 				this.newColorDialog = false
 				this.$ga.event(this.$root.username, 'changed their color to ' + this.$root.accountColor)
-				this.inquiryEvent(this.$root.username, 'changed their color to ' + this.$root.accountColor, '$account', this.$root.accountColor)
 			})
 		},
 		changeBio(newBio) {
@@ -540,7 +576,6 @@ export default {
 				this.accountBio = newBio
 				this.newBioDialog = false
 				this.$ga.event(this.$root.username, 'changed their bio to ' + this.$root.accountBio)
-				this.inquiryEvent(this.$root.username, 'changed their bio to ' + this.$root.accountBio, '$account', this.$root.accountColor)
 			})
 		},
 		startTime() {
@@ -551,9 +586,11 @@ export default {
 		}
 	},
 	created() {
+		this.app_loaded = false
 		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
 		this.$root.loadingBar = true
 		firebase.auth().onAuthStateChanged(firebaseUser => {
+			this.app_loaded = true
 			if(firebaseUser) {
 				this.$root.feedback = 'Signed in successfully.'
 				this.$root.snackbar = true
@@ -582,7 +619,6 @@ export default {
 					} else {
 						db.collection('users').doc(this.$root.username).update({ isBanned: false })
 					}
-					this.inquiryEvent(this.$root.username, 'signed in', '$account', this.$root.accountColor)
 					LogRocket.identify(this.userInfo.uid, {
 						name: this.$root.username,
 						isAdmin: this.$root.isAdmin,
@@ -755,6 +791,14 @@ html {
   transform: translate(-50%, -50%);
 }
 
+.logo-nouser {
+	margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 110px;
+  transform: translate(-50%, -50%);
+}
+
 .logo-sm {
 	margin: 0;
   position: absolute;
@@ -763,4 +807,11 @@ html {
   transform: translate(-50%, -50%);
 }
 
+.logo-sm-nouser {
+	margin: 0;
+  position: absolute;
+  top: 47%;
+  left: 40px;
+  transform: translate(-50%, -50%);
+}
 </style>

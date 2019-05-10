@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import db from '@/firebase'
+import { db } from '@/firebase'
 import moment from 'moment'
 
 export default {
@@ -109,7 +109,7 @@ export default {
 			editing: null,
 			flamechatEnable: true,
 			chatroom: null,
-			chatrooms: [],
+			rooms: [],
 			flamechatHTML: null,
 			profilePopupUsername: '',
 			profilePopupEnable: false,
@@ -195,9 +195,8 @@ export default {
 				this.$root.feedback = 'Message deleted successfully.'
 				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'deleted a message on ' + this.chatroom)
-				this.inquiryEvent(this.$root.username, 'deleted a message on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 			}).catch(error => {
-				this.inquiryError(this.$root.username, error.message + this.chatroom, 'Flamechat', this.$root.accountColor)
+				this.$ga.event($root.username, 'error: ' + error.message)
 			})
 		},
 		clearAllMessages() {
@@ -209,12 +208,11 @@ export default {
 						this.$root.feedback = 'All messages purged.'
 						this.$root.snackbar = true
 					}).catch(error => {
-						this.inquiryError(this.$root.username, error.message + this.chatroom, 'Flamechat', this.$root.accountColor)
+						this.$ga.event($root.username, 'error: ' + error.message)
 					})
 				})
 			}
 			this.$ga.event(this.$root.username, 'purged all messages')
-			this.inquiryEvent(this.$root.username, 'purged all messages on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 		},
 		sendChat() {
 			if(this.newMessage && this.$root.username != '' && this.$root.accountColor != null) {
@@ -223,20 +221,19 @@ export default {
 					content: this.newMessage,
 					color: this.$root.accountColor,
 					timestamp: Date.now()
-				}).catch(err => {
-					console.log(err)
+				}).catch(error => {
+					console.log(error.message)
 					this.$root.feedback = 'Your message did not send successfully!'
 					this.$root.snackbar = true
-					this.inquiryError(this.$root.username, err.message + this.chatroom, 'Flamechat', this.$root.accountColor)
+					this.$ga.event($root.username, 'error: ' + error.message)
 				})
 				this.$root.feedback = 'Your message sent successfully!'
 				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'sent ' + this.newMessage + ' on ' + this.chatroom)
-				this.inquiryEvent(this.$root.username, 'sent "' + this.newMessage + '" on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 				this.newMessage = null
 			} else {
 				this.$root.feedback = 'Your message did not send sucessfully!'
-				this.inquiryError(this.$root.username, 'tried to send a message on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
+				this.$ga.event($root.username, 'error: they tried and failed to send a message')
 				this.$root.snackbar = true
 			}
 		},
@@ -247,12 +244,11 @@ export default {
 				this.$root.feedback = 'Message edited successfully.'
 				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'edited ' + this.editMessage + ' on ' + this.chatroom)
-				this.inquiryEvent(this.$root.username, 'edited ' + this.editMessage + ' on ' + this.chatroom, 'Flamechat', this.$root.accountColor)
 				this.editing = null
 				this.editMessage = ''
 				this.editor = false
 			}).catch(error => {
-				this.inquiryError(this.$root.username, error.message + this.chatroom, 'Flamechat', this.$root.accountColor)
+				this.$ga.event($root.username, 'error: ' + error.message)
 			})
 		},
 		setChatroom() {

@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import db from './../firebase'
+import { db } from '@/firebase'
 import firebase from 'firebase'
 
 export default {
@@ -117,7 +117,6 @@ export default {
 	methods: {
 		logBook(book) {
 			this.$ga.event(this.$root.username,  + 'is reading ' + book)
-			this.inquiryEvent(this.$root.username, 'is reading ' + book, 'Bookshelf', this.$root.accountColor)
 		},
 		submitBook() {
 			if (this.newBookTitle && this.newBookAuthor && this.newBookCover && this.newBookGenre && this.newBookSummary) {
@@ -130,7 +129,6 @@ export default {
 					genre: this.newBookGenre,
 					summary: this.newBookSummary
 				}).then(() => {
-					this.inquiryEvent(this.$root.username, 'requested ' + this.newBookTitle + ' by ' + this.newBookAuthor + ' to be added', 'Bookshelf', this.$root.accountColor)
 					this.newBookDialog = false
 					this.newBookTitle = ''
 					this.newBookAuthor = ''

@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import db from './../firebase'
+import { db } from '@/firebase'
 import firebase from 'firebase'
 
 export default {
@@ -134,7 +134,6 @@ export default {
 	methods: {
 		logShow(show) {
 			this.$ga.event(this.$root.username, 'is watching ' + show)
-			this.inquiryEvent(this.$root.username, 'is watching ' + show, 'TV Shows', this.$root.accountColor)
 		},
 		submitShow() {
 			if (this.newShowTitle && this.newShowSummary && this.newShowCover && this.newShowGenre) {
@@ -146,7 +145,6 @@ export default {
 					link: '',
 					genre: this.newShowGenre
 				}).then(() => {
-					this.inquiryEvent(this.$root.username, 'requested ' + this.newShowTitle + ' to be added', 'TV Shows', this.$root.accountColor)
 					this.newShowDialog = false
 					this.newShowTitle = ''
 					this.newShowSummary = ''
