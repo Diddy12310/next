@@ -19,21 +19,21 @@
 				<v-btn href="https://relay.theparadigmdev.com/paradox/robert-mueller-report-into-pres-donald-trump-russia-collusion.pdf" color="red">Read it</v-btn>
 			</v-layout>
 		</v-parallax> -->
-		<div style="text-align: center; padding: 25px;" class="grey darken-4">
+		<!-- <div style="text-align: center; padding: 25px;" class="grey darken-4">
 	  	<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin-bottom: 25px;">HEY!</h1>
 		  <h5 class="headline pb-2 white--text">Have <span class="font-weight-bold">YOU</span> read the notice?</h5>
 		  <p class="white--text">It contains vital information pertaining to your Paradigm account. Be sure to read and acknowledge it.</p>
-		  <v-btn router to="/company/notice" color="deep-purple">Read the Notice</v-btn>
-		</div>
+		  <v-btn @click="route()" color="deep-purple">Read the Notice</v-btn>
+		</div> -->
 		<v-parallax src="https://relay.theparadigmdev.com/img/Outer_Space.jpg" style="padding: 25px; height: 275px;">
 			<div style="text-align: center;">
 				<h1 class="display-3 deep-orange--text font-weight-thin text-uppercase" style="margin-bottom: 25px;">Flamechat</h1>
 				<h5 class="headline pb-2 white--text">A common sense chatting app.</h5>
 				<p class="white--text">A chatting app built for the future.</p>
-				<v-btn router to="/flame" color="deep-orange">Open Flamechat</v-btn>
+				<v-btn @click="route('Flamechat')" color="deep-orange">Open Flamechat</v-btn>
 			</div>
 		</v-parallax>
-		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 25px; text-align: center;">Updates</h1>
+		<!-- <h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 25px; text-align: center;">Updates</h1>
 		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 100%; margin: 20px auto; max-width: 600px;">
 			<v-card-title primary-title>
 				<div>
@@ -44,7 +44,7 @@
 			<v-card-text>
 				<div v-for="item in announcement.detail" :key="item" class="item" v-html="item"></div>
 			</v-card-text>
-		</v-card>
+		</v-card> -->
 	</div>
 </template>
 

@@ -18,6 +18,11 @@ Vue.config.productionTip = false
 Vue.use(VueChatScroll)
 
 Vue.mixin({
+  methods: {
+    route(to) {
+      this.$root.app = to
+    }
+  },
   data() {
     return {
       username: '',
@@ -32,7 +37,8 @@ Vue.mixin({
       feedback: '',
       snackbar: false,
       isWriter: false,
-      loadingBar: false
+      loadingBar: false,
+      app: 'Home'
     }
   }
 })

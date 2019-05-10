@@ -34,13 +34,13 @@
 			</v-toolbar>
 
 			<v-list two-line>
-				<v-list-tile @click="app = 'Home', drawer = false" :ripple="{ class: 'grey--text' }">
+				<v-list-tile @click="$root.app = 'Home', drawer = false" :ripple="{ class: 'grey--text' }">
 					<v-list-tile-content>
             <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
 				</v-list-tile>
 
-				<v-list-tile v-for="link in apps" :key="link.route" @click="app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
+				<v-list-tile v-for="link in apps" :key="link.route" @click="$root.app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 					<v-list-tile-content>
             <v-list-tile-title v-html="link.app"></v-list-tile-title>
             <v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
@@ -54,7 +54,7 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-tile v-for="link in company" :key="link.route" @click="app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
+					<v-list-tile v-for="link in company" :key="link.route" @click="$root.app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 						<v-list-tile-content>
 							<v-list-tile-title v-html="link.app"></v-list-tile-title>
 							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
@@ -69,7 +69,7 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-tile v-for="link in latest" :key="link.route" @click="app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
+					<v-list-tile v-for="link in latest" :key="link.route" @click="$root.app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 						<v-list-tile-content>
 							<v-list-tile-title v-html="link.app"></v-list-tile-title>
 							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
@@ -84,7 +84,7 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-tile v-for="link in developers" :key="link.route" @click="app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
+					<v-list-tile v-for="link in developers" :key="link.route" @click="$root.app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 						<v-list-tile-content>
 							<v-list-tile-title v-html="link.app"></v-list-tile-title>
 							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
@@ -245,28 +245,28 @@
 		<v-content v-if="app_loaded">
 			<v-container fluid style="padding: 0;">
 				<!-- <router-view v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></router-view> -->
-				<Home v-if="app == 'Home' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Flamechat v-if="app == 'Flamechat' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Roadmap v-if="app == 'Roadmap' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Terms v-if="app == 'Terms' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Drawer v-if="app == 'Drawer' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Launchpad v-if="app == 'Launchpad' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Scorecard v-if="app == 'Scorecard' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Support v-if="app == 'Support' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<News v-if="app == 'News' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Satellite v-if="app == 'Satellite' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Asteroid v-if="app == 'Asteroid' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<NetworkStatus v-if="app == 'NetworkStatus' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<LatestMemes v-if="app == 'LatestMemes' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<LatestVines v-if="app == 'LatestVines' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Debate v-if="app == 'Debate' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Inquiry v-if="app == 'Inquiry' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Contracts v-if="app == 'Contracts' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Databank v-if="app == 'Databank' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Relay v-if="app == 'Relay' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<UserControl v-if="app == 'UserControl' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Media v-if="app == 'Media' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<PageNotFound v-if="app == 'PageNotFound' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Home v-if="$root.app == 'Home' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Flamechat v-if="$root.app == 'Flamechat' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Roadmap v-if="$root.app == 'Roadmap' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Terms v-if="$root.app == 'Terms' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Drawer v-if="$root.app == 'Drawer' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Launchpad v-if="$root.app == 'Launchpad' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Scorecard v-if="$root.app == 'Scorecard' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Support v-if="$root.app == 'Support' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<News v-if="$root.app == 'News' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Satellite v-if="$root.app == 'Satellite' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Asteroid v-if="$root.app == 'Asteroid' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<NetworkStatus v-if="$root.app == 'NetworkStatus' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<LatestMemes v-if="$root.app == 'LatestMemes' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<LatestVines v-if="$root.app == 'LatestVines' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Debate v-if="$root.app == 'Debate' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Inquiry v-if="$root.app == 'Inquiry' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Contracts v-if="$root.app == 'Contracts' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Databank v-if="$root.app == 'Databank' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Relay v-if="$root.app == 'Relay' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<UserControl v-if="$root.app == 'UserControl' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<Media v-if="$root.app == 'Media' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
+				<PageNotFound v-if="$root.app == 'PageNotFound' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
 				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !fourofour" style="text-align: center;">
 					<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">Welcome!</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
@@ -302,7 +302,7 @@
 </template>
 
 <script>
-import { db } from '@/firebase'
+import { db, perf } from '@/firebase'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import moment from 'moment'
@@ -343,7 +343,6 @@ export default {
 	},
 	data() {
 		return {
-			app: 'Home',
 			drawer: false,
 			apps: [
 				{ text: 'Chat with a friend', route: 'Flamechat', app: 'Flamechat' },
@@ -400,8 +399,10 @@ export default {
 		},
 		signIn() {
 			if(this.$root.username && this.password) {
+				perf.trace('signIn').start()
 				firebase.auth().signInWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(() => {
-				  this.dialog = false
+					this.dialog = false
+					perf.trace('signIn').stop()
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
@@ -423,6 +424,7 @@ export default {
 		},
 		signUp() {
 			if(this.$root.username && this.password && this.terms && this.$root.accountBio && this.$root.accountColor) {
+				perf.trace('signUp').start()
 				firebase.auth().createUserWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(user => {
 					db.collection('users').doc(this.$root.username).set({
 						bio: this.$root.accountBio,
@@ -438,6 +440,7 @@ export default {
 						isWriter: false
 					})
 					this.$ga.event(this.$root.username, 'signed up')
+					perf.trace('signUp').stop()
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
@@ -458,10 +461,12 @@ export default {
 			}
 		},
 		signOut() {
-			this.$ga.event(this.$root.username, 'signed out')
+			perf.trace('signOut').start()
 			firebase.auth().signOut().then(() => {
 				this.$root.feedback = 'Signed out successfully.'
 				this.$root.snackbar = true
+				this.$ga.event(this.$root.username, 'signed out')
+				perf.trace('signOut').stop()
 			})
 		},
 		changePass() {

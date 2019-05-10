@@ -109,7 +109,7 @@ export default {
 			editing: null,
 			flamechatEnable: true,
 			chatroom: null,
-			rooms: [],
+			chatrooms: [],
 			flamechatHTML: null,
 			profilePopupUsername: '',
 			profilePopupEnable: false,
