@@ -6,7 +6,6 @@ import Roadmap from './views/Company/Roadmap'
 import Terms from './views/Company/Terms'
 import Notice from './views/Company/Notice'
 import Drawer from './views/Drawer'
-import Launchpad from './views/Launchpad'
 import Scorecard from './views/Scorecard'
 import Support from './views/Company/Support'
 import News from './views/News'
@@ -15,7 +14,6 @@ import Asteroid from './views/Asteroid'
 import NetworkStatus from './views/Company/NetworkStatus'
 import LatestMemes from './views/Latest/Memes'
 import LatestVines from './views/Latest/Vines'
-import Debate from './views/Debate'
 import Inquiry from './views/Admin/Inquiry'
 import Contracts from './views/Devs/Contracts'
 import Databank from './views/Devs/Databank'
@@ -72,11 +70,6 @@ export default new Router({
 		// 	component: Drawer
 		// },
 		// {
-		// 	path: '/launchpad',
-		// 	name: 'Launchpad',
-		// 	component: Launchpad
-		// },
-		// {
 		// 	path: '/scorecard',
 		// 	name: 'Scorecard',
 		// 	component: Scorecard
@@ -120,11 +113,6 @@ export default new Router({
 		// 	path: '/latest/vines',
 		// 	name: 'LatestVines',
 		// 	component: LatestVines
-		// },
-		// {
-		// 	path: '/debate',
-		// 	name: 'Debate',
-		// 	component: Debate
 		// },
 		// {
 		// 	path: '/admin/inquiry',
