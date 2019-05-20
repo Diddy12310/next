@@ -424,23 +424,8 @@ export default {
 		},
 		signUp() {
 			if(this.$root.username && this.password && this.terms && this.$root.accountBio && this.$root.accountColor) {
-				perf.trace('signUp').start()
 				auth.createUserWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(user => {
-					db.collection('users').doc(this.$root.username).set({
-						bio: this.$root.accountBio,
-						color: this.$root.accountColor,
-						moonrocks: 0,
-						isAdmin: false,
-						isInnerCore: false,
-						isAsteroid: false,
-						isAnalytics: false,
-						uid: user.uid,
-						isBanned: false,
-						strikes: 0,
-						isWriter: false
-					})
-					this.$ga.event(this.$root.username, 'signed up')
-					perf.trace('signUp').stop()
+					this.$root.uid = user.user.uid
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
@@ -455,6 +440,21 @@ export default {
 						this.$root.snackbar = true
 					}
 				})
+				db.collection('users').doc(this.$root.username).set({
+					bio: this.$root.accountBio,
+					color: this.$root.accountColor.hex,
+					moonrocks: 0,
+					isAdmin: false,
+					isInnerCore: false,
+					isAsteroid: false,
+					isAnalytics: false,
+					uid: this.$root.uid,
+					isBanned: false,
+					strikes: 0,
+					isWriter: false
+				})
+				this.$root.accountColor = this.$root.accountColor.hex
+				this.$ga.event(this.$root.username, 'signed up')
 			} else {
 				this.$root.feedback = 'Please fill in the required fields.'
 				this.$root.snackbar = true
@@ -664,6 +664,8 @@ export default {
 				this.$root.userPresent = false
 				this.$root.username = ''
 				this.password = ''
+				this.$root.accountBio = ''
+				this.terms = false
 			}
 		})
 

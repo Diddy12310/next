@@ -38,6 +38,7 @@ Vue.mixin({
       isWriter: false,
       loadingBar: false,
       switch: 'Home',
+      uid: ''
     }
   }
 })
