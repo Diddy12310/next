@@ -1,16 +1,16 @@
 <template>
 	<v-app dark>
     <!-- Toolbar -->
-		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown, 'red': lockdown }">
-			<v-toolbar-side-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></v-toolbar-side-icon>
+		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'black': shutdown }">
+			<v-toolbar-side-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned"></v-toolbar-side-icon>
 			<v-toolbar-title>
 				<img style="height: 45px;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent, 'hidden-xs-only': $root.accountColor }">
 				<img style="height: 45px;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
 			</v-toolbar-title>
       <v-spacer></v-spacer>
-      <p v-if="app_loaded" class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
+      <p v-if="app_loaded && !shutdown" class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 			<v-spacer></v-spacer>
-			<v-toolbar-items v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned">
+			<v-toolbar-items v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown">
 				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="$root.isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
@@ -21,8 +21,11 @@
 			<v-toolbar-items v-if="$root.username == 'diddy12310' && lockdown">
 				<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important; top: +16px;"></v-switch>
 			</v-toolbar-items>
-			<v-toolbar-items v-if="$root.username == 'diddy12310' && fourofour">
-				<v-switch @click="fourofourToggle" v-model="fourofour" style="flex: none !important; top: +16px;"></v-switch>
+			<v-toolbar-items v-if="$root.username == 'diddy12310' && global_pnf">
+				<v-switch @click="global_pnfToggle" v-model="global_pnf" style="flex: none !important; top: +16px;"></v-switch>
+			</v-toolbar-items>
+			<v-toolbar-items v-if="$root.username == 'diddy12310' && shutdown">
+				<v-switch @click="toggleShutdown" v-model="shutdown" style="flex: none !important; top: +16px;"></v-switch>
 			</v-toolbar-items>
 		</v-toolbar>
 
@@ -33,19 +36,20 @@
 				<v-toolbar-title>Menu</v-toolbar-title>
 			</v-toolbar>
 
-			<v-list two-line>
-				<v-list-tile @click="$root.app = 'Home', drawer = false" :ripple="{ class: 'grey--text' }">
+			<v-list>
+				<v-list-tile @click="$root.switch = 'Home', drawer = false" :ripple="{ class: 'grey--text' }">
 					<v-list-tile-content>
-            <v-list-tile-title>Home</v-list-tile-title>
+            <v-list-tile-title class="font-weight-light">Home</v-list-tile-title>
           </v-list-tile-content>
 				</v-list-tile>
 
-				<v-list-tile v-for="link in apps" :key="link.route" @click="$root.app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
+				<v-list-tile v-for="link in apps" :key="link.route" @click="$root.switch = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 					<v-list-tile-content>
-            <v-list-tile-title v-html="link.app"></v-list-tile-title>
-            <v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
+            <v-list-tile-title class="font-weight-light" v-html="link.app"></v-list-tile-title>
           </v-list-tile-content>
 				</v-list-tile>
+
+				<v-divider></v-divider>
 
 				<v-list-group>
 					<v-list-tile slot="activator">
@@ -54,10 +58,9 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-tile v-for="link in company" :key="link.route" @click="$root.app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
+					<v-list-tile v-for="link in company" :key="link.route" @click="$root.switch = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 						<v-list-tile-content>
-							<v-list-tile-title v-html="link.app"></v-list-tile-title>
-							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
+							<v-list-tile-title class="font-weight-light" v-html="link.app"></v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
 				</v-list-group>
@@ -69,10 +72,9 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-tile v-for="link in latest" :key="link.route" @click="$root.app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
+					<v-list-tile v-for="link in latest" :key="link.route" @click="$root.switch = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 						<v-list-tile-content>
-							<v-list-tile-title v-html="link.app"></v-list-tile-title>
-							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
+							<v-list-tile-title class="font-weight-light" v-html="link.app"></v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
 				</v-list-group>
@@ -84,10 +86,9 @@
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-tile v-for="link in developers" :key="link.route" @click="$root.app = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
+					<v-list-tile v-for="link in developers" :key="link.route" @click="$root.switch = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
 						<v-list-tile-content>
-							<v-list-tile-title v-html="link.app"></v-list-tile-title>
-							<v-list-tile-sub-title v-html="link.text"></v-list-tile-sub-title>
+							<v-list-tile-title class="font-weight-light" v-html="link.app"></v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
 				</v-list-group>
@@ -107,20 +108,20 @@
 				</v-card-title>
 
 				<v-card-text>
-					<v-tabs fixed-tabs v-if="!$root.userPresent && signUpAvail">
+					<v-tabs fixed-tabs v-if="!$root.userPresent && sign_up_enable">
 						<v-tab>Sign In</v-tab>
 						<v-tab-item>
 							<v-form>
-								<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
-								<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
+								<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username"></v-text-field>
+								<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password"></v-text-field>
 								<v-btn @click="signIn" color="primary">Sign In</v-btn>
 							</v-form>
 						</v-tab-item>
 						<v-tab>Sign Up</v-tab>
 						<v-tab-item>
 							<v-form>
-								<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
-								<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
+								<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username"></v-text-field>
+								<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password"></v-text-field>
 								<v-text-field clearable autocomplete="off" type="text" name="bio" v-model="$root.accountBio" label="Bio"></v-text-field>
 								<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="$root.accountColor" />
 								<v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms"></v-checkbox>
@@ -130,9 +131,9 @@
 						</v-tab-item>
 					</v-tabs>
 
-					<v-form v-if="!$root.userPresent && !signUpAvail">
-						<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username" :rules="usernameRules"></v-text-field>
-						<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password" :rules="passRules"></v-text-field>
+					<v-form v-if="!$root.userPresent && !sign_up_enable">
+						<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username"></v-text-field>
+						<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password"></v-text-field>
 					</v-form>
 
 					<div v-if="$root.userPresent">
@@ -150,7 +151,7 @@
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn v-if="!$root.userPresent && !signUpAvail" @click="signIn" color="primary">Sign In</v-btn>
+					<v-btn v-if="!$root.userPresent && !sign_up_enable" @click="signIn" color="primary">Sign In</v-btn>
 					<v-btn v-if="$root.userPresent" @click="signOut">Sign Out</v-btn>
 				</v-card-actions>
 			</v-card>
@@ -174,7 +175,7 @@
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Change Password</h3></v-card-title>
 				<v-card-text>
-					<v-text-field autocomplete="off" type="password" name="newPassword" v-model="newPassword" label="New Password" :rules="passRules"></v-text-field>
+					<v-text-field autocomplete="off" type="password" name="newPassword" v-model="newPassword" label="New Password"></v-text-field>
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
@@ -225,11 +226,12 @@
 					</v-btn>
 				</v-card-title>
 				<v-card-text>
-					<v-switch @click="toggleSignUp" v-model="signUpAvail" style="flex: none !important;" label="Sign up availability"></v-switch>
+					<v-switch @click="toggleSignUp" v-model="sign_up_enable" style="flex: none !important;" label="Sign up availability"></v-switch>
 					<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Lockdown" color="red"></v-switch>
-					<v-switch @click="fourofourToggle" v-model="fourofour" style="flex: none !important;" label="404" color="deep-purple"></v-switch>
-					<v-switch @click="toggleFc" v-model="flamechatEnable" style="flex: none !important;" label="Flamechat" color="deep-orange"></v-switch>
-					<v-switch @click="toggleFcHTML" v-model="flamechatHTML" style="flex: none !important;" label="Flamechat HTML" color="deep-orange"></v-switch>
+					<v-switch @click="toggleShutdown" v-model="shutdown" style="flex: none !important;" label="Shutdown" color="black"></v-switch>
+					<v-switch @click="global_pnfToggle" v-model="global_pnf" style="flex: none !important;" label="404" color="deep-purple"></v-switch>
+					<v-switch @click="toggleFc" v-model="flamechat_enable" style="flex: none !important;" label="Flamechat" color="deep-orange"></v-switch>
+					<v-switch @click="toggleFcHTML" v-model="flamechat_html_render" style="flex: none !important;" label="Flamechat HTML" color="deep-orange"></v-switch>
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
@@ -244,48 +246,53 @@
 		<!-- Site content -->
 		<v-content v-if="app_loaded">
 			<v-container fluid style="padding: 0;">
-				<!-- <router-view v-if="$root.userPresent && !lockdown && !fourofour && !$root.isBanned"></router-view> -->
-				<Home v-if="$root.app == 'Home' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Flamechat v-if="$root.app == 'Flamechat' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Roadmap v-if="$root.app == 'Roadmap' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Terms v-if="$root.app == 'Terms' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Drawer v-if="$root.app == 'Drawer' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Launchpad v-if="$root.app == 'Launchpad' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Scorecard v-if="$root.app == 'Scorecard' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Support v-if="$root.app == 'Support' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<News v-if="$root.app == 'News' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Satellite v-if="$root.app == 'Satellite' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Asteroid v-if="$root.app == 'Asteroid' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<NetworkStatus v-if="$root.app == 'NetworkStatus' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<LatestMemes v-if="$root.app == 'LatestMemes' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<LatestVines v-if="$root.app == 'LatestVines' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Debate v-if="$root.app == 'Debate' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Inquiry v-if="$root.app == 'Inquiry' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Contracts v-if="$root.app == 'Contracts' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Databank v-if="$root.app == 'Databank' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Relay v-if="$root.app == 'Relay' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<UserControl v-if="$root.app == 'UserControl' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<Media v-if="$root.app == 'Media' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<PageNotFound v-if="$root.app == 'PageNotFound' && $root.userPresent && !lockdown && !fourofour && !$root.isBanned"/>
-				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !fourofour" style="text-align: center;">
+				<!-- <router-view v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned"></router-view> -->
+				<Home v-if="$root.switch == 'Home' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Flamechat v-if="$root.switch == 'Flamechat' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Roadmap v-if="$root.switch == 'Roadmap' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Terms v-if="$root.switch == 'Terms' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Drawer v-if="$root.switch == 'Drawer' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Launchpad v-if="$root.switch == 'Launchpad' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Scorecard v-if="$root.switch == 'Scorecard' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Support v-if="$root.switch == 'Support' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<News v-if="$root.switch == 'News' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Satellite v-if="$root.switch == 'Satellite' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Asteroid v-if="$root.switch == 'Asteroid' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<NetworkStatus v-if="$root.switch == 'NetworkStatus' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<LatestMemes v-if="$root.switch == 'LatestMemes' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<LatestVines v-if="$root.switch == 'LatestVines' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Debate v-if="$root.switch == 'Debate' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Inquiry v-if="$root.switch == 'Inquiry' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Contracts v-if="$root.switch == 'Contracts' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Databank v-if="$root.switch == 'Databank' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Relay v-if="$root.switch == 'Relay' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<UserControl v-if="$root.switch == 'UserControl' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Media v-if="$root.switch == 'Media' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<PageNotFound v-if="$root.switch == 'PageNotFound' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !global_pnf" style="text-align: center;">
 					<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">Welcome!</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
 					<v-btn color="deep-purple" @click="dialog = true">Login</v-btn>
 				</div>
-				<div class="lockdown" v-if="lockdown" style="text-align: center;">
+				<div class="lockdown" v-if="lockdown && !shutdown" style="text-align: center;">
 					<v-icon style="font-size: 75px; margin-top: 100px;" color="red">block</v-icon>
 					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Nope.</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Entry is not permitted.</h3>
 				</div>
-				<div class="banned" v-if="$root.isBanned && !lockdown && !fourofour" style="text-align: center;">
+				<div class="banned" v-if="$root.isBanned && !lockdown && !global_pnf && !shutdown" style="text-align: center;">
 					<v-icon style="font-size: 75px; margin-top: 100px;" color="red">block</v-icon>
 					<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Sorry!</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">But, you've been banned.</h3>
 				</div>
-				<div class="fourofour" v-if="fourofour && !lockdown" style="text-align: center;">
+				<div class="global_pnf" v-if="global_pnf && !lockdown && !shutdown" style="text-align: center;">
 					<v-icon style="font-size: 75px; margin-top: 100px;" color="deep-purple darken-3">warning</v-icon>
 					<h1 class="display-3 deep-purple--text darken-3 font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">404</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Page not found.<br>There is probably an issue with the server.</h3>
+				</div>
+				<div class="global_pnf" v-if="shutdown" style="text-align: center;">
+					<v-icon style="font-size: 75px; margin-top: 100px;" color="black">highlight_off</v-icon>
+					<h1 class="display-3 black--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Shutdown</h1>
+					<h3 class="headline font-weight-light grey--text darken-4" style="margin: 25px;">Paradigm has been shut down.</h3>
 				</div>
 			</v-container>
 			<v-progress-linear :indeterminate="true" v-if="$root.loadingBar" class="loading-bar"></v-progress-linear>
@@ -295,19 +302,17 @@
 		<v-snackbar v-model="$root.snackbar" bottom left :timeout="2000">{{ $root.feedback }}</v-snackbar>
 
 		<!-- Footer -->
-		<v-footer>
+		<v-footer v-if="!shutdown">
 			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm</span></div>
 		</v-footer>
 	</v-app>
 </template>
 
 <script>
-import { db, perf } from '@/firebase'
+import { db, perf, auth } from './firebase'
 import firebase from 'firebase/app'
-import 'firebase/auth'
 import moment from 'moment'
 import { Swatches } from 'vue-color'
-import LogRocket from 'logrocket'
 
 // ------------------------------
 
@@ -369,28 +374,23 @@ export default {
 			],
 			password: '',
 			dialog: false,
-			usernameRules: [
-				value => value.length >= 3 || 'Minimum length is 3 characters',
-			],
-			passRules: [
-				value => value.length >= 8 || 'Minimum length is 8 characters'
-			],
 			userInfo: null,
 			newPassword: null,
-			signUpAvail: null,
+			sign_up_enable: null,
 			terms: false,
 			deleteDialog: false,
 			lockdown: null,
-			flamechatEnable: null,
-			fourofour: null,
-			flamechatHTML: null,
+			flamechat_enable: true,
+			global_pnf: null,
+			flamechat_html_render: true,
 			newPasswordDialog: false,
 			adminDialog: false,
 			newColorDialog: false,
 			newBioDialog: false,
 			currentTime: '',
 			currentDate: '',
-			app_loaded: false
+			app_loaded: false,
+			shutdown: false
 		}
 	},
 	methods: {
@@ -400,7 +400,7 @@ export default {
 		signIn() {
 			if(this.$root.username && this.password) {
 				perf.trace('signIn').start()
-				firebase.auth().signInWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(() => {
+				auth.signInWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(() => {
 					this.dialog = false
 					perf.trace('signIn').stop()
 				}).catch(error => {
@@ -425,7 +425,7 @@ export default {
 		signUp() {
 			if(this.$root.username && this.password && this.terms && this.$root.accountBio && this.$root.accountColor) {
 				perf.trace('signUp').start()
-				firebase.auth().createUserWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(user => {
+				auth.createUserWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(user => {
 					db.collection('users').doc(this.$root.username).set({
 						bio: this.$root.accountBio,
 						color: this.$root.accountColor,
@@ -462,7 +462,7 @@ export default {
 		},
 		signOut() {
 			perf.trace('signOut').start()
-			firebase.auth().signOut().then(() => {
+			auth.signOut().then(() => {
 				this.$root.feedback = 'Signed out successfully.'
 				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'signed out')
@@ -470,7 +470,7 @@ export default {
 			})
 		},
 		changePass() {
-			firebase.auth().currentUser.updatePassword(this.newPassword).then(() => {
+			auth.currentUser.updatePassword(this.newPassword).then(() => {
 				// Update successful.
 				this.newPasswordDialog = false,
 				this.$root.feedback = 'Password changed successfully.'
@@ -485,7 +485,7 @@ export default {
 		},
 		deleteUser() {
 			this.$ga.event(this.$root.username, 'deleted their account')
-			firebase.auth().currentUser.delete().then(() => {
+			auth.currentUser.delete().then(() => {
 				// User deleted.
 				db.collection('users').doc(this.$root.username).delete().then(() => {
 					this.$root.username = null
@@ -502,10 +502,21 @@ export default {
 			this.dialog = false
 		},
 		toggleSignUp() {
-			db.collection('meta').doc('auth').update({
-				signUpAvail: !this.signUpAvail
+			db.collection('paradigm').doc('config').update({
+				sign_up_enable: !this.sign_up_enable
 			}).then(() => {
-				if(this.signUpAvail == true) {
+				if(this.sign_up_enable == true) {
+					this.$ga.event(this.$root.username, 'enabled sign ups')
+				} else {
+					this.$ga.event(this.$root.username, 'disabled sign ups')
+				}
+			})
+		},
+		toggleShutdown() {
+			db.collection('paradigm').doc('config').update({
+				shutdown: !this.shutdown
+			}).then(() => {
+				if(this.sign_up_enable == true) {
 					this.$ga.event(this.$root.username, 'enabled sign ups')
 				} else {
 					this.$ga.event(this.$root.username, 'disabled sign ups')
@@ -513,10 +524,10 @@ export default {
 			})
 		},
 		toggleFcHTML() {
-			db.collection('meta').doc('auth').update({
-				flamechatHTML: !this.flamechatHTML
+			db.collection('paradigm').doc('config').update({
+				flamechat_html_render: !this.flamechat_html_render
 			}).then(() => {
-				if(this.flamechatHTML == true) {
+				if(this.flamechat_html_render == true) {
 					this.$ga.event(this.$root.username, 'enabled Flamechat HTML')
 				} else {
 					this.$ga.event(this.$root.username, 'disabled Flamechat HTML')
@@ -524,7 +535,7 @@ export default {
 			})
 		},
 		lockdownToggle() {
-			db.collection('meta').doc('auth').update({
+			db.collection('paradigm').doc('config').update({
 				lockdown: !this.lockdown
 			}).then(() => {
 				if (this.lockdown == true) {
@@ -538,11 +549,11 @@ export default {
 				}
 			})
 		},
-		fourofourToggle() {
-			db.collection('meta').doc('auth').update({
-				fourofour: !this.fourofour
+		global_pnfToggle() {
+			db.collection('paradigm').doc('config').update({
+				global_pnf: !this.global_pnf
 			}).then(() => {
-				if (this.fourofour == true) {
+				if (this.global_pnf == true) {
 					this.$ga.event(this.$root.username, '404ed')
 					this.$root.feedback = '404 successfully.'
 					this.$root.snackbar = true
@@ -554,13 +565,13 @@ export default {
 			})
 		},
 		toggleFc() {
-			db.collection('meta').doc('auth').update({
-				flamechatEnable: !this.flamechatEnable
+			db.collection('paradigm').doc('config').update({
+				flamechat_enable: !this.flamechat_enable
 			}).then(() => {
-				if (this.flamechatEnable) {
+				if (this.flamechat_enable) {
 					this.$ga.event(this.$root.username, 'enabled Flamechat')
 				}
-				if (!this.flamechatEnable) {
+				if (!this.flamechat_enable) {
 					this.$ga.event(this.$root.username, 'disabled Flamechat')
 				}
 			})
@@ -592,9 +603,9 @@ export default {
 	},
 	created() {
 		this.app_loaded = false
-		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+		auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
 		this.$root.loadingBar = true
-		firebase.auth().onAuthStateChanged(firebaseUser => {
+		auth.onAuthStateChanged(firebaseUser => {
 			this.app_loaded = true
 			if(firebaseUser) {
 				this.$root.feedback = 'Signed in successfully.'
@@ -624,14 +635,6 @@ export default {
 					} else {
 						db.collection('users').doc(this.$root.username).update({ isBanned: false })
 					}
-					LogRocket.identify(this.userInfo.uid, {
-						name: this.$root.username,
-						isAdmin: this.$root.isAdmin,
-						isAsteroid: this.$root.isAsteroid,
-						bio: this.$root.accountBio,
-						color: this.$root.accountColor,
-						moonrocks: this.$root.moonrocks
-					})
 				})
 
 				usersRef.onSnapshot(snapshot => {
@@ -664,27 +667,29 @@ export default {
 			}
 		})
 
-		var metaRef = db.collection('meta')
-		metaRef.doc('auth').get().then((doc) => {
-			this.signUpAvail = doc.data().signUpAvail
+		var metaRef = db.collection('paradigm')
+		metaRef.doc('config').get().then((doc) => {
+			this.sign_up_enable = doc.data().sign_up_enable
 			this.lockdown = doc.data().lockdown
-			this.flamechatEnable = doc.data().flamechatEnable,
-			this.fourofour = doc.data().fourofour,
-			this.flamechatHTML = doc.data().flamechatHTML
+			this.shutdown = doc.data().shutdown
+			this.flamechat_enable = doc.data().flamechat_enable,
+			this.global_pnf = doc.data().global_pnf,
+			this.flamechat_html_render = doc.data().flamechat_html_render
 		})
 
 		metaRef.onSnapshot(snapshot => {
 			snapshot.docChanges().forEach(change => {
 				if(change.type === "modified") {
 					let doc = change.doc
-					this.signUpAvail = doc.data().signUpAvail
+					this.sign_up_enable = doc.data().sign_up_enable
 					this.lockdown = doc.data().lockdown
-					this.flamechatEnable = doc.data().flamechatEnable,
-					this.fourofour = doc.data().fourofour,
-					this.flamechatHTML = doc.data().flamechatHTML
+					this.shutdown = doc.data().shutdown
+					this.flamechat_enable = doc.data().flamechat_enable,
+					this.global_pnf = doc.data().global_pnf,
+					this.flamechat_html_render = doc.data().flamechat_html_render
 				}
 
-				if (this.lockdown || this.fourofour) {
+				if (this.lockdown || this.global_pnf || this.shutdown) {
 					this.newBioDialog = false
 					this.newColorDialog = false
 					this.adminDialog = false

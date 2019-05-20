@@ -5,8 +5,7 @@ import router from './router'
 import VueChatScroll from 'vue-chat-scroll'
 import VueAnalytics from 'vue-analytics'
 import store from './store'
-import LogRocket from 'logrocket'
-import { perf } from 'firebase'
+import { perf } from '@/firebase'
 
 Vue.use(VueAnalytics, {
 	id: 'UA-52752236-3',
@@ -20,7 +19,7 @@ Vue.use(VueChatScroll)
 Vue.mixin({
   methods: {
     route(to) {
-      this.$root.app = to
+      this.$root.switch = to
     }
   },
   data() {
@@ -38,7 +37,7 @@ Vue.mixin({
       snackbar: false,
       isWriter: false,
       loadingBar: false,
-      app: 'Home'
+      switch: 'Home',
     }
   }
 })
@@ -48,5 +47,3 @@ new Vue({
   store,
   render: function(h) { return h(App) }
 }).$mount('div#app')    
-
-LogRocket.init('uvh8hk/paradigm')

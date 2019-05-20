@@ -2,7 +2,8 @@
 	<div class="index">
 		<v-parallax :src="homebg" class="parallax">
 			<div class="home">
-				<h2 class="display-3 font-weight-light text-uppercase" style="position: relative; text-align: center; margin: auto; padding-top: 33vh;">Welcome to<br>the future</h2>
+				<img src="@/assets/plogo.png" alt=""  style="position: relative; text-align: center; margin: auto; padding-top: 30vh;">
+				<h2 class="display-3 font-weight-thin text-uppercase">Paradigm</h2>
 			</div>
 		</v-parallax>
 		<div style="text-align: center; padding: 25px;" class="blue-grey darken-4">

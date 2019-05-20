@@ -39,7 +39,6 @@
 <script>
 import { db } from '@/firebase'
 import moment from 'moment'
-import firebase from 'firebase'
 
 export default {
   name: 'Inquiry',

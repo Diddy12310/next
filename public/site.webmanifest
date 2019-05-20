@@ -1,5 +1,5 @@
 {
-  "name": "Paradigm Development, Inc.",
+  "name": "Paradigm",
   "short_name": "Paradigm",
   "icons": [
     {
@@ -10,5 +10,8 @@
   ],
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
-  "display": "standalone"
+  "display": "standalone",
+  "gcm_sender_id": "103953800507",
+  "start_url": "/",
+  "orientation": "portrait"
 }
