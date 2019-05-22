@@ -58,19 +58,19 @@ export default {
 				case 'set':
 					switch (this.cmd_output[1]) {
 						case 'flamechat_enable':
-							this.toggleFc(this.cmd_output[2])
+							this.toggleFc(this.parseBool(this.cmd_output[2]))
 							break
 						case '404':
-							this.global_pnfToggle(this.cmd_output[2])
+							this.global_pnfToggle(this.parseBool(this.cmd_output[2]))
 							break
 						case 'lockdown':
-							this.lockdownToggle(this.cmd_output[2])
+							this.lockdownToggle(this.parseBool(this.cmd_output[2]))
 							break
 						case 'shutdown':
-							this.toggleShutdown(this.cmd_output[2])
+							this.toggleShutdown(this.parseBool(this.cmd_output[2]))
 							break
 						case 'sign_up_enable':
-							this.toggleSignUp(this.cmd_output[2])
+							this.toggleSignUp(this.parseBool(this.cmd_output[2]))
 							break
 						default:
 							this.cmdError('! command does not exist')
