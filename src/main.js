@@ -12,6 +12,8 @@ Vue.use(VueAnalytics, {
 	router
 })
 
+Vue.config.keyCodes.f1 = 192
+
 Vue.config.productionTip = false
 
 Vue.use(VueChatScroll)
@@ -38,7 +40,8 @@ Vue.mixin({
       isWriter: false,
       loadingBar: false,
       switch: 'Home',
-      uid: ''
+      uid: '',
+      cmdOpen: false
     }
   }
 })

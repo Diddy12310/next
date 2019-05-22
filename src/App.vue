@@ -11,21 +11,17 @@
       <p v-if="app_loaded && !shutdown" class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 			<v-spacer></v-spacer>
 			<v-toolbar-items v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown">
-				<v-btn flat icon @click="adminDialog = true" slot="activator" v-if="$root.isAdmin">
+				<v-btn flat icon @click="$root.cmdOpen = true" slot="activator" v-if="$root.isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
 				<v-btn icon @click="dialog = true">
 					<v-icon>person</v-icon>
 				</v-btn>
 			</v-toolbar-items>
-			<v-toolbar-items v-if="$root.username == 'diddy12310' && lockdown">
-				<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important; top: +16px;"></v-switch>
-			</v-toolbar-items>
-			<v-toolbar-items v-if="$root.username == 'diddy12310' && global_pnf">
-				<v-switch @click="global_pnfToggle" v-model="global_pnf" style="flex: none !important; top: +16px;"></v-switch>
-			</v-toolbar-items>
-			<v-toolbar-items v-if="$root.username == 'diddy12310' && shutdown">
-				<v-switch @click="toggleShutdown" v-model="shutdown" style="flex: none !important; top: +16px;"></v-switch>
+			<v-toolbar-items v-if="shutdown || lockdown || global_pnf && !$root.isBanned">
+				<v-btn flat icon @click="$root.cmdOpen = true" slot="activator" v-if="$root.isAdmin">
+					<v-icon>settings</v-icon>
+				</v-btn>
 			</v-toolbar-items>
 		</v-toolbar>
 
@@ -114,7 +110,7 @@
 							<v-form>
 								<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username"></v-text-field>
 								<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password"></v-text-field>
-								<v-btn @click="signIn" color="primary">Sign In</v-btn>
+								<v-btn @click="signIn" color="accent" flat>Sign In</v-btn>
 							</v-form>
 						</v-tab-item>
 						<v-tab>Sign Up</v-tab>
@@ -125,8 +121,8 @@
 								<v-text-field clearable autocomplete="off" type="text" name="bio" v-model="$root.accountBio" label="Bio"></v-text-field>
 								<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="$root.accountColor" />
 								<v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms"></v-checkbox>
-								<v-btn href="http://relay.theparadigmdev.com/terms.html">View Terms</v-btn>
-								<v-btn @click="signUp" color="primary">Sign Up</v-btn>
+								<v-btn href="http://relay.theparadigmdev.com/terms.html" flat color="blue-grey lighten-2">View Terms</v-btn>
+								<v-btn @click="signUp" color="accent" flat>Sign Up</v-btn>
 							</v-form>
 						</v-tab-item>
 					</v-tabs>
@@ -151,8 +147,8 @@
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn v-if="!$root.userPresent && !sign_up_enable" @click="signIn" color="primary">Sign In</v-btn>
-					<v-btn v-if="$root.userPresent" @click="signOut">Sign Out</v-btn>
+					<v-btn v-if="!$root.userPresent && !sign_up_enable" @click="signIn" color="accent" flat>Sign In</v-btn>
+					<v-btn v-if="$root.userPresent" @click="signOut" color="accent" flat>Sign Out</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -165,7 +161,7 @@
 				<v-divider></v-divider>
 				<v-card-actions>
 					<v-btn @click="deleteUser" color="error" flat>Yes</v-btn>
-					<v-btn @click="deleteDialog = false" color="green">Cancel</v-btn>
+					<v-btn @click="deleteDialog = false" color="green" flat>Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -216,12 +212,16 @@
 		</v-dialog>
 
 		<!-- Admin dialog -->
-		<v-dialog v-model="adminDialog" max-width="500" v-if="$root.isAdmin">
+		<v-bottom-sheet v-model="$root.cmdOpen" v-if="$root.isAdmin">
+			<Terminal />
+    </v-bottom-sheet>
+
+		<!-- <v-dialog v-model="$root.cmdOpen" max-width="500" v-if="$root.isAdmin">
 			<v-card>
 				<v-card-title>
 					<h3 class="headline mb-0">Mission Control</h3>
 					<v-spacer></v-spacer>
-					<v-btn icon @click="adminDialog = false" class="dialog-close-btn">
+					<v-btn icon @click="$root.cmdOpen = false" class="dialog-close-btn">
 						<v-icon>close</v-icon>
 					</v-btn>
 				</v-card-title>
@@ -238,10 +238,10 @@
 					<v-btn flat color="deep-orange" href="https://console.firebase.google.com/project/paradigm-a1bc9/overview">Firebase</v-btn>
 					<v-btn flat color="deep-purple lighten-1" href="https://app.logrocket.com/uvh8hk/paradigm">LogRocket</v-btn>
 					<v-btn flat color="blue" href="https://search.google.com/search-console?resource_id=sc-domain:theparadigmdev.com">Search</v-btn>
-					<v-btn flat color="deep-purple lighten-1" router to="/admin/inquiry" @click="adminDialog = false">Inquiry</v-btn>
+					<v-btn flat color="deep-purple lighten-1" router to="/admin/inquiry" @click="$root.cmdOpen = false">Inquiry</v-btn>
 				</v-card-actions>
 			</v-card>
-		</v-dialog>
+		</v-dialog> -->
 
 		<!-- Site content -->
 		<v-content v-if="app_loaded">
@@ -252,7 +252,6 @@
 				<Roadmap v-if="$root.switch == 'Roadmap' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Terms v-if="$root.switch == 'Terms' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Drawer v-if="$root.switch == 'Drawer' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Launchpad v-if="$root.switch == 'Launchpad' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Scorecard v-if="$root.switch == 'Scorecard' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Support v-if="$root.switch == 'Support' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<News v-if="$root.switch == 'News' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
@@ -261,7 +260,6 @@
 				<NetworkStatus v-if="$root.switch == 'NetworkStatus' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<LatestMemes v-if="$root.switch == 'LatestMemes' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<LatestVines v-if="$root.switch == 'LatestVines' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Debate v-if="$root.switch == 'Debate' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Inquiry v-if="$root.switch == 'Inquiry' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Contracts v-if="$root.switch == 'Contracts' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Databank v-if="$root.switch == 'Databank' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
@@ -321,7 +319,6 @@ import Flamechat from './views/Flamechat'
 import Roadmap from './views/Company/Roadmap'
 import Terms from './views/Company/Terms'
 import Drawer from './views/Drawer'
-import Launchpad from './views/Launchpad'
 import Scorecard from './views/Scorecard'
 import Support from './views/Company/Support'
 import News from './views/News'
@@ -330,7 +327,6 @@ import Asteroid from './views/Asteroid'
 import NetworkStatus from './views/Company/NetworkStatus'
 import LatestMemes from './views/Latest/Memes'
 import LatestVines from './views/Latest/Vines'
-import Debate from './views/Debate'
 import Inquiry from './views/Admin/Inquiry'
 import Contracts from './views/Devs/Contracts'
 import Databank from './views/Devs/Databank'
@@ -339,12 +335,13 @@ import About from './views/Company/About'
 import UserControl from './views/Admin/UserControl'
 import Media from './views/Media'
 import PageNotFound from './views/404'
+import Terminal from './components/Terminal'
 
 export default {
 	name: 'Paradigm',
 	components: {
-		Swatches, Home, Flamechat, Roadmap, Terms, Drawer, Launchpad, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
-		LatestVines, Debate, Inquiry, Contracts, Databank, Relay, UserControl, Media, PageNotFound
+		Swatches, Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
+		LatestVines, Inquiry, Contracts, Databank, Relay, UserControl, Media, PageNotFound, Terminal
 	},
 	data() {
 		return {
@@ -384,13 +381,12 @@ export default {
 			global_pnf: null,
 			flamechat_html_render: true,
 			newPasswordDialog: false,
-			adminDialog: false,
 			newColorDialog: false,
 			newBioDialog: false,
 			currentTime: '',
 			currentDate: '',
 			app_loaded: false,
-			shutdown: false
+			shutdown: false,
 		}
 	},
 	methods: {
@@ -501,81 +497,6 @@ export default {
 			this.deleteDialog = false
 			this.dialog = false
 		},
-		toggleSignUp() {
-			db.collection('paradigm').doc('config').update({
-				sign_up_enable: !this.sign_up_enable
-			}).then(() => {
-				if(this.sign_up_enable == true) {
-					this.$ga.event(this.$root.username, 'enabled sign ups')
-				} else {
-					this.$ga.event(this.$root.username, 'disabled sign ups')
-				}
-			})
-		},
-		toggleShutdown() {
-			db.collection('paradigm').doc('config').update({
-				shutdown: !this.shutdown
-			}).then(() => {
-				if(this.sign_up_enable == true) {
-					this.$ga.event(this.$root.username, 'enabled sign ups')
-				} else {
-					this.$ga.event(this.$root.username, 'disabled sign ups')
-				}
-			})
-		},
-		toggleFcHTML() {
-			db.collection('paradigm').doc('config').update({
-				flamechat_html_render: !this.flamechat_html_render
-			}).then(() => {
-				if(this.flamechat_html_render == true) {
-					this.$ga.event(this.$root.username, 'enabled Flamechat HTML')
-				} else {
-					this.$ga.event(this.$root.username, 'disabled Flamechat HTML')
-				}
-			})
-		},
-		lockdownToggle() {
-			db.collection('paradigm').doc('config').update({
-				lockdown: !this.lockdown
-			}).then(() => {
-				if (this.lockdown == true) {
-					this.$ga.event(this.$root.username, 'locked down')
-					this.$root.feedback = 'Locked down successfully.'
-					this.$root.snackbar = true
-				} else {
-					this.$ga.event(this.$root.username, 'ended the lockdown')
-					this.$root.feedback = 'Lockdown ended successfully.'
-					this.$root.snackbar = true
-				}
-			})
-		},
-		global_pnfToggle() {
-			db.collection('paradigm').doc('config').update({
-				global_pnf: !this.global_pnf
-			}).then(() => {
-				if (this.global_pnf == true) {
-					this.$ga.event(this.$root.username, '404ed')
-					this.$root.feedback = '404 successfully.'
-					this.$root.snackbar = true
-				} else {
-					this.$ga.event(this.$root.username, 'ended the 404')
-					this.$root.feedback = '404 ended successfully.'
-					this.$root.snackbar = true
-				}
-			})
-		},
-		toggleFc() {
-			db.collection('paradigm').doc('config').update({
-				flamechat_enable: !this.flamechat_enable
-			}).then(() => {
-				if (this.flamechat_enable) {
-					this.$ga.event(this.$root.username, 'enabled Flamechat')
-				}
-				if (!this.flamechat_enable) {
-					this.$ga.event(this.$root.username, 'disabled Flamechat')
-				}
-			})
-		},
 		changeColor(newColor) {
 			db.collection('users').doc(this.$root.username).update({
 				color: newColor
@@ -599,7 +520,7 @@ export default {
 			this.currentDate = moment(today).format('MMMM Do YYYY')
 			this.currentTime = moment(today).format('LTS')
 			setTimeout(this.startTime, 500)
-		}
+		},
 	},
 	created() {
 		this.app_loaded = false
@@ -694,7 +615,7 @@ export default {
 				if (this.lockdown || this.global_pnf || this.shutdown) {
 					this.newBioDialog = false
 					this.newColorDialog = false
-					this.adminDialog = false
+					this.$root.cmdOpen = false
 					this.newPasswordDialog = false
 					this.deleteDialog = false
 					this.dialog = false
