@@ -4,7 +4,7 @@
       <v-subheader class="white--text">Terminal</v-subheader>
       <p v-if="profilePopupEnable && usersDbDownloaded" style="font-family: monospace; color: white; padding: 0px 16px 0px 16px;">
         <span :style="{ color: profilePopupData.color }">{{ profilePopupUsername }}</span><br>
-        {{ profilePopupData.uid }}
+        {{ profilePopupData.uid }}<br>
         {{ profilePopupData.bio }}<br>
         ------------------------------------<br>
 				Moonrocks: {{ profilePopupData.moonrocks }}<br>
@@ -12,6 +12,7 @@
         Asteroid: {{ profilePopupData.isAsteroid }}<br>
 				The Inner Core: {{ profilePopupData.isInnerCore }}<br>
 				Writer: {{ profilePopupData.isWriter }}<br>
+				Analytics: {{ profilePopupData.isAnalytics }}<br>
 				Banned: {{ profilePopupData.isBanned }}<br>
 				Strikes: {{ profilePopupData.strikes }}
       </p>
@@ -42,7 +43,6 @@ export default {
   methods: {
     sendCmd() {
       this.cmd_output = this.cmd_input.split(' ')
-      console.log(this.cmd_output)
 			switch (this.cmd_output[0]) {
 				case 'exit':
 					this.$root.cmdOpen = false
@@ -73,36 +73,31 @@ export default {
 					}
 					break
 				case 'user':
-					if (this.checkIfUser(this.cmd_output[1])) {
-						switch (this.cmd_output[2]) {
-							case 'ban':
-								this.userBan(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-								break
-							case 'admin':
-								this.userAdmin(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-								break
-							case 'view':
-								this.openUsernamePopup(this.cmd_output[1])
-								break
-							case 'strike':
-								this.userStrike(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-								break
-							case 'the_inner_core':
-								this.userTIC(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-								break
-							case 'asteroid':
-								this.userAsteroid(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-								break
-							case 'writer':
-								this.userWriter(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-								break
-							default:
-								this.cmd_error = '! command does not exist'
-								this.cmdError()
-						}
-					} else {
-						this.cmdError()
-						this.cmd_error = '! user does not exist'
+					switch (this.cmd_output[2]) {
+						case 'ban':
+							this.userBan(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+							break
+						case 'admin':
+							this.userAdmin(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+							break
+						case 'view':
+							this.openUsernamePopup(this.cmd_output[1])
+							break
+						case 'strike':
+							this.userStrike(this.cmd_output[1], this.cmd_output[3])
+							break
+						case 'the_inner_core':
+							this.userTIC(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+							break
+						case 'asteroid':
+							this.userAsteroid(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+							break
+						case 'writer':
+							this.userWriter(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+							break
+						case 'analytics':
+							this.userAnalytics(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+							break
 					}
 					break
 				case 'switch':
@@ -111,11 +106,6 @@ export default {
 				case 'clear':
 					this.profilePopupEnable = false
 					break
-				default:
-					this.cmdError('! this command does not exist')
-			}
-			if (this.cmd_output[0] == 'clear') {
-				this.profilePopupEnable = false
 			}
 			this.cmd_input = ''
 			this.cmd_output = ''
@@ -134,25 +124,25 @@ export default {
       db.collection('users').doc(username).update({
         isAdmin: input
       })
+		},
+		userAnalytics(username, input) {
+      db.collection('users').doc(username).update({
+        isAnalytics: input
+      })
     },
     userStrike(username, input) {
       db.collection('users').doc(username).get().then(doc => {
         var current = parseInt(doc.data().strikes, 10)
-        var input_int = parseInt(input, 10)
-        if (current + input_int <= 3) {
-          db.collection('users').doc(username).update({
-            strikes: current + input_int
-          }).then(() => {
-            if (current + input_int >= 3) {
-              if (db.collection('users').doc(username).get().then(doc => doc.data().isBanned)) {
-                db.collection('users').doc(username).update({ isBanned: true })
-              }
-            }
-          })
-        } else {
-					this.cmdError()
-					this.cmd_error = '! strikes cannot be greater than 3'
-        }
+				var input_int = parseInt(input, 10)
+				db.collection('users').doc(username).update({
+					strikes: current + input_int
+				}).then(() => {
+					if (current + input_int >= 3) {
+						if (db.collection('users').doc(username).get().then(doc => doc.data().isBanned)) {
+							db.collection('users').doc(username).update({ isBanned: true })
+						}
+					}
+				})
 			})
     },
     userTIC(username, input) {
