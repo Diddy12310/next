@@ -41,7 +41,7 @@ Vue.mixin({
       loadingBar: false,
       switch: 'Home',
       uid: '',
-      cmdOpen: false
+      terminalOpen: false
     }
   }
 })

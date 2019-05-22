@@ -3,7 +3,7 @@
     <div style="background-color: black;">
       <v-subheader class="white--text">Terminal</v-subheader>
       <p v-if="profilePopupEnable && usersDbDownloaded" style="font-family: monospace; color: white; padding: 0px 16px 0px 16px;">
-        <span :style="{ color: profilePopupData.color }">{{ profilePopupUsername }}</span><br>
+        <span :style="{ 'color': profilePopupData.color, 'font-size': '14px' }">{{ profilePopupUsername }}</span><br>
         {{ profilePopupData.uid }}<br>
         {{ profilePopupData.bio }}<br>
         ------------------------------------<br>
@@ -16,6 +16,7 @@
 				Banned: {{ profilePopupData.isBanned }}<br>
 				Strikes: {{ profilePopupData.strikes }}
       </p>
+			<p v-if="cmd_console_open" :style="{ 'color': cmd_console_color, 'font-family': 'monospace', 'padding': '0px 16px 0px 16px' }">{{ cmd_console }}</p>
       <form @submit.prevent="sendCmd()">
         <input placeholder="> enter command" autofocus :disabled="!cmd_enabled" :class="cmd_class" style="font-family: monospace; width: 100%; height: 100%; padding: 0px 16px 16px 16px;" v-model="cmd_input">
       </form>
@@ -37,7 +38,10 @@ export default {
       profilePopupEnable: false,
       usersDbDownloaded: false,
 			profilePopupData: null,
-			profilePopupUsername: ''
+			profilePopupUsername: '',
+			cmd_console_open: false,
+			cmd_console: '',
+			cmd_console_color: ''
     }
   },
   methods: {
@@ -45,7 +49,7 @@ export default {
       this.cmd_output = this.cmd_input.split(' ')
 			switch (this.cmd_output[0]) {
 				case 'exit':
-					this.$root.cmdOpen = false
+					this.$root.terminalOpen = false
 					this.profilePopupEnable = false
 					break
 				case 'help':
@@ -105,6 +109,16 @@ export default {
 					break
 				case 'clear':
 					this.profilePopupEnable = false
+					this.cmd_console = ''
+					this.cmd_console_open = false
+					break
+				case 'console':
+					this.cmd_console = ''
+					for (var array_pos = 2; array_pos < this.cmd_output.length; array_pos++) {
+						this.cmd_console = this.cmd_console + ' ' + this.cmd_output[array_pos]
+					}
+					this.cmd_console_color = this.cmd_output[1]
+					this.cmd_console_open = true
 					break
 			}
 			this.cmd_input = ''

@@ -11,7 +11,7 @@
       <p v-if="app_loaded && !shutdown" class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 			<v-spacer></v-spacer>
 			<v-toolbar-items v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown">
-				<v-btn flat icon @click="$root.cmdOpen = true" slot="activator" v-if="$root.isAdmin">
+				<v-btn flat icon @click="$root.terminalOpen = true" slot="activator" v-if="$root.isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
 				<v-btn icon @click="dialog = true">
@@ -19,7 +19,7 @@
 				</v-btn>
 			</v-toolbar-items>
 			<v-toolbar-items v-if="shutdown || lockdown || global_pnf && !$root.isBanned">
-				<v-btn flat icon @click="$root.cmdOpen = true" slot="activator" v-if="$root.isAdmin">
+				<v-btn flat icon @click="$root.terminalOpen = true" slot="activator" v-if="$root.isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
 			</v-toolbar-items>
@@ -212,16 +212,16 @@
 		</v-dialog>
 
 		<!-- Admin dialog -->
-		<v-bottom-sheet v-model="$root.cmdOpen" v-if="$root.isAdmin">
+		<v-bottom-sheet v-model="$root.terminalOpen" v-if="$root.isAdmin">
 			<Terminal />
     </v-bottom-sheet>
 
-		<!-- <v-dialog v-model="$root.cmdOpen" max-width="500" v-if="$root.isAdmin">
+		<!-- <v-dialog v-model="$root.terminalOpen" max-width="500" v-if="$root.isAdmin">
 			<v-card>
 				<v-card-title>
 					<h3 class="headline mb-0">Mission Control</h3>
 					<v-spacer></v-spacer>
-					<v-btn icon @click="$root.cmdOpen = false" class="dialog-close-btn">
+					<v-btn icon @click="$root.terminalOpen = false" class="dialog-close-btn">
 						<v-icon>close</v-icon>
 					</v-btn>
 				</v-card-title>
@@ -238,7 +238,7 @@
 					<v-btn flat color="deep-orange" href="https://console.firebase.google.com/project/paradigm-a1bc9/overview">Firebase</v-btn>
 					<v-btn flat color="deep-purple lighten-1" href="https://app.logrocket.com/uvh8hk/paradigm">LogRocket</v-btn>
 					<v-btn flat color="blue" href="https://search.google.com/search-console?resource_id=sc-domain:theparadigmdev.com">Search</v-btn>
-					<v-btn flat color="deep-purple lighten-1" router to="/admin/inquiry" @click="$root.cmdOpen = false">Inquiry</v-btn>
+					<v-btn flat color="deep-purple lighten-1" router to="/admin/inquiry" @click="$root.terminalOpen = false">Inquiry</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog> -->
@@ -615,7 +615,6 @@ export default {
 				if (this.lockdown || this.global_pnf || this.shutdown) {
 					this.newBioDialog = false
 					this.newColorDialog = false
-					this.$root.cmdOpen = false
 					this.newPasswordDialog = false
 					this.deleteDialog = false
 					this.dialog = false
