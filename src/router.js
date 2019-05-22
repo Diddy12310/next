@@ -14,7 +14,6 @@ import Asteroid from './views/Asteroid'
 import NetworkStatus from './views/Company/NetworkStatus'
 import LatestMemes from './views/Latest/Memes'
 import LatestVines from './views/Latest/Vines'
-import Inquiry from './views/Admin/Inquiry'
 import Contracts from './views/Devs/Contracts'
 import Databank from './views/Devs/Databank'
 import Relay from './views/Devs/Relay'
@@ -113,11 +112,6 @@ export default new Router({
 		// 	path: '/latest/vines',
 		// 	name: 'LatestVines',
 		// 	component: LatestVines
-		// },
-		// {
-		// 	path: '/admin/inquiry',
-		// 	name: 'Inquiry',
-		// 	component: Inquiry
 		// },
 		// {
 		// 	path: '/dev/contracts',

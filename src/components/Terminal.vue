@@ -57,7 +57,7 @@ export default {
 					break
 				case 'set':
 					switch (this.cmd_output[1]) {
-						case 'flamechat_enable':
+						case 'flamechat':
 							this.toggleFc(this.parseBool(this.cmd_output[2]))
 							break
 						case '404':
@@ -69,7 +69,7 @@ export default {
 						case 'shutdown':
 							this.toggleShutdown(this.parseBool(this.cmd_output[2]))
 							break
-						case 'sign_up_enable':
+						case 'sign_up':
 							this.toggleSignUp(this.parseBool(this.cmd_output[2]))
 							break
 						default:

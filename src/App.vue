@@ -260,7 +260,6 @@
 				<NetworkStatus v-if="$root.switch == 'NetworkStatus' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<LatestMemes v-if="$root.switch == 'LatestMemes' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<LatestVines v-if="$root.switch == 'LatestVines' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Inquiry v-if="$root.switch == 'Inquiry' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Contracts v-if="$root.switch == 'Contracts' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Databank v-if="$root.switch == 'Databank' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Relay v-if="$root.switch == 'Relay' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
@@ -327,7 +326,6 @@ import Asteroid from './views/Asteroid'
 import NetworkStatus from './views/Company/NetworkStatus'
 import LatestMemes from './views/Latest/Memes'
 import LatestVines from './views/Latest/Vines'
-import Inquiry from './views/Admin/Inquiry'
 import Contracts from './views/Devs/Contracts'
 import Databank from './views/Devs/Databank'
 import Relay from './views/Devs/Relay'
@@ -341,7 +339,7 @@ export default {
 	name: 'Paradigm',
 	components: {
 		Swatches, Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
-		LatestVines, Inquiry, Contracts, Databank, Relay, UserControl, Media, PageNotFound, Terminal
+		LatestVines, Contracts, Databank, Relay, UserControl, Media, PageNotFound, Terminal
 	},
 	data() {
 		return {
