@@ -263,7 +263,6 @@
 				<Contracts v-if="$root.switch == 'Contracts' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Databank v-if="$root.switch == 'Databank' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Relay v-if="$root.switch == 'Relay' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<UserControl v-if="$root.switch == 'UserControl' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Media v-if="$root.switch == 'Media' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<PageNotFound v-if="$root.switch == 'PageNotFound' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !global_pnf" style="text-align: center;">
@@ -330,7 +329,6 @@ import Contracts from './views/Devs/Contracts'
 import Databank from './views/Devs/Databank'
 import Relay from './views/Devs/Relay'
 import About from './views/Company/About'
-import UserControl from './views/Admin/UserControl'
 import Media from './views/Media'
 import PageNotFound from './views/404'
 import Terminal from './components/Terminal'
@@ -339,7 +337,7 @@ export default {
 	name: 'Paradigm',
 	components: {
 		Swatches, Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
-		LatestVines, Contracts, Databank, Relay, UserControl, Media, PageNotFound, Terminal
+		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal
 	},
 	data() {
 		return {

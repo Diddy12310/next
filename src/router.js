@@ -18,7 +18,6 @@ import Contracts from './views/Devs/Contracts'
 import Databank from './views/Devs/Databank'
 import Relay from './views/Devs/Relay'
 import About from './views/Company/About'
-import UserControl from './views/Admin/UserControl'
 import Media from './views/Media'
 import PageNotFound from './views/404'
 import Weather from './views/Weather'
@@ -132,11 +131,6 @@ export default new Router({
 		// 	path: '/company/about',
 		// 	name: 'About',
 		// 	component: About
-		// },
-		// {
-		// 	path: '/admin/users',
-		// 	name: 'UserControl',
-		// 	component: UserControl
 		// },
 		// {
 		// 	path: '/media',
