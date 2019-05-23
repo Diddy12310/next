@@ -6,7 +6,7 @@
         <span :style="{ 'color': profilePopupData.color, 'font-size': '14px' }">{{ profilePopupUsername }}</span><br>
         {{ profilePopupData.uid }}<br>
         {{ profilePopupData.bio }}<br>
-        ------------------------------------<br>
+        --------------------------------------<br>
 				Moonrocks: {{ profilePopupData.moonrocks }}<br>
 				Admin: {{ profilePopupData.isAdmin }}<br>
         Asteroid: {{ profilePopupData.isAsteroid }}<br>
@@ -14,7 +14,8 @@
 				Writer: {{ profilePopupData.isWriter }}<br>
 				Analytics: {{ profilePopupData.isAnalytics }}<br>
 				Banned: {{ profilePopupData.isBanned }}<br>
-				Strikes: {{ profilePopupData.strikes }}
+				Strikes: {{ profilePopupData.strikes }}<br>
+				Logged in: {{ profilePopupData.isLoggedIn }}
       </p>
 			<p v-if="cmd_console_open" :style="{ 'color': cmd_console_color, 'font-family': 'monospace', 'padding': '0px 16px 0px 16px' }">{{ cmd_console }}</p>
       <form @submit.prevent="sendCmd()">

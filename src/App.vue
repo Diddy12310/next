@@ -211,7 +211,7 @@
 			</v-card>
 		</v-dialog>
 
-		<!-- Admin dialog -->
+		<!-- Admin terminal -->
 		<v-bottom-sheet v-model="$root.terminalOpen" v-if="$root.isAdmin">
 			<Terminal />
     </v-bottom-sheet>
@@ -396,6 +396,7 @@ export default {
 				perf.trace('signIn').start()
 				auth.signInWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(() => {
 					this.dialog = false
+					db.collection('users').doc(this.$root.username).update({ isLoggedIn: true })
 					perf.trace('signIn').stop()
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
@@ -445,7 +446,8 @@ export default {
 					uid: this.$root.uid,
 					isBanned: false,
 					strikes: 0,
-					isWriter: false
+					isWriter: false,
+					isLoggedIn: true
 				})
 				this.$root.accountColor = this.$root.accountColor.hex
 				this.$ga.event(this.$root.username, 'signed up')
@@ -457,6 +459,7 @@ export default {
 		signOut() {
 			perf.trace('signOut').start()
 			auth.signOut().then(() => {
+				db.collection('users').doc(this.$root.username).update({ isLoggedIn: false })
 				this.$root.feedback = 'Signed out successfully.'
 				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'signed out')
