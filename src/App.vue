@@ -264,6 +264,8 @@
 				<Databank v-if="$root.switch == 'Databank' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Relay v-if="$root.switch == 'Relay' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<Media v-if="$root.switch == 'Media' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Weather v-if="$root.switch == 'Weather' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<Notice v-if="$root.switch == 'Notice' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<PageNotFound v-if="$root.switch == 'PageNotFound' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !global_pnf" style="text-align: center;">
 					<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">Welcome!</h1>
@@ -332,38 +334,41 @@ import About from './views/Company/About'
 import Media from './views/Media'
 import PageNotFound from './views/404'
 import Terminal from './components/Terminal'
+import Weather from './views/Weather'
+import Notice from './views/Company/Notice'
 
 export default {
 	name: 'Paradigm',
 	components: {
 		Swatches, Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
-		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal
+		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice
 	},
 	data() {
 		return {
 			drawer: false,
 			apps: [
-				{ text: 'Chat with a friend', route: 'Flamechat', app: 'Flamechat' },
-				{ text: 'Read the news', route: 'News', app: 'The Paradox' },
-				{ text: 'Browse the Internet', route: 'Satellite', app: 'Satellite' },
-				{ text: 'Paradigm premium subscription', route: 'Asteroid', app: 'Asteroid' },
-				{ text: 'See the latest scores', route: 'Scorecard', app: 'Scorecard' },
-				{ text: 'Store your files', route: 'Drawer', app: 'Drawer' },
-				{ text: 'Books, movies, music, and TV shows', route: 'Media', app: 'Media' },
+				{ route: 'Flamechat', app: 'Flamechat' },
+				{ route: 'News', app: 'The Paradox' },
+				{ route: 'Satellite', app: 'Satellite' },
+				{ route: 'Asteroid', app: 'Asteroid' },
+				{ route: 'Scorecard', app: 'Scorecard' },
+				{ route: 'Drawer', app: 'Drawer' },
+				{ route: 'Media', app: 'Media' },
+				{ route: 'Weather', app: 'Weather' },
 			],
 			company: [
-				{ text: 'Get some help', route: 'Support', app: 'Support' },
-				{ text: 'What&#39s coming soon', route: 'Roadmap', app: 'Roadmap' },
-				{ text: 'Read it', route: 'Terms', app: 'Terms of Use, Service, and Privacy Policy' },
-				{ text: 'Company status', route: 'NetworkStatus', app: 'Network Status' },
+				{ route: 'Support', app: 'Support' },
+				{ route: 'Roadmap', app: 'Roadmap' },
+				{ route: 'Terms', app: 'Terms of Use, Service, and Privacy Policy' },
+				{ route: 'NetworkStatus', app: 'Network Status' },
 			],
 			latest: [
-				{ text: 'Have a laugh', route: 'LatestMemes', app: 'Latest Memes' },
+				{ route: 'LatestMemes', app: 'Memes' },
 			],
 			developers: [
-				{ text: 'Have us build you a website', route: 'Contracts', app: 'Contracting' },
-				{ text: 'Host your website', route: 'Relay', app: 'Relay' },
-				{ text: 'Add a database to your website', route: 'Databank', app: 'Databank' },
+				{ route: 'Contracts', app: 'Contracting' },
+				{ route: 'Relay', app: 'Relay' },
+				{ route: 'Databank', app: 'Databank' },
 			],
 			password: '',
 			dialog: false,
@@ -418,7 +423,23 @@ export default {
 		signUp() {
 			if(this.$root.username && this.password && this.terms && this.$root.accountBio && this.$root.accountColor) {
 				auth.createUserWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(user => {
-					this.$root.uid = user.user.uid
+					this.$root.username = user.user.email.substring(0, user.user.email.lastIndexOf("@"))
+					db.collection('users').doc(this.$root.username).set({
+						bio: this.$root.accountBio,
+						color: this.$root.accountColor.hex,
+						moonrocks: 0,
+						isAdmin: false,
+						isInnerCore: false,
+						isAsteroid: false,
+						isAnalytics: false,
+						uid: user.user.uid,
+						isBanned: false,
+						strikes: 0,
+						isWriter: false,
+						isLoggedIn: true
+					})
+					this.$root.accountColor = this.$root.accountColor.hex
+					this.$ga.event(this.$root.username, 'signed up')
 				}).catch(error => {
 					if(error.code == 'auth/invalid-email') {
 						this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
@@ -431,27 +452,11 @@ export default {
 					if(error.code != 'auth/invalid-email' || 'auth/wrong-password') {
 						this.$root.feedback = error.message
 						this.$root.snackbar = true
+					} else {
+						this.$root.feedback = 'Please fill in the required fields.'
+						this.$root.snackbar = true
 					}
 				})
-				db.collection('users').doc(this.$root.username).set({
-					bio: this.$root.accountBio,
-					color: this.$root.accountColor.hex,
-					moonrocks: 0,
-					isAdmin: false,
-					isInnerCore: false,
-					isAsteroid: false,
-					isAnalytics: false,
-					uid: this.$root.uid,
-					isBanned: false,
-					strikes: 0,
-					isWriter: false,
-					isLoggedIn: true
-				})
-				this.$root.accountColor = this.$root.accountColor.hex
-				this.$ga.event(this.$root.username, 'signed up')
-			} else {
-				this.$root.feedback = 'Please fill in the required fields.'
-				this.$root.snackbar = true
 			}
 		},
 		signOut() {
