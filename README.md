@@ -5,15 +5,12 @@
 npm install
 ```
 
-### Serves in a development server
+### Serves in a local development server
 ```
 npm run serve
 ```
 
-### Compiles for production
+### Compiles for production and pushes to Firebase
 ```
 npm run build
 ```
-
-### Note
-For proper use of the audio player, the component file will need to be updated. For this file, please contact us.
