@@ -291,7 +291,8 @@ export default {
     },
     parseBool(input) {
       if (input == 'true') return true
-      if (input == 'false') return false
+			if (input == 'false') return false
+			if (input != 'true' || input != 'false') return undefined
 		},
 		checkIfUser(input) {
 			db.collection('users').doc(input).get().then(doc => {
