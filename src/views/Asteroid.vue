@@ -9,7 +9,7 @@
 					</div>
 				</v-card-title>
 				<v-divider></v-divider>
-				<v-card-text>The Paradigm installer for Windows.</v-card-text>
+				<v-card-text>The Asteroid installer for Windows.</v-card-text>
 				<v-card-actions>
 					<v-btn v-if="winavail" flat color="accent" :href="windows" download>Download</v-btn>
 					<span v-if="!winavail" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
@@ -23,7 +23,7 @@
 					</div>
 				</v-card-title>
 				<v-divider></v-divider>
-				<v-card-text>The Paradigm installer for macOS.</v-card-text>
+				<v-card-text>The Asteroid installer for macOS.</v-card-text>
 				<v-card-actions>
 					<v-btn v-if="macavail" flat color="accent" :href="macos" download>Download</v-btn>
 					<span v-if="!macavail" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
@@ -52,11 +52,11 @@ export default {
 		}
 	},
 	created() {
-		db.collection('meta').doc('electron').get().then((doc) => {
-			this.windows = doc.data().windows
-			this.macos = doc.data().macos
-			this.winavail = doc.data().winavail
-			this.macavail = doc.data().macavail
+		db.collection('paradigm').doc('config').get().then(doc => {
+			this.windows = doc.data().asteroid_win32.link
+			this.macos = doc.data().asteroid_darwin.link
+			this.winavail = doc.data().asteroid_win32.avail
+			this.macavail = doc.data().asteroid_darwin.avail
 		})
 	}
 }
