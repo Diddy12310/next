@@ -216,33 +216,6 @@
 			<Terminal />
     </v-bottom-sheet>
 
-		<!-- <v-dialog v-model="$root.terminalOpen" max-width="500" v-if="$root.isAdmin">
-			<v-card>
-				<v-card-title>
-					<h3 class="headline mb-0">Mission Control</h3>
-					<v-spacer></v-spacer>
-					<v-btn icon @click="$root.terminalOpen = false" class="dialog-close-btn">
-						<v-icon>close</v-icon>
-					</v-btn>
-				</v-card-title>
-				<v-card-text>
-					<v-switch @click="toggleSignUp" v-model="sign_up_enable" style="flex: none !important;" label="Sign up availability"></v-switch>
-					<v-switch @click="lockdownToggle" v-model="lockdown" style="flex: none !important;" label="Lockdown" color="red"></v-switch>
-					<v-switch @click="toggleShutdown" v-model="shutdown" style="flex: none !important;" label="Shutdown" color="black"></v-switch>
-					<v-switch @click="global_pnfToggle" v-model="global_pnf" style="flex: none !important;" label="404" color="deep-purple"></v-switch>
-					<v-switch @click="toggleFc" v-model="flamechat_enable" style="flex: none !important;" label="Flamechat" color="deep-orange"></v-switch>
-					<v-switch @click="toggleFcHTML" v-model="flamechat_html_render" style="flex: none !important;" label="Flamechat HTML" color="deep-orange"></v-switch>
-				</v-card-text>
-				<v-divider></v-divider>
-				<v-card-actions>
-					<v-btn flat color="deep-orange" href="https://console.firebase.google.com/project/paradigm-a1bc9/overview">Firebase</v-btn>
-					<v-btn flat color="deep-purple lighten-1" href="https://app.logrocket.com/uvh8hk/paradigm">LogRocket</v-btn>
-					<v-btn flat color="blue" href="https://search.google.com/search-console?resource_id=sc-domain:theparadigmdev.com">Search</v-btn>
-					<v-btn flat color="deep-purple lighten-1" router to="/admin/inquiry" @click="$root.terminalOpen = false">Inquiry</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog> -->
-
 		<!-- Site content -->
 		<v-content v-if="app_loaded">
 			<v-container fluid style="padding: 0;">
