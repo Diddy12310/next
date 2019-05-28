@@ -31,7 +31,7 @@
 				<h1 class="display-3 deep-orange--text font-weight-thin text-uppercase" style="margin-bottom: 25px;">Flamechat</h1>
 				<h5 class="headline pb-2 white--text">A common sense chatting app.</h5>
 				<p class="white--text">A chatting app built for the future.</p>
-				<v-btn @click="route('Flamechat')" color="deep-orange">Open Flamechat</v-btn>
+				<v-btn @click="$root.switch = 'Flamechat'" color="deep-orange">Open Flamechat</v-btn>
 			</div>
 		</v-parallax>
 		<!-- <h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 25px; text-align: center;">Updates</h1>
