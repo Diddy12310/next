@@ -15,7 +15,7 @@
 			<v-layout align-center column justify-center>
 				<h1 class="display-3 red--text font-weight-black text-uppercase" style="margin-bottom: 25px;">The Mueller Report</h1>
 				<h5 class="headline pb-2 deep-purple--text font-weight-bold">Special Counsel Robert Mueller and Attorney General William Barr</h5>
-				<p class="white--text">The document we have been waiting for two years has finally been released by the Special Counsel's office. Earlier on April 18th, Attorney General William Barr spoke at a press conference where he summarized the report that he would later that day.</p>
+				<p class="white--text">The document we have been waiting two years for has finally been released by the Special Counsel's office. Earlier on April 18th, Attorney General William Barr spoke at a press conference where he summarized the report that he would later that day.</p>
 				<p class="white--text text-uppercase font-weight-medium">Read the report now.</p>
 				<v-btn href="https://relay.theparadigmdev.com/paradox/robert-mueller-report-into-pres-donald-trump-russia-collusion.pdf" color="red">Read it</v-btn>
 			</v-layout>
@@ -34,7 +34,7 @@
 				<v-btn @click="$root.switch = 'Flamechat'" color="deep-orange">Open Flamechat</v-btn>
 			</div>
 		</v-parallax>
-		<!-- <h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 25px; text-align: center;">Updates</h1>
+		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 25px; text-align: center;">Updates</h1>
 		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 100%; margin: 20px auto; max-width: 600px;">
 			<v-card-title primary-title>
 				<div>
@@ -45,7 +45,7 @@
 			<v-card-text>
 				<div v-for="item in announcement.detail" :key="item" class="item" v-html="item"></div>
 			</v-card-text>
-		</v-card> -->
+		</v-card>
 	</div>
 </template>
 
@@ -61,7 +61,7 @@ export default {
 		}
 	},
   created() {
-		var dbRef = db.collection('announcements').orderBy('time', 'desc').limit(3)
+		var dbRef = db.collection('updates').orderBy('time', 'desc').limit(3)
     dbRef.get().then(snapshot => {
       snapshot.forEach(doc => {
         let announcement = doc.data()

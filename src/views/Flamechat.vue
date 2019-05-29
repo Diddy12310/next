@@ -3,8 +3,8 @@
 		<v-toolbar dense color="deep-orange darken-2" v-if="flamechat_enable">
 			<v-toolbar-title>Flamechat</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-btn v-if="$root.isAdmin && $root.accountColor && ready && chatroom" flat @click="purgeVerifyPopup = true">Purge</v-btn>
-			<v-btn v-if="$root.username && $root.accountColor && ready && chatroom" flat @click="leaveRoom()">Leave</v-btn>
+			<v-btn v-if="$root.isAdmin && $root.accountColor && ready && chatroom" text @click="purgeVerifyPopup = true">Purge</v-btn>
+			<v-btn v-if="$root.username && $root.accountColor && ready && chatroom" text @click="leaveRoom()">Leave</v-btn>
 		</v-toolbar>
 
 		<v-container>
@@ -28,7 +28,7 @@
 					</v-card-text>
 					<v-divider></v-divider>
 					<v-card-actions>
-						<v-btn :disabled="!chatroom || !$root.accountColor" flat @click.stop="ready = true, setChatroom()" color="accent">Join</v-btn>
+						<v-btn :disabled="!chatroom || !$root.accountColor" text @click.stop="ready = true, setChatroom()" color="accent">Join</v-btn>
 					</v-card-actions>
 				</v-card>
 
@@ -38,9 +38,9 @@
 						<ul class="messages" v-chat-scroll="{ always: false }">
 							<p v-if="messages == []">There are no messages posted on this room.</p>
 							<li v-for="message in messages" :key="message.id" :id="message.id">
-								<v-btn :style="{ color: message.color }" class="name" flat @click="openUsernamePopup(message.name)">{{ message.name }}</v-btn>
-								<v-btn class="admin-btn" icon flat color="error" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
-								<v-btn class="admin-btn" icon flat color="warning" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn><br>
+								<v-btn :style="{ color: message.color }" class="name" text @click="openUsernamePopup(message.name)">{{ message.name }}</v-btn>
+								<v-btn class="admin-btn" icon text color="error" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
+								<v-btn class="admin-btn" icon text color="warning" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn><br>
 								<span v-if="flamechat_html_render" v-html="message.content" class="message"></span>
 								<span v-if="!flamechat_html_render" class="message">{{ message.content }}</span>
 								<span class="time">{{ message.timestamp }}</span>
@@ -50,13 +50,13 @@
 					<v-divider></v-divider>
 					<v-card-actions>
 						<form @submit.prevent="sendChat" class="new-message" v-if="!editor">
-							<v-btn :disabled="!flamechat_enable" id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
+							<v-btn :disabled="!flamechat_enable" id="submit" type="submit" text icon style="float: right; display: inline; position: relative; top: 16px;">
 								<v-icon>send</v-icon>
 							</v-btn>
 							<v-text-field :disabled="!flamechat_enable" class="message-box" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field>
 						</form>
 						<form @submit.prevent="editChat" class="new-message" v-if="editor">
-							<v-btn id="submit" type="submit" flat icon style="float: right; display: inline; position: relative; top: 16px;">
+							<v-btn id="submit" type="submit" text icon style="float: right; display: inline; position: relative; top: 16px;">
 								<v-icon>edit</v-icon>
 							</v-btn>
 							<v-text-field v-model="editMessage" class="message-box" autocomplete="off" label="Edit Message"></v-text-field>
@@ -85,7 +85,7 @@
 					</v-card-text>
 					<v-divider></v-divider>
 					<v-card-actions>
-						<v-btn flat @click="noDM()" color="accent">Message</v-btn>
+						<v-btn text @click="noDM()" color="accent">Message</v-btn>
 					</v-card-actions>
 				</div>
 			</v-card>
@@ -97,7 +97,7 @@
 				<v-card-text>Are you sure you want to purge this chatroom?</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn @click="clearAllMessages()" color="error" flat>Yes</v-btn>
+					<v-btn @click="clearAllMessages()" color="error" text>Yes</v-btn>
 					<v-btn @click="purgeVerifyPopup = false" color="green">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>

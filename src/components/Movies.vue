@@ -11,14 +11,14 @@
 					<v-card-title primary-title>
 						<div>
 							<h3 class="headline mb-0">{{ movie.title }}</h3>
-							<h4 class="subheading grey--text">{{ movie.genre }}</h4>
+							<h4 class="subtitle-1 grey--text">{{ movie.genre }}</h4>
 						</div>
 					</v-card-title>
 					<v-divider></v-divider>
 					<v-card-text>{{ movie.summary }}</v-card-text>
 
 					<v-card-actions>
-						<v-btn :disabled="!movie.available" flat color="accent" @click="watchMovie(movie.title, movie.link, movie.cover)">Watch</v-btn>
+						<v-btn :disabled="!movie.available" text color="accent" @click="watchMovie(movie.title, movie.link, movie.cover)">Watch</v-btn>
 					</v-card-actions>
 				</v-card>
 			</div>
@@ -45,7 +45,7 @@
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn :disabled="!newMovieTitle || !newMovieGenre || !newMovieSummary || !newMovieCover" flat color="accent" @click="submitMovie()">Submit</v-btn>
+					<v-btn :disabled="!newMovieTitle || !newMovieGenre || !newMovieSummary || !newMovieCover" text color="accent" @click="submitMovie()">Submit</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>

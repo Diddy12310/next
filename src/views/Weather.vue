@@ -40,14 +40,17 @@ export default {
     }
   },
   created() {
+    this.$root.loadingBar = true
     navigator.geolocation.getCurrentPosition(position => {
       this.latitude = position.coords.latitude
       this.longitude = position.coords.longitude
       this.reload()
     })
+    this.$root.loadingBar = false
   },
   methods: {
     reload() {
+      this.$root.loadingBar = true
       axios.get(`https://cors.io/?https://api.darksky.net/forecast/36090b633b11e11a7eb790775044992a/${this.latitude},${this.longitude}`).then(response => {
         var temperature_input = response.data.currently.temperature.toString()
         this.temperature = temperature_input.substring(0, temperature_input.lastIndexOf('.'))
@@ -65,6 +68,7 @@ export default {
         var visibility_input = response.data.currently.visibility.toString()
         this.visibility = visibility_input.substring(0, visibility_input.lastIndexOf('.'))
         this.precipitaion_chance = this.toPercent(response.data.currently.precipProbability)
+        this.$root.loadingBar = false
       }).catch(error => {
         console.error(error)
       }).then(() => {

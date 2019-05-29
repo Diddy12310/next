@@ -10,7 +10,7 @@
 					<v-card-title primary-title>
 						<div>
 							<h3 class="headline mb-0">{{ item.title }}</h3>
-							<h4 class="subheading grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.album }}</h4>
+							<h4 class="subtitle-1 grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.album }}</h4>
 							<h4 class="body-2 grey--text">{{ item.genre }}</h4>
 						</div>
 					</v-card-title>
@@ -49,7 +49,7 @@
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn :disabled="!newMusicAlbum || !newMusicArtist || !newMusicCover || !newMusicGenre || !newMusicTitle" flat color="accent" @click="submitSong()">Submit</v-btn>
+					<v-btn :disabled="!newMusicAlbum || !newMusicArtist || !newMusicCover || !newMusicGenre || !newMusicTitle" text color="accent" @click="submitSong()">Submit</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>

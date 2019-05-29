@@ -10,13 +10,13 @@
 					<v-card-title primary-title>
 						<div>
 							<h3 class="headline mb-0">{{ book.title }}</h3>
-							<h4 class="subheading grey--text">By {{ book.author }}</h4>
+							<h4 class="subtitle-1 grey--text">By {{ book.author }}</h4>
 						</div>
 					</v-card-title>
 					<v-divider></v-divider>
 					<v-card-text>{{ book.summary }}</v-card-text>
 					<v-card-actions>
-						<v-btn flat color="accent" :disabled="!book.available" :href="book.link" @click="logBook(book.title)">Read</v-btn>
+						<v-btn text color="accent" :disabled="!book.available" :href="book.link" @click="logBook(book.title)">Read</v-btn>
 					</v-card-actions>
 				</v-card>
 			</div>
@@ -44,7 +44,7 @@
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn :disabled="!newBookTitle || !newBookGenre || !newBookSummary || !newBookCover || !newBookGenre" flat color="accent" @click="submitBook()">Submit</v-btn>
+					<v-btn :disabled="!newBookTitle || !newBookGenre || !newBookSummary || !newBookCover || !newBookGenre" text color="accent" @click="submitBook()">Submit</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>

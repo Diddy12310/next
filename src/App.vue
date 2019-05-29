@@ -1,8 +1,8 @@
 <template>
-	<v-app dark>
+	<v-app>
     <!-- Toolbar -->
-		<v-toolbar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'black': shutdown }">
-			<v-toolbar-side-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned"></v-toolbar-side-icon>
+		<v-app-bar absolute elevation="4" :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'black': shutdown }" v-if="app_loaded">
+			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned"><v-icon>menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
 				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent, 'hidden-xs-only': $root.accountColor }">
 				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
@@ -10,95 +10,102 @@
       <v-spacer></v-spacer>
       <p v-if="app_loaded && !shutdown" class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 			<v-spacer></v-spacer>
-			<v-toolbar-items v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown">
-				<v-btn flat icon @click="$root.terminalOpen = true" slot="activator" v-if="$root.isAdmin">
+			<div v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown">
+				<v-btn icon @click="$root.terminalOpen = true" slot="activator" v-if="$root.isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
-				<v-btn icon @click="dialog = true">
+				<v-btn icon @click="$root.account_dialog = true">
 					<v-icon>person</v-icon>
 				</v-btn>
-			</v-toolbar-items>
-			<v-toolbar-items v-if="shutdown || lockdown || global_pnf && !$root.isBanned">
-				<v-btn flat icon @click="$root.terminalOpen = true" slot="activator" v-if="$root.isAdmin">
+			</div>
+			<div v-if="shutdown || lockdown || global_pnf && !$root.isBanned">
+				<v-btn icon @click="$root.terminalOpen = true" slot="activator" v-if="$root.isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
-			</v-toolbar-items>
-		</v-toolbar>
+			</div>
+		</v-app-bar>
 
 		<!-- Navigation drawer -->
 		<v-navigation-drawer v-model="drawer" app temporary floating>
 			<v-toolbar>
-				<v-toolbar-side-icon @click.prevent="drawer = false"><v-icon>close</v-icon></v-toolbar-side-icon>
+				<v-app-bar-nav-icon @click.prevent="drawer = false"><v-icon>close</v-icon></v-app-bar-nav-icon>
 				<v-toolbar-title>Menu</v-toolbar-title>
 			</v-toolbar>
 
-			<v-list>
-				<v-list-tile @click="$root.switch = 'Home', drawer = false" :ripple="{ class: 'grey--text' }">
-					<v-list-tile-content>
-            <v-list-tile-title class="font-weight-light">Home</v-list-tile-title>
-          </v-list-tile-content>
-				</v-list-tile>
-
-				<v-list-tile v-for="link in apps" :key="link.route" @click="$root.switch = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
-					<v-list-tile-content>
-            <v-list-tile-title class="font-weight-light" v-html="link.app"></v-list-tile-title>
-          </v-list-tile-content>
-				</v-list-tile>
-
+			<v-list dense nav>
+				<v-list-item @click="$root.switch = 'Home', drawer = false">
+					<v-list-item-content>
+						<v-list-item-title>Home</v-list-item-title>
+					</v-list-item-content>
+				</v-list-item>
+        <v-list-item v-for="link in apps" :key="link.route" link @click="$root.switch = `${link.route}`, drawer = false">
+          <v-list-item-content>
+            <v-list-item-title>{{ link.app }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 				<v-divider></v-divider>
-
 				<v-list-group>
-					<v-list-tile slot="activator">
-						<v-list-tile-content>
-							<v-list-tile-title>Company</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
+          <template v-slot:activator>
+            <v-list-item>
+              <v-list-item-title>Company</v-list-item-title>
+            </v-list-item>
+          </template>
 
-					<v-list-tile v-for="link in company" :key="link.route" @click="$root.switch = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
-						<v-list-tile-content>
-							<v-list-tile-title class="font-weight-light" v-html="link.app"></v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
+					<v-list-item v-for="link in company" :key="link.route" link @click="$root.switch = `${link.route}`, drawer = false">
+						<v-list-item-content>
+							<v-list-item-title>{{ link.app }}</v-list-item-title>
+						</v-list-item-content>
+					</v-list-item>
 				</v-list-group>
-
 				<v-list-group>
-					<v-list-tile slot="activator">
-						<v-list-tile-content>
-							<v-list-tile-title>Latest</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
+          <template v-slot:activator>
+            <v-list-item>
+              <v-list-item-title>Latest</v-list-item-title>
+            </v-list-item>
+          </template>
 
-					<v-list-tile v-for="link in latest" :key="link.route" @click="$root.switch = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
-						<v-list-tile-content>
-							<v-list-tile-title class="font-weight-light" v-html="link.app"></v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
+					<v-list-item v-for="link in latest" :key="link.route" link @click="$root.switch = `${link.route}`, drawer = false">
+						<v-list-item-content>
+							<v-list-item-title>{{ link.app }}</v-list-item-title>
+						</v-list-item-content>
+					</v-list-item>
 				</v-list-group>
-
 				<v-list-group>
-					<v-list-tile slot="activator">
-						<v-list-tile-content>
-							<v-list-tile-title>For developers</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
+          <template v-slot:activator>
+            <v-list-item>
+              <v-list-item-title>Developers</v-list-item-title>
+            </v-list-item>
+          </template>
 
-					<v-list-tile v-for="link in developers" :key="link.route" @click="$root.switch = link.route, drawer = false" :ripple="{ class: 'grey--text' }">
-						<v-list-tile-content>
-							<v-list-tile-title class="font-weight-light" v-html="link.app"></v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
+					<v-list-item v-for="link in developers" :key="link.route" link @click="$root.switch = `${link.route}`, drawer = false">
+						<v-list-item-content>
+							<v-list-item-title>{{ link.app }}</v-list-item-title>
+						</v-list-item-content>
+					</v-list-item>
 				</v-list-group>
-			</v-list>
+      </v-list>
+			<template v-slot:append>
+				<v-divider></v-divider>
+				<v-btn block @click="window.open('https://discord.gg/cA9dpRM')"></v-btn>
+        <v-divider></v-divider>
+
+        <v-list-item two-line>
+          <v-list-item-content>
+            <v-list-item-title class="text-uppercase">{{ $root.username }}</v-list-item-title>
+            <v-list-item-subtitle>Logged in</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
     </v-navigation-drawer>
 
 		<!-- Account dialog -->
-		<v-dialog v-model="dialog" max-width="500">
+		<v-dialog v-model="$root.account_dialog" max-width="500">
 			<v-card>
 				<v-card-title primary-title>
 					<h3 v-if="!$root.userPresent" class="headline mb-0">Account</h3>
 					<h3 v-if="$root.userPresent" class="headline mb-0 font-weight-medium text-uppercase" :style="{ color: $root.accountColor }">{{ $root.username }}</h3>
 					<v-spacer></v-spacer>
-					<v-btn icon @click="dialog = false" class="dialog-close-btn">
+					<v-btn icon @click="$root.account_dialog = false" class="dialog-close-btn">
 						<v-icon>close</v-icon>
 					</v-btn>
 				</v-card-title>
@@ -110,20 +117,12 @@
 							<v-form>
 								<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username"></v-text-field>
 								<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password"></v-text-field>
-								<v-btn @click="signIn" color="accent" flat>Sign In</v-btn>
+								<v-btn @click="signIn" color="accent" text>Sign In</v-btn>
 							</v-form>
 						</v-tab-item>
 						<v-tab>Sign Up</v-tab>
 						<v-tab-item>
-							<v-form>
-								<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username"></v-text-field>
-								<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password"></v-text-field>
-								<v-text-field clearable autocomplete="off" type="text" name="bio" v-model="$root.accountBio" label="Bio"></v-text-field>
-								<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="$root.accountColor" />
-								<v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms"></v-checkbox>
-								<v-btn href="http://relay.theparadigmdev.com/terms.html" flat color="blue-grey lighten-2">View Terms</v-btn>
-								<v-btn @click="signUp" color="accent" flat>Sign Up</v-btn>
-							</v-form>
+							<Signup />
 						</v-tab-item>
 					</v-tabs>
 
@@ -139,16 +138,18 @@
 						<p><strong>Account Creation:</strong> {{ userInfo.metadata.creationTime }}</p>
 						<p><strong>User ID:</strong> {{ userInfo.uid }}</p>
 						<v-divider></v-divider>
-						<v-btn @click="newBioDialog = true" flat color="accent">Edit Bio</v-btn>
-						<v-btn @click="newColorDialog = true" flat color="accent">Change Color</v-btn>
-						<v-btn @click="newPasswordDialog = true" flat color="warning">Change Password</v-btn>
-						<v-btn @click="deleteDialog = true" flat color="error">Delete Account</v-btn>
+						<div class="pt-2">
+							<v-btn @click="newBioDialog = true" text color="accent">Edit Bio</v-btn>
+							<v-btn @click="newColorDialog = true" text color="accent">Edit Color</v-btn>
+							<v-btn @click="newPasswordDialog = true" text color="warning">New Password</v-btn>
+							<v-btn @click="deleteDialog = true" text color="error">Delete Account</v-btn>
+						</div>
 					</div>
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn v-if="!$root.userPresent && !sign_up_enable" @click="signIn" color="accent" flat>Sign In</v-btn>
-					<v-btn v-if="$root.userPresent" @click="signOut" color="accent" flat>Sign Out</v-btn>
+					<v-btn v-if="!$root.userPresent && !sign_up_enable" @click="signIn" color="accent" text>Sign In</v-btn>
+					<v-btn v-if="$root.userPresent" @click="signOut" color="accent" text>Sign Out</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -160,8 +161,8 @@
 				<v-card-text>Are you sure you want to delete your account?</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn @click="deleteUser" color="error" flat>Yes</v-btn>
-					<v-btn @click="deleteDialog = false" color="green" flat>Cancel</v-btn>
+					<v-btn @click="deleteUser" color="error" text>Yes</v-btn>
+					<v-btn @click="deleteDialog = false" color="green" text>Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -169,29 +170,31 @@
 		<!-- New password dialog -->
 		<v-dialog v-model="newPasswordDialog" max-width="400">
 			<v-card>
-				<v-card-title><h3 class="headline mb-0">Change Password</h3></v-card-title>
+				<v-card-title><h3 class="headline mb-0">New Password</h3></v-card-title>
 				<v-card-text>
 					<v-text-field autocomplete="off" type="password" name="newPassword" v-model="newPassword" label="New Password"></v-text-field>
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn @click="changePass" color="warning" flat>Change Password</v-btn>
-					<v-btn @click="newPasswordDialog = false" flat color="accent">Cancel</v-btn>
+					<v-btn @click="changePass" color="warning" text>Save</v-btn>
+					<v-btn @click="newPasswordDialog = false" text color="accent">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
 
 		<!-- New color dialog -->
-		<v-dialog v-model="newColorDialog" max-width="400">
+		<v-dialog v-model="newColorDialog" max-width="335">
 			<v-card>
-				<v-card-title><h3 class="headline mb-0">Change Color</h3></v-card-title>
+				<v-card-title><h3 class="headline mb-0">Edit Color</h3></v-card-title>
 				<v-card-text>
-					<swatches style="width: 100%; height: 100%; background-color: #2E2E2E; overflow-y: hidden;" v-model="$root.accountColor" />
+					<v-layout justify-center>
+						<v-color-picker mode="hexa" hide-mode-switch style="background-color: #2E2E2E;" v-model="$root.accountColor"></v-color-picker>
+					</v-layout>
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn @click="changeColor($root.accountColor.hex)" color="warning" flat>Change Color</v-btn>
-					<v-btn @click="newColorDialog = false" flat color="accent">Cancel</v-btn>
+					<v-btn @click="changeColor($root.accountColor.hex)" color="warning" text>Save</v-btn>
+					<v-btn @click="newColorDialog = false" text color="accent">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -199,14 +202,14 @@
 		<!-- New bio dialog -->
 		<v-dialog v-model="newBioDialog" max-width="400">
 			<v-card>
-				<v-card-title><h3 class="headline mb-0">Change Bio</h3></v-card-title>
+				<v-card-title><h3 class="headline mb-0">Edit Bio</h3></v-card-title>
 				<v-card-text>
 					<v-text-field autocomplete="off" type="text" name="bio" v-model="$root.accountBio" label="Bio"></v-text-field>
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn @click="changeBio($root.accountBio)" color="warning" flat>Change Bio</v-btn>
-					<v-btn @click="newBioDialog = false" flat color="accent">Cancel</v-btn>
+					<v-btn @click="changeBio($root.accountBio)" color="warning" text>Save</v-btn>
+					<v-btn @click="newBioDialog = false" text color="accent">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -243,7 +246,7 @@
 				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !global_pnf" style="text-align: center;">
 					<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">Welcome!</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
-					<v-btn color="deep-purple" @click="dialog = true">Login</v-btn>
+					<v-btn color="deep-purple" @click="$root.account_dialog = true">Login</v-btn>
 				</div>
 				<div class="lockdown" v-if="lockdown && !shutdown" style="text-align: center;">
 					<v-icon style="font-size: 75px; margin-top: 100px;" color="red">block</v-icon>
@@ -266,14 +269,14 @@
 					<h3 class="headline font-weight-light grey--text darken-4" style="margin: 25px;">Paradigm has been shut down.</h3>
 				</div>
 			</v-container>
-			<v-progress-linear :indeterminate="true" v-if="$root.loadingBar" class="loading-bar"></v-progress-linear>
 		</v-content>
 
 		<!-- Snackbar -->
 		<v-snackbar v-model="$root.snackbar" bottom left :timeout="2000">{{ $root.feedback }}</v-snackbar>
 
 		<!-- Footer -->
-		<v-footer v-if="!shutdown">
+		<v-footer v-if="!shutdown && app_loaded">
+			<v-progress-linear :active="$root.loadingBar" indeterminate absolute top color="deep-purple accent-4"></v-progress-linear>
 			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm</span></div>
 		</v-footer>
 	</v-app>
@@ -283,7 +286,7 @@
 import { db, perf, auth } from './firebase'
 import firebase from 'firebase/app'
 import moment from 'moment'
-import { Swatches } from 'vue-color'
+import Signup from './components/Signup'
 
 // ------------------------------
 
@@ -313,8 +316,8 @@ import Notice from './views/Company/Notice'
 export default {
 	name: 'Paradigm',
 	components: {
-		Swatches, Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
-		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice
+		Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
+		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice, Signup
 	},
 	data() {
 		return {
@@ -344,11 +347,9 @@ export default {
 				{ route: 'Databank', app: 'Databank' },
 			],
 			password: '',
-			dialog: false,
 			userInfo: null,
 			newPassword: null,
 			sign_up_enable: null,
-			terms: false,
 			deleteDialog: false,
 			lockdown: null,
 			flamechat_enable: true,
@@ -360,7 +361,7 @@ export default {
 			currentTime: '',
 			currentDate: '',
 			app_loaded: false,
-			shutdown: false,
+			shutdown: false
 		}
 	},
 	methods: {
@@ -371,7 +372,7 @@ export default {
 			if(this.$root.username && this.password) {
 				perf.trace('signIn').start()
 				auth.signInWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(() => {
-					this.dialog = false
+					this.$root.account_dialog = false
 					db.collection('users').doc(this.$root.username).update({ isLoggedIn: true })
 					perf.trace('signIn').stop()
 				}).catch(error => {
@@ -391,45 +392,6 @@ export default {
 			} else {
 				this.$root.feedback = 'Please fill in the required fields.'
 				this.$root.snackbar = true
-			}
-		},
-		signUp() {
-			if(this.$root.username && this.password && this.terms && this.$root.accountBio && this.$root.accountColor) {
-				auth.createUserWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(user => {
-					this.$root.username = user.user.email.substring(0, user.user.email.lastIndexOf("@"))
-					db.collection('users').doc(this.$root.username).set({
-						bio: this.$root.accountBio,
-						color: this.$root.accountColor.hex,
-						moonrocks: 0,
-						isAdmin: false,
-						isInnerCore: false,
-						isAsteroid: false,
-						isAnalytics: false,
-						uid: user.user.uid,
-						isBanned: false,
-						strikes: 0,
-						isWriter: false,
-						isLoggedIn: true
-					})
-					this.$root.accountColor = this.$root.accountColor.hex
-					this.$ga.event(this.$root.username, 'signed up')
-				}).catch(error => {
-					if(error.code == 'auth/invalid-email') {
-						this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
-						this.$root.snackbar = true
-					}
-					if(error.code == 'auth/wrong-password') {
-						this.$root.feedback = 'Please check your password.'
-						this.$root.snackbar = true
-					}
-					if(error.code != 'auth/invalid-email' || 'auth/wrong-password') {
-						this.$root.feedback = error.message
-						this.$root.snackbar = true
-					} else {
-						this.$root.feedback = 'Please fill in the required fields.'
-						this.$root.snackbar = true
-					}
-				})
 			}
 		},
 		signOut() {
@@ -472,7 +434,7 @@ export default {
 				console.log(error)
 			})
 			this.deleteDialog = false
-			this.dialog = false
+			this.$root.account_dialog = false
 		},
 		changeColor(newColor) {
 			db.collection('users').doc(this.$root.username).update({
@@ -568,7 +530,7 @@ export default {
 		})
 
 		var metaRef = db.collection('paradigm')
-		metaRef.doc('config').get().then((doc) => {
+		metaRef.doc('config').get().then(doc => {
 			this.sign_up_enable = doc.data().sign_up_enable
 			this.lockdown = doc.data().lockdown
 			this.shutdown = doc.data().shutdown
@@ -594,7 +556,7 @@ export default {
 					this.newColorDialog = false
 					this.newPasswordDialog = false
 					this.deleteDialog = false
-					this.dialog = false
+					this.$root.account_dialog = false
 				}
 			})
 		})

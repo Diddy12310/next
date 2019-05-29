@@ -11,7 +11,7 @@
 				<v-divider></v-divider>
 				<v-card-text>The Asteroid installer for Windows.</v-card-text>
 				<v-card-actions>
-					<v-btn v-if="winavail" flat color="accent" :href="windows" download>Download</v-btn>
+					<v-btn v-if="winavail" text color="accent" :href="windows" download>Download</v-btn>
 					<span v-if="!winavail" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
 				</v-card-actions>
 			</v-card>
@@ -25,7 +25,7 @@
 				<v-divider></v-divider>
 				<v-card-text>The Asteroid installer for macOS.</v-card-text>
 				<v-card-actions>
-					<v-btn v-if="macavail" flat color="accent" :href="macos" download>Download</v-btn>
+					<v-btn v-if="macavail" text color="accent" :href="macos" download>Download</v-btn>
 					<span v-if="!macavail" class="red--text font-weight-medium" style="margin: 6px;">UNAVAILABLE</span>
 				</v-card-actions>
 			</v-card>

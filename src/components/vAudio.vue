@@ -1,18 +1,18 @@
 <template>
   <v-card style="text-align: center" class="elevation-0">
     <v-card-text>
-      <v-btn flat icon class="primary--text" @click.native="playing ? pause() : play()" v-if="loaded">
+      <v-btn text icon class="primary--text" @click.native="playing ? pause() : play()" v-if="loaded">
         <v-icon v-if="playing === false || paused === true">play_arrow</v-icon>
         <v-icon v-else>pause</v-icon>
       </v-btn>
-      <v-btn flat icon class="primary--text" @click.native="stop()" v-if="loaded">
+      <v-btn text icon class="primary--text" @click.native="stop()" v-if="loaded">
         <v-icon>stop</v-icon>
       </v-btn>
-      <v-btn flat icon class="primary--text" @click.native="mute()" v-if="loaded">
+      <v-btn text icon class="primary--text" @click.native="mute()" v-if="loaded">
         <v-icon v-if="isMuted === false">volume_up</v-icon>
         <v-icon v-else>volume_off</v-icon>
       </v-btn>
-      <v-btn flat icon class="primary--text" @click.native="download()" v-if="loaded">
+      <v-btn text icon class="primary--text" @click.native="download()" v-if="loaded">
         <v-icon>get_app</v-icon>
       </v-btn>
       <v-btn @click.native="reload()" v-else color="red">Reload</v-btn>

@@ -11,14 +11,14 @@
 					<v-card-title primary-title>
 						<div>
 							<h3 class="headline mb-0">{{ show.title }}</h3>
-							<h4 class="subheading grey--text">{{ show.genre }}</h4>
+							<h4 class="subtitle-1 grey--text">{{ show.genre }}</h4>
 						</div>
 					</v-card-title>
 					<v-divider></v-divider>
 					<v-card-text>{{ show.summary }}</v-card-text>
 
 					<v-card-actions>
-						<v-btn :disabled="!show.available" flat color="accent" @click="watchShow(show.title, show.link, show.cover)">Watch</v-btn>
+						<v-btn :disabled="!show.available" text color="accent" @click="watchShow(show.title, show.link, show.cover)">Watch</v-btn>
 					</v-card-actions>
 				</v-card>
 			</div>
@@ -45,7 +45,7 @@
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn :disabled="!newShowTitle || !newShowGenre || !newShowSummary || !newShowCover" flat color="accent" @click="submitShow()">Submit</v-btn>
+					<v-btn :disabled="!newShowTitle || !newShowGenre || !newShowSummary || !newShowCover" text color="accent" @click="submitShow()">Submit</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
