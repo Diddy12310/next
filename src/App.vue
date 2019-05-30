@@ -334,7 +334,7 @@
 		<!-- Footer -->
 		<v-footer inset app v-if="!shutdown && app_loaded">
 			<v-progress-linear :active="$root.loadingBar" indeterminate absolute top color="deep-purple accent-4"></v-progress-linear>
-			<div>&copy; {{ new Date().getFullYear() }} Paradigm</div>
+			<span class="caption text-uppercase">&copy; {{ new Date().getFullYear() }} Paradigm</span>
 		</v-footer>
 
 		<p class="hidden-screen-only" style="margin: auto auto auto auto;">Paradigm cannot be printed!</p>
