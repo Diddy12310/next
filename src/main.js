@@ -40,12 +40,11 @@ Vue.config.productionTip = false
 
 Vue.use(VueChatScroll)
 
-Vue.mixin({
-  methods: {
-    route(to) {
-      this.$root.switch = to
-    }
-  },
+new Vue({
+  router,
+  store,
+  render: function(h) { return h(App) },
+  vuetify: new Vuetify(opts),
   data() {
     return {
       username: '',
@@ -68,11 +67,4 @@ Vue.mixin({
       bugreport_dialog: false
     }
   }
-})
-
-new Vue({
-  router,
-  store,
-  render: function(h) { return h(App) },
-  vuetify: new Vuetify(opts)
 }).$mount('div#app')    
