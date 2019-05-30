@@ -16,6 +16,11 @@ var config = {
 
 const firebaseApp = firebase.initializeApp(config)
 
+firebaseApp.firestore().settings({
+  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+})
+firebaseApp.firestore().enablePersistence()
+
 const auth = firebaseApp.auth()
 const storage = firebaseApp.storage().ref()
 const db = firebaseApp.firestore()

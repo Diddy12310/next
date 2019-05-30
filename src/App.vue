@@ -1,17 +1,17 @@
 <template>
-	<v-app>
+	<v-app class="hidden-print-only">
     <!-- Toolbar -->
-		<v-app-bar absolute elevation="4" :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'black': shutdown }" v-if="app_loaded">
+		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'black': shutdown }" v-if="app_loaded">
 			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned"><v-icon>menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
 				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent, 'hidden-xs-only': $root.accountColor }">
 				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
 			</v-toolbar-title>
-      <v-spacer></v-spacer>
+			<v-spacer></v-spacer>
       <p v-if="app_loaded && !shutdown" class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 			<v-spacer></v-spacer>
 			<div v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown">
-				<v-btn icon @click="$root.terminalOpen = true" slot="activator" v-if="$root.isAdmin">
+				<v-btn icon @click="$root.terminalOpen = true" v-if="$root.isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
 				<v-btn icon @click="$root.account_dialog = true">
@@ -19,7 +19,7 @@
 				</v-btn>
 			</div>
 			<div v-if="shutdown || lockdown || global_pnf && !$root.isBanned">
-				<v-btn icon @click="$root.terminalOpen = true" slot="activator" v-if="$root.isAdmin">
+				<v-btn icon @click="$root.terminalOpen = true" v-if="$root.isAdmin">
 					<v-icon>settings</v-icon>
 				</v-btn>
 			</div>
@@ -27,7 +27,7 @@
 
 		<!-- Navigation drawer -->
 		<v-navigation-drawer v-model="drawer" app temporary floating>
-			<v-toolbar>
+			<v-toolbar class="grey darken-4">
 				<v-app-bar-nav-icon @click.prevent="drawer = false"><v-icon>close</v-icon></v-app-bar-nav-icon>
 				<v-toolbar-title>Menu</v-toolbar-title>
 			</v-toolbar>
@@ -85,16 +85,20 @@
 				</v-list-group>
       </v-list>
 			<template v-slot:append>
-				<v-divider></v-divider>
-				<v-btn block @click="window.open('https://discord.gg/cA9dpRM')"></v-btn>
-        <v-divider></v-divider>
+				<div class="grey darken-4 elevation-14">
+					<v-divider></v-divider>
+					<v-btn class="ma-2" icon color="#7289DA" href="https://discord.gg/cA9dpRM">
+						<v-icon>mdi-discord</v-icon>
+					</v-btn>
+					<v-divider></v-divider>
 
-        <v-list-item two-line>
-          <v-list-item-content>
-            <v-list-item-title class="text-uppercase">{{ $root.username }}</v-list-item-title>
-            <v-list-item-subtitle>Logged in</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
+					<v-list-item two-line>
+						<v-list-item-content>
+							<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': $root.accountColor }">{{ $root.username }}</v-list-item-title>
+							<v-list-item-subtitle>Logged in</v-list-item-subtitle>
+						</v-list-item-content>
+					</v-list-item>
+				</div>
       </template>
     </v-navigation-drawer>
 
@@ -275,10 +279,12 @@
 		<v-snackbar v-model="$root.snackbar" bottom left :timeout="2000">{{ $root.feedback }}</v-snackbar>
 
 		<!-- Footer -->
-		<v-footer v-if="!shutdown && app_loaded">
+		<v-footer app v-if="!shutdown && app_loaded">
 			<v-progress-linear :active="$root.loadingBar" indeterminate absolute top color="deep-purple accent-4"></v-progress-linear>
-			<div><span class="pl-2" style="text-align: center;">&copy; {{ new Date().getFullYear() }} Paradigm</span></div>
+			<div>&copy; {{ new Date().getFullYear() }} Paradigm</div>
 		</v-footer>
+
+		<p class="hidden-screen-only" style="margin: auto auto auto auto;">Paradigm cannot be printed!</p>
 	</v-app>
 </template>
 
@@ -361,13 +367,16 @@ export default {
 			currentTime: '',
 			currentDate: '',
 			app_loaded: false,
-			shutdown: false
+			shutdown: null,
+			onLine: null,
+			onlineSlot: 'online',
+			offlineSlot: 'offline'
 		}
 	},
 	methods: {
-		refresh() {
-			location.reload()
-		},
+		amIOnline(e) {
+      this.onLine = e;
+    },
 		signIn() {
 			if(this.$root.username && this.password) {
 				perf.trace('signIn').start()
@@ -459,7 +468,7 @@ export default {
 			this.currentDate = moment(today).format('MMMM Do YYYY')
 			this.currentTime = moment(today).format('LTS')
 			setTimeout(this.startTime, 500)
-		},
+		}
 	},
 	created() {
 		this.app_loaded = false
@@ -623,12 +632,6 @@ html {
 	background: linear-gradient(135deg, #162fa1 0%, #50336e 100%);
 }
 
-.v-input--switch {
-	flex: none !important;
-	position: relative;
-	height: 30px;
-}
-
 .moonrock-img {
 	height: 50px;
 	margin-bottom: 16px;
@@ -638,11 +641,6 @@ html {
 	position: relative;
 	bottom: +36px;
 	padding-left: 5px;
-}
-
-.loading-bar {
-	position: absolute;
-	bottom: -14px;
 }
 
 .clock {
@@ -684,5 +682,13 @@ html {
   top: 47%;
   left: 40px;
   transform: translate(-50%, -50%);
+}
+
+.offline {
+  background-color: red;
+}
+
+.online {
+  background-color: green;
 }
 </style>
