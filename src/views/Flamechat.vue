@@ -17,9 +17,7 @@
 			<!-- Welcome card -->
 			<div v-if="flamechat_enable">
 				<v-card class="welcome-card" v-if="!$root.username || !$root.accountColor || !ready || !chatroom">
-					<v-card-title>
-						<h3 class="headline mb-0 text-xs-center">Welcome to Flamechat!</h3>
-					</v-card-title>
+					<v-card-title>Welcome to Flamechat!</v-card-title>
 					<v-card-text>
 						<v-radio-group v-model="chatroom" column>
 							<v-radio :label="room.name" :value="room.db" :disabled="!room.available" v-if="room.id !== 'chatrooms'" v-for="room in chatrooms" :key="room.id"></v-radio>

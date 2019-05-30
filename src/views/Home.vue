@@ -1,6 +1,6 @@
 <template>
 	<div class="index">
-		<v-parallax :src="homebg" class="parallax">
+		<v-parallax src="https://relay.theparadigmdev.com/img/home_bg.jpg" class="parallax">
 			<div class="home">
 				<img src="@/assets/plogo.png" alt=""  style="position: relative; text-align: center; margin: auto; padding-top: 30vh;">
 				<h2 class="display-3 font-weight-thin text-uppercase">Paradigm</h2>
@@ -35,15 +35,11 @@
 			</div>
 		</v-parallax>
 		<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 25px; text-align: center;">Updates</h1>
-		<v-card v-for="(announcement, index) in announcements" :key="index" style="width: 100%; margin: 20px auto; max-width: 600px;">
-			<v-card-title primary-title>
-				<div>
-					<h3 class="headline mb-0">{{ announcement.title }}</h3>
-				</div>
-			</v-card-title>
+		<v-card v-for="(update, index) in updates" :key="index" style="width: 100%; margin: 20px auto; max-width: 600px;">
+			<v-card-title>{{ update.title }}</v-card-title>
 			<v-divider></v-divider>
 			<v-card-text>
-				<div v-for="item in announcement.detail" :key="item" class="item" v-html="item"></div>
+				<div v-for="item in update.detail" :key="item" class="item" v-html="item"></div>
 			</v-card-text>
 		</v-card>
 	</div>
@@ -56,17 +52,16 @@ export default {
   name: 'Home',
   data() {
     return {
-			announcements: [],
-			homebg: 'https://relay.theparadigmdev.com/img/home_bg.jpg'
+			updates: []
 		}
 	},
   created() {
 		var dbRef = db.collection('updates').orderBy('time', 'desc').limit(3)
     dbRef.get().then(snapshot => {
       snapshot.forEach(doc => {
-        let announcement = doc.data()
-				announcement.id = doc.id
-				this.announcements.push(announcement)
+        let update = doc.data()
+				update.id = doc.id
+				this.updates.push(update)
       })
 		})
   }

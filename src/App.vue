@@ -140,7 +140,7 @@
 					</v-tooltip>
 					<v-tooltip top>
 						<template v-slot:activator="{ on }">
-							<v-btn v-on="on" class="my-2 mr-2" icon color="lime" @click="$root.snackbar = true, $root.feedback = 'Coming soon!'">
+							<v-btn v-on="on" class="my-2 mr-2" icon color="lime" @click="$root.bugreport_dialog = true">
 								<v-icon>mdi-bug</v-icon>
 							</v-btn>
 						</template>
@@ -266,6 +266,11 @@
 			</v-card>
 		</v-dialog>
 
+		<!-- Account dialog -->
+		<v-dialog v-model="$root.bugreport_dialog" max-width="500">
+			<BugReport />
+		</v-dialog>
+
 		<!-- Admin terminal -->
 		<v-bottom-sheet v-model="$root.terminalOpen" v-if="$root.isAdmin">
 			<Terminal />
@@ -341,6 +346,7 @@ import { db, perf, auth } from './firebase'
 import firebase from 'firebase/app'
 import moment from 'moment'
 import Signup from './components/Signup'
+import BugReport from './components/BugReport'
 
 // ------------------------------
 
@@ -371,7 +377,7 @@ export default {
 	name: 'Paradigm',
 	components: {
 		Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
-		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice, Signup
+		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice, Signup, BugReport
 	},
 	data() {
 		return {

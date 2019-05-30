@@ -64,7 +64,8 @@ Vue.mixin({
       switch: 'Home',
       uid: '',
       terminalOpen: false,
-      account_dialog: false
+      account_dialog: false,
+      bugreport_dialog: false
     }
   }
 })
