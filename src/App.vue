@@ -2,43 +2,53 @@
 	<v-app class="hidden-print-only">
     <!-- Toolbar -->
 		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'black': shutdown }" v-if="app_loaded">
-			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned"><v-icon>menu</v-icon></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon v-on="on" @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned" style="margin: 0px;"><v-icon>menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
-				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent, 'hidden-xs-only': $root.accountColor }">
-				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
+				<img v-on="on" @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent, 'hidden-xs-only': $root.accountColor }">
+				<img v-on="on" @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
-      <p v-if="app_loaded && !shutdown" class="clock font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
-			<v-spacer></v-spacer>
-			<div v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown">
-				<v-btn icon @click="$root.terminalOpen = true" v-if="$root.isAdmin">
-					<v-icon>settings</v-icon>
-				</v-btn>
-				<v-btn icon @click="$root.account_dialog = true">
-					<v-icon>person</v-icon>
-				</v-btn>
-			</div>
-			<div v-if="shutdown || lockdown || global_pnf && !$root.isBanned">
-				<v-btn icon @click="$root.terminalOpen = true" v-if="$root.isAdmin">
-					<v-icon>settings</v-icon>
-				</v-btn>
-			</div>
+      <p v-if="app_loaded && !shutdown" class="clock text-xs-right font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 		</v-app-bar>
 
 		<!-- Navigation drawer -->
-		<v-navigation-drawer v-model="drawer" app temporary floating>
-			<v-toolbar class="grey darken-4">
-				<v-app-bar-nav-icon @click.prevent="drawer = false"><v-icon>close</v-icon></v-app-bar-nav-icon>
-				<v-toolbar-title>Menu</v-toolbar-title>
-			</v-toolbar>
+		<v-navigation-drawer v-model="drawer" app>
+			<template v-slot:prepend>
+				<v-card-actions class="grey darken-4 elevation-4 ma-0 pa-0">
+					<v-tooltip bottom>
+						<template v-slot:activator="{ on }">
+							<v-list-item v-on="on" two-line v-ripple="{ class: `${$root.accountColor}--text` }" style="cursor: pointer;" @click="$root.account_dialog = true">
+								<v-list-item-content>
+									<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': $root.accountColor }">{{ $root.username }}</v-list-item-title>
+									<v-list-item-subtitle>Logged in</v-list-item-subtitle>
+								</v-list-item-content>
+							</v-list-item>
+						</template>
+						<span>Account</span>
+					</v-tooltip>
+					<v-spacer></v-spacer>
+					<v-tooltip bottom>
+						<template v-slot:activator="{ on }">
+							<v-btn v-on="on" v-if="$root.isAdmin" @click="$root.terminalOpen = true" icon class="mx-3" color="grey"><v-icon>mdi-console-line</v-icon></v-btn>
+						</template>
+						<span>Terminal</span>
+					</v-tooltip>
+				</v-card-actions>
+			</template>
 
 			<v-list dense nav>
-				<v-list-item @click="$root.switch = 'Home', drawer = false">
+				<v-list-item @click="$root.switch = 'Home'">
+					<v-list-item-icon>
+            <v-icon>home</v-icon>
+          </v-list-item-icon>
 					<v-list-item-content>
 						<v-list-item-title>Home</v-list-item-title>
 					</v-list-item-content>
 				</v-list-item>
-        <v-list-item v-for="link in apps" :key="link.route" link @click="$root.switch = `${link.route}`, drawer = false">
+        <v-list-item v-for="link in apps" :key="link.route" link @click="$root.switch = `${link.route}`">
+					<v-list-item-icon>
+            <v-icon>{{ link.icon }}</v-icon>
+          </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>{{ link.app }}</v-list-item-title>
           </v-list-item-content>
@@ -46,12 +56,15 @@
 				<v-divider></v-divider>
 				<v-list-group>
           <template v-slot:activator>
+						<v-list-item-icon>
+							<v-icon>mdi-domain</v-icon>
+						</v-list-item-icon>
             <v-list-item>
-              <v-list-item-title>Company</v-list-item-title>
+              <v-list-item-title style="position: relative; left: -8px;">Company</v-list-item-title>
             </v-list-item>
           </template>
 
-					<v-list-item v-for="link in company" :key="link.route" link @click="$root.switch = `${link.route}`, drawer = false">
+					<v-list-item v-for="link in company" :key="link.route" link @click="$root.switch = `${link.route}`">
 						<v-list-item-content>
 							<v-list-item-title>{{ link.app }}</v-list-item-title>
 						</v-list-item-content>
@@ -59,12 +72,15 @@
 				</v-list-group>
 				<v-list-group>
           <template v-slot:activator>
+            <v-list-item-icon>
+							<v-icon>mdi-history</v-icon>
+						</v-list-item-icon>
             <v-list-item>
-              <v-list-item-title>Latest</v-list-item-title>
+              <v-list-item-title style="position: relative; left: -8px;">Latest</v-list-item-title>
             </v-list-item>
           </template>
 
-					<v-list-item v-for="link in latest" :key="link.route" link @click="$root.switch = `${link.route}`, drawer = false">
+					<v-list-item v-for="link in latest" :key="link.route" link @click="$root.switch = `${link.route}`">
 						<v-list-item-content>
 							<v-list-item-title>{{ link.app }}</v-list-item-title>
 						</v-list-item-content>
@@ -72,12 +88,15 @@
 				</v-list-group>
 				<v-list-group>
           <template v-slot:activator>
+            <v-list-item-icon>
+							<v-icon>mdi-code-tags</v-icon>
+						</v-list-item-icon>
             <v-list-item>
-              <v-list-item-title>Developers</v-list-item-title>
+              <v-list-item-title style="position: relative; left: -8px;">Developers</v-list-item-title>
             </v-list-item>
           </template>
 
-					<v-list-item v-for="link in developers" :key="link.route" link @click="$root.switch = `${link.route}`, drawer = false">
+					<v-list-item v-for="link in developers" :key="link.route" link @click="$root.switch = `${link.route}`">
 						<v-list-item-content>
 							<v-list-item-title>{{ link.app }}</v-list-item-title>
 						</v-list-item-content>
@@ -87,17 +106,46 @@
 			<template v-slot:append>
 				<div class="grey darken-4 elevation-14">
 					<v-divider></v-divider>
-					<v-btn class="ma-2" icon color="#7289DA" href="https://discord.gg/cA9dpRM">
-						<v-icon>mdi-discord</v-icon>
-					</v-btn>
-					<v-divider></v-divider>
-
-					<v-list-item two-line>
-						<v-list-item-content>
-							<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': $root.accountColor }">{{ $root.username }}</v-list-item-title>
-							<v-list-item-subtitle>Logged in</v-list-item-subtitle>
-						</v-list-item-content>
-					</v-list-item>
+					<v-tooltip top>
+						<template v-slot:activator="{ on }">
+							<v-btn v-on="on" class="ma-2" icon color="#7289DA" href="https://discord.gg/cA9dpRM">
+								<v-icon>mdi-discord</v-icon>
+							</v-btn>
+						</template>
+						<span>Discord</span>
+					</v-tooltip>
+					<v-tooltip top>
+						<template v-slot:activator="{ on }">
+							<v-btn v-on="on" class="my-2 mr-2" icon color="grey darken-1" href="https://github.com/Paradigm-Dev">
+								<v-icon>mdi-github-circle</v-icon>
+							</v-btn>
+						</template>
+						<span>Github</span>
+					</v-tooltip>
+					<v-tooltip top>
+						<template v-slot:activator="{ on }">
+							<v-btn v-on="on" class="my-2 mr-2" icon color="#7CA5C6" href="https://relay.theparadigmdev.com">
+								<v-icon>mdi-server-network</v-icon>
+							</v-btn>
+						</template>
+						<span>Relay</span>
+					</v-tooltip>
+					<v-tooltip top>
+						<template v-slot:activator="{ on }">
+							<v-btn v-on="on" class="my-2 mr-2" icon color="red" @click="$root.switch = 'Support'">
+								<v-icon>mdi-lifebuoy</v-icon>
+							</v-btn>
+						</template>
+						<span>Support</span>
+					</v-tooltip>
+					<v-tooltip top>
+						<template v-slot:activator="{ on }">
+							<v-btn v-on="on" class="my-2 mr-2" icon color="lime" @click="$root.snackbar = true, $root.feedback = 'Coming soon!'">
+								<v-icon>mdi-bug</v-icon>
+							</v-btn>
+						</template>
+						<span>Report a bug</span>
+					</v-tooltip>
 				</div>
       </template>
     </v-navigation-drawer>
@@ -279,7 +327,7 @@
 		<v-snackbar v-model="$root.snackbar" bottom left :timeout="2000">{{ $root.feedback }}</v-snackbar>
 
 		<!-- Footer -->
-		<v-footer app v-if="!shutdown && app_loaded">
+		<v-footer inset app v-if="!shutdown && app_loaded">
 			<v-progress-linear :active="$root.loadingBar" indeterminate absolute top color="deep-purple accent-4"></v-progress-linear>
 			<div>&copy; {{ new Date().getFullYear() }} Paradigm</div>
 		</v-footer>
@@ -329,17 +377,16 @@ export default {
 		return {
 			drawer: false,
 			apps: [
-				{ route: 'Flamechat', app: 'Flamechat' },
-				{ route: 'News', app: 'The Paradox' },
-				{ route: 'Satellite', app: 'Satellite' },
-				{ route: 'Asteroid', app: 'Asteroid' },
-				{ route: 'Scorecard', app: 'Scorecard' },
-				{ route: 'Drawer', app: 'Drawer' },
-				{ route: 'Media', app: 'Media' },
-				{ route: 'Weather', app: 'Weather' },
+				{ icon: 'mdi-message', route: 'Flamechat', app: 'Flamechat' },
+				{ icon: 'mdi-newspaper', route: 'News', app: 'The Paradox' },
+				{ icon: 'mdi-web', route: 'Satellite', app: 'Satellite' },
+				{ icon: 'mdi-professional-hexagon', route: 'Asteroid', app: 'Asteroid' },
+				{ icon: 'mdi-counter', route: 'Scorecard', app: 'Scorecard' },
+				{ icon: 'mdi-folder-multiple', route: 'Drawer', app: 'Drawer' },
+				{ icon: 'mdi-play-network', route: 'Media', app: 'Media' },
+				{ icon: 'mdi-weather-pouring', route: 'Weather', app: 'Weather' },
 			],
 			company: [
-				{ route: 'Support', app: 'Support' },
 				{ route: 'Roadmap', app: 'Roadmap' },
 				{ route: 'Terms', app: 'Terms of Use, Service, and Privacy Policy' },
 				{ route: 'NetworkStatus', app: 'Network Status' },
@@ -374,9 +421,6 @@ export default {
 		}
 	},
 	methods: {
-		amIOnline(e) {
-      this.onLine = e;
-    },
 		signIn() {
 			if(this.$root.username && this.password) {
 				perf.trace('signIn').start()
@@ -472,7 +516,6 @@ export default {
 	},
 	created() {
 		this.app_loaded = false
-		auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
 		this.$root.loadingBar = true
 		auth.onAuthStateChanged(firebaseUser => {
 			this.app_loaded = true
@@ -645,11 +688,8 @@ html {
 
 .clock {
 	margin: 0;
-  position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-	text-align: center;
+	text-align: right;
 }
 
 .logo {
@@ -682,13 +722,5 @@ html {
   top: 47%;
   left: 40px;
   transform: translate(-50%, -50%);
-}
-
-.offline {
-  background-color: red;
-}
-
-.online {
-  background-color: green;
 }
 </style>

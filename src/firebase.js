@@ -20,6 +20,7 @@ firebaseApp.firestore().settings({
   cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
 })
 firebaseApp.firestore().enablePersistence()
+firebaseApp.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
 
 const auth = firebaseApp.auth()
 const storage = firebaseApp.storage().ref()
