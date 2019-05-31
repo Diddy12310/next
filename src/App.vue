@@ -2,10 +2,10 @@
 	<v-app class="hidden-print-only">
     <!-- Toolbar -->
 		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'black': shutdown }" v-if="app_loaded">
-			<v-app-bar-nav-icon v-on="on" @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned" style="margin: 0px;"><v-icon>menu</v-icon></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned" style="margin: 0px;"><v-icon>menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
-				<img v-on="on" @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent, 'hidden-xs-only': $root.accountColor }">
-				<img v-on="on" @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
+				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent, 'hidden-xs-only': $root.accountColor }">
+				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
       <p v-if="app_loaded && !shutdown" class="clock text-xs-right font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
@@ -18,7 +18,10 @@
 					<v-tooltip bottom>
 						<template v-slot:activator="{ on }">
 							<v-list-item v-on="on" two-line v-ripple="{ class: `${$root.accountColor}--text` }" style="cursor: pointer;" @click="$root.account_dialog = true">
-								<v-list-item-content>
+								<v-list-item-avatar class="my-0">
+									<img :src="$root.accountPic">
+								</v-list-item-avatar>
+								<v-list-item-content style="position: relative; left: -14px;">
 									<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': $root.accountColor }">{{ $root.username }}</v-list-item-title>
 									<v-list-item-subtitle>Logged in</v-list-item-subtitle>
 								</v-list-item-content>
@@ -151,11 +154,22 @@
     </v-navigation-drawer>
 
 		<!-- Account dialog -->
-		<v-dialog v-model="$root.account_dialog" max-width="500">
+		<v-dialog v-model="$root.account_dialog" max-width="530px">
 			<v-card>
-				<v-card-title primary-title>
-					<h3 v-if="!$root.userPresent" class="headline mb-0">Account</h3>
-					<h3 v-if="$root.userPresent" class="headline mb-0 font-weight-medium text-uppercase" :style="{ color: $root.accountColor }">{{ $root.username }}</h3>
+				<v-list-item v-if="$root.userPresent">
+					<v-list-item-avatar>
+						<img :src="$root.accountPic">
+					</v-list-item-avatar>
+					<v-list-item-content style="position: relative; left: -10px;">
+						<v-list-item-title class="headline font-weight-medium text-uppercase" :style="{ 'color': $root.accountColor }">{{ $root.username }}</v-list-item-title>
+						<v-list-item-subtitle>{{ $root.accountBio }}</v-list-item-subtitle>
+					</v-list-item-content>
+					<v-btn icon @click="$root.account_dialog = false" class="dialog-close-btn">
+						<v-icon>close</v-icon>
+					</v-btn>
+				</v-list-item>
+				<v-card-title primary-title v-if="!$root.userPresent">
+					<h3 class="headline mb-0">Account</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="$root.account_dialog = false" class="dialog-close-btn">
 						<v-icon>close</v-icon>
@@ -184,15 +198,15 @@
 					</v-form>
 
 					<div v-if="$root.userPresent">
-						<p>{{ $root.accountBio }}</p>
-						<img src="./assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ $root.moonrocks }}</span>
 						<p><strong>Last Sign In:</strong> {{ userInfo.metadata.lastSignInTime }}</p>
 						<p><strong>Account Creation:</strong> {{ userInfo.metadata.creationTime }}</p>
 						<p><strong>User ID:</strong> {{ userInfo.uid }}</p>
+						<img src="./assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ $root.moonrocks }}</span>
 						<v-divider></v-divider>
 						<div class="pt-2">
 							<v-btn @click="newBioDialog = true" text color="accent">Edit Bio</v-btn>
 							<v-btn @click="newColorDialog = true" text color="accent">Edit Color</v-btn>
+							<v-btn @click="changePicDialog = true" text color="accent">Change Picture</v-btn>
 							<v-btn @click="newPasswordDialog = true" text color="warning">New Password</v-btn>
 							<v-btn @click="deleteDialog = true" text color="error">Delete Account</v-btn>
 						</div>
@@ -247,6 +261,34 @@
 				<v-card-actions>
 					<v-btn @click="changeColor($root.accountColor.hex)" color="warning" text>Save</v-btn>
 					<v-btn @click="newColorDialog = false" text color="accent">Cancel</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+
+		<!-- Change pic dialog -->
+		<v-dialog v-model="changePicDialog" max-width="545px">
+			<v-card>
+				<v-card-title><h3 class="headline mb-0">Change Profile Pic</h3></v-card-title>
+				<v-card-text>
+					<v-container fluid>
+						<v-layout row wrap max-height="600px" style="overflow-y: auto;">
+							<v-flex v-for="pic in $root.avail_profile_pics" :key="pic" xs4>
+								<v-card @click="change_pic = pic" v-ripple flat tile>
+									<v-img :src="`https://relay.theparadigmdev.com/profile-pics/${pic}.jpg`" width="150px" height="150px"></v-img>
+									<v-fade-transition>
+										<v-overlay v-if="change_pic == pic" absolute>
+											<v-icon>check</v-icon>
+										</v-overlay>
+									</v-fade-transition>
+								</v-card>
+							</v-flex>
+						</v-layout>
+					</v-container>
+				</v-card-text>
+				<v-divider></v-divider>
+				<v-card-actions>
+					<v-btn @click="changePic(change_pic)" color="warning" text>Save</v-btn>
+					<v-btn @click="changePicDialog = false" text color="accent">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -421,9 +463,9 @@ export default {
 			currentDate: '',
 			app_loaded: false,
 			shutdown: null,
-			onLine: null,
-			onlineSlot: 'online',
-			offlineSlot: 'offline'
+			changePicDialog: false,
+			avail_profile_pics: ['paradigm', 'barn-owl', 'chipmunk', 'dart-frog', 'deer', 'giraffe', 'hedgehog', 'hermit-crab', 'panther', 'polar-bear', 'sea-lion', 'sting-ray'],
+			change_pic: ''
 		}
 	},
 	methods: {
@@ -478,20 +520,19 @@ export default {
 			this.newPassword = null
 		},
 		deleteUser() {
-			this.$ga.event(this.$root.username, 'deleted their account')
-			auth.currentUser.delete().then(() => {
-				// User deleted.
-				db.collection('users').doc(this.$root.username).delete().then(() => {
-					this.$root.username = null
-					this.userInfo = null
-					this.$root.userPresent = false
+			db.collection('users').doc(this.$root.username).delete().then(() => {
+				this.$root.username = null
+				this.userInfo = null
+				this.$root.userPresent = false
+				auth.currentUser.delete().then(() => {
+					this.$root.feedback = 'Account deleted sucessfully.'
+					this.$root.snackbar = true
+				}).catch(error => {
+					// An error happened.
+					console.log(error)
 				})
-				this.$root.feedback = 'Account deleted sucessfully.'
-				this.$root.snackbar = true
-			}).catch(error => {
-				// An error happened.
-				console.log(error)
 			})
+			this.$ga.event(this.$root.username, 'deleted their account')
 			this.deleteDialog = false
 			this.$root.account_dialog = false
 		},
@@ -502,6 +543,16 @@ export default {
 				this.$root.accountColor = newColor
 				this.newColorDialog = false
 				this.$ga.event(this.$root.username, 'changed their color to ' + this.$root.accountColor)
+			})
+		},
+		changePic(newPic) {
+			db.collection('users').doc(this.$root.username).update({
+				pic: newPic
+			}).then(() => {
+				this.$root.accountPic = `https://relay.theparadigmdev.com/profile-pics/${newPic}.jpg`
+				this.changePicDialog = false
+				this.change_pic = ''
+				this.$ga.event(this.$root.username, 'changed their pic to ' + this.$root.accountPic)
 			})
 		},
 		changeBio(newBio) {
@@ -545,6 +596,7 @@ export default {
 					this.$root.isBanned = doc.data().isBanned
 					this.$root.strikes = doc.data().strikes
 					this.$root.isWriter = doc.data().isWriter
+					this.$root.accountPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
 					if (doc.data().strikes >= 3) {
 						this.$root.isBanned = true
 						if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {
@@ -569,6 +621,7 @@ export default {
 							this.$root.isBanned = doc.data().isBanned
 							this.$root.strikes = doc.data().strikes
 							this.$root.isWriter = doc.data().isWriter
+							this.$root.accountPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
 							if (doc.data().strikes >= 3) {
 								this.$root.isBanned = true
 								if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {
@@ -588,18 +641,19 @@ export default {
 		})
 
 		var metaRef = db.collection('paradigm')
-		metaRef.doc('config').get().then(doc => {
-			this.sign_up_enable = doc.data().sign_up_enable
-			this.lockdown = doc.data().lockdown
-			this.shutdown = doc.data().shutdown
-			this.flamechat_enable = doc.data().flamechat_enable,
-			this.global_pnf = doc.data().global_pnf,
-			this.flamechat_html_render = doc.data().flamechat_html_render
-		})
-
 		metaRef.onSnapshot(snapshot => {
 			snapshot.docChanges().forEach(change => {
 				if(change.type === "modified") {
+					let doc = change.doc
+					this.sign_up_enable = doc.data().sign_up_enable
+					this.lockdown = doc.data().lockdown
+					this.shutdown = doc.data().shutdown
+					this.flamechat_enable = doc.data().flamechat_enable,
+					this.global_pnf = doc.data().global_pnf,
+					this.flamechat_html_render = doc.data().flamechat_html_render
+				}
+
+				if(change.type === "added") {
 					let doc = change.doc
 					this.sign_up_enable = doc.data().sign_up_enable
 					this.lockdown = doc.data().lockdown

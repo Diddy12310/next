@@ -64,7 +64,9 @@ new Vue({
       uid: '',
       terminalOpen: false,
       account_dialog: false,
-      bugreport_dialog: false
+      bugreport_dialog: false,
+      accountPic: '',
+      avail_profile_pics: ['paradigm', 'barn-owl', 'chipmunk', 'dart-frog', 'deer', 'giraffe', 'hedgehog', 'hermit-crab', 'panther', 'polar-bear', 'sea-lion', 'sting-ray', 'chickadee', 'hummingbird', 'seahorse'],
     }
   }
 }).$mount('div#app')    

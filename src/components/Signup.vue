@@ -35,6 +35,23 @@
       </v-window-item>
 
       <v-window-item :value="5">
+        <v-container style="margin: auto;" fluid>
+          <v-layout row wrap>
+            <v-flex v-for="pic in $root.avail_profile_pics" :key="pic" xs4>
+              <v-card @click="$root.accountPic = pic" v-ripple flat tile>
+                <v-img :src="`https://relay.theparadigmdev.com/profile-pics/${pic}.jpg`" width="150px" height="150px"></v-img>
+                <v-fade-transition>
+                  <v-overlay v-if="$root.accountPic == pic" absolute>
+                    <v-icon>check</v-icon>
+                  </v-overlay>
+                </v-fade-transition>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-window-item>
+
+      <v-window-item :value="6">
         <v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms_accepted"></v-checkbox>
         <v-btn href="http://relay.theparadigmdev.com/terms.html" text color="blue-grey lighten-2">View Terms</v-btn><br>
         <span class="caption grey--text text--darken-1">
@@ -42,17 +59,17 @@
         </span>
       </v-window-item>
 
-      <v-window-item :value="6">
+      <v-window-item :value="7">
         <span class="caption grey--text text--darken-1">
           Welcome to Paradigm!
         </span>
       </v-window-item>
     </v-window>
     <v-card-actions>
-      <v-btn :disabled="step === 1 || step === 6" text @click="step--">Back</v-btn>
+      <v-btn :disabled="step === 1 || step === 7" text @click="step--">Back</v-btn>
       <v-spacer></v-spacer>
-      <v-btn v-if="step !== 6" color="primary" @click="step++">Next</v-btn>
-      <v-btn color="primary" v-if="step === 6" @click="signUp()">Continue</v-btn>
+      <v-btn v-if="step !== 7" color="primary" @click="step++">Next</v-btn>
+      <v-btn color="primary" v-if="step === 7" @click="signUp()">Continue</v-btn>
     </v-card-actions>
   </div>
 </template>
@@ -73,7 +90,7 @@ export default {
   methods: {
     signUp() {
 			if (this.password_confirm === this.password) {
-				if (this.$root.username && this.password && this.terms_accepted && this.$root.accountBio && this.$root.accountColor) {
+				if (this.$root.username && this.password && this.terms_accepted && this.$root.accountBio && this.$root.accountColor && this.$root.accountPic) {
 					auth.createUserWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(user => {
 						this.$root.username = user.user.email.substring(0, user.user.email.lastIndexOf("@"))
 						db.collection('users').doc(this.$root.username).set({
@@ -88,7 +105,8 @@ export default {
 							isBanned: false,
 							strikes: 0,
 							isWriter: false,
-							isLoggedIn: true
+              isLoggedIn: true,
+              pic: this.$root.accountPic
 						})
             this.$ga.event(this.$root.username, 'signed up')
             this.$root.account_dialog = false

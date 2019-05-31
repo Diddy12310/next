@@ -36,12 +36,19 @@
 						<ul class="messages" v-chat-scroll="{ always: false }">
 							<p v-if="messages == []">There are no messages posted on this room.</p>
 							<li v-for="message in messages" :key="message.id" :id="message.id">
-								<v-btn :style="{ color: message.color }" class="name" text @click="openUsernamePopup(message.name)">{{ message.name }}</v-btn>
+								<v-list-item style="cursor: pointer; border-radius: 12px;" v-ripple @click="openUsernamePopup(message.name)">
+									<v-list-item-avatar class="my-0">
+										<img :src="message.pic">
+									</v-list-item-avatar>
+									<v-list-item-content style="position: relative; left: -8px;">
+										<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': message.color }">{{ message.name }}</v-list-item-title>
+										<v-list-item-subtitle class="time">{{ message.timestamp }}</v-list-item-subtitle>
+									</v-list-item-content>
+								</v-list-item>
 								<v-btn class="admin-btn" icon text color="error" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
 								<v-btn class="admin-btn" icon text color="warning" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn><br>
 								<span v-if="flamechat_html_render" v-html="message.content" class="message"></span>
 								<span v-if="!flamechat_html_render" class="message">{{ message.content }}</span>
-								<span class="time">{{ message.timestamp }}</span>
 							</li>
 						</ul>
 					</v-card-text>
@@ -65,18 +72,22 @@
 			</div>
 		</v-container>
 
-		<v-dialog v-model="profilePopupEnable" max-width="350">
+		<v-dialog v-model="profilePopupEnable" max-width="450">
 			<v-card>
 				<div v-if="usersDbDownloaded">
-					<v-card-title>
-						<h3 class="headline mb-0 text-uppercase font-weight-medium" :style="{ color: profilePopupColor }">{{ profilePopupUsername }}</h3>
-						<v-spacer></v-spacer>
-						<v-btn icon @click="closeUsernamePopup" class="dialog-close-btn">
+					<v-list-item two-line>
+						<v-list-item-avatar class="my-0">
+							<img :src="profilePopupPic">
+						</v-list-item-avatar>
+						<v-list-item-content style="position: relative; left: -14px;">
+							<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': profilePopupColor }">{{ profilePopupUsername }}</v-list-item-title>
+							<v-list-item-subtitle>{{ profilePopupBio }}</v-list-item-subtitle>
+						</v-list-item-content>
+						<v-btn icon @click="closeUsernamePopup()" class="dialog-close-btn">
 							<v-icon>close</v-icon>
 						</v-btn>
-					</v-card-title>
+					</v-list-item>
 					<v-card-text>
-						<p>{{ profilePopupBio }}</p>
 						<img src="@/assets/isAdmin.png" alt="Administrator" class="moonrock-img" v-if="profilePopupAdmin" style="height: 25px !important;">
 						<img src="@/assets/asteroid.png" alt="Asteroid" class="moonrock-img" v-if="profilePopupAsteroid" style="height: 25px !important;"><br>
 						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ profilePopupMoonrocks }}</span>
@@ -127,6 +138,7 @@ export default {
 			profilePopupBio: '',
 			profilePopupColor: '',
 			profilePopupMoonrocks: '',
+			profilePopupPic: '',
 			usersDbDownloaded: false,
 			profilePopupAdmin: false,
 			profilePopupAsteroid: false,
@@ -149,7 +161,7 @@ export default {
 							id: doc.id,
 							name: doc.data().name,
 							db: doc.data().db,
-							available: doc.data().available,
+							available: doc.data().available
 						})
 					}
 					if (change.type === "removed") {
@@ -232,7 +244,8 @@ export default {
 					name: this.$root.username,
 					content: this.newMessage,
 					color: this.$root.accountColor,
-					timestamp: Date.now()
+					timestamp: Date.now(),
+					pic: this.$root.accountPic
 				}).catch(error => {
 					console.log(error.message)
 					this.$root.feedback = 'Your message did not send successfully!'
@@ -279,7 +292,8 @@ export default {
 							name: doc.data().name,
 							content: doc.data().content,
 							color: doc.data().color,
-							timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a')
+							timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a'),
+							pic: doc.data().pic
 						})
 					}
 					if(change.type === "removed") {
@@ -293,7 +307,8 @@ export default {
 							name: doc.data().name,
 							content: doc.data().content,
 							color: doc.data().color,
-							timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a')
+							timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a'),
+							pic: doc.data().pic
 						})
 					}
 				})
@@ -314,6 +329,7 @@ export default {
 				this.profilePopupUsername = username
 				this.profilePopupAdmin = doc.data().isAdmin
 				this.profilePopupAsteroid = doc.data().isAsteroid
+				this.profilePopupPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
 				this.usersDbDownloaded = true
 				this.$root.loadingBar = false
 			})
@@ -328,6 +344,7 @@ export default {
 						this.profilePopupUsername = username
 						this.profilePopupAdmin = doc.data().isAdmin
 						this.profilePopupAsteroid = doc.data().isAsteroid
+						this.profilePopupPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
 						this.usersDbDownloaded = true
 						this.$root.loadingBar = false
 					}
@@ -343,6 +360,7 @@ export default {
 			this.profilePopupMoonrocks = ''
 			this.profilePopupAdmin = false,
 			this.profilePopupAsteroid = false
+			this.profilePopupPic = ''
 			this.usersDbDownloaded = false
 		},
 		noDM() {
