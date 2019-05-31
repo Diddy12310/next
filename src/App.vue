@@ -15,7 +15,7 @@
 		<v-navigation-drawer v-model="drawer" app>
 			<template v-slot:prepend>
 				<v-card-actions class="grey darken-4 elevation-4 ma-0 pa-0">
-					<v-tooltip bottom>
+					<v-tooltip bottom open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-list-item v-on="on" two-line v-ripple="{ class: `${$root.accountColor}--text` }" style="cursor: pointer;" @click="$root.account_dialog = true">
 								<v-list-item-avatar class="my-0">
@@ -30,7 +30,7 @@
 						<span>Account</span>
 					</v-tooltip>
 					<v-spacer></v-spacer>
-					<v-tooltip bottom>
+					<v-tooltip bottom open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn v-on="on" v-if="$root.isAdmin" @click="$root.terminalOpen = true" icon class="mx-3" color="grey"><v-icon>mdi-console-line</v-icon></v-btn>
 						</template>
@@ -109,7 +109,7 @@
 			<template v-slot:append>
 				<div class="grey darken-4 elevation-14">
 					<v-divider></v-divider>
-					<v-tooltip top>
+					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn v-on="on" class="ma-2" icon color="#7289DA" href="https://discord.gg/cA9dpRM">
 								<v-icon>mdi-discord</v-icon>
@@ -117,7 +117,7 @@
 						</template>
 						<span>Discord</span>
 					</v-tooltip>
-					<v-tooltip top>
+					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn v-on="on" class="my-2 mr-2" icon color="grey darken-1" href="https://github.com/Paradigm-Dev">
 								<v-icon>mdi-github-circle</v-icon>
@@ -125,7 +125,7 @@
 						</template>
 						<span>Github</span>
 					</v-tooltip>
-					<v-tooltip top>
+					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn v-on="on" class="my-2 mr-2" icon color="#7CA5C6" href="https://relay.theparadigmdev.com">
 								<v-icon>mdi-server-network</v-icon>
@@ -133,7 +133,7 @@
 						</template>
 						<span>Relay</span>
 					</v-tooltip>
-					<v-tooltip top>
+					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn v-on="on" class="my-2 mr-2" icon color="red" @click="$root.switch = 'Support'">
 								<v-icon>mdi-lifebuoy</v-icon>
@@ -141,7 +141,7 @@
 						</template>
 						<span>Support</span>
 					</v-tooltip>
-					<v-tooltip top>
+					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn v-on="on" class="my-2 mr-2" icon color="lime" @click="$root.bugreport_dialog = true">
 								<v-icon>mdi-bug</v-icon>
@@ -259,7 +259,7 @@
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn @click="changeColor($root.accountColor.hex)" color="warning" text>Save</v-btn>
+					<v-btn @click="changeColor($root.accountColor)" color="warning" text>Save</v-btn>
 					<v-btn @click="newColorDialog = false" text color="accent">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
@@ -270,7 +270,7 @@
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Change Profile Pic</h3></v-card-title>
 				<v-card-text>
-					<v-container fluid>
+					<v-container fluid grid-list-xs>
 						<v-layout row wrap>
 							<v-flex v-for="pic in $root.avail_profile_pics" :key="pic" xs4>
 								<v-card @click="change_pic ? change_pic = null : change_pic = pic" v-ripple flat tile>
