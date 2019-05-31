@@ -271,12 +271,12 @@
 				<v-card-title><h3 class="headline mb-0">Change Profile Pic</h3></v-card-title>
 				<v-card-text>
 					<v-container fluid>
-						<v-layout row wrap max-height="600px" style="overflow-y: auto;">
+						<v-layout row wrap>
 							<v-flex v-for="pic in $root.avail_profile_pics" :key="pic" xs4>
-								<v-card @click="change_pic = pic" v-ripple flat tile>
+								<v-card @click="change_pic ? change_pic = null : change_pic = pic" v-ripple flat tile>
 									<v-img :src="`https://relay.theparadigmdev.com/profile-pics/${pic}.jpg`" width="150px" height="150px"></v-img>
 									<v-fade-transition>
-										<v-overlay v-if="change_pic == pic" absolute>
+										<v-overlay v-if="change_pic == pic" absolute color="grey">
 											<v-icon>check</v-icon>
 										</v-overlay>
 									</v-fade-transition>
