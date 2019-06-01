@@ -273,7 +273,7 @@
 					<v-container fluid grid-list-xs>
 						<v-layout row wrap>
 							<v-flex v-for="pic in $root.avail_profile_pics" :key="pic" xs4>
-								<v-card @click="change_pic ? change_pic = null : change_pic = pic" v-ripple flat tile>
+								<v-card @click="change_pic == pic ? change_pic = null : change_pic = pic" v-ripple flat tile>
 									<v-img :src="`https://relay.theparadigmdev.com/profile-pics/${pic}.jpg`" width="150px" height="150px"></v-img>
 									<v-fade-transition>
 										<v-overlay v-if="change_pic == pic" absolute color="grey">
@@ -314,7 +314,7 @@
 		</v-dialog>
 
 		<!-- Admin terminal -->
-		<v-bottom-sheet v-model="$root.terminalOpen" v-if="$root.isAdmin">
+		<v-bottom-sheet v-model="$root.terminalOpen">
 			<Terminal />
     </v-bottom-sheet>
 
@@ -637,6 +637,8 @@ export default {
 				this.password = ''
 				this.$root.accountBio = ''
 				this.terms = false
+				this.drawer = false
+				this.$root.terminalOpen = false
 			}
 		})
 
@@ -648,8 +650,8 @@ export default {
 					this.sign_up_enable = doc.data().sign_up_enable
 					this.lockdown = doc.data().lockdown
 					this.shutdown = doc.data().shutdown
-					this.flamechat_enable = doc.data().flamechat_enable,
-					this.global_pnf = doc.data().global_pnf,
+					this.flamechat_enable = doc.data().flamechat_enable
+					this.global_pnf = doc.data().global_pnf
 					this.flamechat_html_render = doc.data().flamechat_html_render
 				}
 
@@ -658,8 +660,8 @@ export default {
 					this.sign_up_enable = doc.data().sign_up_enable
 					this.lockdown = doc.data().lockdown
 					this.shutdown = doc.data().shutdown
-					this.flamechat_enable = doc.data().flamechat_enable,
-					this.global_pnf = doc.data().global_pnf,
+					this.flamechat_enable = doc.data().flamechat_enable
+					this.global_pnf = doc.data().global_pnf
 					this.flamechat_html_render = doc.data().flamechat_html_render
 				}
 

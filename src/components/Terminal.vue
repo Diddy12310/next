@@ -6,7 +6,7 @@
         <span :style="{ 'color': profilePopupData.color, 'font-size': '14px' }">{{ profilePopupUsername }}</span><br>
         {{ profilePopupData.uid }}<br>
         {{ profilePopupData.bio }}<br>
-        --------------------------------------<br>
+        ---------------------------------------<br>
 				Moonrocks: {{ profilePopupData.moonrocks }}<br>
 				Admin: {{ profilePopupData.isAdmin }}<br>
         Asteroid: {{ profilePopupData.isAsteroid }}<br>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { db } from '@/firebase'
+import { db, auth } from '@/firebase'
 
 export default {
   name: 'Terminal',
@@ -47,103 +47,125 @@ export default {
   },
   methods: {
     sendCmd() {
-      this.cmd_output = this.cmd_input.split(' ')
-			switch (this.cmd_output[0]) {
-				case 'exit':
-					this.$root.terminalOpen = false
-					this.profilePopupEnable = false
-					break
-				case 'help':
-					window.open('https://relay.theparadigmdev.com/terminal.html')
-					break
-				case 'set':
-					switch (this.cmd_output[1]) {
-						case 'flamechat':
-							this.toggleFc(this.parseBool(this.cmd_output[2]))
-							break
-						case '404':
-							this.global_pnfToggle(this.parseBool(this.cmd_output[2]))
-							break
-						case 'lockdown':
-							this.lockdownToggle(this.parseBool(this.cmd_output[2]))
-							break
-						case 'shutdown':
-							this.toggleShutdown(this.parseBool(this.cmd_output[2]))
-							break
-						case 'sign_up':
-							this.toggleSignUp(this.parseBool(this.cmd_output[2]))
-							break
-						default:
-							this.cmdError('! command does not exist')
-					}
-					break
-				case 'user':
-					switch (this.cmd_output[2]) {
-						case 'ban':
-							this.userBan(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-							break
-						case 'admin':
-							this.userAdmin(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-							break
-						case 'view':
-							this.openUsernamePopup(this.cmd_output[1])
-							break
-						case 'strike':
-							this.userStrike(this.cmd_output[1], this.cmd_output[3])
-							break
-						case 'the_inner_core':
-							this.userTIC(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-							break
-						case 'asteroid':
-							this.userAsteroid(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-							break
-						case 'writer':
-							this.userWriter(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-							break
-						case 'analytics':
-							this.userAnalytics(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
-							break
-					}
-					break
-				case 'switch':
-					this.$root.switch = this.cmd_output[1]
-					break
-				case 'clear':
-					this.profilePopupEnable = false
-					this.cmd_console = ''
-					this.cmd_console_open = false
-					break
-				case 'console':
-					this.cmd_console = ''
-					for (var array_pos = 2; array_pos < this.cmd_output.length; array_pos++) {
-						this.cmd_console = this.cmd_console + ' ' + this.cmd_output[array_pos]
-					}
-					this.cmd_console_color = this.cmd_output[1]
-					this.cmd_console_open = true
-					break
+			if (this.$root.isAdmin) {
+				this.cmd_output = this.cmd_input.split(' ')
+				switch (this.cmd_output[0]) {
+					case 'signout':
+						this.signOut()
+						break
+					case 'exit':
+						this.$root.terminalOpen = false
+						this.profilePopupEnable = false
+						break
+					case 'help':
+						window.open('https://relay.theparadigmdev.com/terminal.html')
+						break
+					case 'set':
+						switch (this.cmd_output[1]) {
+							case 'flamechat':
+								this.toggleFc(this.parseBool(this.cmd_output[2]))
+								break
+							case '404':
+								this.global_pnfToggle(this.parseBool(this.cmd_output[2]))
+								break
+							case 'lockdown':
+								this.lockdownToggle(this.parseBool(this.cmd_output[2]))
+								break
+							case 'shutdown':
+								this.toggleShutdown(this.parseBool(this.cmd_output[2]))
+								break
+							case 'sign_up':
+								this.toggleSignUp(this.parseBool(this.cmd_output[2]))
+								break
+							default:
+								this.cmdError('Command does not exist.')
+								break
+						}
+						break
+					case 'user':
+						switch (this.cmd_output[2]) {
+							case 'ban':
+								this.userBan(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+								break
+							case 'admin':
+								this.userAdmin(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+								break
+							case 'view':
+								this.openUsernamePopup(this.cmd_output[1])
+								break
+							case 'strike':
+								this.userStrike(this.cmd_output[1], this.cmd_output[3])
+								break
+							case 'the_inner_core':
+								this.userTIC(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+								break
+							case 'asteroid':
+								this.userAsteroid(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+								break
+							case 'writer':
+								this.userWriter(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+								break
+							case 'analytics':
+								this.userAnalytics(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+								break
+							default:
+								this.cmdError('! command does not exist')
+								break
+						}
+						break
+					case 'switch':
+						this.$root.switch = this.cmd_output[1]
+						break
+					case 'clear':
+						this.profilePopupEnable = false
+						this.cmd_console = ''
+						this.cmd_console_open = false
+						break
+					case 'console':
+						this.cmd_console = ''
+						for (var array_pos = 2; array_pos < this.cmd_output.length; array_pos++) {
+							this.cmd_console = this.cmd_console + ' ' + this.cmd_output[array_pos]
+						}
+						this.cmd_console_color = this.cmd_output[1]
+						this.cmd_console_open = true
+						break
+					default:
+						this.cmdError('! command does not exist')
+						break
+				}
+				this.cmd_input = ''
+				this.cmd_output = ''
+			} else {
+				this.cmdError('! you are not authorized to execute commands')
 			}
-			this.cmd_input = ''
-			this.cmd_output = ''
 		},
 		userBan(username, input) {
       db.collection('users').doc(username).update({
         isBanned: input
-      })
+      }).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
+			})
 		},
 		userWriter(username, input) {
       db.collection('users').doc(username).update({
         isWriter: input
-      })
+      }).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
+			})
     },
     userAdmin(username, input) {
       db.collection('users').doc(username).update({
         isAdmin: input
-      })
+      }).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
+			})
 		},
 		userAnalytics(username, input) {
       db.collection('users').doc(username).update({
         isAnalytics: input
-      })
+      }).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
+			})
     },
     userStrike(username, input) {
       db.collection('users').doc(username).get().then(doc => {
@@ -157,18 +179,26 @@ export default {
 							db.collection('users').doc(username).update({ isBanned: true })
 						}
 					}
+				}).catch(error => {
+					this.cmdError(`! an error occurred: ${error}`)
 				})
+			}).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
 			})
     },
     userTIC(username, input) {
       db.collection('users').doc(username).update({
         isInnerCore: input
-      })
+      }).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
+			})
     },
     userAsteroid(username, input) {
       db.collection('users').doc(username).update({
         isAsteroid: input
-      })
+      }).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
+			})
     },
     toggleSignUp(input) {
 			db.collection('paradigm').doc('config').update({
@@ -180,6 +210,8 @@ export default {
 				} else {
 					this.$ga.event(this.$root.username, 'disabled sign ups')
 				}
+			}).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
 			})
 		},
 		toggleShutdown(input) {
@@ -192,6 +224,8 @@ export default {
 				} else {
 					this.$ga.event(this.$root.username, 'disabled shutdown')
 				}
+			}).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
 			})
 		},
 		toggleFcHTML() {
@@ -203,6 +237,8 @@ export default {
 				} else {
 					this.$ga.event(this.$root.username, 'disabled Flamechat HTML')
 				}
+			}).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
 			})
 		},
 		lockdownToggle(input) {
@@ -219,6 +255,8 @@ export default {
 					this.$root.feedback = 'Lockdown ended successfully.'
 					this.$root.snackbar = true
 				}
+			}).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
 			})
 		},
 		global_pnfToggle(input) {
@@ -235,6 +273,8 @@ export default {
 					this.$root.feedback = '404 ended successfully.'
 					this.$root.snackbar = true
 				}
+			}).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
 			})
 		},
 		toggleFc(input) {
@@ -248,6 +288,8 @@ export default {
 				if (!this.flamechat_enable) {
 					this.$ga.event(this.$root.username, 'disabled Flamechat')
 				}
+			}).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
 			})
     },
     openUsernamePopup(username) {
@@ -259,6 +301,8 @@ export default {
 				this.profilePopupUsername = username
 				this.usersDbDownloaded = true
 				this.$root.loadingBar = false
+			}).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
 			})
 
 			usersRef.onSnapshot(snapshot => {
@@ -280,13 +324,16 @@ export default {
 			this.usersDbDownloaded = false
 		},
     cmdError(input_text) {
-			this.cmd_input = input_text
-      this.cmd_class = 'red--text'
+			this.cmd_console = input_text
+			this.cmd_console_color = 'red'
+			this.cmd_console_open = true
+			this.cmd_input = ''
 			this.cmd_enabled = false
       setTimeout(() => {
-        this.cmd_input = ''
-        this.cmd_class = 'white--text'
-        this.cmd_enabled = true
+				this.cmd_console_open = false
+				this.cmd_enabled = true
+				this.cmd_console = ''
+				this.cmd_console_color = 'white'
       }, 3000)
     },
     parseBool(input) {
@@ -299,7 +346,21 @@ export default {
 				if (doc != null) return true
 				if (doc == null) return false
 			})
+		},
+		signOut() {
+			auth.signOut().then(() => {
+				db.collection('users').doc(this.$root.username).update({ isLoggedIn: false })
+				this.$root.feedback = 'Signed out successfully.'
+				this.$root.snackbar = true
+				this.$ga.event(this.$root.username, 'signed out')
+			})
 		}
   }
 }
 </script>
+
+<style scoped>
+input {
+	outline: none;
+}
+</style>

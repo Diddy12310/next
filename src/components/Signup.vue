@@ -38,7 +38,7 @@
         <v-container style="margin: auto;" fluid>
           <v-layout row wrap>
             <v-flex v-for="pic in $root.avail_profile_pics" :key="pic" xs4>
-              <v-card @click="$root.accountPic = pic" v-ripple flat tile>
+              <v-card @click="$root.accountPic == pic ? $root.accountPic = null : $root.accountPic = pic" v-ripple flat tile>
                 <v-img :src="`https://relay.theparadigmdev.com/profile-pics/${pic}.jpg`" width="150px" height="150px"></v-img>
                 <v-fade-transition>
                   <v-overlay v-if="$root.accountPic == pic" absolute>
