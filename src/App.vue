@@ -374,7 +374,7 @@
 		<v-snackbar v-model="$root.snackbar" bottom left :timeout="2000">{{ $root.feedback }}</v-snackbar>
 
 		<!-- Footer -->
-		<v-footer inset app v-if="!shutdown && app_loaded">
+		<v-footer app v-if="!shutdown && app_loaded">
 			<v-progress-linear :active="$root.loadingBar" indeterminate absolute top color="deep-purple accent-4"></v-progress-linear>
 			<span class="caption text-uppercase">&copy; {{ new Date().getFullYear() }} Paradigm</span>
 		</v-footer>
@@ -566,7 +566,7 @@ export default {
 		},
 		startTime() {
 			var today = new Date()
-			this.currentDate = moment(today).format('MMMM Do YYYY')
+			this.currentDate = moment(today).format('MMMM Do, YYYY')
 			this.currentTime = moment(today).format('LTS')
 			setTimeout(this.startTime, 500)
 		}
