@@ -599,10 +599,9 @@ export default {
 					this.$root.accountPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
 					if (doc.data().strikes >= 3) {
 						this.$root.isBanned = true
-						if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {
-							db.collection('users').doc(this.$root.username).update({ isBanned: true })
-						}
+						db.collection('users').doc(this.$root.username).update({ isBanned: true })
 					} else {
+						this.$root.isBanned = false
 						db.collection('users').doc(this.$root.username).update({ isBanned: false })
 					}
 				})
@@ -624,9 +623,10 @@ export default {
 							this.$root.accountPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
 							if (doc.data().strikes >= 3) {
 								this.$root.isBanned = true
-								if (db.collection('users').doc(this.$root.username).get().then(doc => doc.data().isBanned)) {
-									db.collection('users').doc(this.$root.username).update({ isBanned: true })
-								}
+								db.collection('users').doc(this.$root.username).update({ isBanned: true })
+							} else {
+								this.$root.isBanned = false
+								db.collection('users').doc(this.$root.username).update({ isBanned: false })
 							}
 						}
 					})
