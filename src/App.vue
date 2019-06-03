@@ -371,10 +371,10 @@
 		</v-content>
 
 		<!-- Snackbar -->
-		<v-snackbar v-model="$root.snackbar" bottom left :timeout="2000">{{ $root.feedback }}</v-snackbar>
+		<v-snackbar v-model="$root.snackbar" bottom right :timeout="2000">{{ $root.feedback }}</v-snackbar>
 
 		<!-- Footer -->
-		<v-footer app v-if="!shutdown && app_loaded">
+		<v-footer app inset v-if="!shutdown && app_loaded">
 			<v-progress-linear :active="$root.loadingBar" indeterminate absolute top color="deep-purple accent-4"></v-progress-linear>
 			<span class="caption text-uppercase">&copy; {{ new Date().getFullYear() }} Paradigm</span>
 		</v-footer>
@@ -384,7 +384,7 @@
 </template>
 
 <script>
-import { db, perf, auth } from './firebase'
+import { db, perf, auth, msg } from './firebase'
 import firebase from 'firebase/app'
 import moment from 'moment'
 import Signup from './components/Signup'
@@ -569,6 +569,31 @@ export default {
 			this.currentDate = moment(today).format('MMMM Do, YYYY')
 			this.currentTime = moment(today).format('LTS')
 			setTimeout(this.startTime, 500)
+		},
+		requestNotificationsPermissions() {
+			console.log('Requesting notifications permission...');
+			Notification.requestPermission().then(() => {
+				// Notification permission granted.
+				this.saveMessagingDeviceToken();
+			}).catch(error => {
+				console.error('Unable to get permission to notify.', error);
+			});
+		},
+		saveMessagingDeviceToken() {
+			msg.getToken().then(currentToken => {
+				if (currentToken) {
+					console.log('Got FCM device token:', currentToken)
+					// Saving the Device Token to the datastore.
+					db.collection('paradigm').doc('fcm_keys').update({
+						values: firebase.firestore.FieldValue.arrayUnion(currentToken)
+					})
+				} else {
+					// Need to request permissions to show notifications.
+					this.requestNotificationsPermissions()
+				}
+			}).catch(error => {
+				console.error('Unable to get messaging token.', error)
+			})
 		}
 	},
 	created() {
@@ -674,6 +699,7 @@ export default {
 				}
 			})
 		})
+		this.requestNotificationsPermissions()
 		this.startTime()
 		this.$root.loadingBar = false
 	}

@@ -11,7 +11,7 @@
 			<h5 class="headline pb-2 font-weight-thin grey--text">a typical example or pattern of something, a model</h5>
 			<p class="grey--text lighten-4 font-weight-light pt-2">We strive to create consistent and well-made products for our users while adopting the newest and best web development standards.</p>
 		</div>
-		<!-- <v-parallax src="https://relay.theparadigmdev.com/img/robert%20mueller%20report%20doj%20logo%20bg%20v4.jpg" style="text-align: center;">
+		<!-- <v-parallax src="https://relay.theparadigmdev.com/img/WWDC19.jpg" style="text-align: center;">
 			<v-layout align-center column justify-center>
 				<h1 class="display-3 red--text font-weight-black text-uppercase" style="margin-bottom: 25px;">The Mueller Report</h1>
 				<h5 class="headline pb-2 deep-purple--text font-weight-bold">Special Counsel Robert Mueller and Attorney General William Barr</h5>

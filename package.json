@@ -13,6 +13,7 @@
     "@vue/cli": "^3.8.2",
     "axios": "^0.18.0",
     "firebase": "^5.11.1",
+    "firebase-admin": "^8.0.0",
     "moment": "^2.24.0",
     "v-offline": "^1.1.0",
     "vue": "^2.6.6",
@@ -33,6 +34,6 @@
     "vue-template-compiler": "^2.5.21"
   },
   "engines": {
-    "node": "6"
+    "node": "8"
   }
 }

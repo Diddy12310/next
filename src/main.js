@@ -40,13 +40,13 @@ Vue.config.productionTip = false
 
 Vue.use(VueChatScroll)
 
-if ('serviceworker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').then(() => {
-    console.log('service worker registered')
-  }).catch(error => {
-    console.error('service worker not registered', error)
-  })
-}
+// if ('serviceworker' in navigator) {
+//   navigator.serviceWorker.register('./sw.js').then(() => {
+//     console.log('service worker registered')
+//   }).catch(error => {
+//     console.error('service worker not registered', error)
+//   })
+// }
 
 new Vue({
   router,

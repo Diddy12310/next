@@ -245,7 +245,8 @@ export default {
 					content: this.newMessage,
 					color: this.$root.accountColor,
 					timestamp: Date.now(),
-					pic: this.$root.accountPic
+					pic: this.$root.accountPic,
+					chatroom: this.chatroom
 				}).catch(error => {
 					console.log(error.message)
 					this.$root.feedback = 'Your message did not send successfully!'
