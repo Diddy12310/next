@@ -266,7 +266,7 @@
 		</v-dialog>
 
 		<!-- Change pic dialog -->
-		<v-dialog v-model="changePicDialog" max-width="545px">
+		<v-dialog v-model="changePicDialog" max-width="553px">
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Change Profile Pic</h3></v-card-title>
 				<v-card-text>

@@ -26,11 +26,10 @@
 
 <script>
 const formatTime = (second) => {
-  let time = new Date(second * 1000).toISOString().substr(11, 8)
-  return time
+  return new Date(second * 1000).toISOString().substr(11, 8)
 }
 export default {
-  name: 'vuetify-audio',
+  name: 'vAudio',
   props: {
     file: {
       type: String,

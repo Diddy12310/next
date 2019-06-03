@@ -40,6 +40,14 @@ Vue.config.productionTip = false
 
 Vue.use(VueChatScroll)
 
+if ('serviceworker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(() => {
+    console.log('service worker registered')
+  }).catch(error => {
+    console.error('service worker not registered', error)
+  })
+}
+
 new Vue({
   router,
   store,
@@ -66,7 +74,7 @@ new Vue({
       account_dialog: false,
       bugreport_dialog: false,
       accountPic: '',
-      avail_profile_pics: ['paradigm', 'barn-owl', 'chipmunk', 'dart-frog', 'deer', 'giraffe', 'hedgehog', 'hermit-crab', 'panther', 'polar-bear', 'sea-lion', 'sting-ray', 'chickadee', 'hummingbird', 'seahorse'],
+      avail_profile_pics: ['paradigm', 'barn-owl', 'chipmunk', 'dart-frog', 'deer', 'giraffe', 'hedgehog', 'hermit-crab', 'panther', 'polar-bear', 'sea-lion', 'sting-ray', 'chickadee', 'hummingbird', 'seahorse', 'betta-fish', 'fawn', 'jellyfish'],
     }
   }
 }).$mount('div#app')    
