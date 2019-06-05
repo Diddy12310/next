@@ -74,7 +74,7 @@ new Vue({
       account_dialog: false,
       bugreport_dialog: false,
       accountPic: '',
-      avail_profile_pics: ['paradigm', 'barn-owl', 'chipmunk', 'dart-frog', 'deer', 'giraffe', 'hedgehog', 'hermit-crab', 'panther', 'polar-bear', 'sea-lion', 'sting-ray', 'chickadee', 'hummingbird', 'seahorse', 'betta-fish', 'fawn', 'jellyfish'],
+      avail_profile_pics: ['paradigm', 'barn-owl', 'chipmunk', 'dart-frog', 'deer', 'giraffe', 'hedgehog', 'hermit-crab', 'panther', 'polar-bear', 'sea-lion', 'sting-ray', 'chickadee', 'hummingbird', 'seahorse', 'betta-fish', 'fawn', 'jellyfish', 'fish', 'flamingo', 'kingfisher'],
     }
   }
 }).$mount('div#app')    
