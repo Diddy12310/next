@@ -266,11 +266,11 @@
 		</v-dialog>
 
 		<!-- Change pic dialog -->
-		<v-dialog v-model="changePicDialog" max-width="553px">
+		<v-dialog v-model="changePicDialog" max-width="530px">
 			<v-card>
 				<v-card-title><h3 class="headline mb-0">Change Profile Pic</h3></v-card-title>
 				<v-card-text>
-					<v-container fluid grid-list-xs>
+					<v-container fluid>
 						<v-layout row wrap>
 							<v-flex v-for="pic in $root.avail_profile_pics" :key="pic" xs4>
 								<v-card @click="change_pic == pic ? change_pic = null : change_pic = pic" v-ripple flat tile>

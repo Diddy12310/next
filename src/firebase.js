@@ -4,6 +4,7 @@ import 'firebase/firestore'
 import 'firebase/performance'
 import 'firebase/auth'
 import 'firebase/messaging'
+import 'firebase/functions'
 
 const firebaseApp = firebase.initializeApp({
   apiKey: "AIzaSyCQqPjLsa4fKf82dQ6V1iMxFlKgmDurnBA",
@@ -26,6 +27,7 @@ const storage = firebaseApp.storage().ref()
 const db = firebaseApp.firestore()
 const perf = firebaseApp.performance()
 const msg = firebaseApp.messaging()
+const func = firebaseApp.functions()
 msg.usePublicVapidKey('BEeCOrT0rNM-9xcNFqeDIQE2umnVcqAUWqmvD_DrRe3w9Aivby6lFGbbz--zeL-TAQCxYiT6her1wxmEN10eDsc')
 
-export { db, storage, perf, auth, msg }
+export { db, storage, perf, auth, msg, func }

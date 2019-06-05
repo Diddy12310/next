@@ -22,6 +22,14 @@ exports.sendNotifications = functions.firestore.document('flamechat/chatrooms/{c
   });
 });
 
+exports.deleteUser = functions.https.onCall(data => {
+  if (data.isAdmin === true) {
+    admin.firestore().collection('users').doc(data.username).delete().then(() => {
+      return admin.auth().deleteUser(data.uid)
+    })
+  }
+})
+
 // function cleanupTokens(response, tokens) {
 //   // For each notification we check if there was an error.
 //     const tokensToRemove = {};

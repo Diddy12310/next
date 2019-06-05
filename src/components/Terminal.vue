@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { db, auth } from '@/firebase'
+import { db, auth, func } from '@/firebase'
 
 export default {
   name: 'Terminal',
@@ -47,8 +47,8 @@ export default {
   },
   methods: {
     sendCmd() {
+			this.cmd_output = this.cmd_input.split(' ')
 			if (this.$root.isAdmin) {
-				this.cmd_output = this.cmd_input.split(' ')
 				switch (this.cmd_output[0]) {
 					case 'signout':
 						this.signOut()
@@ -105,8 +105,8 @@ export default {
 							case 'writer':
 								this.userWriter(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
 								break
-							case 'analytics':
-								this.userAnalytics(this.cmd_output[1], this.parseBool(this.cmd_output[3]))
+							case 'delete':
+								this.userDelete(this.cmd_output[1])
 								break
 							default:
 								this.cmdError('! command does not exist')
@@ -136,7 +136,7 @@ export default {
 				this.cmd_input = ''
 				this.cmd_output = ''
 			} else {
-				this.cmdError('! you are not authorized to execute commands')
+				this.cmdError('! you are not authorized to send commands')
 			}
 		},
 		userBan(username, input) {
@@ -160,13 +160,6 @@ export default {
 				this.cmdError(`! an error occurred: ${error}`)
 			})
 		},
-		userAnalytics(username, input) {
-      db.collection('users').doc(username).update({
-        isAnalytics: input
-      }).catch(error => {
-				this.cmdError(`! an error occurred: ${error}`)
-			})
-    },
     userStrike(username, input) {
       db.collection('users').doc(username).get().then(doc => {
         var current = parseInt(doc.data().strikes, 10)
@@ -354,7 +347,17 @@ export default {
 				this.$root.snackbar = true
 				this.$ga.event(this.$root.username, 'signed out')
 			})
-		}
+		},
+		userDelete(username) {
+			var _remote_deleteUser = func.httpsCallable('deleteUser')
+      db.collection('users').doc(username).get().then(doc => {
+				_remote_deleteUser({ isAdmin: this.$root.isAdmin, uid: doc.data().uid, username: username }).then(result => {
+					console.log(result)
+				})
+			}).catch(error => {
+				this.cmdError(`! an error occurred: ${error}`)
+			})
+    },
   }
 }
 </script>
