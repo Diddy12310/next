@@ -19,7 +19,7 @@
       </p>
 			<p v-if="cmd_console_open" :style="{ 'color': cmd_console_color, 'font-family': 'monospace', 'padding': '0px 16px 0px 16px' }">{{ cmd_console }}</p>
       <form @submit.prevent="sendCmd()">
-        <input placeholder="> enter command" autofocus :disabled="!cmd_enabled" :class="cmd_class" style="font-family: monospace; width: 100%; height: 100%; padding: 0px 16px 16px 16px;" v-model="cmd_input">
+        <input placeholder="> enter command" autofocus :disabled="!cmd_enabled" :class="cmd_class" v-model="cmd_input">
       </form>
     </div>
   </div>
@@ -363,7 +363,13 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+
 input {
 	outline: none;
+	font-family: 'Roboto Mono', monospace;
+	width: 100%;
+	height: 100%;
+	padding: 0px 16px 16px 16px;
 }
 </style>

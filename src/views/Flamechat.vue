@@ -1,10 +1,48 @@
 <template>
 	<div class="flamechat">
 		<v-toolbar dense color="deep-orange darken-2" v-if="flamechat_enable">
-			<v-toolbar-title>Flamechat</v-toolbar-title>
+			<v-toolbar-title v-if="!ready">Flamechat</v-toolbar-title>
+			<v-toolbar-title v-if="ready">Flamechat: {{ chatroom_name }}</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-btn v-if="$root.isAdmin && $root.accountColor && ready && chatroom" text @click="purgeVerifyPopup = true">Purge</v-btn>
-			<v-btn v-if="$root.username && $root.accountColor && ready && chatroom" text @click="leaveRoom()">Leave</v-btn>
+			<v-tooltip bottom v-if="chatroom_id && !ready" open-delay="1000">
+				<template v-slot:activator="{ on }">
+					<v-btn v-on="on" text icon @click="removeChatroom()"><v-icon>mdi-bookmark-remove</v-icon></v-btn>
+				</template>
+				<span>Remove</span>
+			</v-tooltip>
+			<v-tooltip bottom v-if="chatroom_owner == $root.username || $root.isAdmin && ready && chatroom_id" open-delay="1000">
+				<template v-slot:activator="{ on }">
+					<v-btn v-on="on" text icon @click="deleteChatroom()"><v-icon>mdi-delete</v-icon></v-btn>
+				</template>
+				<span>Delete</span>
+			</v-tooltip>
+			<v-menu offset-y :close-on-content-click="false">
+				<template v-slot:activator="{ on: menu }">
+					<v-tooltip bottom v-if="ready && chatroom_id" open-delay="1000">
+						<template v-slot:activator="{ on: tooltip }">
+							<v-btn v-on="{ ...tooltip, ...menu }" text icon><v-icon>mdi-share-variant</v-icon></v-btn>
+						</template>
+						<span>Share</span>
+					</v-tooltip>
+				</template>
+				<v-card>
+					<v-card-text class="text-xs-center" style="user-select: text;">
+						{{ chatroom_id }}
+					</v-card-text>
+				</v-card>
+			</v-menu>
+			<v-tooltip bottom v-if="$root.isAdmin && $root.accountColor && ready && chatroom_id" open-delay="1000">
+				<template v-slot:activator="{ on }">
+					<v-btn v-on="on" text icon @click="purgeVerifyPopup = true"><v-icon>mdi-message-bulleted-off</v-icon></v-btn>
+				</template>
+				<span>Purge</span>
+			</v-tooltip>
+			<v-tooltip bottom v-if="$root.username && $root.accountColor && ready && chatroom_id" open-delay="1000">
+				<template v-slot:activator="{ on }">
+					<v-btn v-on="on" text icon @click="leaveRoom()"><v-icon>mdi-arrow-collapse-left</v-icon></v-btn>
+				</template>
+				<span>Leave</span>
+			</v-tooltip>
 		</v-toolbar>
 
 		<v-container>
@@ -16,22 +54,31 @@
 
 			<!-- Welcome card -->
 			<div v-if="flamechat_enable">
-				<v-card class="welcome-card" v-if="!$root.username || !$root.accountColor || !ready || !chatroom">
+				<v-card class="welcome-card" v-if="!$root.username || !$root.accountColor || !ready || !chatroom_id">
 					<v-card-title>Welcome to Flamechat!</v-card-title>
 					<v-card-text>
-						<v-radio-group v-model="chatroom" column>
-							<v-radio :label="room.name" :value="room.db" :disabled="!room.available" v-if="room.id !== 'chatrooms'" v-for="room in chatrooms" :key="room.id"></v-radio>
-							<v-radio color="#C0C0C0" label="The Inner Core" value="the-inner-core" v-if="$root.isInnerCore"></v-radio>
+						<v-layout row wrap text-xs-center align-center justify-center>
+							<v-flex xs11><v-text-field v-model="new_chatroom_id" label="Chatroom ID"></v-text-field></v-flex>
+							<v-flex xs1><v-btn text icon @click="saveChatroom()"><v-icon>mdi-plus</v-icon></v-btn></v-flex>
+						</v-layout>
+						<p>Your chatrooms:</p>
+						<v-radio-group v-model="chatroom_id" column>
+							<div @click="chatroom_name = room.name, chatroom_id = room.id" v-for="room in $root.my_chatrooms" :key="room.id" class="mb-2">
+								<v-radio :label="room.name" :value="room.id"></v-radio>
+							</div>
 						</v-radio-group>
 					</v-card-text>
 					<v-divider></v-divider>
 					<v-card-actions>
-						<v-btn :disabled="!chatroom || !$root.accountColor" text @click.stop="ready = true, setChatroom()" color="accent">Join</v-btn>
+						<v-btn :disabled="!chatroom_id" text @click.stop="setChatroom()" color="accent">Join</v-btn>
 					</v-card-actions>
+					<v-btn color="deep-purple" fab fixed bottom right @click="create_chatroom_dialog = true">
+						<v-icon>add</v-icon>
+					</v-btn>
 				</v-card>
 
 				<!-- Chat card -->
-				<v-card class="chat-card" v-if="$root.username && $root.accountColor && ready && chatroom">
+				<v-card class="chat-card" v-if="$root.username && $root.accountColor && ready && chatroom_id">
 					<v-card-text>
 						<ul class="messages" v-chat-scroll="{ always: false }">
 							<p v-if="messages == []">There are no messages posted on this room.</p>
@@ -79,10 +126,10 @@
 					<v-divider></v-divider>
 					<v-card-actions>
 						<form @submit.prevent="sendChat" class="new-message" v-if="!editor">
-							<v-btn :disabled="!flamechat_enable" id="submit" type="submit" text icon style="float: right; display: inline; position: relative; top: 16px;">
-								<v-icon>mdi-send</v-icon>
-							</v-btn>
-							<v-text-field :disabled="!flamechat_enable" class="message-box" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field>
+							<v-layout row text-xs-center align-center justify-center>
+								<v-flex xs12><v-text-field :disabled="!flamechat_enable" class="message-box" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field></v-flex>
+								<v-flex xs1><v-btn :disabled="!flamechat_enable" id="submit" type="submit" text icon><v-icon>mdi-send</v-icon></v-btn></v-flex>
+							</v-layout>
 						</form>
 						<form @submit.prevent="editChat" class="new-message" v-if="editor">
 							<v-btn id="submit" type="submit" text icon style="float: right; display: inline; position: relative; top: 16px;">
@@ -118,9 +165,37 @@
 					</v-card-text>
 					<v-divider></v-divider>
 					<v-card-actions>
-						<v-btn text @click="noDM()" color="accent">Message</v-btn>
+						<v-btn text @click="$noFunc()" color="accent">Message</v-btn>
 					</v-card-actions>
 				</div>
+			</v-card>
+		</v-dialog>
+
+		<v-dialog v-model="create_chatroom_dialog" max-width="450">
+			<v-card>
+				<v-card-title><h3 class="headline mb-0">Create a Chatroom</h3></v-card-title>
+				<v-card-text>
+					<p>Chatroom ID: <span class="font-weight-light">{{ create_chatroom_id }}</span></p>
+					<v-text-field v-model="create_chatroom_name" label="Chatroom Name"></v-text-field>
+					<div v-if="$root.moonrocks > 50">
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium green--text">-50</span>
+						<p class="green--text">You have enough moonrocks to purchase a chatroom.</p>
+						<p>New Balance: <span class="font-weight-light">{{ $root.moonrocks - 50 }} Moonrocks</span></p>
+					</div>
+					<div v-if="$root.moonrocks == 50">
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium orange--text">-50</span>
+						<p class="orange--text">You have just enough moonrocks to purchase a chatroom.</p>
+					</div>
+					<div v-if="$root.moonrocks < 50">
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">-50</span>
+						<p class="red--text">You do <b>not</b> have enough moonrocks to purchase a chatroom.</p>
+					</div>
+				</v-card-text>
+				<v-divider></v-divider>
+				<v-card-actions>
+					<v-btn @click="createChatroom()" color="warning" text>Buy</v-btn>
+					<v-btn @click="create_chatroom_dialog = false" text color="accent">Cancel</v-btn>
+				</v-card-actions>
 			</v-card>
 		</v-dialog>
 
@@ -140,7 +215,7 @@
 </template>
 
 <script>
-import { db } from '@/firebase'
+import { db, app } from '@/firebase'
 import moment from 'moment'
 
 export default {
@@ -154,8 +229,9 @@ export default {
 			editor: false,
 			editing: null,
 			flamechat_enable: true,
-			chatroom: null,
-			chatrooms: [],
+			chatroom_id: '',
+			chatroom_name: '',
+			chatroom_owner: '',
 			flamechat_html_render: true,
 			profilePopupUsername: '',
 			profilePopupEnable: false,
@@ -168,42 +244,16 @@ export default {
 			profilePopupAsteroid: false,
 			lockdown: null,
 			global_pnf: null,
-			purgeVerifyPopup: false
+			purgeVerifyPopup: false,
+			new_chatroom_id: '',
+			new_chatroom_name: '',
+			create_chatroom_dialog: false,
+			create_chatroom_name: ''
     }
 	},
 	created() {
-		this.chatroom = null
-
-		var chatroomsRef = db.collection('flamechat')
-		chatroomsRef.onSnapshot(snapshot => {
-			snapshot.docChanges().forEach(change => {
-				// if (change.doc.id != 'chatrooms') {
-				// 	console.log(change)
-					if (change.type === "added") {
-						let doc = change.doc
-						this.chatrooms.splice(change.newIndex, 0, {
-							id: doc.id,
-							name: doc.data().name,
-							db: doc.data().db,
-							available: doc.data().available
-						})
-					}
-					if (change.type === "removed") {
-						let doc = change.doc
-						this.chatrooms.splice(change.oldIndex, 1)
-					}
-					if (change.type === "modified") {
-						let doc = change.doc
-						this.chatrooms.splice(change.oldIndex, 1, {
-							id: doc.id,
-							name: doc.data().name,
-							db: doc.data().db,
-							available: doc.data().available
-						})
-					}
-				// }
-			})
-		})
+		this.chatroom_id = null
+		this.chatroom_name = null
 
 		var metaRef = db.collection('paradigm')
 		metaRef.doc('config').get().then((doc) => {
@@ -232,17 +282,18 @@ export default {
 					this.profilePopupBio = ''
 					this.profilePopupEnable = false
 					this.ready = false
-					this.chatroom = ''
+					this.chatroom_id = ''
+					this.chatroom_name = ''
 				}
 			})
 		})
 	},
 	methods: {
 		deleteChat(id) {
-			db.collection('flamechat').doc('chatrooms').collection(this.chatroom).doc(id).delete().then(() => {
+			db.collection('flamechat').doc('chatrooms').collection(this.chatroom_id).doc(id).delete().then(() => {
 				this.$root.feedback = 'Message deleted successfully.'
 				this.$root.snackbar = true
-				this.$ga.event(this.$root.username, 'deleted a message on ' + this.chatroom)
+				this.$ga.event(this.$root.username, 'deleted a message on ' + this.chatroom_name)
 			}).catch(error => {
 				this.$ga.event($root.username, 'error: ' + error.message)
 			})
@@ -250,7 +301,7 @@ export default {
 		clearAllMessages() {
 			var message
 			for (message in this.messages) {
-				db.collection('flamechat').doc('chatrooms').collection(this.chatroom).get().then(snapshot => {
+				db.collection('flamechat').doc('chatrooms').collection(this.chatroom_id).get().then(snapshot => {
 					snapshot.forEach(doc => {
 						doc.ref.delete()
 						this.$root.feedback = 'All messages purged.'
@@ -264,13 +315,13 @@ export default {
 		},
 		sendChat() {
 			if(this.newMessage && this.$root.username != '' && this.$root.accountColor != null) {
-				db.collection('flamechat').doc('chatrooms').collection(this.chatroom).add({
+				db.collection('flamechat').doc('chatrooms').collection(this.chatroom_id).add({
 					name: this.$root.username,
 					content: this.newMessage,
 					color: this.$root.accountColor,
 					timestamp: Date.now(),
 					pic: this.$root.accountPic,
-					chatroom: this.chatroom
+					chatroom: this.chatroom_id
 				}).catch(error => {
 					console.log(error.message)
 					this.$root.feedback = 'Your message did not send successfully!'
@@ -279,7 +330,7 @@ export default {
 				})
 				this.$root.feedback = 'Your message sent successfully!'
 				this.$root.snackbar = true
-				this.$ga.event(this.$root.username, 'sent ' + this.newMessage + ' on ' + this.chatroom)
+				this.$ga.event(this.$root.username, 'sent ' + this.newMessage + ' on ' + this.chatroom_name)
 				this.newMessage = null
 			} else {
 				this.$root.feedback = 'Your message did not send sucessfully!'
@@ -288,12 +339,12 @@ export default {
 			}
 		},
 		editChat(id) {
-			db.collection('flamechat').doc('chatrooms').collection(this.chatroom).doc(this.editing).update({
+			db.collection('flamechat').doc('chatrooms').collection(this.chatroom_id).doc(this.editing).update({
 				content: this.editMessage
 			}).then(() => {
 				this.$root.feedback = 'Message edited successfully.'
 				this.$root.snackbar = true
-				this.$ga.event(this.$root.username, 'edited ' + this.editMessage + ' on ' + this.chatroom)
+				this.$ga.event(this.$root.username, 'edited ' + this.editMessage + ' on ' + this.chatroom_name)
 				this.editing = null
 				this.editMessage = ''
 				this.editor = false
@@ -302,45 +353,57 @@ export default {
 			})
 		},
 		setChatroom() {
-			let ref = db.collection('flamechat').doc('chatrooms').collection(this.chatroom).orderBy('timestamp', 'asc')
-			this.messages = []
-			this.editing = null
-			this.editMessage = ''
-			this.editor = false
-
-			ref.onSnapshot(snapshot => {
-				snapshot.docChanges().forEach(change => {
-					if(change.type === "added") {
-						let doc = change.doc
-						this.messages.splice(change.newIndex, 0, {
-							id: doc.id,
-							name: doc.data().name,
-							content: doc.data().content,
-							color: doc.data().color,
-							timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a'),
-							pic: doc.data().pic
+			db.collection('flamechat').doc(this.chatroom_id).get().then(doc => {
+				if (doc.exists) {
+					this.chatroom_name = doc.data().name
+					this.chatroom_owner = doc.data().owner
+					let ref = db.collection('flamechat').doc('chatrooms').collection(this.chatroom_id).orderBy('timestamp', 'asc')
+					this.messages = []
+					this.editing = null
+					this.editMessage = ''
+					this.editor = false
+					ref.onSnapshot(snapshot => {
+						snapshot.docChanges().forEach(change => {
+							if(change.type === "added") {
+								let doc = change.doc
+								this.messages.splice(change.newIndex, 0, {
+									id: doc.id,
+									name: doc.data().name,
+									content: doc.data().content,
+									color: doc.data().color,
+									timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a'),
+									pic: doc.data().pic
+								})
+							}
+							if(change.type === "removed") {
+								let doc = change.doc
+								this.messages.splice(change.oldIndex, 1)
+							}
+							if(change.type === "modified") {
+								let doc = change.doc
+								this.messages.splice(change.oldIndex, 1, {
+									id: doc.id,
+									name: doc.data().name,
+									content: doc.data().content,
+									color: doc.data().color,
+									timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a'),
+									pic: doc.data().pic
+								})
+							}
 						})
-					}
-					if(change.type === "removed") {
-						let doc = change.doc
-						this.messages.splice(change.oldIndex, 1)
-					}
-					if(change.type === "modified") {
-						let doc = change.doc
-						this.messages.splice(change.oldIndex, 1, {
-							id: doc.id,
-							name: doc.data().name,
-							content: doc.data().content,
-							color: doc.data().color,
-							timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a'),
-							pic: doc.data().pic
-						})
-					}
-				})
+					})
+					this.ready = true
+				} else {
+					this.$notify('Chatroom does not exist')
+					db.collection('users').doc(this.$root.username).update({
+						chatrooms: app.firestore.FieldValue.arrayRemove({ id: this.chatroom_id })
+					})
+				}
 			})
 		},
 		leaveRoom() {
-			this.chatroom = null
+			this.chatroom_id = null
+			this.chatroom_name = null
 			this.ready = false
 		},
 		openUsernamePopup(username, color) {
@@ -388,9 +451,50 @@ export default {
 			this.profilePopupPic = ''
 			this.usersDbDownloaded = false
 		},
-		noDM() {
-			this.$root.feedback = 'Function not implemented yet.'
-			this.$root.snackbar = true
+		saveChatroom() {
+			db.collection('flamechat').doc(this.new_chatroom_id).get().then(doc => {
+				if (doc.exists) {
+					this.new_chatroom_name = doc.data().name
+					db.collection('users').doc(this.$root.username).update({
+						chatrooms: app.firestore.FieldValue.arrayUnion({ id: this.new_chatroom_id, name: this.new_chatroom_name })
+					})
+				} else {
+					this.$notify('Chatroom does not exist')
+				}
+			})
+		},
+		createChatroom() {
+			db.collection('flamechat').doc(this.create_chatroom_id).set({
+				name: this.create_chatroom_name,
+				id: this.create_chatroom_id,
+				owner: this.username
+			}).then(() => {
+				db.collection('users').doc(this.$root.username).update({
+					chatrooms: app.firestore.FieldValue.arrayUnion({ name: this.create_chatroom_name, id: this.create_chatroom_id }),
+					moonrocks: app.firestore.FieldValue.increment(-50)
+				}).then(() => {
+					this.chatroom_id = this.create_chatroom_id
+					this.setChatroom()
+				})
+			})
+		},
+		deleteChatroom() {
+			if (this.chatroom_owner == this.$root.username) {
+				this.clearAllMessages()
+				db.collection('flamechat').doc(this.chatroom_id).delete().then(() => {
+					this.leaveRoom()
+				})
+			}
+		},
+		removeChatroom() {
+			db.collection('users').doc(this.$root.username).update({
+				chatrooms: app.firestore.FieldValue.arrayRemove({ name: this.chatroom_name, id: this.chatroom_id })
+			})
+		}
+	},
+	computed: {
+		create_chatroom_id() {
+			return Math.random().toString(36).substring(7)
 		}
 	}
 }
@@ -465,14 +569,6 @@ div.v-input__slot {
 
 div.v-messages {
 	height: 0px !important;
-}
-
-.admin-btn {
-	margin: auto;
-}
-
-.message-box {
-	width: 92.5% !important;
 }
 
 .disabled-card {

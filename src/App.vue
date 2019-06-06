@@ -498,24 +498,19 @@ export default {
 		signOut() {
 			perf.trace('signOut').start()
 			auth.signOut().then(() => {
-				db.collection('users').doc(this.$root.username).update({ isLoggedIn: false })
-				this.$root.feedback = 'Signed out successfully.'
-				this.$root.snackbar = true
+				db.collection('users').doc(this.$root.username).update({ isLoggedIn: false }).catch(error => this.$notify(error.message))
+				this.$notify('Signed out successfully.')
 				this.$ga.event(this.$root.username, 'signed out')
 				perf.trace('signOut').stop()
-			})
+			}).catch(error => this.$notify(error.message))
 		},
 		changePass() {
 			auth.currentUser.updatePassword(this.newPassword).then(() => {
-				// Update successful.
-				this.newPasswordDialog = false,
-				this.$root.feedback = 'Password changed successfully.'
-				this.$root.snackbar = true
+				this.newPasswordDialog = false
+				this.$notify('Password changed successfully.')
 				this.$ga.event(this.$root.username, 'changed their password')
 			}).catch(error => {
-				// An error happened.
-				this.$root.feedback = 'Password changed unsuccessfully.'
-				this.$root.snackbar = true
+				this.$notify('Password changed unsuccessfully.')
 			})
 			this.newPassword = null
 		},
@@ -525,12 +520,12 @@ export default {
 				this.userInfo = null
 				this.$root.userPresent = false
 				auth.currentUser.delete().then(() => {
-					this.$root.feedback = 'Account deleted sucessfully.'
-					this.$root.snackbar = true
+					this.$notify('Account deleted successfully.')
 				}).catch(error => {
-					// An error happened.
-					console.log(error)
+					this.$notify(error.message)
 				})
+			}).catch(error => {
+				this.$notify(error.message)
 			})
 			this.$ga.event(this.$root.username, 'deleted their account')
 			this.deleteDialog = false
@@ -543,7 +538,7 @@ export default {
 				this.$root.accountColor = newColor
 				this.newColorDialog = false
 				this.$ga.event(this.$root.username, 'changed their color to ' + this.$root.accountColor)
-			})
+			}).catch(error => this.$notify(error.message))
 		},
 		changePic(newPic) {
 			db.collection('users').doc(this.$root.username).update({
@@ -553,7 +548,7 @@ export default {
 				this.changePicDialog = false
 				this.change_pic = ''
 				this.$ga.event(this.$root.username, 'changed their pic to ' + this.$root.accountPic)
-			})
+			}).catch(error => this.$notify(error.message))
 		},
 		changeBio(newBio) {
 			db.collection('users').doc(this.$root.username).update({
@@ -562,7 +557,7 @@ export default {
 				this.accountBio = newBio
 				this.newBioDialog = false
 				this.$ga.event(this.$root.username, 'changed their bio to ' + this.$root.accountBio)
-			})
+			}).catch(error => this.$notify(error.message))
 		},
 		startTime() {
 			var today = new Date()
@@ -602,8 +597,7 @@ export default {
 		auth.onAuthStateChanged(firebaseUser => {
 			this.app_loaded = true
 			if(firebaseUser) {
-				this.$root.feedback = 'Signed in successfully.'
-				this.$root.snackbar = true
+				this.$notify('Signed in successfully.')
 				this.$root.userPresent = true
 				this.$root.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
 				this.userInfo = firebaseUser
@@ -622,6 +616,7 @@ export default {
 					this.$root.strikes = doc.data().strikes
 					this.$root.isWriter = doc.data().isWriter
 					this.$root.accountPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
+					this.$root.my_chatrooms = doc.data().chatrooms
 					if (doc.data().strikes >= 3) {
 						this.$root.isBanned = true
 						db.collection('users').doc(this.$root.username).update({ isBanned: true })
@@ -645,6 +640,7 @@ export default {
 							this.$root.isBanned = doc.data().isBanned
 							this.$root.strikes = doc.data().strikes
 							this.$root.isWriter = doc.data().isWriter
+							this.$root.my_chatrooms = doc.data().chatrooms
 							this.$root.accountPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
 							if (doc.data().strikes >= 3) {
 								this.$root.isBanned = true
@@ -664,6 +660,8 @@ export default {
 				this.terms = false
 				this.drawer = false
 				this.$root.terminalOpen = false
+				this.$root.accountColor = '#1565C0'
+				this.$root.accountPic = ''
 			}
 		})
 

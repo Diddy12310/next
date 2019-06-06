@@ -15,7 +15,13 @@
         <v-autocomplete :items="bug_locations" label="Location" v-model="bug_location"></v-autocomplete>
         <v-slider label="Importance" v-model="bug_importance" thumb-label max="10"></v-slider>
         <v-textarea label="Description" v-model="bug_body" hint="You can style the description by using HTML."></v-textarea>
+        <div>
+					<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium green--text">15</span>
+					<p>If this bug exists, you will be awarded 15 Moonrocks.</p>
+					<p>New Balance: <span class="font-weight-light">{{ $root.moonrocks + 15 }} Moonrocks</span></p>
+				</div>
       </v-card-text>
+      <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text color="accent" @click="submitBug()">Submit</v-btn>
