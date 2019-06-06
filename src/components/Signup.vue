@@ -60,9 +60,7 @@
       </v-window-item>
 
       <v-window-item :value="7">
-        <span class="caption grey--text text--darken-1">
-          Welcome to Paradigm!
-        </span>
+        <h1 class="display-2 text-xs-center">Welcome to Paradigm!</h1>
       </v-window-item>
     </v-window>
     <v-card-actions>
@@ -112,19 +110,15 @@ export default {
             this.$root.account_dialog = false
 					}).catch(error => {
 						if(error.code == 'auth/invalid-email') {
-							this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
-							this.$root.snackbar = true
+							this.$notify('Do not use spaces or other special characters.')
 						}
 						if(error.code == 'auth/wrong-password') {
-							this.$root.feedback = 'Please check your password.'
-							this.$root.snackbar = true
+							this.$notify('Please check your password.')
 						}
 						if(error.code != 'auth/invalid-email' || 'auth/wrong-password') {
-							this.$root.feedback = error.message
-							this.$root.snackbar = true
+							this.$notify(error.message)
 						} else {
-							this.$root.feedback = 'Please fill in the required fields.'
-							this.$root.snackbar = true
+							this.$notify('Please fill in the required fields.')
 						}
 					})
 				}

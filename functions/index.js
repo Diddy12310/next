@@ -34,13 +34,22 @@ exports.deleteUser = functions.https.onCall(data => {
   }
 })
 
-// exports.clearChatroom = functions.https.onCall(data => {
-//   if (data.isAdmin === true) {
-//     admin.firestore().collection('flamechat').doc('chatrooms').collection(data.chatroom)
-//   } else {
-//     return false
-//   }
-// })
+exports.clearChatroom = functions.https.onCall(data => {
+  if (data.isAdmin === true) {
+    functions.firestore.delete(`flamechat/chatrooms/${data.chatroom_id}`, {
+      project: process.env.GCLOUD_PROJECT,
+      recursive: true,
+      yes: true,
+      token: functions.config().fb.token
+    }).then(() => {
+      return true
+    }).catch(error => {
+      return false, error
+    })
+  } else {
+    return false
+  }
+})
 
 // function cleanupTokens(response, tokens) {
 //   // For each notification we check if there was an error.

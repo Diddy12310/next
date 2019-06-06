@@ -6,19 +6,25 @@
 			<v-spacer></v-spacer>
 			<v-tooltip bottom v-if="chatroom_id && !ready" open-delay="1000">
 				<template v-slot:activator="{ on }">
-					<v-btn v-on="on" text icon @click="removeChatroom()"><v-icon>mdi-bookmark-remove</v-icon></v-btn>
+					<v-btn v-on="on" text icon @click="removeChatroom()"><v-icon>mdi-close</v-icon></v-btn>
 				</template>
 				<span>Remove</span>
 			</v-tooltip>
-			<v-tooltip bottom v-if="chatroom_owner == $root.username || $root.isAdmin && ready && chatroom_id" open-delay="1000">
+			<v-tooltip bottom v-if="(chatroom_owner == $root.username || $root.isAdmin) && ready && chatroom_id" open-delay="1000">
 				<template v-slot:activator="{ on }">
 					<v-btn v-on="on" text icon @click="deleteChatroom()"><v-icon>mdi-delete</v-icon></v-btn>
 				</template>
 				<span>Delete</span>
 			</v-tooltip>
-			<v-menu offset-y :close-on-content-click="false">
+			<v-tooltip bottom v-if="($root.isAdmin || chatroom_owner == $root.username) && ready && chatroom_id" open-delay="1000">
+				<template v-slot:activator="{ on }">
+					<v-btn v-on="on" text icon @click="purgeVerifyPopup = true"><v-icon>mdi-message-bulleted-off</v-icon></v-btn>
+				</template>
+				<span>Purge</span>
+			</v-tooltip>
+			<v-menu offset-y :close-on-content-click="false" v-if="ready && chatroom_id">
 				<template v-slot:activator="{ on: menu }">
-					<v-tooltip bottom v-if="ready && chatroom_id" open-delay="1000">
+					<v-tooltip bottom open-delay="1000">
 						<template v-slot:activator="{ on: tooltip }">
 							<v-btn v-on="{ ...tooltip, ...menu }" text icon><v-icon>mdi-share-variant</v-icon></v-btn>
 						</template>
@@ -31,13 +37,7 @@
 					</v-card-text>
 				</v-card>
 			</v-menu>
-			<v-tooltip bottom v-if="$root.isAdmin && $root.accountColor && ready && chatroom_id" open-delay="1000">
-				<template v-slot:activator="{ on }">
-					<v-btn v-on="on" text icon @click="purgeVerifyPopup = true"><v-icon>mdi-message-bulleted-off</v-icon></v-btn>
-				</template>
-				<span>Purge</span>
-			</v-tooltip>
-			<v-tooltip bottom v-if="$root.username && $root.accountColor && ready && chatroom_id" open-delay="1000">
+			<v-tooltip bottom v-if="ready && chatroom_id" open-delay="1000">
 				<template v-slot:activator="{ on }">
 					<v-btn v-on="on" text icon @click="leaveRoom()"><v-icon>mdi-arrow-collapse-left</v-icon></v-btn>
 				</template>
@@ -215,7 +215,7 @@
 </template>
 
 <script>
-import { db, app } from '@/firebase'
+import { db, app, func } from '@/firebase'
 import moment from 'moment'
 
 export default {
@@ -312,6 +312,9 @@ export default {
 				})
 			}
 			this.purgeVerifyPopup = false
+
+			var _remote_clearChatroom = func.httpsCallable('addMessage');
+			addMessage({ isAdmin: this.$root.isAdmin, chatroom_id: this.chatroom_id })
 		},
 		sendChat() {
 			if(this.newMessage && this.$root.username != '' && this.$root.accountColor != null) {
@@ -321,34 +324,32 @@ export default {
 					color: this.$root.accountColor,
 					timestamp: Date.now(),
 					pic: this.$root.accountPic,
-					chatroom: this.chatroom_id
+					chatroom_id: this.chatroom_id,
+					chatroom: this.chatroom_name
 				}).catch(error => {
 					console.log(error.message)
-					this.$root.feedback = 'Your message did not send successfully!'
-					this.$root.snackbar = true
+					this.$notify('Your message did not send successfully!')
 					this.$ga.event($root.username, 'error: ' + error.message)
 				})
-				this.$root.feedback = 'Your message sent successfully!'
-				this.$root.snackbar = true
+				this.$notify('Your message sent successfully!')
 				this.$ga.event(this.$root.username, 'sent ' + this.newMessage + ' on ' + this.chatroom_name)
 				this.newMessage = null
 			} else {
-				this.$root.feedback = 'Your message did not send sucessfully!'
+				this.$notify('Your message did not send sucessfully!')
 				this.$ga.event($root.username, 'error: they tried and failed to send a message')
-				this.$root.snackbar = true
 			}
 		},
 		editChat(id) {
 			db.collection('flamechat').doc('chatrooms').collection(this.chatroom_id).doc(this.editing).update({
 				content: this.editMessage
 			}).then(() => {
-				this.$root.feedback = 'Message edited successfully.'
-				this.$root.snackbar = true
+				this.$notify('Message edited successfully.')
 				this.$ga.event(this.$root.username, 'edited ' + this.editMessage + ' on ' + this.chatroom_name)
 				this.editing = null
 				this.editMessage = ''
 				this.editor = false
 			}).catch(error => {
+				this.$notify(error.message)
 				this.$ga.event($root.username, 'error: ' + error.message)
 			})
 		},

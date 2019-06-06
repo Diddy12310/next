@@ -107,6 +107,7 @@
 				</v-list-group>
       </v-list>
 			<template v-slot:append>
+				<p class="pl-2 ma-0 caption" style="padding-bottom: 5px;">v{{ version }}</p>
 				<div class="grey darken-4 elevation-14">
 					<v-divider></v-divider>
 					<v-tooltip top open-delay="1000">
@@ -392,28 +393,28 @@ import BugReport from './components/BugReport'
 
 // ------------------------------
 
-import Home from './views/Home'
-import Flamechat from './views/Flamechat'
-import Roadmap from './views/Company/Roadmap'
-import Terms from './views/Company/Terms'
-import Drawer from './views/Drawer'
-import Scorecard from './views/Scorecard'
-import Support from './views/Company/Support'
-import News from './views/News'
-import Satellite from './views/Satellite'
-import Asteroid from './views/Asteroid'
-import NetworkStatus from './views/Company/NetworkStatus'
-import LatestMemes from './views/Latest/Memes'
-import LatestVines from './views/Latest/Vines'
-import Contracts from './views/Devs/Contracts'
-import Databank from './views/Devs/Databank'
-import Relay from './views/Devs/Relay'
-import About from './views/Company/About'
-import Media from './views/Media'
-import PageNotFound from './views/404'
+import Home from './pages/Home'
+import Flamechat from './pages/Flamechat'
+import Roadmap from './pages/Company/Roadmap'
+import Terms from './pages/Company/Terms'
+import Drawer from './pages/Drawer'
+import Scorecard from './pages/Scorecard'
+import Support from './pages/Company/Support'
+import News from './pages/News'
+import Satellite from './pages/Satellite'
+import Asteroid from './pages/Asteroid'
+import NetworkStatus from './pages/Company/NetworkStatus'
+import LatestMemes from './pages/Latest/Memes'
+import LatestVines from './pages/Latest/Vines'
+import Contracts from './pages/Devs/Contracts'
+import Databank from './pages/Devs/Databank'
+import Relay from './pages/Devs/Relay'
+import About from './pages/Company/About'
+import Media from './pages/Media'
+import PageNotFound from './pages/404'
 import Terminal from './components/Terminal'
-import Weather from './views/Weather'
-import Notice from './views/Company/Notice'
+import Weather from './pages/Weather'
+import Notice from './pages/Company/Notice'
 
 export default {
 	name: 'Paradigm',
@@ -465,7 +466,8 @@ export default {
 			shutdown: null,
 			changePicDialog: false,
 			avail_profile_pics: ['paradigm', 'barn-owl', 'chipmunk', 'dart-frog', 'deer', 'giraffe', 'hedgehog', 'hermit-crab', 'panther', 'polar-bear', 'sea-lion', 'sting-ray'],
-			change_pic: ''
+			change_pic: '',
+			version: ''
 		}
 	},
 	methods: {
@@ -510,7 +512,7 @@ export default {
 				this.$notify('Password changed successfully.')
 				this.$ga.event(this.$root.username, 'changed their password')
 			}).catch(error => {
-				this.$notify('Password changed unsuccessfully.')
+				this.$notify(error.message)
 			})
 			this.newPassword = null
 		},
@@ -665,37 +667,14 @@ export default {
 			}
 		})
 
-		var metaRef = db.collection('paradigm')
-		metaRef.onSnapshot(snapshot => {
-			snapshot.docChanges().forEach(change => {
-				if(change.type === "modified") {
-					let doc = change.doc
-					this.sign_up_enable = doc.data().sign_up_enable
-					this.lockdown = doc.data().lockdown
-					this.shutdown = doc.data().shutdown
-					this.flamechat_enable = doc.data().flamechat_enable
-					this.global_pnf = doc.data().global_pnf
-					this.flamechat_html_render = doc.data().flamechat_html_render
-				}
-
-				if(change.type === "added") {
-					let doc = change.doc
-					this.sign_up_enable = doc.data().sign_up_enable
-					this.lockdown = doc.data().lockdown
-					this.shutdown = doc.data().shutdown
-					this.flamechat_enable = doc.data().flamechat_enable
-					this.global_pnf = doc.data().global_pnf
-					this.flamechat_html_render = doc.data().flamechat_html_render
-				}
-
-				if (this.lockdown || this.global_pnf || this.shutdown) {
-					this.newBioDialog = false
-					this.newColorDialog = false
-					this.newPasswordDialog = false
-					this.deleteDialog = false
-					this.$root.account_dialog = false
-				}
-			})
+		db.collection('paradigm').doc('config').onSnapshot(doc => {
+			this.sign_up_enable = doc.data().sign_up_enable
+			this.lockdown = doc.data().lockdown
+			this.shutdown = doc.data().shutdown
+			this.flamechat_enable = doc.data().flamechat_enable
+			this.global_pnf = doc.data().global_pnf
+			this.flamechat_html_render = doc.data().flamechat_html_render
+			this.version = doc.data().version
 		})
 		this.requestNotificationsPermissions()
 		this.startTime()
