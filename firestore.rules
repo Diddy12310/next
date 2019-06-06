@@ -8,7 +8,8 @@ service cloud.firestore {
       allow read, write: if request.auth.uid != null;
     }
     match /paradigm/config {
-      allow read, write;
+      allow read;
+      allow write: if request.auth.uid != null
     }
     match /users/{user=**} {
       allow read, write;

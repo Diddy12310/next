@@ -36,19 +36,43 @@
 						<ul class="messages" v-chat-scroll="{ always: false }">
 							<p v-if="messages == []">There are no messages posted on this room.</p>
 							<li v-for="message in messages" :key="message.id" :id="message.id">
-								<v-list-item style="cursor: pointer; border-radius: 12px;" v-ripple @click="openUsernamePopup(message.name)">
-									<v-list-item-avatar class="my-0">
-										<img :src="message.pic">
-									</v-list-item-avatar>
-									<v-list-item-content style="position: relative; left: -8px;">
-										<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': message.color }">{{ message.name }}</v-list-item-title>
-										<v-list-item-subtitle class="time">{{ message.timestamp }}</v-list-item-subtitle>
-									</v-list-item-content>
-								</v-list-item>
-								<v-btn class="admin-btn" icon text color="error" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="deleteChat(message.id)"><v-icon>delete</v-icon></v-btn>
-								<v-btn class="admin-btn" icon text color="warning" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>edit</v-icon></v-btn><br>
-								<span v-if="flamechat_html_render" v-html="message.content" class="message"></span>
-								<span v-if="!flamechat_html_render" class="message">{{ message.content }}</span>
+								<v-layout row wrap>
+									<v-flex xs10>
+										<v-list-item style="cursor: pointer; border-radius: 12px;" v-ripple @click="openUsernamePopup(message.name)">
+											<v-list-item-avatar class="my-0">
+												<img :src="message.pic">
+											</v-list-item-avatar>
+											<v-list-item-content style="position: relative; left: -8px;">
+												<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': message.color }">{{ message.name }}</v-list-item-title>
+												<v-list-item-subtitle class="time">{{ message.timestamp }}</v-list-item-subtitle>
+											</v-list-item-content>
+										</v-list-item>
+									</v-flex>
+									<v-flex xs2 text-xs-right>
+										<v-tooltip bottom open-delay="1000">
+											<template v-slot:activator="{ on }">
+												<v-btn v-on="on" class="admin-btn" icon text color="orange" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="reportChat(message.id)"><v-icon>mdi-exclamation</v-icon></v-btn>
+											</template>
+											<span>Report</span>
+										</v-tooltip>
+										<v-tooltip bottom open-delay="1000">
+											<template v-slot:activator="{ on }">
+												<v-btn v-on="on" class="admin-btn" icon text color="warning" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="editor = true, editing = message.id, editMessage = message.content"><v-icon>mdi-pencil</v-icon></v-btn>
+											</template>
+											<span>Edit</span>
+										</v-tooltip>
+										<v-tooltip bottom open-delay="1000">
+											<template v-slot:activator="{ on }">
+												<v-btn v-on="on" class="admin-btn" icon text color="error" v-if="$root.isAdmin || $root.username == message.name" @click.prevent="deleteChat(message.id)"><v-icon>mdi-delete</v-icon></v-btn>
+											</template>
+											<span>Delete</span>
+										</v-tooltip>
+									</v-flex>
+									<v-flex xs12>
+										<span v-if="flamechat_html_render" v-html="message.content" class="message"></span>
+										<span v-if="!flamechat_html_render" class="message">{{ message.content }}</span>
+									</v-flex>
+								</v-layout>
 							</li>
 						</ul>
 					</v-card-text>
@@ -56,13 +80,13 @@
 					<v-card-actions>
 						<form @submit.prevent="sendChat" class="new-message" v-if="!editor">
 							<v-btn :disabled="!flamechat_enable" id="submit" type="submit" text icon style="float: right; display: inline; position: relative; top: 16px;">
-								<v-icon>send</v-icon>
+								<v-icon>mdi-send</v-icon>
 							</v-btn>
 							<v-text-field :disabled="!flamechat_enable" class="message-box" autocomplete="off" label="Message..." v-model="newMessage"></v-text-field>
 						</form>
 						<form @submit.prevent="editChat" class="new-message" v-if="editor">
 							<v-btn id="submit" type="submit" text icon style="float: right; display: inline; position: relative; top: 16px;">
-								<v-icon>edit</v-icon>
+								<v-icon>mdi-pencil</v-icon>
 							</v-btn>
 							<v-text-field v-model="editMessage" class="message-box" autocomplete="off" label="Edit Message"></v-text-field>
 						</form>
@@ -84,7 +108,7 @@
 							<v-list-item-subtitle>{{ profilePopupBio }}</v-list-item-subtitle>
 						</v-list-item-content>
 						<v-btn icon @click="closeUsernamePopup()" class="dialog-close-btn">
-							<v-icon>close</v-icon>
+							<v-icon>mdi-close</v-icon>
 						</v-btn>
 					</v-list-item>
 					<v-card-text>

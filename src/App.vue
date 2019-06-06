@@ -2,7 +2,7 @@
 	<v-app class="hidden-print-only">
     <!-- Toolbar -->
 		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'black': shutdown }" v-if="app_loaded">
-			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned" style="margin: 0px;"><v-icon>menu</v-icon></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned" style="margin: 0px;"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
 				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent, 'hidden-xs-only': $root.accountColor }">
 				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
@@ -42,7 +42,7 @@
 			<v-list dense nav>
 				<v-list-item @click="$root.switch = 'Home'">
 					<v-list-item-icon>
-            <v-icon>home</v-icon>
+            <v-icon>mdi-home</v-icon>
           </v-list-item-icon>
 					<v-list-item-content>
 						<v-list-item-title>Home</v-list-item-title>
@@ -165,14 +165,14 @@
 						<v-list-item-subtitle>{{ $root.accountBio }}</v-list-item-subtitle>
 					</v-list-item-content>
 					<v-btn icon @click="$root.account_dialog = false" class="dialog-close-btn">
-						<v-icon>close</v-icon>
+						<v-icon>mdi-close</v-icon>
 					</v-btn>
 				</v-list-item>
 				<v-card-title primary-title v-if="!$root.userPresent">
 					<h3 class="headline mb-0">Account</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="$root.account_dialog = false" class="dialog-close-btn">
-						<v-icon>close</v-icon>
+						<v-icon>mdi-close</v-icon>
 					</v-btn>
 				</v-card-title>
 
