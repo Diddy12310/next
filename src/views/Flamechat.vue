@@ -178,16 +178,16 @@
 					<p>Chatroom ID: <span class="font-weight-light">{{ create_chatroom_id }}</span></p>
 					<v-text-field v-model="create_chatroom_name" label="Chatroom Name"></v-text-field>
 					<div v-if="$root.moonrocks > 50">
-						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium green--text">-50</span>
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
 						<p class="green--text">You have enough moonrocks to purchase a chatroom.</p>
 						<p>New Balance: <span class="font-weight-light">{{ $root.moonrocks - 50 }} Moonrocks</span></p>
 					</div>
 					<div v-if="$root.moonrocks == 50">
-						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium orange--text">-50</span>
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
 						<p class="orange--text">You have just enough moonrocks to purchase a chatroom.</p>
 					</div>
 					<div v-if="$root.moonrocks < 50">
-						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">-50</span>
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
 						<p class="red--text">You do <b>not</b> have enough moonrocks to purchase a chatroom.</p>
 					</div>
 				</v-card-text>
