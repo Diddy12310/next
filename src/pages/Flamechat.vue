@@ -1,8 +1,9 @@
 <template>
 	<div class="flamechat">
 		<v-toolbar dense color="deep-orange darken-2" v-if="flamechat_enable">
-			<v-toolbar-title v-if="!ready">Flamechat</v-toolbar-title>
-			<v-toolbar-title v-if="ready">Flamechat: {{ chatroom_name }}</v-toolbar-title>
+			<v-toolbar-title>Flamechat</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<span v-if="ready" class="chatroom-name font-weight-light text-uppercase">{{ chatroom_name }}</span>
 			<v-spacer></v-spacer>
 			<v-tooltip bottom v-if="chatroom_id && !ready" open-delay="1000">
 				<template v-slot:activator="{ on }">
@@ -12,7 +13,7 @@
 			</v-tooltip>
 			<v-tooltip bottom v-if="(chatroom_owner == $root.username || $root.isAdmin) && ready && chatroom_id" open-delay="1000">
 				<template v-slot:activator="{ on }">
-					<v-btn v-on="on" text icon @click="deleteChatroom()"><v-icon>mdi-delete</v-icon></v-btn>
+					<v-btn v-on="on" text icon @click="deleteVerifyPopup = true"><v-icon>mdi-delete</v-icon></v-btn>
 				</template>
 				<span>Delete</span>
 			</v-tooltip>
@@ -205,12 +206,25 @@
 				<v-card-text>Are you sure you want to purge this chatroom?</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn @click="clearAllMessages()" color="error" text>Yes</v-btn>
-					<v-btn @click="purgeVerifyPopup = false" color="green">Cancel</v-btn>
+					<v-btn @click="clearAllMessages()" color="red" text>Yes</v-btn>
+					<v-spacer></v-spacer>
+					<v-btn @click="purgeVerifyPopup = false" color="green" text>Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
 
+		<v-dialog v-model="deleteVerifyPopup" max-width="400">
+			<v-card>
+				<v-card-title><h3 class="headline mb-0">Delete Chatroom</h3></v-card-title>
+				<v-card-text>Are you sure you want to delete this chatroom? A refund will not be issued.</v-card-text>
+				<v-divider></v-divider>
+				<v-card-actions>
+					<v-btn @click="deleteChatroom()" color="red" text>Yes</v-btn>
+					<v-spacer></v-spacer>
+					<v-btn @click="deleteVerifyPopup = false" color="green" text>Cancel</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
 	</div>
 </template>
 
@@ -245,6 +259,7 @@ export default {
 			lockdown: null,
 			global_pnf: null,
 			purgeVerifyPopup: false,
+			deleteVerifyPopup: false,
 			new_chatroom_id: '',
 			new_chatroom_name: '',
 			create_chatroom_dialog: false,
@@ -578,5 +593,14 @@ div.v-messages {
 	text-align: center;
 	padding: 8px;
 	margin: 64px auto;
+}
+
+.chatroom-name {
+	margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+	text-align: center;
 }
 </style>
