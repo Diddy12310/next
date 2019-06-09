@@ -1,5 +1,5 @@
 <template>
-	<v-app class="hidden-print-only">
+	<v-app>
     <!-- Toolbar -->
 		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'black': shutdown }" v-if="app_loaded">
 			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned" style="margin: 0px;"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
@@ -30,6 +30,7 @@
 						<span>Account</span>
 					</v-tooltip>
 					<v-spacer></v-spacer>
+
 					<v-tooltip bottom open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn v-on="on" v-if="$root.isAdmin" @click="$root.terminalOpen = true" icon class="mx-3" color="grey"><v-icon>mdi-console-line</v-icon></v-btn>
@@ -379,13 +380,11 @@
 			<v-progress-linear :active="$root.loadingBar" indeterminate absolute top color="deep-purple accent-4"></v-progress-linear>
 			<span class="caption text-uppercase">&copy; {{ new Date().getFullYear() }} Paradigm</span>
 		</v-footer>
-
-		<p class="hidden-screen-only" style="margin: auto auto auto auto;">Paradigm cannot be printed!</p>
 	</v-app>
 </template>
 
 <script>
-import { db, perf, auth, msg } from './firebase'
+import { db, perf, auth, /* msg */ } from './firebase'
 import firebase from 'firebase/app'
 import moment from 'moment'
 import Signup from './components/Signup'
@@ -567,31 +566,32 @@ export default {
 			this.currentTime = moment(today).format('LTS')
 			setTimeout(this.startTime, 500)
 		},
-		requestNotificationsPermissions() {
-			console.log('Requesting notifications permission...');
-			Notification.requestPermission().then(() => {
-				// Notification permission granted.
-				this.saveMessagingDeviceToken();
-			}).catch(error => {
-				console.error('Unable to get permission to notify.', error);
-			});
-		},
-		saveMessagingDeviceToken() {
-			msg.getToken().then(currentToken => {
-				if (currentToken) {
-					console.log('Got FCM device token:', currentToken)
-					// Saving the Device Token to the datastore.
-					db.collection('paradigm').doc('fcm_keys').update({
-						values: firebase.firestore.FieldValue.arrayUnion(currentToken)
-					})
-				} else {
-					// Need to request permissions to show notifications.
-					this.requestNotificationsPermissions()
-				}
-			}).catch(error => {
-				console.error('Unable to get messaging token.', error)
-			})
-		}
+		// requestNotificationsPermissions() {
+		// 	if (app.messaging.isSupported()) {
+		// 		console.log('Requesting notifications permission...')
+		// 		Notification.requestPermission().then(() => {
+		// 			this.saveMessagingDeviceToken()
+		// 		}).catch(error => {
+		// 			console.error('Unable to get permission to notify.', error)
+		// 		})
+		// 	}
+		// },
+		// saveMessagingDeviceToken() {
+		// 	msg.getToken().then(currentToken => {
+		// 		if (currentToken) {
+		// 			console.log('Got FCM device token:', currentToken)
+		// 			// Saving the Device Token to the datastore.
+		// 			db.collection('paradigm').doc('fcm_keys').update({
+		// 				values: firebase.firestore.FieldValue.arrayUnion(currentToken)
+		// 			})
+		// 		} else {
+		// 			// Need to request permissions to show notifications.
+		// 			this.requestNotificationsPermissions()
+		// 		}
+		// 	}).catch(error => {
+		// 		console.error('Unable to get messaging token.', error)
+		// 	})
+		// }
 	},
 	created() {
 		this.app_loaded = false
@@ -676,7 +676,7 @@ export default {
 			this.flamechat_html_render = doc.data().flamechat_html_render
 			this.version = doc.data().version
 		})
-		this.requestNotificationsPermissions()
+		// if (app.messaging.isSupported()) this.requestNotificationsPermissions()
 		this.startTime()
 		this.$root.loadingBar = false
 	}

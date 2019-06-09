@@ -55,7 +55,7 @@
 
 			<!-- Welcome card -->
 			<div v-if="flamechat_enable">
-				<v-card class="welcome-card" v-if="!$root.username || !$root.accountColor || !ready || !chatroom_id">
+				<v-card class="welcome-card" v-if="!ready || !chatroom_id">
 					<v-card-title>Welcome to Flamechat!</v-card-title>
 					<v-card-text>
 						<v-layout row wrap text-xs-center align-center justify-center>
@@ -79,7 +79,7 @@
 				</v-card>
 
 				<!-- Chat card -->
-				<v-card class="chat-card" v-if="$root.username && $root.accountColor && ready && chatroom_id">
+				<v-card class="chat-card" v-if="ready && chatroom_id">
 					<v-card-text>
 						<ul class="messages" v-chat-scroll="{ always: false }">
 							<p v-if="messages == []">There are no messages posted on this room.</p>
