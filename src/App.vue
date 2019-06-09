@@ -324,26 +324,7 @@
 		<v-content v-if="app_loaded">
 			<v-container fluid style="padding: 0;">
 				<!-- <router-view v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned"></router-view> -->
-				<Home v-if="$root.switch == 'Home' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Flamechat v-if="$root.switch == 'Flamechat' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Roadmap v-if="$root.switch == 'Roadmap' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Terms v-if="$root.switch == 'Terms' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Drawer v-if="$root.switch == 'Drawer' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Scorecard v-if="$root.switch == 'Scorecard' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Support v-if="$root.switch == 'Support' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<News v-if="$root.switch == 'News' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Satellite v-if="$root.switch == 'Satellite' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Asteroid v-if="$root.switch == 'Asteroid' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<NetworkStatus v-if="$root.switch == 'NetworkStatus' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<LatestMemes v-if="$root.switch == 'LatestMemes' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<LatestVines v-if="$root.switch == 'LatestVines' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Contracts v-if="$root.switch == 'Contracts' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Databank v-if="$root.switch == 'Databank' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Relay v-if="$root.switch == 'Relay' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Media v-if="$root.switch == 'Media' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Weather v-if="$root.switch == 'Weather' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<Notice v-if="$root.switch == 'Notice' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<PageNotFound v-if="$root.switch == 'PageNotFound' && $root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
+				<UISwitch v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !global_pnf" style="text-align: center;">
 					<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">Welcome!</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
@@ -389,37 +370,12 @@ import firebase from 'firebase/app'
 import moment from 'moment'
 import Signup from './components/Signup'
 import BugReport from './components/BugReport'
-
-// ------------------------------
-
-import Home from './pages/Home'
-import Flamechat from './pages/Flamechat'
-import Roadmap from './pages/Company/Roadmap'
-import Terms from './pages/Company/Terms'
-import Drawer from './pages/Drawer'
-import Scorecard from './pages/Scorecard'
-import Support from './pages/Company/Support'
-import News from './pages/News'
-import Satellite from './pages/Satellite'
-import Asteroid from './pages/Asteroid'
-import NetworkStatus from './pages/Company/NetworkStatus'
-import LatestMemes from './pages/Latest/Memes'
-import LatestVines from './pages/Latest/Vines'
-import Contracts from './pages/Devs/Contracts'
-import Databank from './pages/Devs/Databank'
-import Relay from './pages/Devs/Relay'
-import About from './pages/Company/About'
-import Media from './pages/Media'
-import PageNotFound from './pages/404'
-import Terminal from './components/Terminal'
-import Weather from './pages/Weather'
-import Notice from './pages/Company/Notice'
+import Switch from './layout/Switch'
 
 export default {
 	name: 'Paradigm',
 	components: {
-		Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
-		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice, Signup, BugReport
+		Signup, BugReport, 'UISwitch': Switch
 	},
 	data() {
 		return {
@@ -433,6 +389,7 @@ export default {
 				{ icon: 'mdi-folder-multiple', route: 'Drawer', app: 'Drawer' },
 				{ icon: 'mdi-play-network', route: 'Media', app: 'Media' },
 				{ icon: 'mdi-weather-pouring', route: 'Weather', app: 'Weather' },
+				{ icon: 'mdi-gamepad-variant', route: 'Games', app: 'Arcade' },
 			],
 			company: [
 				{ route: 'Roadmap', app: 'Roadmap' },

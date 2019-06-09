@@ -1,0 +1,24 @@
+<template>
+	<div style="text-align: center; margin: 50px 0px;">
+		<h1 class="display-3 blue--text font-weight-thin text-uppercase">Coming soon</h1>
+		<h6 class="headline white--text font-weight-thin mt-3">Development is in progress.</h6>
+	</div>
+</template>
+
+<script>
+export default {
+  name: 'Drawer',
+  data() {
+    return {
+
+    }
+	},
+	created() {
+
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
