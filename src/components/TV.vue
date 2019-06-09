@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-		<v-container>
+		<!-- <v-container>
 			<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
 				<v-text-field v-model="searchShow" label="Search..." style="width: 300px; margin: 50px auto 0px auto;"></v-text-field>
 			</div>
@@ -61,7 +61,11 @@
 				</v-card-title>
 				<video autoplay :poster="watchShowCover" width="1000" :src="watchShowURL" controls></video>
 			</v-card>
-		</v-dialog>
+		</v-dialog> -->
+		<div style="text-align: center; margin: 50px 0px;">
+			<h1 class="display-3 blue--text font-weight-thin text-uppercase">Coming soon</h1>
+			<h6 class="headline white--text font-weight-thin mt-3">Development is in progress.</h6>
+		</div>
   </div>
 </template>
 
