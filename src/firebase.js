@@ -26,9 +26,9 @@ const auth = firebaseApp.auth()
 const storage = firebaseApp.storage().ref()
 const db = firebaseApp.firestore()
 const perf = firebaseApp.performance()
-const msg = firebaseApp.messaging()
+// const msg = firebaseApp.messaging()
 const func = firebaseApp.functions()
 const app = firebase
-msg.usePublicVapidKey('BEeCOrT0rNM-9xcNFqeDIQE2umnVcqAUWqmvD_DrRe3w9Aivby6lFGbbz--zeL-TAQCxYiT6her1wxmEN10eDsc')
+// msg.usePublicVapidKey('BEeCOrT0rNM-9xcNFqeDIQE2umnVcqAUWqmvD_DrRe3w9Aivby6lFGbbz--zeL-TAQCxYiT6her1wxmEN10eDsc')
 
-export { db, storage, perf, auth, msg, func, app }
+export { db, storage, perf, auth, /* msg ,*/ func, app }
