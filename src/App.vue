@@ -370,12 +370,13 @@ import firebase from 'firebase/app'
 import moment from 'moment'
 import Signup from './components/Signup'
 import BugReport from './components/BugReport'
+import Terminal from './components/Terminal'
 import Switch from './layout/Switch'
 
 export default {
 	name: 'Paradigm',
 	components: {
-		Signup, BugReport, 'UISwitch': Switch
+		Signup, BugReport, 'UISwitch': Switch, Terminal
 	},
 	data() {
 		return {

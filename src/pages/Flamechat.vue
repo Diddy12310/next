@@ -468,7 +468,6 @@ export default {
 			this.usersDbDownloaded = false
 		},
 		saveChatroom() {
-			this.new_chatroom_id = ''
 			db.collection('flamechat').doc(this.new_chatroom_id).get().then(doc => {
 				if (doc.exists) {
 					this.new_chatroom_name = doc.data().name
@@ -479,6 +478,7 @@ export default {
 					this.$notify('Chatroom does not exist')
 				}
 			})
+			this.new_chatroom_id = ''
 		},
 		createChatroom() {
 			db.collection('flamechat').doc(this.create_chatroom_id).set({
