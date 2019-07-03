@@ -21,6 +21,7 @@
     <Notice v-if="$root.switch == 'Notice'"/>
     <PageNotFound v-if="$root.switch == 'PageNotFound'"/>
     <Arcade v-if="$root.switch == 'Games'"/>
+    <Write v-if="$root.switch == 'Write'"/>
   </div>
 </template>
 
@@ -48,12 +49,13 @@ import Arcade from '@/pages/Arcade'
 import Terminal from '@/components/Terminal'
 import Weather from '@/pages/Weather'
 import Notice from '@/pages/Company/Notice'
+import Write from '@/pages/Write'
 
 export default {
   name: 'Switch',
   components: {
 		Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
-		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice, Arcade
+		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice, Arcade, Write
 	},
   data() {
     return {
