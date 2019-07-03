@@ -3,7 +3,7 @@
     <v-toolbar color="blue darken-4" dense>
       <v-toolbar-title>Write</v-toolbar-title>
       <v-spacer></v-spacer>
-      <input type="text" v-model="data.title" style="text-align: center;" placeholder="Untitled document">
+      <input type="text" v-model="data.title" class="doc-title" placeholder="Untitled document">
       <v-spacer></v-spacer>
       <v-btn @click="newDocument()" icon><v-icon>mdi-file-document-box-plus</v-icon></v-btn>
       <v-btn @click="$notify('Function not implemented')" icon><v-icon>mdi-printer</v-icon></v-btn>
@@ -12,25 +12,28 @@
     </v-toolbar>
 
     <v-toolbar color="blue darken-2" dense>
-      <v-btn icon @click="data.blocks.push({ type: 'text', content: '', format: { bold: false, italics: false, underline: false, strikethrough: false, overline: false }, index: data.blocks.length })"><v-icon>mdi-format-paragraph</v-icon></v-btn>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
-          <v-btn v-on="on" icon><v-icon>mdi-format-header-pound</v-icon></v-btn>
+          <v-btn v-on="on" icon><v-icon>mdi-format-text-variant</v-icon></v-btn>
         </template>
         <v-list>
-          <v-list-item @click="data.blocks.push({ type: 'header1', content: '', format: { bold: false, italics: false, underline: false, strikethrough: false, overline: false }, index: data.blocks.length, size: 1 })">
+          <v-list-item @click="data.blocks.push({ type: 'text', content: '', format: { b: false, i: false, ul: false, str: false, ol: false, align: 'left' }, index: data.blocks.length })">
+            <v-list-item-title><v-icon>mdi-format-paragraph</v-icon></v-list-item-title>
+          </v-list-item>
+
+          <v-list-item @click="data.blocks.push({ type: 'header1', content: '', format: { b: false, i: false, ul: false, str: false, ol: false, align: 'left' }, index: data.blocks.length, size: 1 })">
             <v-list-item-title><v-icon>mdi-format-header-1</v-icon></v-list-item-title>
           </v-list-item>
 
-          <v-list-item @click="data.blocks.push({ type: 'header2', content: '', format: { bold: false, italics: false, underline: false, strikethrough: false, overline: false }, index: data.blocks.length, size: 2 })">
+          <v-list-item @click="data.blocks.push({ type: 'header2', content: '', format: { b: false, i: false, ul: false, str: false, ol: false, align: 'left' }, index: data.blocks.length, size: 2 })">
             <v-list-item-title><v-icon>mdi-format-header-2</v-icon></v-list-item-title>
           </v-list-item>
 
-          <v-list-item @click="data.blocks.push({ type: 'header3', content: '', format: { bold: false, italics: false, underline: false, strikethrough: false, overline: false }, index: data.blocks.length, size: 3 })">
+          <v-list-item @click="data.blocks.push({ type: 'header3', content: '', format: { b: false, i: false, ul: false, str: false, ol: false, align: 'left' }, index: data.blocks.length, size: 3 })">
             <v-list-item-title><v-icon>mdi-format-header-3</v-icon></v-list-item-title>
           </v-list-item>
 
-          <v-list-item @click="data.blocks.push({ type: 'header4', content: '', format: { bold: false, italics: false, underline: false, strikethrough: false, overline: false }, index: data.blocks.length, size: 4 })">
+          <v-list-item @click="data.blocks.push({ type: 'header4', content: '', format: { b: false, i: false, ul: false, str: false, ol: false, align: 'left' }, index: data.blocks.length, size: 4 })">
             <v-list-item-title><v-icon>mdi-format-header-4</v-icon></v-list-item-title>
           </v-list-item>
         </v-list>
@@ -64,22 +67,34 @@
       <v-btn icon @click="data.blocks.push({ type: 'html', src: '', src_saved: '', index: data.blocks.length })"><v-icon>mdi-language-html5</v-icon></v-btn>
       <v-btn icon @click="data.blocks.push({ type: 'quote', content: '', author: '', src_saved: '', index: data.blocks.length })"><v-icon>mdi-format-quote-close</v-icon></v-btn>
       <v-btn icon @click="data.blocks.push({ type: 'icon', src: '', src_saved: '', index: data.blocks.length })"><v-icon>mdi-star</v-icon></v-btn>
+      <v-btn icon @click="data.blocks.push({ type: 'gap', index: data.blocks.length })"><v-icon>mdi-arrow-expand-vertical</v-icon></v-btn>
       <v-spacer></v-spacer>
-      <v-btn-toggle multiple v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
-        <v-btn icon @click="data.blocks[current_index].format.bold = !data.blocks[current_index].format.bold" v-model="data.blocks[current_index].format.bold" color="white">
+      <v-btn-toggle multiple v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'" style="background-color: #1976D2;">
+        <v-btn icon @click="data.blocks[current_block.index].format.b = !data.blocks[current_block.index].format.b" v-model="data.blocks[current_block.index].format.b">
           <v-icon>mdi-format-bold</v-icon>
         </v-btn>
-        <v-btn icon @click="data.blocks[current_index].format.italics = !data.blocks[current_index].format.italics" v-model="data.blocks[current_index].format.italics" color="white">
+        <v-btn icon @click="data.blocks[current_block.index].format.i = !data.blocks[current_block.index].format.i" v-model="data.blocks[current_block.index].format.i">
           <v-icon>mdi-format-italic</v-icon>
         </v-btn>
-        <v-btn icon @click="data.blocks[current_index].format.underline = !data.blocks[current_index].format.underline" v-model="data.blocks[current_index].format.underline" color="white">
+        <v-btn icon @click="data.blocks[current_block.index].format.ul = !data.blocks[current_block.index].format.ul" v-model="data.blocks[current_block.index].format.ul">
           <v-icon>mdi-format-underline</v-icon>
         </v-btn>
-        <v-btn icon @click="data.blocks[current_index].format.overline = !data.blocks[current_index].format.overline" v-model="data.blocks[current_index].format.overline" color="white">
+        <v-btn icon @click="data.blocks[current_block.index].format.ol = !data.blocks[current_block.index].format.ol" v-model="data.blocks[current_block.index].format.ol">
           <v-icon>mdi-format-overline</v-icon>
         </v-btn>
-        <v-btn icon @click="data.blocks[current_index].format.strikethrough = !data.blocks[current_index].format.strikethrough" v-model="data.blocks[current_index].format.strikethrough" color="white">
+        <v-btn icon @click="data.blocks[current_block.index].format.str = !data.blocks[current_block.index].format.str" v-model="data.blocks[current_block.index].format.str">
           <v-icon>mdi-format-strikethrough</v-icon>
+        </v-btn>
+      </v-btn-toggle>
+      <v-btn-toggle v-model="data.blocks[current_block.index].format.align" mandatory v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'" style="background-color: #1976D2;">
+        <v-btn value="left">
+          <v-icon>mdi-format-align-left</v-icon>
+        </v-btn>
+        <v-btn value="center">
+          <v-icon>mdi-format-align-center</v-icon>
+        </v-btn>
+        <v-btn value="right">
+          <v-icon>mdi-format-align-right</v-icon>
         </v-btn>
       </v-btn-toggle>
     </v-toolbar>
@@ -102,26 +117,26 @@
       </v-card>
     </v-dialog>
 
-    <v-container id="editor" @click.self="current_block = {}, current_index = null">
-      <v-layout v-for="(block, index) in data.blocks" :key="index" @click="current_block = block, current_index = index">
+    <v-container id="editor" @click.self="current_block = {}">
+      <v-layout v-for="(block, index) in data.blocks" :key="index" @click="current_block = block">
         <v-flex xs11 class="text" v-if="block.type == 'text'">
-          <textarea style="width: 100%;" :class="{ 'body-1': true, 'font-weight-bold': block.format.bold, 'font-italic': block.format.italics, 'font-underline': block.format.underline }" type="text" v-model="block.content" placeholder="Paragraph"></textarea>
+          <textarea style="width: 100%;" :class="{ 'body-1': true, 'font-weight-bold': block.format.b, 'font-italic': block.format.i, 'font-underline': block.format.ul, 'font-strikethrough': block.format.str, 'font-overline': block.format.ol }" :style="{ 'text-align': block.format.align }" type="text" v-model="block.content" placeholder="Paragraph"></textarea>
         </v-flex>
 
         <v-flex xs11 class="header1" v-if="block.type == 'header1'">
-          <textarea style="width: 100%;" :class="{ 'display-1': true, 'font-weight-bold': block.format.bold, 'font-italic': block.format.italics, 'font-underline': block.format.underline }" type="text" v-model="block.content" placeholder="Header"></textarea>
+          <textarea style="width: 100%;" :class="{ 'display-1': true, 'font-weight-bold': block.format.b, 'font-italic': block.format.i, 'font-underline': block.format.ul, 'font-strikethrough': block.format.str, 'font-overline': block.format.ol }" :style="{ 'text-align': block.format.align }" type="text" v-model="block.content" placeholder="Header"></textarea>
         </v-flex>
 
         <v-flex xs11 class="header2" v-if="block.type == 'header2'">
-          <textarea style="width: 100%;" :class="{ 'display-2': true, 'font-weight-bold': block.format.bold, 'font-italic': block.format.italics, 'font-underline': block.format.underline }" type="text" v-model="block.content" placeholder="Header"></textarea>
+          <textarea style="width: 100%;" :class="{ 'display-2': true, 'font-weight-bold': block.format.b, 'font-italic': block.format.i, 'font-underline': block.format.ul, 'font-strikethrough': block.format.str, 'font-overline': block.format.ol }" :style="{ 'text-align': block.format.align }" type="text" v-model="block.content" placeholder="Header"></textarea>
         </v-flex>
 
         <v-flex xs11 class="header3" v-if="block.type == 'header3'">
-          <textarea style="width: 100%;" :class="{ 'display-3': true, 'font-weight-bold': block.format.bold, 'font-italic': block.format.italics, 'font-underline': block.format.underline }" type="text" v-model="block.content" placeholder="Header"></textarea>
+          <textarea style="width: 100%;" :class="{ 'display-3': true, 'font-weight-bold': block.format.b, 'font-italic': block.format.i, 'font-underline': block.format.ul, 'font-strikethrough': block.format.str, 'font-overline': block.format.ol }" :style="{ 'text-align': block.format.align }" type="text" v-model="block.content" placeholder="Header"></textarea>
         </v-flex>
 
         <v-flex xs11 class="header4" v-if="block.type == 'header4'">
-          <textarea style="width: 100%;" :class="{ 'display-4': true, 'font-weight-bold': block.format.bold, 'font-italic': block.format.italics, 'font-underline': block.format.underline }" type="text" v-model="block.content" placeholder="Header"></textarea>
+          <textarea style="width: 100%;" :class="{ 'display-4': true, 'font-weight-bold': block.format.b, 'font-italic': block.format.i, 'font-underline': block.format.ul, 'font-strikethrough': block.format.str, 'font-overline': block.format.ol }" :style="{ 'text-align': block.format.align }" type="text" v-model="block.content" placeholder="Header"></textarea>
         </v-flex>
 
         <v-flex xs11 class="quote" v-if="block.type == 'quote'">
@@ -196,6 +211,10 @@
           <v-divider style="margin-top: 13px;"></v-divider>
         </v-flex>
 
+        <v-flex xs11 class="gap" v-if="block.type == 'gap'">
+          <div style="height: 45px;"></div>
+        </v-flex>
+
         <v-flex xs11 class="code" v-if="block.type == 'code'">
           <kbd><input type="text" v-model="block.content" placeholder="Code snippet"></kbd>
         </v-flex>
@@ -248,19 +267,18 @@ import { saveAs } from 'file-saver'
 import printJS from 'print-js'
 
 export default {
-  name: 'app',
+  name: 'Write',
   data() {
     return {
       open_dialog: false,
       data: {
         title: '',
         blocks: [
-          { type: 'header1', content: '', format: { bold: false, italics: false, underline: false, strikethrough: false, overline: false }, index: 0, size: 1 },
-          { type: 'text', content: '', format: { bold: false, italics: false, underline: false, strikethrough: false, overline: false }, index: 0 }
+          { type: 'header1', content: '', format: { b: false, i: false, ul: false, str: false, ol: false, align: 'left' }, index: 0, size: 0 },
+          { type: 'text', content: '', format: { b: false, i: false, ul: false, str: false, ol: false, align: 'left' }, index: 1 }
         ]
       },
-      current_block: {},
-      current_index: 0
+      current_block: {}
     }
   },
   methods: {
@@ -268,8 +286,8 @@ export default {
       this.data = {
         title: '',
         blocks: [
-          { type: 'header1', content: '', format: { bold: false, italics: false, underline: false, strikethrough: false, overline: false }, index: 0, size: 1 },
-          { type: 'text', content: '', format: { bold: false, italics: false, underline: false, strikethrough: false, overline: false }, index: 0 }
+          { type: 'header1', content: '', format: { b: false, i: false, ul: false, str: false, ol: false, align: 'left' }, index: 0, size: 0 },
+          { type: 'text', content: '', format: { b: false, i: false, ul: false, str: false, ol: false, align: 'left' }, index: 1 }
         ]
       }
     },
@@ -344,6 +362,10 @@ div#editor {
   text-decoration: line-through;
 }
 
+.font-overline {
+  text-decoration: overline;
+}
+
 html {
   outline: none;
 }
@@ -355,5 +377,18 @@ html {
 
 iframe {
   border: none !important;
+}
+
+.doc-title {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+  background: none !important;
 }
 </style>
