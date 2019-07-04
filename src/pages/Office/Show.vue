@@ -1,19 +1,19 @@
 <template>
   <div>
-    <v-toolbar color="blue darken-4" dense>
-      <v-toolbar-title class="hidden-sm-and-down">Write</v-toolbar-title>
+    <v-toolbar color="red darken-4" dense>
+      <v-toolbar-title class="hidden-sm-and-down">Show</v-toolbar-title>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
-      <input class="hidden-sm-and-down doc-title" type="text" v-model="data.title" placeholder="Untitled document">
-      <input class="hidden-md-and-up" style="text-align: left;" type="text" v-model="data.title" placeholder="Untitled document">
+      <!-- <input class="hidden-sm-and-down doc-title" type="text" v-model="data.title" placeholder="Untitled document">
+      <input class="hidden-md-and-up" style="text-align: left;" type="text" v-model="data.title" placeholder="Untitled document"> -->
       <v-spacer></v-spacer>
-      <v-btn @click="newDocument()" icon><v-icon>mdi-file-document-box-plus</v-icon></v-btn>
+      <!-- <v-btn @click="newDocument()" icon><v-icon>mdi-file-document-box-plus</v-icon></v-btn>
       <v-btn @click="$notify('Function not implemented')" icon><v-icon>mdi-printer</v-icon></v-btn>
       <v-btn @click="open_dialog = true" icon><v-icon>mdi-folder-open</v-icon></v-btn>
-      <v-btn @click="saveDocument()" icon><v-icon>mdi-content-save</v-icon></v-btn>
+      <v-btn @click="saveDocument()" icon><v-icon>mdi-content-save</v-icon></v-btn> -->
     </v-toolbar>
 
-    <v-toolbar color="blue darken-2" dense>
-      <v-menu offset-y>
+    <v-toolbar color="red darken-2" dense>
+      <!-- <v-menu offset-y>
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" icon><v-icon>mdi-format-text-variant</v-icon></v-btn>
         </template>
@@ -97,10 +97,14 @@
         <v-btn value="right">
           <v-icon>mdi-format-align-right</v-icon>
         </v-btn>
-      </v-btn-toggle>
+      </v-btn-toggle> -->
+
+      <v-spacer></v-spacer>
+      <p class="doc-title">Unavailable</p>
+      <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-dialog v-model="open_dialog" max-width="500">
+    <!-- <v-dialog v-model="open_dialog" max-width="500">
       <v-card>
         <v-card-title>
           <h4>Open file</h4>
@@ -261,7 +265,7 @@
           </v-menu>
         </v-flex>
       </v-layout>
-    </v-container>
+    </v-container> -->
   </div>
 </template>
 

@@ -391,7 +391,10 @@ export default {
 				{ icon: 'mdi-play-network', route: 'Media', app: 'Media' },
 				{ icon: 'mdi-weather-pouring', route: 'Weather', app: 'Weather' },
 				{ icon: 'mdi-gamepad-variant', route: 'Games', app: 'Arcade' },
-				{ icon: 'mdi-file-document-box-multiple', route: 'Write', app: 'Write' }
+				{ icon: 'mdi-file-document-box-multiple', route: 'Write', app: 'Write' },
+				{ icon: 'mdi-presentation', route: 'Show', app: 'Show' },
+				{ icon: 'mdi-google-spreadsheet', route: 'Spread', app: 'Spread' }
+
 			],
 			company: [
 				{ route: 'Roadmap', app: 'Roadmap' },
