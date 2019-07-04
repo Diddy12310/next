@@ -516,7 +516,7 @@
                   <v-list-item v-if="block.type == 'embed' || block.type == 'html'" v-on="on" icon><v-icon>mdi-resize</v-icon></v-list-item>
                 </template>
                 <v-list dense>
-                  <v-slider max="750" style="width: 500px; padding: 20px 40px 0px 40px;" v-model="data.blocks[current_block.index].size"></v-slider>
+                  <v-slider max="750" style="max-width: 500px; min-width: 200px; padding: 20px 40px 0px 40px;" v-model="data.blocks[current_block.index].size"></v-slider>
                 </v-list>
               </v-menu>
             </v-list>
