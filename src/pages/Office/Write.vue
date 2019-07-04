@@ -93,8 +93,8 @@
           <v-list-item icon @click="data.blocks.push({ type: 'image', src: '', alt: '', src_saved: false, index: data.blocks.length })"><v-icon>mdi-image</v-icon></v-list-item>
           <v-list-item icon @click="data.blocks.push({ type: 'divider', index: data.blocks.length })"><v-icon>mdi-minus</v-icon></v-list-item>
           <v-list-item icon @click="data.blocks.push({ type: 'code', index: data.blocks.length })"><v-icon>mdi-code-tags</v-icon></v-list-item>
-          <v-list-item icon @click="data.blocks.push({ type: 'embed', src: '', src_saved: '', index: data.blocks.length })"><v-icon>mdi-web</v-icon></v-list-item>
-          <v-list-item icon @click="data.blocks.push({ type: 'html', src: '', src_saved: '', index: data.blocks.length })"><v-icon>mdi-language-html5</v-icon></v-list-item>
+          <v-list-item icon @click="data.blocks.push({ type: 'embed', src: '', src_saved: '', index: data.blocks.length, size: 100 })"><v-icon>mdi-web</v-icon></v-list-item>
+          <v-list-item icon @click="data.blocks.push({ type: 'html', src: '', src_saved: '', index: data.blocks.length, size: 100 })"><v-icon>mdi-language-html5</v-icon></v-list-item>
           <v-list-item icon @click="data.blocks.push({ type: 'quote', content: '', author: '', src_saved: '', index: data.blocks.length })"><v-icon>mdi-format-quote-close</v-icon></v-list-item>
           <v-list-item icon @click="data.blocks.push({ type: 'icon', src: '', src_saved: '', index: data.blocks.length })"><v-icon>mdi-star</v-icon></v-list-item>
           <v-list-item icon @click="data.blocks.push({ type: 'gap', index: data.blocks.length })"><v-icon>mdi-arrow-expand-vertical</v-icon></v-list-item>
@@ -442,18 +442,18 @@
             <input type="text" v-model="block.src" placeholder="URL" style="width: 750px; margin-right: 14px;">
             <v-btn text color="accent" @click="block.src_saved = true" v-if="block.src">Save</v-btn>
           </div>
-          <embed v-if="block.src_saved" :src="block.src" style="width: 100%;">
+          <embed v-if="block.src_saved" :src="block.src" :style="{ 'width': '100%', 'height': block.size + 'px' }">
         </v-flex>
 
         <v-flex xs11 class="html" v-if="block.type == 'html'">
           <div v-if="!block.src_saved">
-            <textarea type="text" v-model="block.src" placeholder="URL" style="width: 750px; margin-right: 14px;"></textarea>
+            <textarea type="text" v-model="block.src" placeholder="Source" style="width: 750px; margin-right: 14px;"></textarea>
             <v-btn text color="accent" @click="block.src_saved = true" v-if="block.src">Save</v-btn>
           </div>
           <iframe v-if="block.src_saved" :srcdoc="block.src" style="width: 100%;"></iframe>
         </v-flex>
 
-        <v-flex xs11 class="divider" v-if="block.type == 'divider'">
+        <v-flex xs11 :class="{ 'divider': block.index != current_hover_block_index, 'divider-hover': block.index == current_hover_block_index }" v-if="block.type == 'divider'">
           <v-divider></v-divider>
         </v-flex>
 
@@ -466,7 +466,7 @@
         </v-flex>
 
         <v-flex xs1 style="text-align: center;">
-          <v-menu offset-y v-if="current_hover_block_index == block.index">
+          <v-menu offset-y v-if="current_hover_block_index == block.index" :close-on-content-click="false">
             <template v-slot:activator="{ on }">
               <v-btn v-on="on" icon color="grey darken-2" v-if="current_hover_block_index == block.index"><v-icon>mdi-dots-vertical</v-icon></v-btn>
             </template>
@@ -510,6 +510,15 @@
               <v-list-item @click="block.rows -= 1" v-if="block.type == 'header1' || block.type == 'header2' || block.type == 'header3' || block.type == 'header4' || block.type == 'text'">
                 <v-list-item-title><v-icon>mdi-minus</v-icon></v-list-item-title>
               </v-list-item>
+
+              <v-menu offset-x left v-if="block.type == 'embed' || block.type == 'html'" :close-on-content-click="false">
+                <template v-slot:activator="{ on }">
+                  <v-list-item v-if="block.type == 'embed' || block.type == 'html'" v-on="on" icon><v-icon>mdi-resize</v-icon></v-list-item>
+                </template>
+                <v-list dense>
+                  <v-slider max="750" style="width: 500px; padding: 20px 40px 0px 40px;" v-model="data.blocks[current_block.index].size"></v-slider>
+                </v-list>
+              </v-menu>
             </v-list>
           </v-menu>
         </v-flex>
@@ -649,18 +658,31 @@ iframe {
 
 .block {
   padding: 14px;
+  border-radius: 6px;
 }
 
 .block:hover {
   background-color: #343434;
-  border-radius: 6px;
 }
 
 .v-menu__content {
   background-color: #424242;
 }
 
-.v-menu--inline{
+.v-menu--inline {
   display: none !important;
+}
+
+.divider {
+  position: relative;
+  top: +18px;
+  bottom: +18px;
+  height: 36px;
+}
+
+.divider-hover {
+  position: relative;
+  top: 0px;
+  bottom: +18px;
 }
 </style>
