@@ -394,7 +394,7 @@
         </v-flex>
 
         <v-flex xs11 class="divider" v-if="block.type == 'divider'">
-          <v-divider style="margin-top: 13px;"></v-divider>
+          <v-divider></v-divider>
         </v-flex>
 
         <v-flex xs11 class="gap" v-if="block.type == 'gap'">
@@ -534,10 +534,6 @@ export default {
 </script>
 
 <style scoped>
-/* .v-toolbar {
-  flex: none !important;
-} */
-
 div#editor {
   margin-top: 16px;
 }

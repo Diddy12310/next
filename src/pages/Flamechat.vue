@@ -1,9 +1,10 @@
 <template>
 	<div class="flamechat">
 		<v-toolbar dense color="deep-orange darken-2" v-if="flamechat_enable">
-			<v-toolbar-title>Flamechat</v-toolbar-title>
-			<v-spacer></v-spacer>
-			<span v-if="ready" class="chatroom-name font-weight-light text-uppercase">{{ chatroom_name }}</span>
+			<v-toolbar-title class="hidden-sm-and-down">Flamechat</v-toolbar-title>
+			<v-spacer class="hidden-sm-and-down"></v-spacer>
+			<span v-if="ready" class="chatroom-name font-weight-light text-uppercase hidden-sm-and-down">{{ chatroom_name }}</span>
+			<span v-if="ready" class="font-weight-light text-uppercase hidden-md-and-up">{{ chatroom_name }}</span>
 			<v-spacer></v-spacer>
 			<v-tooltip bottom v-if="chatroom_id && !ready" open-delay="1000">
 				<template v-slot:activator="{ on }">
