@@ -1,9 +1,10 @@
 <template>
   <div>
     <v-toolbar color="blue darken-4" dense>
-      <v-toolbar-title>Write</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <input type="text" v-model="data.title" class="doc-title" placeholder="Untitled document">
+      <v-toolbar-title class="hidden-sm-and-down">Write</v-toolbar-title>
+      <v-spacer class="hidden-sm-and-down"></v-spacer>
+      <input class="hidden-sm-and-down doc-title" type="text" v-model="data.title" placeholder="Untitled document">
+      <input class="hidden-md-and-up" style="text-align: left;" type="text" v-model="data.title" placeholder="Untitled document">
       <v-spacer></v-spacer>
       <v-btn @click="newDocument()" icon><v-icon>mdi-file-document-box-plus</v-icon></v-btn>
       <v-btn @click="$notify('Function not implemented')" icon><v-icon>mdi-printer</v-icon></v-btn>
@@ -118,7 +119,7 @@
     </v-dialog>
 
     <v-container id="editor" @click.self="current_block = {}">
-      <v-layout v-for="(block, index) in data.blocks" :key="index" @click="current_block = block">
+      <v-layout v-for="(block, index) in data.blocks" :key="index" @click="current_block = block" class="block" align-center justify-center>
         <v-flex xs11 class="text" v-if="block.type == 'text'">
           <textarea style="width: 100%;" :class="{ 'body-1': true, 'font-weight-bold': block.format.b, 'font-italic': block.format.i, 'font-underline': block.format.ul, 'font-strikethrough': block.format.str, 'font-overline': block.format.ol }" :style="{ 'text-align': block.format.align }" type="text" v-model="block.content" placeholder="Paragraph"></textarea>
         </v-flex>
@@ -219,44 +220,46 @@
           <kbd><input type="text" v-model="block.content" placeholder="Code snippet"></kbd>
         </v-flex>
 
-        <v-menu offset-y>
-          <template v-slot:activator="{ on }">
-            <v-btn v-on="on" icon color="grey darken-2"><v-icon>mdi-dots-vertical</v-icon></v-btn>
-          </template>
-          <v-list>
-            <v-list-item @click="moveUp(block, index)">
-              <v-list-item-title><v-icon>mdi-chevron-up</v-icon></v-list-item-title>
-            </v-list-item>
+        <v-flex xs1 style="text-align: center;">
+          <v-menu offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn v-on="on" icon color="grey darken-2"><v-icon>mdi-dots-vertical</v-icon></v-btn>
+            </template>
+            <v-list>
+              <v-list-item @click="moveUp(block, index)">
+                <v-list-item-title><v-icon>mdi-chevron-up</v-icon></v-list-item-title>
+              </v-list-item>
 
-            <v-list-item @click="deleteBlock(block.index)" color="red">
-              <v-list-item-title><v-icon>mdi-delete</v-icon></v-list-item-title>
-            </v-list-item>
+              <v-list-item @click="deleteBlock(block.index)" color="red">
+                <v-list-item-title><v-icon>mdi-delete</v-icon></v-list-item-title>
+              </v-list-item>
 
-            <v-list-item @click="moveDown(block, index)">
-              <v-list-item-title><v-icon>mdi-chevron-down</v-icon></v-list-item-title>
-            </v-list-item>
+              <v-list-item @click="moveDown(block, index)">
+                <v-list-item-title><v-icon>mdi-chevron-down</v-icon></v-list-item-title>
+              </v-list-item>
 
-            <v-list-item @click="addListItem(index)" v-if="block.type == 'ul' || block.type == 'ol'">
-              <v-list-item-title><v-icon>mdi-plus</v-icon></v-list-item-title>
-            </v-list-item>
+              <v-list-item @click="addListItem(index)" v-if="block.type == 'ul' || block.type == 'ol'">
+                <v-list-item-title><v-icon>mdi-plus</v-icon></v-list-item-title>
+              </v-list-item>
 
-            <v-list-item @click="removeListItem(index)" v-if="block.type == 'ul' || block.type == 'ol'">
-              <v-list-item-title><v-icon>mdi-minus</v-icon></v-list-item-title>
-            </v-list-item>
+              <v-list-item @click="removeListItem(index)" v-if="block.type == 'ul' || block.type == 'ol'">
+                <v-list-item-title><v-icon>mdi-minus</v-icon></v-list-item-title>
+              </v-list-item>
 
-            <v-list-item @click="block.src_saved = false" v-if="(block.type == 'image' || 'embed') && block.src_saved">
-              <v-list-item-title><v-icon>mdi-pencil</v-icon></v-list-item-title>
-            </v-list-item>
+              <v-list-item @click="block.src_saved = false" v-if="(block.type == 'image' || 'embed') && block.src_saved">
+                <v-list-item-title><v-icon>mdi-pencil</v-icon></v-list-item-title>
+              </v-list-item>
 
-            <v-list-item @click="block.size += 1, block.type = 'header' + block.size" v-if="block.type == 'header1' || block.type == 'header2' || block.type == 'header3'">
-              <v-list-item-title><v-icon>mdi-format-font-size-increase</v-icon></v-list-item-title>
-            </v-list-item>
+              <v-list-item @click="block.size += 1, block.type = 'header' + block.size" v-if="block.type == 'header1' || block.type == 'header2' || block.type == 'header3'">
+                <v-list-item-title><v-icon>mdi-format-font-size-increase</v-icon></v-list-item-title>
+              </v-list-item>
 
-            <v-list-item @click="block.size -= 1, block.type = 'header' + block.size" v-if="block.type == 'header2' || block.type == 'header3' || block.type == 'header4'">
-              <v-list-item-title><v-icon>mdi-format-font-size-decrease</v-icon></v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+              <v-list-item @click="block.size -= 1, block.type = 'header' + block.size" v-if="block.type == 'header2' || block.type == 'header3' || block.type == 'header4'">
+                <v-list-item-title><v-icon>mdi-format-font-size-decrease</v-icon></v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-flex>
       </v-layout>
     </v-container>
   </div>
@@ -390,5 +393,14 @@ iframe {
 
 .theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
   background: none !important;
+}
+
+.block {
+  padding: 8px;
+}
+
+.block:hover {
+  background-color: #424242;
+  border-radius: 10px;
 }
 </style>
