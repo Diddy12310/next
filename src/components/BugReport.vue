@@ -43,7 +43,7 @@ export default {
       bug_importance: '',
       bug_location: '',
       bug_categories: ['Feature', 'UI', 'Link/Button', 'Unexpected response'],
-      bug_locations: ['Toolbar', 'Navigation drawer', 'Footer', 'Home', 'Flamechat', 'The Paradox', 'Satellite', 'Asteroid', 'Scorecard', 'Drawer', 'Media', 'Weather', 'Latest Memes', 'Roadmap', 'Terms and Conditions', 'Network Status', 'Contracting', 'Relay', 'Databank', 'Account', 'Terminal', 'Support', 'Report a Bug']
+      bug_locations: ['Toolbar', 'Navigation drawer', 'Footer', 'Home', 'Flamechat', 'The Paradox', 'Satellite', 'Asteroid', 'Scorecard', 'Drawer', 'Media', 'Weather', 'Latest Memes', 'Roadmap', 'Terms and Conditions', 'Network Status', 'Contracting', 'Relay', 'Databank', 'Account', 'Terminal', 'Support', 'Report a Bug', 'Write']
     }
   },
   methods: {
