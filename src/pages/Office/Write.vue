@@ -288,7 +288,11 @@
     <v-dialog v-model="open_dialog" max-width="500">
       <v-card>
         <v-card-title>
-          <h4>Open file</h4>
+          <span>Open a Document</span>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="open_dialog = false" class="dialog-close-btn">
+            <v-icon>close</v-icon>
+          </v-btn>
         </v-card-title>
 
         <v-card-text>

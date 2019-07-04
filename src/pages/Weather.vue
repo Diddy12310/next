@@ -10,7 +10,7 @@
       <h6 class="description"><span v-if="cloud_cover">Cloud Cover: </span>{{ cloud_cover }}<span v-if="cloud_cover">&#x25;</span></h6>
       <h6 class="description"><span v-if="cloud_cover">UV Index: </span>{{ uv_index }}</h6>
       <h6 class="description"><span v-if="visibility">Visbility: </span>{{ visibility }} <span v-if="visibility">mi</span></h6>
-      <h6 class="description"><span v-if="precipitaion_chance != null || !precipitaion_chance">Chance of Precipitaion: </span>{{ precipitaion_chance }}<span v-if="precipitaion_chance != null || !precipitaion_chance">&#x25;</span></h6>
+      <h6 class="description"><span v-if="precipitaion_chance">Chance of Precipitaion: </span>{{ precipitaion_chance }}<span v-if="precipitaion_chance">&#x25;</span></h6>
     </div>
   </v-container>
 </template>
@@ -33,7 +33,7 @@ export default {
       dew_point: '',
       cloud_cover: '',
       uv_index: '',
-      visibility: '86',
+      visibility: '',
       precipitaion_chance: '',
       latitude: '',
       longitude: ''
@@ -71,6 +71,8 @@ export default {
         this.$root.loadingBar = false
       }).catch(error => {
         console.error(error)
+        this.$notify('Network error')
+        this.$root.loadingBar = false
       }).then(() => {
 
       })
