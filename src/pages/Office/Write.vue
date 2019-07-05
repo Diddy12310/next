@@ -346,28 +346,6 @@
       </v-menu>
     </v-toolbar>
 
-    <v-dialog v-model="open_dialog" max-width="500">
-      <v-card>
-        <v-card-title>
-          <span>Open a Document</span>
-          <v-spacer></v-spacer>
-          <v-btn icon @click="open_dialog = false" class="dialog-close-btn">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-card-text>
-          <input id="file-uploader" type="file" name="file" accept="application/json">
-        </v-card-text>
-
-        <v-card-actions>
-          <v-btn text color="accent" @click="openDocument()">Open</v-btn>
-          <v-spacer></v-spacer>
-          <v-btn text color="red" @click="open_dialog = false">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
     <v-container id="editor" @click.self="current_block = {}" @mouseover.self="current_hover_block_index = null">
       <v-layout v-for="(block, index) in data.blocks" :key="index" @click="current_block = block" class="block" align-center justify-center @mouseover="current_hover_block_index = block.index">
         <v-flex xs11 class="text" v-if="block.type == 'text'">
@@ -529,6 +507,44 @@
         </v-flex>
       </v-layout>
     </v-container>
+
+    <v-dialog v-model="open_dialog" max-width="500">
+      <v-card>
+        <v-card-title>
+          <span>Open a Document</span>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="open_dialog = false" class="dialog-close-btn">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <v-card-text>
+          <input id="file-uploader" type="file" name="file" accept="application/json">
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn text color="accent" @click="openDocument()">Open</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn text color="red" @click="open_dialog = false">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="corrupt_dialog" max-width="350">
+      <v-card color="red">
+        <v-card-title>
+          <span style="margin: auto;" class="white--text font-weight-bold text-uppercase">Corrupt Document</span>
+        </v-card-title>
+
+        <v-card-text style="text-align: center;">Please upload a valid document.</v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text color="white" @click="corrupt_dialog = false">Okay</v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -541,6 +557,7 @@ export default {
   data() {
     return {
       open_dialog: false,
+      corrupt_dialog: false,
       data: {
         title: '',
         blocks: [
@@ -564,16 +581,20 @@ export default {
     },
     openDocument() {
       var files = document.getElementById('file-uploader').files
-
+      var file_ext_search = files[0].name.search('.write.json')
+      var corrupt = true
+      if (file_ext_search >= 1) corrupt = false
       var reader = new FileReader()
-
-      reader.onload = e => { 
-        this.data = JSON.parse(e.target.result)
+      if (!corrupt) {
+        reader.onload = e => {
+          this.data = JSON.parse(e.target.result)
+        }
+        reader.readAsText(files.item(0))
+        this.open_dialog = false
+      } else {
+        document.getElementById('file-uploader').value = null
+        this.corrupt_dialog = true
       }
-
-      reader.readAsText(files.item(0))
-
-      this.open_dialog = false
     },
     saveDocument() {
       if (this.data.title) {
