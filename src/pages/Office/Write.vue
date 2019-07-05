@@ -685,4 +685,8 @@ iframe {
   top: 0px;
   bottom: +18px;
 }
+
+textarea {
+  resize: none;
+}
 </style>
