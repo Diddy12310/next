@@ -739,7 +739,7 @@ html {
 	margin: 0;
   position: absolute;
   top: 47%;
-  left: 80px;
+  left: 90px;
   transform: translate(-50%, -50%);
 }
 
