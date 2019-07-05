@@ -161,7 +161,7 @@
       <v-btn icon @click="data.blocks.push({ type: 'icon', src: '', src_saved: '', index: data.blocks.length })" class="hidden-sm-and-down"><v-icon>mdi-star</v-icon></v-btn>
       <v-btn icon @click="data.blocks.push({ type: 'gap', index: data.blocks.length })" class="hidden-sm-and-down"><v-icon>mdi-arrow-expand-vertical</v-icon></v-btn>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
-      <div class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
+      <div class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header'">
         <v-btn icon @click="data.blocks[current_block.index].format.b = !data.blocks[current_block.index].format.b" v-model="data.blocks[current_block.index].format.b">
           <v-icon>mdi-format-bold</v-icon>
         </v-btn>
@@ -178,9 +178,9 @@
           <v-icon>mdi-format-strikethrough</v-icon>
         </v-btn>
       </div>
-      <v-menu class="hidden-sm-and-down" :close-on-content-click="false" offset-y v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
+      <v-menu class="hidden-sm-and-down" :close-on-content-click="false" offset-y v-if="current_block.type == 'text' || current_block.type == 'header'">
         <template v-slot:activator="{ on }">
-          <v-btn class="hidden-sm-and-down" v-on="on" icon v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'"><v-icon>mdi-format-align-{{ data.blocks[current_block.index].format.align }}</v-icon></v-btn>
+          <v-btn class="hidden-sm-and-down" v-on="on" icon v-if="current_block.type == 'text' || current_block.type == 'header'"><v-icon>mdi-format-align-{{ data.blocks[current_block.index].format.align }}</v-icon></v-btn>
         </template>
         <v-list>
           <v-list-item-group v-model="data.blocks[current_block.index].format.align">
@@ -212,9 +212,9 @@
           </v-list-item-group>
         </v-list>
       </v-menu>
-      <v-menu offset-y class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
+      <v-menu offset-y class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header'">
         <template v-slot:activator="{ on }">
-          <v-btn v-on="on" icon class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'"><v-icon>mdi-format-font</v-icon></v-btn>
+          <v-btn v-on="on" icon class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header'"><v-icon>mdi-format-font</v-icon></v-btn>
         </template>
         <v-list dense>
           <v-list-item-group  v-model="data.blocks[current_block.index].format.font">
@@ -236,9 +236,9 @@
           </v-list-item-group>
         </v-list>
       </v-menu>
-      <v-menu :close-on-content-click="false" offset-y class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
+      <v-menu :close-on-content-click="false" offset-y class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header'">
         <template v-slot:activator="{ on }">
-          <v-btn :style="{ 'color': data.blocks[current_block.index].format.color }" v-on="on" icon class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'"><v-icon>mdi-format-color-fill</v-icon></v-btn>
+          <v-btn :style="{ 'color': data.blocks[current_block.index].format.color }" v-on="on" icon class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header'"><v-icon>mdi-format-color-fill</v-icon></v-btn>
         </template>
         <v-color-picker show-swatches mode="hexa" style="background-color: #2E2E2E;" v-model="data.blocks[current_block.index].format.color"></v-color-picker>
       </v-menu>
@@ -248,7 +248,7 @@
 
       <!-- Mobile format -->
       <v-spacer class="hidden-md-and-up"></v-spacer>
-      <v-menu :close-on-content-click="false" offset-y class="hidden-md-and-up" v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
+      <v-menu :close-on-content-click="false" offset-y class="hidden-md-and-up" v-if="current_block.type == 'text' || current_block.type == 'header'">
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" icon class="hidden-md-and-up"><v-icon>mdi-format-paint</v-icon></v-btn>
         </template>
@@ -273,9 +273,9 @@
             <v-list-item-title><v-icon>mdi-format-strikethrough</v-icon></v-list-item-title>
           </v-list-item>
 
-          <v-menu class="hidden-md-and-up" :close-on-content-click="false" offset-x left v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
+          <v-menu class="hidden-md-and-up" :close-on-content-click="false" offset-x left v-if="current_block.type == 'text' || current_block.type == 'header'">
             <template v-slot:activator="{ on }">
-              <v-list-item class="hidden-md-and-up" v-on="on" icon v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'"><v-icon>mdi-format-align-{{ data.blocks[current_block.index].format.align }}</v-icon></v-list-item>
+              <v-list-item class="hidden-md-and-up" v-on="on" icon v-if="current_block.type == 'text' || current_block.type == 'header'"><v-icon>mdi-format-align-{{ data.blocks[current_block.index].format.align }}</v-icon></v-list-item>
             </template>
             <v-list dense>
               <v-list-item-group v-model="data.blocks[current_block.index].format.align">
@@ -332,9 +332,9 @@
               </v-list-item-group>
             </v-list>
           </v-menu>
-          <v-menu :close-on-content-click="false" offset-x class="hidden-md-and-up" v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
+          <v-menu :close-on-content-click="false" offset-x class="hidden-md-and-up" v-if="current_block.type == 'text' || current_block.type == 'header'">
             <template v-slot:activator="{ on }">
-              <v-list-item v-on="on" icon class="hidden-md-and-up" v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'"><v-icon :style="{ 'color': data.blocks[current_block.index].format.color }">mdi-format-color-fill</v-icon></v-list-item>
+              <v-list-item v-on="on" icon class="hidden-md-and-up" v-if="current_block.type == 'text' || current_block.type == 'header'"><v-icon :style="{ 'color': data.blocks[current_block.index].format.color }">mdi-format-color-fill</v-icon></v-list-item>
             </template>
             <v-color-picker show-swatches mode="hexa" style="background-color: #2E2E2E;" v-model="data.blocks[current_block.index].format.color"></v-color-picker>
           </v-menu>
@@ -496,12 +496,12 @@
                 <v-list-item-title><v-icon>mdi-pencil</v-icon></v-list-item-title>
               </v-list-item>
 
-              <v-list-item @click="block.size += 1" v-if="block.type == 'header' && block.size < 4">
-                <v-list-item-title><v-icon>mdi-format-font-size-increase</v-icon></v-list-item-title>
+              <v-list-item @click="block.size == 4 ? null : block.size += 1" v-if="block.type == 'header'" :disabled="block.size == 4">
+                <v-list-item-title><v-icon :class="{ 'grey--text': block.size == 4, 'white--text': block.size != 4 }">mdi-format-font-size-increase</v-icon></v-list-item-title>
               </v-list-item>
 
-              <v-list-item @click="block.size -= 1" v-if="block.type == 'header' && block.size > 1">
-                <v-list-item-title><v-icon>mdi-format-font-size-decrease</v-icon></v-list-item-title>
+              <v-list-item @click="block.size == 1 ? null : block.size -= 1" v-if="block.type == 'header'" :disabled="block.size == 1">
+                <v-list-item-title><v-icon :class="{ 'grey--text': block.size == 1, 'white--text': block.size != 1 }">mdi-format-font-size-decrease</v-icon></v-list-item-title>
               </v-list-item>
 
               <v-list-item @click="block.rows += 1" v-if="block.type == 'header' || block.type == 'text'">
@@ -700,5 +700,4 @@ textarea {
 .display-4 {
   line-height: 7.15rem;
 }
-
 </style>
