@@ -242,6 +242,7 @@
         </template>
         <v-color-picker show-swatches mode="hexa" style="background-color: #2E2E2E;" v-model="data.blocks[current_block.index].format.color"></v-color-picker>
       </v-menu>
+      <v-btn icon @click="clearFormat(current_block.index)" class="hidden-sm-and-down"><v-icon>mdi-format-clear</v-icon></v-btn>
 
 
 
@@ -338,6 +339,9 @@
             </template>
             <v-color-picker show-swatches mode="hexa" style="background-color: #2E2E2E;" v-model="data.blocks[current_block.index].format.color"></v-color-picker>
           </v-menu>
+          <v-list-item @click="clearFormat(current_block.index)">
+            <v-list-item-title><v-icon>mdi-format-clear</v-icon></v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-menu>
     </v-toolbar>
@@ -607,6 +611,9 @@ export default {
         if (block.index >= index) block.index -= 1
       })
       this.current_block = {}
+    },
+    clearFormat(index) {
+      this.data.blocks[index].format = { b: false, i: false, ul: false, str: false, ol: false, align: 'left', font: 'Roboto', color: '#FFFFFF', just: 'top' }
     }
   }
 }
