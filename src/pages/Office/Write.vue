@@ -242,7 +242,7 @@
         </template>
         <v-color-picker show-swatches mode="hexa" style="background-color: #2E2E2E;" v-model="data.blocks[current_block.index].format.color"></v-color-picker>
       </v-menu>
-      <v-btn icon @click="clearFormat(current_block.index)" class="hidden-sm-and-down"><v-icon>mdi-format-clear</v-icon></v-btn>
+      <v-btn icon @click="clearFormat(current_block.index)" class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header'"><v-icon>mdi-format-clear</v-icon></v-btn>
 
 
 
