@@ -6,6 +6,7 @@
       <input class="hidden-sm-and-down doc-title" type="text" v-model="data.title" placeholder="Untitled document">
       <input class="hidden-md-and-up" style="text-align: left;" type="text" v-model="data.title" placeholder="Untitled document">
       <v-spacer></v-spacer>
+      <v-btn href="https://relay.theparadigmdev.com/install/write.exe" download icon class="hidden-sm-and-down"><v-icon>mdi-download</v-icon></v-btn>
       <v-btn @click="newDocument()" icon class="hidden-sm-and-down"><v-icon>mdi-file-document-box-plus</v-icon></v-btn>
       <v-btn @click="$notify('Function not implemented')" icon class="hidden-sm-and-down"><v-icon>mdi-printer</v-icon></v-btn>
       <v-btn @click="open_dialog = true" icon class="hidden-sm-and-down"><v-icon>mdi-folder-open</v-icon></v-btn>
@@ -177,7 +178,7 @@
           <v-icon>mdi-format-strikethrough</v-icon>
         </v-btn>
       </div>
-      <v-menu class="hidden-sm-and-down" offset-y v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
+      <v-menu class="hidden-sm-and-down" :close-on-content-click="false" offset-y v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
         <template v-slot:activator="{ on }">
           <v-btn class="hidden-sm-and-down" v-on="on" icon v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'"><v-icon>mdi-format-align-{{ data.blocks[current_block.index].format.align }}</v-icon></v-btn>
         </template>
@@ -272,7 +273,7 @@
             <v-list-item-title><v-icon>mdi-format-strikethrough</v-icon></v-list-item-title>
           </v-list-item>
 
-          <v-menu class="hidden-md-and-up" offset-x left v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
+          <v-menu class="hidden-md-and-up" :close-on-content-click="false" offset-x left v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'">
             <template v-slot:activator="{ on }">
               <v-list-item class="hidden-md-and-up" v-on="on" icon v-if="current_block.type == 'text' || current_block.type == 'header1' || current_block.type == 'header2' || current_block.type == 'header3' || current_block.type == 'header4'"><v-icon>mdi-format-align-{{ data.blocks[current_block.index].format.align }}</v-icon></v-list-item>
             </template>
@@ -347,7 +348,7 @@
           <span>Open a Document</span>
           <v-spacer></v-spacer>
           <v-btn icon @click="open_dialog = false" class="dialog-close-btn">
-            <v-icon>close</v-icon>
+            <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
 
