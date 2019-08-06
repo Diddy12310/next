@@ -271,7 +271,6 @@
 
 <script>
 import { saveAs } from 'file-saver'
-import printJS from 'print-js'
 
 export default {
   name: 'Write',
@@ -321,7 +320,7 @@ export default {
       }
     },
     printDocument() {
-      printJS('editor', 'html')
+      window.print()
     },
     moveUp(block, currentIndex) {
       this.data.blocks.splice(currentIndex, 1)

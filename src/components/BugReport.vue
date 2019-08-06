@@ -5,7 +5,7 @@
         <span>Report a Bug</span>
         <v-spacer></v-spacer>
         <v-btn icon @click="$root.bugreport_dialog = false" class="dialog-close-btn">
-					<v-icon>close</v-icon>
+					<v-icon>mdi-close</v-icon>
 				</v-btn>
       </v-card-title>
       <v-card-text>

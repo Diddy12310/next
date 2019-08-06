@@ -55,7 +55,7 @@ Vue.mixin({
       this.$root.snackbar = true
     },
     $noFunc() {
-      this.$notify('Function not implemented yet')
+      this.$notify('Function not implemented')
     }
   }
 })
@@ -71,8 +71,6 @@ new Vue({
       accountBio: null,
       accountColor: '#1565C0',
       isAdmin: false,
-      isInnerCore: false,
-      isAnalytics: false,
       userPresent: null,
       isAsteroid: false,
       isBanned: false,

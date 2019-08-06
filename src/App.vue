@@ -113,7 +113,7 @@
 					<v-divider></v-divider>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn v-on="on" class="ma-2" icon color="#7289DA" href="https://discord.gg/cA9dpRM">
+							<v-btn small v-on="on" class="ma-2" icon color="#7289DA" href="https://discord.gg/cA9dpRM">
 								<v-icon>mdi-discord</v-icon>
 							</v-btn>
 						</template>
@@ -121,7 +121,7 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn v-on="on" class="my-2 mr-2" icon color="grey darken-1" href="https://github.com/Paradigm-Dev">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="grey darken-1" href="https://github.com/Paradigm-Dev">
 								<v-icon>mdi-github-circle</v-icon>
 							</v-btn>
 						</template>
@@ -129,7 +129,7 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn v-on="on" class="my-2 mr-2" icon color="#7CA5C6" href="https://relay.theparadigmdev.com">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="#7CA5C6" href="https://relay.theparadigmdev.com">
 								<v-icon>mdi-server-network</v-icon>
 							</v-btn>
 						</template>
@@ -137,7 +137,7 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn v-on="on" class="my-2 mr-2" icon color="red" @click="$root.switch = 'Support'">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="red" @click="$root.switch = 'Support'">
 								<v-icon>mdi-lifebuoy</v-icon>
 							</v-btn>
 						</template>
@@ -145,7 +145,7 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn v-on="on" class="my-2 mr-2" icon color="lime" @click="$root.bugreport_dialog = true">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="lime" @click="$root.bugreport_dialog = true">
 								<v-icon>mdi-bug</v-icon>
 							</v-btn>
 						</template>
@@ -714,8 +714,8 @@ html {
 }
 
 .clock {
-	margin: 0;
-  top: 50%;
+	margin: 0 !important;
+  top: 50% !important;
 	text-align: right;
 }
 
@@ -749,5 +749,14 @@ html {
   top: 47%;
   left: 40px;
   transform: translate(-50%, -50%);
+}
+
+.centralize {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+	text-align: center;
 }
 </style>

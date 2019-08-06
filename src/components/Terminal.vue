@@ -10,9 +10,7 @@
 				Moonrocks: {{ profilePopupData.moonrocks }}<br>
 				Admin: {{ profilePopupData.isAdmin }}<br>
         Asteroid: {{ profilePopupData.isAsteroid }}<br>
-				The Inner Core: {{ profilePopupData.isInnerCore }}<br>
 				Writer: {{ profilePopupData.isWriter }}<br>
-				Analytics: {{ profilePopupData.isAnalytics }}<br>
 				Banned: {{ profilePopupData.isBanned }}<br>
 				Strikes: {{ profilePopupData.strikes }}<br>
 				Logged in: {{ profilePopupData.isLoggedIn }}

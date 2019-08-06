@@ -2,21 +2,21 @@
   <v-card style="text-align: center" class="elevation-0">
     <v-card-text>
       <v-btn text icon class="primary--text" @click.native="playing ? pause() : play()" v-if="loaded">
-        <v-icon v-if="playing === false || paused === true">play_arrow</v-icon>
-        <v-icon v-else>pause</v-icon>
+        <v-icon v-if="playing === false || paused === true">mdi-play</v-icon>
+        <v-icon v-else>mdi-pause</v-icon>
       </v-btn>
       <v-btn text icon class="primary--text" @click.native="stop()" v-if="loaded">
-        <v-icon>stop</v-icon>
+        <v-icon>mdi-stop</v-icon>
       </v-btn>
       <v-btn text icon class="primary--text" @click.native="mute()" v-if="loaded">
-        <v-icon v-if="isMuted === false">volume_up</v-icon>
-        <v-icon v-else>volume_off</v-icon>
+        <v-icon v-if="isMuted === false">mdi-volume-high</v-icon>
+        <v-icon v-else>mdi-volume-off</v-icon>
       </v-btn>
       <v-btn text icon class="primary--text" @click.native="download()" v-if="loaded">
-        <v-icon>get_app</v-icon>
+        <v-icon>mdi-download</v-icon>
       </v-btn>
       <v-btn @click.native="reload()" v-else color="red">Reload</v-btn>
-      <v-switch style="margin: auto;" append-icon="repeat" v-model="repeat" :disabled="loaded === false"></v-switch>
+      <v-switch style="margin: auto;" append-icon="mdi-repeat" v-model="repeat" :disabled="loaded === false"></v-switch>
       <v-slider ref="slider" @click.native="setPosition()" v-model="percentage" :disabled="loaded === false"></v-slider>
       <p><strong>{{ currentTime }}</strong> / {{ duration }}</p>
     </v-card-text>

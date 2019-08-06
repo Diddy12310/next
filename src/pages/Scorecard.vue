@@ -4,7 +4,7 @@
 			<h1 class="display-3 green--text font-weight-thin text-uppercase">Golf</h1>
 			<h6 class="headline yellow--text font-weight-thin mt-3">{{ tournament_name }}</h6>
 			<p class="grey--text font-weight-light mt-3">Last updated: {{ timestamp }}</p>
-			<v-btn color="grey" text icon @click="reloadData()" class="mt-3"><v-icon>refresh</v-icon></v-btn>
+			<v-btn color="grey" text icon @click="reloadData()" class="mt-3"><v-icon>mdi-refresh</v-icon></v-btn>
 		</div>
 		<v-container>
 			<v-data-table :headers="headers" :items="players" hide-default-footer>

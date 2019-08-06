@@ -24,7 +24,7 @@
 			</div>
 		</v-container>
 		<v-btn color="deep-purple" fab fixed bottom right @click="newMovieDialog = true">
-      <v-icon>add</v-icon>
+      <v-icon>mdi-plus</v-icon>
     </v-btn>
 		<v-dialog v-model="newMovieDialog" max-width="500">
 			<v-card>
@@ -32,7 +32,7 @@
 					<h3 class="headline mb-0">Add Movie</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="newMovieDialog = false" class="dialog-close-btn">
-						<v-icon>close</v-icon>
+						<v-icon>mdi-close</v-icon>
 					</v-btn>
 				</v-card-title>
 				<v-card-text>
@@ -56,7 +56,7 @@
 					<h3 class="headline mb-0">{{ watchMovieTitle }}</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="watchMovieDialog = false" class="dialog-close-btn">
-						<v-icon>close</v-icon>
+						<v-icon>mdi-close</v-icon>
 					</v-btn>
 				</v-card-title>
 				<video autoplay :poster="watchMovieCover" width="1000" :src="watchMovieURL" controls></video>

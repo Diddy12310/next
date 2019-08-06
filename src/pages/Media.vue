@@ -9,28 +9,28 @@
     <v-tabs fixed-tabs icons-and-text>
       <v-tab>
         Books
-        <v-icon>book</v-icon>
+        <v-icon>mdi-book</v-icon>
       </v-tab>
       <v-tab-item>
         <books/>
       </v-tab-item>
       <v-tab>
         Movies
-        <v-icon>movie</v-icon>
+        <v-icon>mdi-movie</v-icon>
       </v-tab>
       <v-tab-item>
         <movies/>
       </v-tab-item>
       <v-tab>
         Music
-        <v-icon>music_note</v-icon>
+        <v-icon>mdi-music-note</v-icon>
       </v-tab>
       <v-tab-item>
         <music/>
       </v-tab-item>
       <v-tab>
         TV Shows
-        <v-icon>tv</v-icon>
+        <v-icon>mdi-television</v-icon>
       </v-tab>
       <v-tab-item>
         <tv/>

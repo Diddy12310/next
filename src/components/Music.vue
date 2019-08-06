@@ -26,7 +26,7 @@
 		</v-container>
 
 		<v-btn color="deep-purple" fab fixed bottom right @click="newMusicDialog = true">
-      <v-icon>add</v-icon>
+      <v-icon>mdi-plus</v-icon>
     </v-btn>
 
 		<v-dialog v-model="newMusicDialog" max-width="500">
@@ -35,7 +35,7 @@
 					<h3 class="headline mb-0">Add Song</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="newMusicDialog = false" class="dialog-close-btn">
-						<v-icon>close</v-icon>
+						<v-icon>mdi-close</v-icon>
 					</v-btn>
 				</v-card-title>
 				<v-card-text>

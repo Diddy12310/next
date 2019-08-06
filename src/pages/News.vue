@@ -44,7 +44,7 @@
 		</v-dialog>
 
 		<v-btn color="deep-purple" fab fixed bottom right @click="newNewsDialog = true">
-      <v-icon>add</v-icon>
+      <v-icon>mdi-plus</v-icon>
     </v-btn>
 		<v-dialog v-model="newNewsDialog" max-width="500">
 			<v-card>
@@ -52,7 +52,7 @@
 					<h3 class="headline mb-0">Write a Story</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="newNewsDialog = false" class="dialog-close-btn">
-						<v-icon>close</v-icon>
+						<v-icon>mdi-close</v-icon>
 					</v-btn>
 				</v-card-title>
 				<v-card-text>

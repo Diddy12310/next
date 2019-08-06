@@ -1,14 +1,14 @@
 <template>
   <div>
-    <v-toolbar color="blue darken-4" dense>
+    <v-toolbar color="blue darken-4" dense style="z-index: 2;" class="elevation-0">
       <v-toolbar-title class="hidden-sm-and-down">Write</v-toolbar-title>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
-      <input class="hidden-sm-and-down doc-title" type="text" v-model="data.title" placeholder="Untitled document">
+      <input class="hidden-sm-and-down doc-title centralize" type="text" v-model="data.title" placeholder="Untitled document">
       <input class="hidden-md-and-up" style="text-align: left;" type="text" v-model="data.title" placeholder="Untitled document">
       <v-spacer></v-spacer>
       <v-btn href="https://relay.theparadigmdev.com/install/write.exe" download icon class="hidden-sm-and-down"><v-icon>mdi-download</v-icon></v-btn>
       <v-btn @click="newDocument()" icon class="hidden-sm-and-down"><v-icon>mdi-file-document-box-plus</v-icon></v-btn>
-      <v-btn @click="$notify('Function not implemented')" icon class="hidden-sm-and-down"><v-icon>mdi-printer</v-icon></v-btn>
+      <v-btn @click="printDocument()" icon class="hidden-sm-and-down"><v-icon>mdi-printer</v-icon></v-btn>
       <v-btn @click="open_dialog = true" icon class="hidden-sm-and-down"><v-icon>mdi-folder-open</v-icon></v-btn>
       <v-btn @click="saveDocument()" icon class="hidden-sm-and-down"><v-icon>mdi-content-save</v-icon></v-btn>
       <v-menu offset-y class="hidden-md-and-up">
@@ -28,15 +28,14 @@
             <v-list-item-title><v-icon>mdi-file-document-box-plus</v-icon></v-list-item-title>
           </v-list-item>
 
-          <v-list-item @click="$notify('Function not implemented')">
+          <v-list-item @click="printDocument()">
             <v-list-item-title><v-icon>mdi-printer</v-icon></v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </v-toolbar>
 
-    <v-toolbar color="blue darken-2" dense>
-
+    <v-toolbar color="blue darken-4" dense>
       <!-- Mobile add menu -->
       <v-menu offset-y :close-on-content-click="false" class="hidden-md-and-up">
         <template v-slot:activator="{ on }">
@@ -97,7 +96,6 @@
           <v-list-item icon @click="data.blocks.push({ type: 'embed', src: '', src_saved: '', index: data.blocks.length, size: 100 })"><v-icon>mdi-web</v-icon></v-list-item>
           <v-list-item icon @click="data.blocks.push({ type: 'html', src: '', src_saved: '', index: data.blocks.length, size: 100 })"><v-icon>mdi-language-html5</v-icon></v-list-item>
           <v-list-item icon @click="data.blocks.push({ type: 'quote', content: '', author: '', src_saved: '', index: data.blocks.length })"><v-icon>mdi-format-quote-close</v-icon></v-list-item>
-          <v-list-item icon @click="data.blocks.push({ type: 'icon', src: '', src_saved: '', index: data.blocks.length })"><v-icon>mdi-star</v-icon></v-list-item>
           <v-list-item icon @click="data.blocks.push({ type: 'gap', index: data.blocks.length })"><v-icon>mdi-arrow-expand-vertical</v-icon></v-list-item>
         </v-list>
       </v-menu>
@@ -106,7 +104,7 @@
       <!-- Desktop toolbar -->
       <v-menu offset-y class="hidden-sm-and-down">
         <template v-slot:activator="{ on }">
-          <v-btn v-on="on" icon class="hidden-sm-and-down"><v-icon>mdi-format-text-variant</v-icon></v-btn>
+          <v-btn v-on="on" icon><v-icon>mdi-format-text-variant</v-icon></v-btn>
         </template>
         <v-list dense>
           <v-list-item @click="data.blocks.push({ type: 'text', content: '', format: { b: false, i: false, ul: false, str: false, ol: false, align: 'left', font: 'Roboto', color: '#FFFFFF', just: 'top' }, index: data.blocks.length, rows: 3 })">
@@ -132,7 +130,7 @@
       </v-menu>
       <v-menu offset-y class="hidden-sm-and-down">
         <template v-slot:activator="{ on }">
-          <v-btn v-on="on" icon class="hidden-sm-and-down"><v-icon>mdi-menu</v-icon></v-btn>
+          <v-btn v-on="on" icon><v-icon>mdi-menu</v-icon></v-btn>
         </template>
         <v-list dense>
           <v-list-item @click="data.blocks.push({ type: 'nl', list: ['', '', ''], index: data.blocks.length })">
@@ -158,7 +156,6 @@
       <v-btn icon @click="data.blocks.push({ type: 'embed', src: '', src_saved: '', index: data.blocks.length })" class="hidden-sm-and-down"><v-icon>mdi-web</v-icon></v-btn>
       <v-btn icon @click="data.blocks.push({ type: 'html', src: '', src_saved: '', index: data.blocks.length })" class="hidden-sm-and-down"><v-icon>mdi-language-html5</v-icon></v-btn>
       <v-btn icon @click="data.blocks.push({ type: 'quote', content: '', author: '', src_saved: '', index: data.blocks.length })" class="hidden-sm-and-down"><v-icon>mdi-format-quote-close</v-icon></v-btn>
-      <v-btn icon @click="data.blocks.push({ type: 'icon', src: '', src_saved: '', index: data.blocks.length })" class="hidden-sm-and-down"><v-icon>mdi-star</v-icon></v-btn>
       <v-btn icon @click="data.blocks.push({ type: 'gap', index: data.blocks.length })" class="hidden-sm-and-down"><v-icon>mdi-arrow-expand-vertical</v-icon></v-btn>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
       <div class="hidden-sm-and-down" v-if="current_block.type == 'text' || current_block.type == 'header'">
@@ -384,22 +381,14 @@
             <input type="text" v-model="block.alt" placeholder="Caption" style="width: 250px; margin-right: 14px;">
             <v-btn text color="accent" @click="block.src_saved = true" v-if="block.src">Save</v-btn>
           </div>
-          <img v-if="block.src_saved" :src="block.src" :alt="block.alt" style="max-width: 1000px; margin: auto;">
+          <img v-if="block.src_saved" :src="block.src" :alt="block.alt" style="max-width: calc(100vw - 28%);">
           <p v-if="block.src_saved" class="caption" style="text-align: right; margin-right: 100px;">{{ block.alt }}</p>
-        </v-flex>
-
-        <v-flex xs11 class="icon" v-if="block.type == 'icon'">
-          <div v-if="!block.src_saved">
-            <input type="text" v-model="block.src" placeholder="Icon title from materialdesignicons.com" style="width: 500px; margin-right: 14px;">
-            <v-btn text color="accent" @click="block.src_saved = true" v-if="block.src">Save</v-btn>
-          </div>
-          <v-icon v-if="block.src_saved">mdi-{{ block.src }}</v-icon>
         </v-flex>
 
         <v-flex xs11 class="nl" v-if="block.type == 'nl'">
           <ul class="mb-3" style="list-style-type: none;">
             <li v-for="(item, index) in block.list" :key="index">
-              <input type="text" v-model="block.list[index]" placeholder="List item">
+              <input type="text" v-model="block.list[index]" placeholder="List item" style="width: 100%;">
             </li>
           </ul>
         </v-flex>
@@ -407,7 +396,7 @@
         <v-flex xs11 class="ul" v-if="block.type == 'ul'">
           <ul class="mb-3">
             <li v-for="(item, index) in block.list" :key="index">
-              <input type="text" v-model="block.list[index]" placeholder="List item">
+              <input type="text" v-model="block.list[index]" placeholder="List item" style="width: 100%;">
             </li>
           </ul>
         </v-flex>
@@ -415,7 +404,7 @@
         <v-flex xs11 class="ol" v-if="block.type == 'ol'">
           <ol class="mb-3">
             <li v-for="(item, index) in block.list" :key="index">
-              <input type="text" v-model="block.list[index]" placeholder="List item">
+              <input type="text" v-model="block.list[index]" placeholder="List item" style="width: 100%;">
             </li>
           </ol>
         </v-flex>
@@ -448,7 +437,7 @@
           <kbd><input type="text" v-model="block.content" placeholder="Code snippet"></kbd>
         </v-flex>
 
-        <v-flex xs1 style="text-align: center;">
+        <v-flex xs1 style="text-align: center;" class="hidden-print-only">
           <v-menu offset-y v-if="current_hover_block_index == block.index" :close-on-content-click="false">
             <template v-slot:activator="{ on }">
               <v-btn v-on="on" icon color="grey darken-2" v-if="current_hover_block_index == block.index"><v-icon>mdi-dots-vertical</v-icon></v-btn>
@@ -508,7 +497,7 @@
       </v-layout>
     </v-container>
 
-    <v-dialog v-model="open_dialog" max-width="500">
+    <v-dialog v-model="open_dialog" max-width="500" class="hidden-print-only">
       <v-card>
         <v-card-title>
           <span>Open a Document</span>
@@ -519,7 +508,7 @@
         </v-card-title>
 
         <v-card-text>
-          <input id="file-uploader" type="file" name="file" accept="application/json">
+          <v-file-input v-model="uploaded_file" id="file-uploader" label="Write document" accept="application/json"></v-file-input>
         </v-card-text>
 
         <v-card-actions>
@@ -530,7 +519,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="corrupt_dialog" max-width="350">
+    <v-dialog v-model="corrupt_dialog" max-width="350" class="hidden-print-only">
       <v-card color="red">
         <v-card-title>
           <span style="margin: auto;" class="white--text font-weight-bold text-uppercase">Corrupt Document</span>
@@ -550,7 +539,6 @@
 
 <script>
 import { saveAs } from 'file-saver'
-import printJS from 'print-js'
 
 export default {
   name: 'Write',
@@ -566,7 +554,8 @@ export default {
         ]
       },
       current_block: {},
-      current_hover_block_index: null
+      current_hover_block_index: null,
+      uploaded_file: undefined
     }
   },
   methods: {
@@ -580,8 +569,7 @@ export default {
       }
     },
     openDocument() {
-      var files = document.getElementById('file-uploader').files
-      var file_ext_search = files[0].name.search('.write.json')
+      var file_ext_search = this.uploaded_file.name.search('.write.json')
       var corrupt = true
       if (file_ext_search >= 1) corrupt = false
       var reader = new FileReader()
@@ -589,24 +577,24 @@ export default {
         reader.onload = e => {
           this.data = JSON.parse(e.target.result)
         }
-        reader.readAsText(files.item(0))
+        reader.readAsText(this.uploaded_file)
         this.open_dialog = false
       } else {
-        document.getElementById('file-uploader').value = null
+        this.uploaded_file = undefined
         this.corrupt_dialog = true
       }
     },
     saveDocument() {
       if (this.data.title) {
         var data = JSON.stringify(this.data)
-        var file = new File([ data ], this.data.title + '.json', { type: 'application/json' })
+        var file = new File([ data ], this.data.title + '.write.json', { type: 'application/json' })
         saveAs(file)
       } else {
         this.$notify('Name your document')
       }
     },
     printDocument() {
-      printJS('editor', 'html')
+      window.print()
     },
     moveUp(block, currentIndex) {
       this.data.blocks.splice(currentIndex, 1)
@@ -641,8 +629,20 @@ export default {
 </script>
 
 <style scoped>
-div#editor {
-  margin-top: 16px;
+@media screen {
+  div#editor {
+    margin-top: 16px;
+  }
+
+  input.doc-title::placeholder {
+    color: #616161;
+  }
+}
+
+@media print {
+  ::-webkit-input-placeholder {
+    color: transparent;
+  }
 }
 
 .font-underline {
@@ -668,15 +668,6 @@ div#editor {
 
 iframe {
   border: none !important;
-}
-
-.doc-title {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-	text-align: center;
 }
 
 .theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
@@ -717,6 +708,10 @@ textarea {
   resize: none;
 }
 
+.display-1 {
+  padding: 8px 0px 8px 0px;
+}
+
 .display-2 {
   line-height: 3.6rem;
 }
@@ -727,5 +722,15 @@ textarea {
 
 .display-4 {
   line-height: 7.15rem;
+}
+
+.sticky-toolbar {
+  position: fixed;
+  top: 32px;
+  width: 100%;
+}
+
+.v-toolbar__content {
+  padding: 0px !important;
 }
 </style>
