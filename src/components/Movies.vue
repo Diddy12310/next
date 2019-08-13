@@ -1,28 +1,32 @@
 <template>
   <div class="index">
-		<v-container>
-			<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
-				<v-text-field v-model="searchMovie" label="Search..." style="width: 300px; margin: 50px auto 0px auto;"></v-text-field>
-			</div>
-			<div class="movies">
-				<v-card v-for="(movie, index) in filteredMovie" :key="index" class="movie-item" ripple :disabled="!movie.available" @click="watchMovie(movie.title, movie.link, movie.cover)">
-					<v-img :src="movie.cover">
-						<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
-							<div style="width: 100%;">
-								<h3 class="headline mb-0">{{ movie.title }}</h3>
-								<div class="d-flex">
-									<h4 class="body-2 grey--text">{{ movie.genre }}</h4>
-								  <v-spacer></v-spacer>
-								  <h4 class="body-2 red--text font-weight-medium" v-if="!movie.available">UNAVAILABLE</h4>
+		<div class="title" style="margin: 24px 0px 12px 0px; text-align: center;">
+			<v-text-field v-model="searchMovie" label="Search..." style="width: 300px; margin: auto;"></v-text-field>
+		</div>
+
+		<v-container fluid grid-list-md>
+			<v-layout wrap>
+				<v-flex v-for="(item, index) in filteredMovies" :key="index" xs12 sm6 md4 lg3 xl2>
+					<v-card class="movie-item" ripple :disabled="!item.available" @click="watchMovie(item.title, item.link, item.cover)">
+						<v-img :src="item.cover">
+							<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+								<div style="width: 100%;">
+									<h3 class="headline mb-0">{{ item.title }}</h3>
+									<div class="d-flex">
+										<h4 class="body-2 grey--text">{{ item.genre }}</h4>
+										<v-spacer></v-spacer>
+										<h4 class="body-2 red--text font-weight-medium" v-if="!item.available">UNAVAILABLE</h4>
+									</div>
 								</div>
-							</div>
-						</v-card-title>
-					</v-img>
-					
-					<v-card-text>{{ movie.summary }}</v-card-text>
-				</v-card>
-			</div>
+							</v-card-title>
+						</v-img>
+
+						<v-card-text>{{ item.summary }}</v-card-text>
+					</v-card>
+				</v-flex>
+			</v-layout>
 		</v-container>
+
 		<v-btn color="deep-purple" fab fixed bottom right @click="newMovieDialog = true">
       <v-icon>mdi-plus</v-icon>
     </v-btn>
@@ -124,7 +128,7 @@ export default {
 		})
 	},
 	computed: {
-		filteredMovie() {
+		filteredMovies() {
 			return this.movies.filter(movie => {
 				return movie.title.toLowerCase().includes(this.searchMovie.toLowerCase()) || movie.genre.toLowerCase().includes(this.searchMovie.toLowerCase())
 			})

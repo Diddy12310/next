@@ -3,7 +3,7 @@
     <v-slider ref="slider" @click.native="setPosition()" v-on:change="setPosition()" v-model="percentage"></v-slider>
 
     <v-layout fill-height wrap align-center>
-      <v-flex sm7 xs12>
+      <v-flex sm6 xs12>
         <div :class="{ 'd-flex': true, 'align-center': true, 'text-center mt-2': $vuetify.breakpoint.xsOnly }">
           <img style="height: 100px; width: 100px;" class="hidden-xs-only" :src="$root.music_player.cover">
           <div style="width: 100%; margin-left: 12px;">
@@ -19,7 +19,7 @@
         <span>{{ currentTime }}</span><span class="font-weight-light"> / {{ duration }}</span>
       </v-flex>
 
-      <v-flex sm3 xs12 text-right :class="{ 'text-center': $vuetify.breakpoint.xsOnly, 'pr-3': $vuetify.breakpoint.smAndUp }">
+      <v-flex sm4 xs12 text-right :class="{ 'text-center': $vuetify.breakpoint.xsOnly, 'pr-3': $vuetify.breakpoint.smAndUp }">
         <v-btn text icon class="primary--text" :loading="!loaded" @click.native="loaded ? playing ? pause() : play() : reload()">
           <v-icon v-if="playing === false || paused === true">mdi-play</v-icon>
           <v-icon v-else>mdi-pause</v-icon>

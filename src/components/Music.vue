@@ -1,26 +1,29 @@
 <template>
   <div class="index">
-		<v-container>
-			<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
-				<v-text-field v-model="searchMusic" label="Search..." style="width: 300px; margin: 50px auto 0px auto;"></v-text-field>
-			</div>
-			<div class="music">
-				<v-card v-for="(item, index) in filteredMusic" :key="index" class="music-item" ripple :disabled="!item.available" @click="$root.music_player = item, $root.music_player.open = true, $root.music_player.playing = true">
-					<v-img :src="item.cover">
-						<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
-							<div style="width: 100%;">
-								<h3 class="headline mb-0">{{ item.title }}</h3>
-								<h4 class="body-2 grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.album }}</h4>
-								<div class="d-flex">
-									<h4 class="body-2 grey--text">{{ item.genre }}</h4>
-								  <v-spacer></v-spacer>
-								  <h4 class="body-2 red--text font-weight-medium" v-if="!item.available">UNAVAILABLE</h4>
+		<div class="title" style="margin: 24px 0px 12px 0px; text-align: center;">
+			<v-text-field v-model="searchMusic" label="Search..." style="width: 300px; margin: auto;"></v-text-field>
+		</div>
+
+		<v-container fluid grid-list-md>
+			<v-layout wrap>
+				<v-flex v-for="(item, index) in filteredMusic" :key="index" xs12 sm6 md4 lg3 xl2>
+					<v-card class="music-item" ripple :disabled="!item.available" @click="$root.music_player = item, $root.music_player.open = true, $root.music_player.playing = true">
+						<v-img :src="item.cover">
+							<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+								<div style="width: 100%;">
+									<h3 class="headline mb-0">{{ item.title }}</h3>
+									<h4 class="body-2 grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.album }}</h4>
+									<div class="d-flex">
+										<h4 class="body-2 grey--text">{{ item.genre }}</h4>
+										<v-spacer></v-spacer>
+										<h4 class="body-2 red--text font-weight-medium" v-if="!item.available">UNAVAILABLE</h4>
+									</div>
 								</div>
-							</div>
-						</v-card-title>
-					</v-img>
- 				</v-card>
-			</div>
+							</v-card-title>
+						</v-img>
+					</v-card>
+				</v-flex>
+			</v-layout>
 		</v-container>
 
 		<v-btn color="deep-purple" fab fixed bottom right @click="newMusicDialog = true">
@@ -154,25 +157,6 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (min-width: 1240px) {
-	div.music {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		grid-gap: 16px;
-		margin-bottom: 32px;
-	}
-}
-
-@media screen and (max-width: 1240px) {
-	div.music {
-		margin-bottom: 32px;
-	}
-
-	.music-item {
-		margin-bottom: 16px !important;
-	}
-}
-
 h1 {
   text-align: center;
 }
@@ -182,13 +166,5 @@ div.v-card.music-item {
 	width: 100%;
 	margin: auto;
 	height: 100%;
-}
-
-.music-item div.v-card__text {
-	margin-bottom: 0px !important;
-	position: relative;
-	bottom: -30px;
-	top: -15px;
-	padding-bottom: 0px !important;
 }
 </style>

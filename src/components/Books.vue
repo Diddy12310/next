@@ -1,10 +1,33 @@
 <template>
   <div class="index">
-		<v-container>
-			<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
-				<v-text-field v-model="searchBook" label="Search..." style="width: 300px; margin: 50px auto 0px auto;"></v-text-field>
-			</div>
-			<div class="bookshelf">
+		<div class="title" style="margin: 24px 0px 12px 0px; text-align: center;">
+			<v-text-field v-model="searchBook" label="Search..." style="width: 300px; margin: auto;"></v-text-field>
+		</div>
+
+		<v-container fluid grid-list-md>
+			<v-layout wrap>
+				<v-flex v-for="(item, index) in filteredBooks" :key="index" xs12 sm6 md4 lg3 xl2>
+					<v-card class="book-item" ripple :disabled="!item.available" @click="readBook(item.title, item.link)">
+						<v-img :src="item.cover">
+							<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+								<div style="width: 100%;">
+									<h3 class="headline mb-0">{{ item.title }}</h3>
+									<div class="d-flex">
+										<h4 class="body-2 grey--text">{{ item.author }}</h4>
+										<v-spacer></v-spacer>
+										<h4 class="body-2 red--text font-weight-medium" v-if="!item.available">UNAVAILABLE</h4>
+									</div>
+								</div>
+							</v-card-title>
+						</v-img>
+
+						<v-card-text>{{ item.summary }}</v-card-text>
+					</v-card>
+				</v-flex>
+			</v-layout>
+		</v-container>
+
+			<!-- <div class="bookshelf">
 				<v-card v-for="(book, index) in filteredBook" :key="index" class="book-item" ripple :disabled="!book.available" @click="readBook(book.title, book.link)">
 					<v-img :src="book.cover">
 						<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
@@ -20,8 +43,7 @@
 					</v-img>
 					<v-card-text>{{ book.summary }}</v-card-text>
 				</v-card>
-			</div>
-		</v-container>
+			</div> -->
 		<v-btn color="deep-purple" fab fixed bottom right @click="newBookDialog = true">
       <v-icon>mdi-plus</v-icon>
     </v-btn>
@@ -108,7 +130,7 @@ export default {
 		})
 	},
 	computed: {
-		filteredBook() {
+		filteredBooks() {
 			return this.bookshelf.filter(book => {
 				return book.title.toLowerCase().includes(this.searchBook.toLowerCase()) || book.author.toLowerCase().includes(this.searchBook.toLowerCase())
 			})
