@@ -38,9 +38,7 @@
 		<v-card v-for="(update, index) in updates" :key="index" style="width: 100%; margin: 20px auto; max-width: 600px;">
 			<v-card-title>{{ update.title }}</v-card-title>
 			<v-divider></v-divider>
-			<v-card-text>
-				<div v-for="item in update.detail" :key="item" class="item" v-html="item"></div>
-			</v-card-text>
+			<v-card-text v-html="update.details"></v-card-text>
 		</v-card>
 	</div>
 </template>
