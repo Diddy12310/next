@@ -1,5 +1,5 @@
 <template>
-  <v-container style="text-align: center;">
+  <!-- <v-container style="text-align: center;">
     <div v-if="latitude && longitude">
       <img class="icon" :src="icon" :alt="summary">
       <h2 class="temperature">{{ temperature }}<span v-if="temperature">°F</span></h2>
@@ -12,7 +12,11 @@
       <h6 class="description"><span v-if="visibility">Visbility: </span>{{ visibility }} <span v-if="visibility">mi</span></h6>
       <h6 class="description"><span v-if="precipitaion_chance">Chance of Precipitaion: </span>{{ precipitaion_chance }}<span v-if="precipitaion_chance">&#x25;</span></h6>
     </div>
-  </v-container>
+  </v-container> -->
+  <div style="text-align: center; margin: 50px 0px;">
+    <h1 class="display-3 red--text font-weight-thin text-uppercase">Shutdown</h1>
+    <h6 class="headline white--text font-weight-thin mt-3">This page was temporarily shut down due to fatal bugs. It will be back in a future release.</h6>
+  </div>
 </template>
 
 <script>

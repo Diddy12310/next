@@ -392,7 +392,7 @@ export default {
 				{ icon: 'mdi-counter', route: 'Scorecard', app: 'Scorecard' },
 				{ icon: 'mdi-folder-multiple', route: 'Drawer', app: 'Drawer' },
 				{ icon: 'mdi-play-network', route: 'Media', app: 'Media' },
-				// { icon: 'mdi-weather-pouring', route: 'Weather', app: 'Weather' },
+				{ icon: 'mdi-weather-pouring', route: 'Weather', app: 'Weather' },
 				{ icon: 'mdi-gamepad-variant', route: 'Games', app: 'Arcade' },
 				{ icon: 'mdi-file-document-box-multiple', route: 'Write', app: 'Write' },
 				// { icon: 'mdi-presentation', route: 'Show', app: 'Show' },

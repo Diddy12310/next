@@ -17,7 +17,7 @@
     <Databank v-if="$root.switch == 'Databank'"/>
     <Relay v-if="$root.switch == 'Relay'"/>
     <Media v-if="$root.switch == 'Media'"/>
-    <!-- <Weather v-if="$root.switch == 'Weather'"/> -->
+    <Weather v-if="$root.switch == 'Weather'"/>
     <Notice v-if="$root.switch == 'Notice'"/>
     <PageNotFound v-if="$root.switch == 'PageNotFound'"/>
     <Arcade v-if="$root.switch == 'Games'"/>
