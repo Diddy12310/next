@@ -27,23 +27,6 @@
 			</v-layout>
 		</v-container>
 
-			<!-- <div class="bookshelf">
-				<v-card v-for="(book, index) in filteredBook" :key="index" class="book-item" ripple :disabled="!book.available" @click="readBook(book.title, book.link)">
-					<v-img :src="book.cover">
-						<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
-							<div style="width: 100%;">
-								<h3 class="headline mb-0">{{ book.title }}</h3>
-								<div class="d-flex">
-									<h4 class="body-2 grey--text">{{ book.author }}</h4>
-								  <v-spacer></v-spacer>
-								  <h4 class="body-2 red--text font-weight-medium" v-if="!book.available">UNAVAILABLE</h4>
-								</div>
-							</div>
-						</v-card-title>
-					</v-img>
-					<v-card-text>{{ book.summary }}</v-card-text>
-				</v-card>
-			</div> -->
 		<v-btn color="deep-purple" fab fixed bottom right @click="newBookDialog = true">
       <v-icon>mdi-plus</v-icon>
     </v-btn>
