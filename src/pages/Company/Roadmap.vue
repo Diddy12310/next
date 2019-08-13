@@ -1,6 +1,6 @@
 <template>
   <div class="changelog">
-  	<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">Roadmap</h1>
+  	<!-- <h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px;">Roadmap</h1>
 
 		<div class="card" v-for="change in roadmap" :key="change.id">
 			<v-card>
@@ -17,6 +17,10 @@
 				</v-card-text>
 			</v-card>
 			<div class="gap"></div>
+		</div> -->
+		<div style="text-align: center; margin: 50px 0px;">
+			<h1 class="display-3 red--text font-weight-thin text-uppercase">Shutdown</h1>
+			<h6 class="headline white--text font-weight-thin mt-3">This page was temporarily shut down due to fatal bugs. It will be back in a future release.</h6>
 		</div>
   </div>
 </template>

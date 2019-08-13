@@ -51,7 +51,7 @@ export default {
   methods: {
     reload() {
       this.$root.loadingBar = true
-      axios.get(`https://cors.io/?https://api.darksky.net/forecast/36090b633b11e11a7eb790775044992a/${this.latitude},${this.longitude}`).then(response => {
+      axios.get(`https://crossorigin.me/https://api.darksky.net/forecast/36090b633b11e11a7eb790775044992a/${this.latitude},${this.longitude}`).then(response => {
         var temperature_input = response.data.currently.temperature.toString()
         this.temperature = temperature_input.substring(0, temperature_input.lastIndexOf('.'))
         this.summary = response.data.currently.summary

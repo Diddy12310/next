@@ -1,6 +1,6 @@
 <template>
 	<div class="scorecard">
-		<div style="text-align: center; margin: 50px 0px;">
+		<!-- <div style="text-align: center; margin: 50px 0px;">
 			<h1 class="display-3 green--text font-weight-thin text-uppercase">Golf</h1>
 			<h6 class="headline yellow--text font-weight-thin mt-3">{{ tournament_name }}</h6>
 			<p class="grey--text font-weight-light mt-3">Last updated: {{ timestamp }}</p>
@@ -22,7 +22,11 @@
 					<td :class="{ 'winner': props.item.current_position == '1' || props.item.current_position == 'T1' }">{{ props.item.total_strokes }}</td>
 				</template>
 			</v-data-table>
-		</v-container>
+		</v-container> -->
+		<div style="text-align: center; margin: 50px 0px;">
+			<h1 class="display-3 red--text font-weight-thin text-uppercase">Shutdown</h1>
+			<h6 class="headline white--text font-weight-thin mt-3">This page was temporarily shut down due to fatal bugs. It will be back in a future release.</h6>
+		</div>
 	</div>
 </template>
 

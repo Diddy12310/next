@@ -1,6 +1,6 @@
 <template>
 	<div class="asteroid">
-		<div v-if="$root.isAsteroid">
+		<!-- <div v-if="$root.isAsteroid">
 			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin: 50px; text-align: center;">Asteroid</h1>
 			<v-card>
 				<v-card-title primary-title>
@@ -34,6 +34,11 @@
 		<div style="text-align: center; margin: 50px 0px;" v-if="!$root.isAsteroid">
 			<h1 class="display-3 red--text font-weight-thin text-uppercase">Unavailable</h1>
 			<h6 class="headline white--text font-weight-thin mt-3">Please navigate away from this page.</h6>
+		</div> -->
+
+		<div style="text-align: center; margin: 50px 0px;">
+			<h1 class="display-3 red--text font-weight-thin text-uppercase">Shutdown</h1>
+			<h6 class="headline white--text font-weight-thin mt-3">This page was temporarily shut down due to fatal bugs. It will be back in a future release.</h6>
 		</div>
 	</div>
 </template>
