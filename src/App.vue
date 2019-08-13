@@ -8,7 +8,7 @@
 				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-btn text icon @click="$root.music_player.open = !$root.music_player.open" v-if="$root.music_player.playing"><v-icon>mdi-music-note</v-icon></v-btn>
+			<v-btn text icon @click="$root.music_player.open = !$root.music_player.open" v-if="$root.music_player.playing" class="mr-2"><v-icon>mdi-music-note</v-icon></v-btn>
       <p v-if="app_loaded && !shutdown" class="clock text-xs-right font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 		</v-app-bar>
 
