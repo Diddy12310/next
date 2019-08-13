@@ -6,7 +6,6 @@ import App from './App.vue'
 import router from './router'
 import VueChatScroll from 'vue-chat-scroll'
 import VueAnalytics from 'vue-analytics'
-import store from './store'
 import { perf } from '@/firebase'
 
 const opts = {
@@ -62,7 +61,6 @@ Vue.mixin({
 
 new Vue({
   router,
-  store,
   render: function(h) { return h(App) },
   vuetify: new Vuetify(opts),
   data() {
@@ -86,6 +84,7 @@ new Vue({
       accountPic: '',
       my_chatrooms: [],
       moonrocks: '',
+      music_player: {},
       avail_profile_pics: ['paradigm', 'barn-owl', 'chipmunk', 'dart-frog', 'deer', 'giraffe', 'hedgehog', 'hermit-crab', 'panther', 'polar-bear', 'sea-lion', 'sting-ray', 'chickadee', 'hummingbird', 'seahorse', 'betta-fish', 'fawn', 'jellyfish', 'fish', 'flamingo', 'kingfisher'],
     }
   }
