@@ -75,7 +75,7 @@
 						<v-btn :disabled="!chatroom_id" text @click.stop="setChatroom()" color="accent">Join</v-btn>
 					</v-card-actions>
 					<v-btn color="deep-purple" fab fixed bottom right @click="create_chatroom_dialog = true">
-						<v-icon>mdi-book-multiple-plus</v-icon>
+						<v-icon>mdi-book-plus-multiple</v-icon>
 					</v-btn>
 				</v-card>
 
