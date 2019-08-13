@@ -1,41 +1,52 @@
 <template>
   <div class="media">
-    <v-toolbar class="grey darken-3" dense>
+    <v-toolbar dense>
       <v-spacer></v-spacer>
       <v-toolbar-title class="red--text font-weight-light">Rights to the items below are reserved for their owners.</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-tabs fixed-tabs icons-and-text>
+    <v-tabs v-model="tab" centered icons-and-text fixed-tabs>
+      <v-tabs-slider></v-tabs-slider>
+
       <v-tab>
         Books
         <v-icon>mdi-book</v-icon>
       </v-tab>
-      <v-tab-item>
-        <books/>
-      </v-tab-item>
+
       <v-tab>
         Movies
         <v-icon>mdi-movie</v-icon>
       </v-tab>
-      <v-tab-item>
-        <movies/>
-      </v-tab-item>
+
       <v-tab>
         Music
         <v-icon>mdi-music-note</v-icon>
       </v-tab>
-      <v-tab-item>
-        <music/>
-      </v-tab-item>
+
       <v-tab>
         TV Shows
         <v-icon>mdi-television</v-icon>
       </v-tab>
-      <v-tab-item>
-        <tv/>
-      </v-tab-item>
     </v-tabs>
+
+    <v-tabs-items v-model="tab">
+      <v-tab-item>
+        <books />
+      </v-tab-item>
+
+      <v-tab-item>
+        <movies />
+      </v-tab-item>
+
+      <v-tab-item>
+        <music />
+      </v-tab-item>
+
+      <v-tab-item>
+        <tv />
+      </v-tab-item>
+    </v-tabs-items>
   </div>
 </template>
 
@@ -52,10 +63,17 @@ export default {
     'music': Music,
     'movies': Movies,
     'books': Books
+  },
+  data() {
+    return {
+      tab: 0
+    }
   }
 }
 </script>
 
 <style scoped>
-
+.v-tabs-items {
+  background: none !important;
+}
 </style>

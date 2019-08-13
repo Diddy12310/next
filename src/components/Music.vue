@@ -5,23 +5,21 @@
 				<v-text-field v-model="searchMusic" label="Search..." style="width: 300px; margin: 50px auto 0px auto;"></v-text-field>
 			</div>
 			<div class="music">
-				<v-card v-for="(item, index) in filteredMusic" :key="index" class="music-item">
-					<v-img :src="item.cover"></v-img>
-					<v-card-title primary-title>
-						<div>
-							<h3 class="headline mb-0">{{ item.title }}</h3>
-							<h4 class="subtitle-1 grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.album }}</h4>
-							<h4 class="body-2 grey--text">{{ item.genre }}</h4>
-						</div>
-					</v-card-title>
-					<v-divider></v-divider>
-					<v-card-text v-if="item.available">
-						<v-audio :file="item.link"></v-audio>
-					</v-card-text>
-					<v-card-text style="text-align: center;" v-if="!item.available">
-						<span class="red--text font-weight-medium" style="position: relative; top: +100px;">UNAVAILABLE</span>
-					</v-card-text>
-				</v-card>
+				<v-card v-for="(item, index) in filteredMusic" :key="index" class="music-item" ripple :disabled="!item.available" @click="$root.music_player = item, $root.music_player.open = true, $root.music_player.playing = true">
+					<v-img :src="item.cover">
+						<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+							<div style="width: 100%;">
+								<h3 class="headline mb-0">{{ item.title }}</h3>
+								<h4 class="body-2 grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.album }}</h4>
+								<div class="d-flex">
+									<h4 class="body-2 grey--text">{{ item.genre }}</h4>
+								  <v-spacer></v-spacer>
+								  <h4 class="body-2 red--text font-weight-medium" v-if="!item.available">UNAVAILABLE</h4>
+								</div>
+							</div>
+						</v-card-title>
+					</v-img>
+ 				</v-card>
 			</div>
 		</v-container>
 
@@ -57,7 +55,6 @@
 </template>
 
 <script>
-import vAudio from './../components/vAudio'
 import { db } from '@/firebase'
 
 export default {
@@ -71,7 +68,8 @@ export default {
 			newMusicAlbum: null,
 			newMusicArtist: null,
 			newMusicCover: null,
-			newMusicGenre: null
+			newMusicGenre: null,
+			current_playing: {}
     }
   },
   created() {
@@ -117,7 +115,10 @@ export default {
 	computed: {
 		filteredMusic() {
 			return this.music.filter(item => {
-				return item.title.toLowerCase().includes(this.searchMusic.toLowerCase()) || item.album.toLowerCase().includes(this.searchMusic.toLowerCase()) || item.author.toLowerCase().includes(this.searchMusic.toLowerCase()) || item.genre.toLowerCase().includes(this.searchMusic.toLowerCase())
+				if (item.title.toLowerCase().includes(this.searchMusic.toLowerCase()) || item.album.toLowerCase().includes(this.searchMusic.toLowerCase()) || item.author.toLowerCase().includes(this.searchMusic.toLowerCase()) || item.genre.toLowerCase().includes(this.searchMusic.toLowerCase())) {
+					item.loaded = false
+					return item
+				}
 			})
 		}
 	},
@@ -148,10 +149,7 @@ export default {
 				this.$root.snackbar = true
 			}
 		}
-	},
-  components: {
-    'v-audio': vAudio
-  },
+	}
 }
 </script>
 
@@ -168,6 +166,10 @@ export default {
 @media screen and (max-width: 1240px) {
 	div.music {
 		margin-bottom: 32px;
+	}
+
+	.music-item {
+		margin-bottom: 16px !important;
 	}
 }
 

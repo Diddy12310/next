@@ -8,6 +8,7 @@
 				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
+			<v-btn text icon @click="$root.music_player.open = !$root.music_player.open" v-if="$root.music_player.playing"><v-icon>mdi-music-note</v-icon></v-btn>
       <p v-if="app_loaded && !shutdown" class="clock text-xs-right font-weight-light hidden-xs-only">{{ currentDate }}<br>{{ currentTime }}</p>
 		</v-app-bar>
 
@@ -353,14 +354,15 @@
 			</v-container>
 		</v-content>
 
+		<v-bottom-sheet v-model="$root.music_player.open">
+			<music-player :autoPlay="true" :file="$root.music_player.link" />
+		</v-bottom-sheet>
+
 		<!-- Snackbar -->
 		<v-snackbar v-model="$root.snackbar" bottom right :timeout="2000">{{ $root.feedback }}</v-snackbar>
 
 		<!-- Footer -->
-		<v-footer app inset v-if="!shutdown && app_loaded">
-			<v-progress-linear :active="$root.loadingBar" indeterminate absolute top color="deep-purple accent-4"></v-progress-linear>
-			<span class="caption text-uppercase">&copy; {{ new Date().getFullYear() }} Paradigm</span>
-		</v-footer>
+		<v-progress-linear :active="$root.loadingBar" indeterminate absolute top color="deep-purple accent-4"></v-progress-linear>
 	</v-app>
 </template>
 
@@ -371,12 +373,13 @@ import moment from 'moment'
 import Signup from './components/Signup'
 import BugReport from './components/BugReport'
 import Terminal from './components/Terminal'
+import MusicPlayer from './components/MusicPlayer'
 import Switch from './layout/Switch'
 
 export default {
 	name: 'Paradigm',
 	components: {
-		Signup, BugReport, 'UISwitch': Switch, Terminal
+		Signup, BugReport, 'UISwitch': Switch, Terminal, 'music-player': MusicPlayer
 	},
 	data() {
 		return {
@@ -660,8 +663,6 @@ html {
 	margin-top: auto;
 	margin-bottom: auto;
 }
-
-/* Scrollbar */
 
 /* width */
 ::-webkit-scrollbar {

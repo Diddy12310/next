@@ -5,21 +5,21 @@
 				<v-text-field v-model="searchMovie" label="Search..." style="width: 300px; margin: 50px auto 0px auto;"></v-text-field>
 			</div>
 			<div class="movies">
-				<v-card v-for="(movie, index) in filteredMovie" :key="index" class="movie-item">
-					<v-img :src="movie.cover"></v-img>
-
-					<v-card-title primary-title>
-						<div>
-							<h3 class="headline mb-0">{{ movie.title }}</h3>
-							<h4 class="subtitle-1 grey--text">{{ movie.genre }}</h4>
-						</div>
-					</v-card-title>
-					<v-divider></v-divider>
+				<v-card v-for="(movie, index) in filteredMovie" :key="index" class="movie-item" ripple :disabled="!movie.available" @click="watchMovie(movie.title, movie.link, movie.cover)">
+					<v-img :src="movie.cover">
+						<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+							<div style="width: 100%;">
+								<h3 class="headline mb-0">{{ movie.title }}</h3>
+								<div class="d-flex">
+									<h4 class="body-2 grey--text">{{ movie.genre }}</h4>
+								  <v-spacer></v-spacer>
+								  <h4 class="body-2 red--text font-weight-medium" v-if="!movie.available">UNAVAILABLE</h4>
+								</div>
+							</div>
+						</v-card-title>
+					</v-img>
+					
 					<v-card-text>{{ movie.summary }}</v-card-text>
-
-					<v-card-actions>
-						<v-btn :disabled="!movie.available" text color="accent" @click="watchMovie(movie.title, movie.link, movie.cover)">Watch</v-btn>
-					</v-card-actions>
 				</v-card>
 			</div>
 		</v-container>
@@ -180,13 +180,6 @@ export default {
 	div.movies {
 		margin-bottom: 32px;
 	}
-
-	.movie-item div.v-card__text {
-		margin-bottom: 30px;
-		margin-top: 30px;
-		position: relative;
-		bottom: 30px;
-	}
 }
 
 h1 {
@@ -194,16 +187,9 @@ h1 {
 }
 
 div.v-card.movie-item {
-	margin: 16px auto;
 	max-width: 400px;
 	width: 100%;
 	height: 100%;
-}
-
-.movie-item div.v-card__actions {
-	position: absolute;
-	bottom: 0px;
-	margin-top: 16px;
 }
 
 video {

@@ -5,19 +5,20 @@
 				<v-text-field v-model="searchBook" label="Search..." style="width: 300px; margin: 50px auto 0px auto;"></v-text-field>
 			</div>
 			<div class="bookshelf">
-				<v-card v-for="(book, index) in filteredBook" :key="index" class="book-item">
-					<v-img :src="book.cover"></v-img>
-					<v-card-title primary-title>
-						<div>
-							<h3 class="headline mb-0">{{ book.title }}</h3>
-							<h4 class="subtitle-1 grey--text">By {{ book.author }}</h4>
-						</div>
-					</v-card-title>
-					<v-divider></v-divider>
+				<v-card v-for="(book, index) in filteredBook" :key="index" class="book-item" ripple :disabled="!book.available" @click="readBook(book.title, book.link)">
+					<v-img :src="book.cover">
+						<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+							<div style="width: 100%;">
+								<h3 class="headline mb-0">{{ book.title }}</h3>
+								<div class="d-flex">
+									<h4 class="body-2 grey--text">{{ book.author }}</h4>
+								  <v-spacer></v-spacer>
+								  <h4 class="body-2 red--text font-weight-medium" v-if="!book.available">UNAVAILABLE</h4>
+								</div>
+							</div>
+						</v-card-title>
+					</v-img>
 					<v-card-text>{{ book.summary }}</v-card-text>
-					<v-card-actions>
-						<v-btn text color="accent" :disabled="!book.available" :href="book.link" @click="logBook(book.title)">Read</v-btn>
-					</v-card-actions>
 				</v-card>
 			</div>
 		</v-container>
@@ -114,7 +115,8 @@ export default {
 		}
 	},
 	methods: {
-		logBook(book) {
+		readBook(book, url) {
+			window.open(url)
 			this.$ga.event(this.$root.username,  + 'is reading ' + book)
 		},
 		submitBook() {
@@ -158,13 +160,6 @@ export default {
 	div.bookshelf {
 		margin-bottom: 32px;
 	}
-
-	div.v-card__text {
-		margin-bottom: 30px;
-		margin-top: 30px;
-		position: relative;
-		bottom: 30px;
-	}
 }
 
 h1 {
@@ -172,7 +167,6 @@ h1 {
 }
 
 .book-item {
-	margin: 16px auto;
 	max-width: 400px;
 	width: 100%;
 	height: 100%;
