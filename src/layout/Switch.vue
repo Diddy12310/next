@@ -24,6 +24,7 @@
     <Write v-if="$root.switch == 'Write'"/>
     <Show v-if="$root.switch == 'Show'"/>
     <Spread v-if="$root.switch == 'Spread'"/>
+    <YTDL v-if="$root.switch == 'YTDL'"/>
   </div>
 </template>
 
@@ -54,12 +55,13 @@ import Notice from '@/pages/Company/Notice'
 import Write from '@/pages/Office/Write'
 import Show from '@/pages/Office/Show'
 import Spread from '@/pages/Office/Spread'
+import YTDL from '@/pages/YTDL'
 
 export default {
   name: 'Switch',
   components: {
 		Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
-		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice, Arcade, Write, Show, Spread
+		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice, Arcade, Write, Show, Spread, YTDL
 	},
   data() {
     return {

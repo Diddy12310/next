@@ -1,5 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const ytdl = require('ytdl-core')
+const express = require('express');
+const cors = require('cors');
+const app = express();
 admin.initializeApp();
 
 exports.sendNotifications = functions.firestore.document('flamechat/chatrooms/{chatroom}/{message}').onCreate(snapshot => {
@@ -67,3 +71,9 @@ exports.clearChatroom = functions.https.onCall(data => {
 //     });
 //     return admin.database().ref().update(tokensToRemove);
 //   }
+
+exports.getYTDownloadLink = functions.https.onCall((data, context) => {
+	ytdl.getInfo(data.url, (error, info) => {
+    return info.formats[0].url
+  })
+})

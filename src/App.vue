@@ -1,11 +1,11 @@
 <template>
 	<v-app>
     <!-- Toolbar -->
-		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'black': shutdown }" v-if="app_loaded">
-			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned" style="margin: 0px;"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
+		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'grey darken-4': shutdown }" v-if="app_loaded">
+			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown" style="margin: 0px;"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
-				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent, 'hidden-xs-only': $root.accountColor }">
-				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent, 'hidden-sm-and-up': $root.accountColor }">
+				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent || shutdown, 'hidden-xs-only': $root.accountColor }">
+				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/plogo.png" :class="{ 'logo-sm': $root.userPresent, 'logo-sm-nouser': !$root.userPresent || shutdown, 'hidden-sm-and-up': $root.accountColor }">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-btn text icon @click="$root.music_player.open = !$root.music_player.open" v-if="$root.music_player.playing" class="mr-2"><v-icon>mdi-music-note</v-icon></v-btn>
@@ -16,20 +16,22 @@
 		<v-navigation-drawer v-model="drawer" app>
 			<template v-slot:prepend>
 				<v-card-actions class="grey darken-4 elevation-4 ma-0 pa-0">
-					<v-tooltip bottom open-delay="1000">
-						<template v-slot:activator="{ on }">
-							<v-list-item v-on="on" two-line v-ripple="{ class: `${$root.accountColor}--text` }" style="cursor: pointer;" @click="$root.account_dialog = true">
-								<v-list-item-avatar class="my-0">
-									<img :src="$root.accountPic">
-								</v-list-item-avatar>
-								<v-list-item-content style="position: relative; left: -14px;">
-									<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': $root.accountColor }">{{ $root.username }}</v-list-item-title>
-									<v-list-item-subtitle>Logged in</v-list-item-subtitle>
-								</v-list-item-content>
-							</v-list-item>
-						</template>
-						<span>Account</span>
-					</v-tooltip>
+					<v-list shaped>
+						<v-tooltip bottom open-delay="1000">
+							<template v-slot:activator="{ on }">
+								<v-list-item v-on="on" two-line v-ripple="{ class: `${$root.accountColor}--text` }" style="cursor: pointer;" @click="$root.account_dialog = true">
+									<v-list-item-avatar class="my-0">
+										<img :src="$root.accountPic">
+									</v-list-item-avatar>
+									<v-list-item-content style="position: relative; left: -14px;">
+										<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': $root.accountColor }">{{ $root.username }}</v-list-item-title>
+										<v-list-item-subtitle>Logged in</v-list-item-subtitle>
+									</v-list-item-content>
+								</v-list-item>
+							</template>
+							<span>Account</span>
+						</v-tooltip>
+					</v-list>
 					<v-spacer></v-spacer>
 
 					<v-tooltip bottom open-delay="1000">
@@ -61,10 +63,10 @@
 				<v-divider></v-divider>
 				<v-list-group>
           <template v-slot:activator>
-						<v-list-item-icon>
-							<v-icon>mdi-domain</v-icon>
-						</v-list-item-icon>
             <v-list-item>
+							<v-list-item-icon>
+								<v-icon>mdi-domain</v-icon>
+							</v-list-item-icon>
               <v-list-item-title style="position: relative; left: -8px;">Company</v-list-item-title>
             </v-list-item>
           </template>
@@ -77,10 +79,10 @@
 				</v-list-group>
 				<v-list-group>
           <template v-slot:activator>
-            <v-list-item-icon>
-							<v-icon>mdi-history</v-icon>
-						</v-list-item-icon>
             <v-list-item>
+							<v-list-item-icon>
+								<v-icon>mdi-history</v-icon>
+							</v-list-item-icon>
               <v-list-item-title style="position: relative; left: -8px;">Latest</v-list-item-title>
             </v-list-item>
           </template>
@@ -93,10 +95,10 @@
 				</v-list-group>
 				<v-list-group>
           <template v-slot:activator>
-            <v-list-item-icon>
-							<v-icon>mdi-code-tags</v-icon>
-						</v-list-item-icon>
             <v-list-item>
+							<v-list-item-icon>
+								<v-icon>mdi-code-tags</v-icon>
+							</v-list-item-icon>
               <v-list-item-title style="position: relative; left: -8px;">Developers</v-list-item-title>
             </v-list-item>
           </template>
@@ -326,7 +328,7 @@
 			<v-container fluid style="padding: 0;">
 				<!-- <router-view v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned"></router-view> -->
 				<UISwitch v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
-				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !global_pnf" style="text-align: center;">
+				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !global_pnf && !shutdown" style="text-align: center;">
 					<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">Welcome!</h1>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
 					<v-btn color="deep-purple" @click="$root.account_dialog = true">Login</v-btn>
@@ -347,9 +349,11 @@
 					<h3 class="headline font-weight-light" style="margin: 25px;">Page not found.<br>There is probably an issue with the server.</h3>
 				</div>
 				<div class="global_pnf" v-if="shutdown" style="text-align: center;">
-					<v-icon style="font-size: 75px; margin-top: 100px;" color="black">highlight_off</v-icon>
-					<h1 class="display-3 black--text font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Shutdown</h1>
-					<h3 class="headline font-weight-light grey--text darken-4" style="margin: 25px;">Paradigm has been shut down.</h3>
+					<v-icon style="font-size: 75px; margin-top: 100px;" color="grey darken-1">mdi-power</v-icon>
+					<h1 class="display-3 grey--text text--darken-1 font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Shutdown</h1>
+					<h3 class="headline font-weight-light grey--text text--darken-2" style="margin: 25px;">Paradigm has been shut down.</h3>
+					<p class="grey--text text--darken-2">For Paradigm to be reenabled, enough support needs to be shown for its future.</p>
+					<p class="grey--text text--darken-2">Any questions and support can be directed to Aidan's inbox at <a class="grey--text text--darken-2" href="mailto:aidanliddy@outlook.com">aidanliddy@outlook.com</a>.</p>
 				</div>
 			</v-container>
 		</v-content>
@@ -659,6 +663,10 @@ html {
   user-select: none;
 }
 
+* {
+	-webkit-line-clamp: none;
+}
+
 .clock {
 	margin-top: auto;
 	margin-bottom: auto;
@@ -666,22 +674,28 @@ html {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
+  height: 8px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: rgba(241, 241, 241, 0.25);
+  background: rgb(33, 33, 33);
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: rgb(100, 100, 100);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: rgb(60, 60, 60);
+}
+
+/* Corner */
+::-webkit-scrollbar-corner {
+  background: rgb(33, 33, 33);
 }
 
 .error-card {
@@ -759,5 +773,9 @@ html {
   left: 50%;
   transform: translate(-50%, -50%);
 	text-align: center;
+}
+
+.v-list.v-sheet.v-sheet--tile.v-list--shaped {
+	padding: 0px;
 }
 </style>

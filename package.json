@@ -10,23 +10,24 @@
     "electron:serve": "vue-cli-service electron:serve"
   },
   "dependencies": {
-    "@vue/cli": "^3.10.0",
+    "@vue/cli": "^3.12.1",
     "axios": "^0.18.0",
     "file-saver": "^2.0.2",
     "firebase": "^5.11.1",
     "moment": "^2.24.0",
     "vue": "^2.6.6",
-    "vue-analytics": "^5.16.4",
-    "vue-chat-scroll": "^1.3.5",
+    "vue-analytics": "^5.17.2",
+    "vue-chat-scroll": "^1.3.6",
     "vue-friendly-iframe": "^0.12.0",
-    "vue-router": "^3.1.2",
-    "vuetify": "^2.0.5"
+    "vue-router": "^3.1.3",
+    "vuetify": "^2.1.9",
+    "ytdl-core": "^0.29.7"
   },
   "devDependencies": {
     "@mdi/font": "^3.9.97",
-    "@vue/cli-plugin-babel": "^3.10.0",
-    "@vue/cli-service": "^3.10.0",
-    "stylus": "^0.54.5",
+    "@vue/cli-plugin-babel": "^3.12.1",
+    "@vue/cli-service": "^3.12.1",
+    "stylus": "^0.54.7",
     "stylus-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.21"
   }

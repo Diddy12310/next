@@ -6,7 +6,7 @@
       <v-flex sm6 xs12>
         <div :class="{ 'd-flex': true, 'align-center': true, 'text-center mt-2': $vuetify.breakpoint.xsOnly }">
           <img style="height: 100px; width: 100px;" class="hidden-xs-only" :src="$root.music_player.cover">
-          <div style="width: 100%; margin-left: 12px;">
+          <div :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }" style="width: 100%;">
             <h3 class="headline mb-0">{{ $root.music_player.title }}</h3>
             <h4 class="subtitle-1 grey--text">{{ $root.music_player.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ $root.music_player.album }}</h4>
           </div>
