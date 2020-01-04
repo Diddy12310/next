@@ -61,7 +61,7 @@
           </v-list-item-content>
         </v-list-item>
 				<v-divider></v-divider>
-				<v-list-item @click="$root.switch = 'Terms'">
+				<v-list-item class="mt-1" @click="$root.switch = 'Terms'">
 					<v-list-item-icon>
             <v-icon>mdi-feather</v-icon>
           </v-list-item-icon>
