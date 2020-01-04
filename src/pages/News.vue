@@ -1,10 +1,16 @@
 <template>
 	<div class="news">
-		<div class="title" style="margin: 26px 0px 50px 0px; text-align: center;">
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase" style="margin-top: 50px; text-align: center;">The Paradox</h1>
-			<h3 class="display-1 blue-grey--text font-weight-light text-uppercase font-italic" style="text-align: center; margin-bottom: 50px;">Accuracy. Transparency. Legitimacy.</h3>
-			<v-text-field v-model="searchNews" label="Search..." style="width: 300px; margin: 50px auto 0px auto;" hint="For now, you cannot search within articles."></v-text-field>
-		</div>
+		<v-container fluid class="text-center pt-0">
+      <v-row>
+        <v-col sm="12" class="light-blue darken-3 py-12 elevation-5" style="z-index: 5;">
+          <h1 class="display-3 font-weight-thin white--text">The Paradox</h1>
+        </v-col>
+				<v-col sm="12" class="blue-grey darken-3 elevation-5 py-4">
+					<h3 class="mt-2 display-1 grey--text font-weight-light text-uppercase font-italic">Accuracy. Transparency. Legitimacy.</h3>
+					<v-text-field v-model="searchNews" label="Search..." color="white" style="width: 300px; position: absolute; top: 5px; right: 15px; z-index: 10;"></v-text-field>
+				</v-col>
+      </v-row>
+    </v-container>
 
 		<v-card v-for="item in filteredNews" :key="item.id" class="news-home">
 			<div v-if="item.uploaded">

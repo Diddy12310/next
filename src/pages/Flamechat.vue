@@ -22,7 +22,7 @@
               <v-list-item :v-ripple="true" v-on="on" @contextmenu.prevent="showChatroomMenu($event, chatroom.id, index)" @click="setChatroom(chatroom.id)" :value="index">
                 <v-list-item-icon>
                   <!-- <v-img :src="chatroom.pic"></v-img> -->
-                  <v-icon>mdi-forum</v-icon>
+                  <v-icon>{{ chatroom.icon }}</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title></v-list-item-title>
@@ -105,9 +105,65 @@
     </main>
 
     <main v-if="current_chatroom_index === -1" style="margin-left: 80px; text-align: center;">
-      <h1 class="display-3 deep-orange--text" style="margin-top: 125px;">Welcome to Flamechat!</h1>
-      <p class="headline mt-6 font-weight-light">Select a chatroom from the left.</p>
-      <v-btn color="deep-orange" class="mt-4" @click="buy_chatroom_popup = true">Buy a Chatroom</v-btn>
+      <v-container fluid class="text-center pt-0 mb-4">
+        <v-row>
+          <v-col sm="12" class="deep-orange py-12 elevation-5">
+            <h1 class="display-3 font-weight-thin white--text">Welcome to Flamechat!</h1>
+          </v-col>
+          <v-col sm="12">
+            <p class="title font-weight-regular px-6 pt-6">Select a chatroom from the left.</p>
+            <v-btn color="deep-orange" @click="buy_chatroom.popup = true">Buy a Chatroom</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-divider width="500" class="mx-auto"></v-divider>
+      <p class="mt-8">Here are some pre-made chatrooms. Their ID is below the summary. Type that ID in the Add field above the home icon.</p>
+      <v-container fluid>
+        <v-row>
+          <v-col sm="6">
+            <div class="mb-6 mt-9">
+              <h3 class="display-1">General</h3>
+              <p class="mt-4 mb-1">General, miscellaneous chit-chat.</p>
+              <p class="font-weight-thin">general</p>
+            </div>
+          </v-col>
+
+          <v-col sm="6">
+            <div class="mt-6">
+              <h3 class="display-1">Dev</h3>
+              <p class="mt-4 mb-1">This chatroom is for discussing upcoming features, software, and tools from Paradigm.</p>
+              <p class="font-weight-thin">dev</p>
+            </div>
+          </v-col>
+        </v-row>
+        <v-divider></v-divider>
+        <v-row>
+          <v-col sm="6">
+            <div class="mt-6">
+              <h3 class="display-1">News</h3>
+              <p class="mt-4 mb-1">Keep yourself up to date with the latest happenings around the world.</p>
+              <p class="font-weight-thin">news</p>
+            </div>
+          </v-col>
+          <v-col sm="6">
+            <div class="mt-6">
+              <h3 class="display-1">Politics</h3>
+              <p class="mt-4 mb-1">Discuss politics in a civilized manner here. Challenge your political opposites.</p>
+              <p class="font-weight-thin">politics</p>
+            </div>
+          </v-col>
+        </v-row>
+        <v-divider></v-divider>
+        <v-row>
+          <v-col sm="12">
+            <div class="mt-6">
+              <h3 class="display-1">Tech</h3>
+              <p class="mt-4 mb-1">Talk about new developments in the world of technology.</p>
+              <p class="font-weight-thin">tech</p>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
     </main>
 
 		<v-dialog v-model="delete_verify_popup" max-width="400">
@@ -123,18 +179,21 @@
 			</v-card>
 		</v-dialog>
 
-    <v-dialog v-model="buy_chatroom_popup" max-width="450">
+    <v-dialog v-model="buy_chatroom.popup" max-width="450">
 			<v-card>
 				<v-card-title>
 					<h3 class="headline mb-0">Buy a Chatroom</h3>
 					<v-spacer></v-spacer>
-					<v-btn icon @click="buy_chatroom_popup = false" class="dialog-close-btn">
+					<v-btn icon @click="buy_chatroom.popup = false" class="dialog-close-btn">
 						<v-icon>mdi-close</v-icon>
 					</v-btn>
 				</v-card-title>
 				<v-card-text>
 					<p>Chatroom ID: <span class="font-weight-light">{{ buy_chatroom_id }}</span></p>
-					<v-text-field v-model="buy_chatroom_name" label="Chatroom Name"></v-text-field>
+					<v-text-field v-model="buy_chatroom.name" label="Chatroom Name"></v-text-field>
+          <p>Chatroom Color</p>
+          <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3 elevation-0" v-model="buy_chatroom.theme"></v-color-picker>
+          <p>Icon selection is not implemented yet.</p>
 					<div v-if="$root.moonrocks > 50">
 						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
 						<p class="green--text">You have enough moonrocks to purchase a chatroom.</p>
@@ -152,7 +211,7 @@
 				<v-divider></v-divider>
 				<v-card-actions>
 					<v-btn @click="buyChatroom()" color="warning" text>Buy</v-btn>
-					<v-btn @click="buy_chatroom_popup = false" text color="accent">Cancel</v-btn>
+					<v-btn @click="buy_chatroom.popup = false" text color="accent">Cancel</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -177,8 +236,11 @@ export default {
       current_chatroom_index: -1,
       delete_verify_popup: false,
       purge_verify_popup: false,
-      buy_chatroom_popup: '',
-      buy_chatroom_name: ''
+      buy_chatroom: {
+        popup: false,
+        name: '',
+        theme: ''
+      }
     }
   },
   computed: {
@@ -190,13 +252,15 @@ export default {
     showChatroomMenu(e, id, index) {
       db.collection('flamechat').doc(id).get().then(doc => {
         this.chatroom_menu = {
-          x: e.clientX - 250,
-          y: e.clientY - 50,
+          x: e.clientX,
+          y: e.clientY,
           open: false,
           id: id,
           name: doc.data().name,
           index: index,
-          owner: doc.data().owner
+          owner: doc.data().owner,
+          theme: doc.data().theme,
+          icon: doc.data().icon
         }
         this.$nextTick(() => {
           this.chatroom_menu.open = true
@@ -225,7 +289,9 @@ export default {
             name: doc.data().name,
             owner: doc.data().name,
             id: doc.data().id,
-            messages: []
+            messages: [],
+            icon: doc.data().icon,
+            theme: doc.data().theme
           }
 					let ref = db.collection('flamechat').doc('chatrooms').collection(id).orderBy('timestamp', 'asc')
 					// this.editing = null
@@ -268,7 +334,7 @@ export default {
 				} else {
 					this.$notify('Chatroom does not exist')
 					db.collection('users').doc(this.$root.username).update({
-						chatrooms: app.firestore.FieldValue.arrayRemove({ id: this.current_chatroom.id })
+						chatrooms: app.firestore.FieldValue.arrayRemove({ id: this.current_chatroom.id, name: this.current_chatroom.name, theme: this.current_chatroom.theme, icon: this.current_chatroom.icon, owner: this.current_chatroom.owner })
 					})
 				}
 			})
@@ -318,8 +384,9 @@ export default {
 			})
     },
     leaveChatroom() {
+      console.log(this.$root.username)
 			db.collection('users').doc(this.$root.username).update({
-				chatrooms: app.firestore.FieldValue.arrayRemove({ name: this.chatroom_menu.name, id: this.chatroom_menu.id })
+				chatrooms: app.firestore.FieldValue.arrayRemove({ name: this.chatroom_menu.name, id: this.chatroom_menu.id, theme: this.chatroom_menu.theme, icon: this.chatroom_menu.icon, owner: this.chatroom_menu.owner })
 			}).then(() => {
         this.current_chatroom_index = -1
       }).catch(error => console.error(error))
@@ -329,7 +396,7 @@ export default {
 				if (doc.exists) {
 					var new_chatroom_name = doc.data().name
 					db.collection('users').doc(this.$root.username).update({
-						chatrooms: app.firestore.FieldValue.arrayUnion({ id: this.add_chatroom_id, name: new_chatroom_name })
+						chatrooms: app.firestore.FieldValue.arrayUnion({ id: this.add_chatroom_id, name: new_chatroom_name, theme: doc.data().theme, icon: doc.data().icon, owner: doc.data().owner })
 					}).then(() => {
             this.add_chatroom_id = ''
           })
@@ -356,20 +423,31 @@ export default {
     },
     buyChatroom() {
 			db.collection('flamechat').doc(this.buy_chatroom_id).set({
-				name: this.buy_chatroom_name,
+				name: this.buy_chatroom.name,
 				id: this.buy_chatroom_id,
+        theme: this.buy_chatroom.theme,
 				owner: this.$root.username
 			}).then(() => {
 				db.collection('users').doc(this.$root.username).update({
-					chatrooms: app.firestore.FieldValue.arrayUnion({ name: this.buy_chatroom_name, id: this.buy_chatroom_id }),
+					chatrooms: app.firestore.FieldValue.arrayUnion({ name: this.buy_chatroom.name, id: this.buy_chatroom_id, theme: this.buy_chatroom.theme, icon: 'mdi-forum', owner: this.$root.username }),
 					moonrocks: app.firestore.FieldValue.increment(-50)
 				}).then(() => {
           this.setChatroom(this.buy_chatroom_id)
-          this.buy_chatroom_popup = false
+          this.buy_chatroom.popup = false
 				})
 			})
 		}
-  }
+  },
+  // created() {
+  //   this.$root.my_chatrooms.forEach(chatroom => {
+  //     db.collection('flamechat').doc(chatroom.id).get().then(doc => {
+  //       var data = doc.data()
+  //       chatroom.theme = doc.data().theme
+  //       chatroom.icon = doc.data().icon
+  //       chatroom.owner = doc.data().owner
+  //     })
+  //   })
+  // }
 }
 </script>
 

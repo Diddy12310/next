@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar color="blue darken-4" dense style="z-index: 2;" class="elevation-0">
+    <!-- <v-toolbar color="blue darken-4" dense style="z-index: 2;" class="elevation-0">
       <v-toolbar-title class="hidden-sm-and-down">Write</v-toolbar-title>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
       <input class="hidden-sm-and-down doc-title centralize" type="text" v-model="data.title" placeholder="Untitled document">
@@ -36,7 +36,6 @@
     </v-toolbar>
 
     <v-toolbar color="blue darken-4" dense>
-      <!-- Mobile add menu -->
       <v-menu offset-y :close-on-content-click="false" class="hidden-md-and-up">
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" icon class="hidden-md-and-up"><v-icon>mdi-plus</v-icon></v-btn>
@@ -101,7 +100,6 @@
       </v-menu>
 
 
-      <!-- Desktop toolbar -->
       <v-menu offset-y class="hidden-sm-and-down">
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" icon><v-icon>mdi-format-text-variant</v-icon></v-btn>
@@ -244,7 +242,6 @@
 
 
 
-      <!-- Mobile format -->
       <v-spacer class="hidden-md-and-up"></v-spacer>
       <v-menu :close-on-content-click="false" offset-y class="hidden-md-and-up" v-if="current_block.type == 'text' || current_block.type == 'header'">
         <template v-slot:activator="{ on }">
@@ -533,7 +530,19 @@
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
+
+    <v-container fluid class="text-center pt-0">
+      <v-row>
+        <v-col sm="12" class="blue darken-3 py-12 elevation-5">
+          <h1 class="display-3 font-weight-thin white--text">Write</h1>
+        </v-col>
+        <v-col sm="12">
+          <p class="title font-weight-regular px-6 pt-6">Paradigm's powerful, yet lightweight word processor. It is the first of our upcoming line of office software and tools.</p>
+          <v-btn color="blue darken-3" href="https://github.com/Paradigm-Dev/write-client/releases">Download</v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -629,7 +638,7 @@ export default {
 </script>
 
 <style scoped>
-@media screen {
+/* @media screen {
   div#editor {
     margin-top: 16px;
   }
@@ -732,5 +741,5 @@ textarea {
 
 .v-toolbar__content {
   padding: 0px !important;
-}
+} */
 </style>

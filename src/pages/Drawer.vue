@@ -1,7 +1,16 @@
 <template>
-	<div style="text-align: center; margin: 50px 0px;">
-		<h1 class="display-3 blue--text font-weight-thin text-uppercase">Coming soon</h1>
-		<h6 class="headline white--text font-weight-thin mt-3">Development is in progress.</h6>
+	<div class="text-center">
+		<v-container fluid class="pt-0">
+      <v-row>
+        <v-col sm="12" class="teal darken-3 py-12 elevation-5">
+          <h1 class="display-3 font-weight-thin white--text">Drawer</h1>
+        </v-col>
+        <v-col sm="12">
+          <p class="title font-weight-regular px-6 pt-6">A cloud-based, secure file hosting and storage service.</p>
+          <v-btn color="teal darken-3" disabled>Coming Soon</v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
 	</div>
 </template>
 

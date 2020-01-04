@@ -1,8 +1,8 @@
 <template>
   <div class="support">
-		<!-- <h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 50px; text-align: center;">Support</h1>
+		<h1 class="display-3 red--text font-weight-thin text-uppercase" style="margin: 50px; text-align: center;">Support</h1>
 		<v-card>
-			<form action="mailto:paradigmdevelop@gmail.com" method="post" enctype="text/plain">
+			<!-- <form action="mailto:paradigmdevelop@gmail.com" method="post" enctype="text/plain">
 
 				<v-card-text>
 					<v-text-field type="text" name="Name" label="Name"></v-text-field>
@@ -15,12 +15,13 @@
 					<v-btn type="reset" color="info">Reset</v-btn>
 				</v-card-actions>
 
-			</form>
-		</v-card> -->
-		<div style="text-align: center; margin: 50px 0px;">
+			</form> -->
+			<v-card-text class="text-center">Contact us anytime at <a href="mailto:paradigmdevelop@gmail.com">paradigmdevelop@gmail.com</a> and we will get back to you as soon as we can.</v-card-text>
+		</v-card>
+		<!-- <div style="text-align: center; margin: 50px 0px;">
 			<h1 class="display-3 red--text font-weight-thin text-uppercase">Shutdown</h1>
 			<h6 class="headline white--text font-weight-thin mt-3">This page was temporarily shut down due to fatal bugs. It will be back in a future release.</h6>
-		</div>
+		</div> -->
   </div>
 </template>
 

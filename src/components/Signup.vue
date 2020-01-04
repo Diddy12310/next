@@ -96,15 +96,14 @@ export default {
 							color: this.$root.accountColor,
 							moonrocks: 0,
 							isAdmin: false,
-							isInnerCore: false,
 							isAsteroid: false,
-							isAnalytics: false,
 							uid: user.user.uid,
 							isBanned: false,
 							strikes: 0,
 							isWriter: false,
               isLoggedIn: true,
-              pic: this.$root.accountPic
+              pic: this.$root.accountPic,
+              chatrooms: []
 						})
             this.$ga.event(this.$root.username, 'signed up')
             this.$root.account_dialog = false

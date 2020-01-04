@@ -177,13 +177,6 @@ export default {
 				this.cmdError(`! an error occurred: ${error}`)
 			})
     },
-    userTIC(username, input) {
-      db.collection('users').doc(username).update({
-        isInnerCore: input
-      }).catch(error => {
-				this.cmdError(`! an error occurred: ${error}`)
-			})
-    },
     userAsteroid(username, input) {
       db.collection('users').doc(username).update({
         isAsteroid: input

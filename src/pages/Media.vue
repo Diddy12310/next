@@ -6,7 +6,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-tabs v-model="tab" centered icons-and-text fixed-tabs>
+    <v-tabs v-model="tab" centered icons-and-text fixed-tabs class="elevation-5">
       <v-tabs-slider></v-tabs-slider>
 
       <v-tab>

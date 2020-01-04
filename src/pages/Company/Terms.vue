@@ -1,11 +1,16 @@
 <template>
     <div class="terms">
-			<div class="title">
-				<h1 style="text-align: center; margin: 50px 50px 20px 50px;" class="display-3 blue--text font-weight-thin text-uppercase">TERMS OF SERVICE, USE, AND PRIVACY POLICY</h1>
-				<h3 style="text-align: center;" class="display-1 font-weight-light">Paradigm Development, Inc.</h3>
-				<v-divider></v-divider>
-			</div>
-      <div style="text-align: center; margin: auto; width: 80vw; padding-top: 10px;">
+      <v-container fluid class="text-center pt-0">
+        <v-row>
+          <v-col sm="12" class="light-blue darken-3 py-12 elevation-5" style="z-index: 5;">
+            <h1 class="display-3 font-weight-thin white--text">Terms of Service and Use and Privacy Policy</h1>
+          </v-col>
+          <v-col sm="12" class="deep-purple darken-2 elevation-5 py-4">
+            <h3 class="mt-2 display-1 grey--text font-weight-light">Paradigm Development</h3>
+          </v-col>
+        </v-row>
+      </v-container>
+      <div style="text-align: center; margin: auto; width: 80vw; padding-top: 20px;">
         <h4 class="title pb-2">Agreement to Terms</h4>
         <p>
           These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity

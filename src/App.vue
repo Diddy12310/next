@@ -1,7 +1,7 @@
 <template>
 	<v-app>
     <!-- Toolbar -->
-		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'grey darken-4': shutdown }" v-if="app_loaded">
+		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'grey darken-4': shutdown }" v-if="app_loaded" style="z-index: 1000000000;">
 			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown" style="margin: 0px;"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
 				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent || shutdown, 'hidden-xs-only': $root.accountColor }">
@@ -61,7 +61,15 @@
           </v-list-item-content>
         </v-list-item>
 				<v-divider></v-divider>
-				<v-list-group>
+				<v-list-item @click="$root.switch = 'Terms'">
+					<v-list-item-icon>
+            <v-icon>mdi-feather</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Terms of Service</v-list-item-title>
+          </v-list-item-content>
+				</v-list-item>
+				<!-- <v-list-group>
           <template v-slot:activator>
             <v-list-item>
 							<v-list-item-icon>
@@ -77,8 +85,8 @@
 						</v-list-item-content>
 					</v-list-item>
 				</v-list-group>
-				<v-list-group>
-          <template v-slot:activator>
+				<v-list-group> -->
+          <!-- <template v-slot:activator>
             <v-list-item>
 							<v-list-item-icon>
 								<v-icon>mdi-history</v-icon>
@@ -108,7 +116,7 @@
 							<v-list-item-title>{{ link.app }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
-				</v-list-group>
+				</v-list-group> -->
       </v-list>
 			<template v-slot:append>
 				<p class="pl-2 ma-0 caption" style="padding-bottom: 5px;">v{{ version }}</p>
@@ -217,7 +225,8 @@
 						</div>
 					</div>
 				</v-card-text>
-				<v-divider></v-divider>
+				<v-divider v-if="!sign_up_enable"></v-divider>
+				<v-divider v-if="$root.userPresent"></v-divider>
 				<v-card-actions>
 					<v-btn v-if="!$root.userPresent && !sign_up_enable" @click="signIn" color="accent" text>Sign In</v-btn>
 					<v-btn v-if="$root.userPresent" @click="signOut" color="accent" text>Sign Out</v-btn>
@@ -353,7 +362,7 @@
 					<h1 class="display-3 grey--text text--darken-1 font-weight-thin text-uppercase" style="margin: 25px 0px 25px 0px;">Shutdown</h1>
 					<h3 class="headline font-weight-light grey--text text--darken-2" style="margin: 25px;">Paradigm has been shut down.</h3>
 					<p class="grey--text text--darken-2">For Paradigm to be reenabled, enough support needs to be shown for its future.</p>
-					<p class="grey--text text--darken-2">Any questions and support can be directed to Aidan's inbox at <a class="grey--text text--darken-2" href="mailto:aidanliddy@outlook.com">aidanliddy@outlook.com</a>.</p>
+					<p class="grey--text text--darken-2">Any questions and support can be directed to our inbox at <a class="grey--text text--darken-2" href="mailto:paradigmdevelop@gmail.com">paradigmdevelop@gmail.com</a>.</p>
 				</div>
 			</v-container>
 		</v-content>
@@ -391,23 +400,23 @@ export default {
 			apps: [
 				{ icon: 'mdi-message', route: 'Flamechat', app: 'Flamechat' },
 				{ icon: 'mdi-newspaper', route: 'News', app: 'The Paradox' },
-				{ icon: 'mdi-web', route: 'Satellite', app: 'Satellite' },
-				{ icon: 'mdi-professional-hexagon', route: 'Asteroid', app: 'Asteroid' },
-				{ icon: 'mdi-counter', route: 'Scorecard', app: 'Scorecard' },
+				// { icon: 'mdi-web', route: 'Satellite', app: 'Satellite' },
+				// { icon: 'mdi-professional-hexagon', route: 'Asteroid', app: 'Asteroid' },
+				// { icon: 'mdi-counter', route: 'Scorecard', app: 'Scorecard' },
 				{ icon: 'mdi-folder-multiple', route: 'Drawer', app: 'Drawer' },
 				{ icon: 'mdi-play-network', route: 'Media', app: 'Media' },
-				{ icon: 'mdi-weather-pouring', route: 'Weather', app: 'Weather' },
-				{ icon: 'mdi-gamepad-variant', route: 'Games', app: 'Arcade' },
+				// { icon: 'mdi-weather-pouring', route: 'Weather', app: 'Weather' },
+				// { icon: 'mdi-gamepad-variant', route: 'Games', app: 'Arcade' },
 				{ icon: 'mdi-file-document-box-multiple', route: 'Write', app: 'Write' },
 				// { icon: 'mdi-presentation', route: 'Show', app: 'Show' },
 				// { icon: 'mdi-google-spreadsheet', route: 'Spread', app: 'Spread' }
 
 			],
-			company: [
-				{ route: 'Roadmap', app: 'Roadmap' },
-				{ route: 'Terms', app: 'Terms of Use, Service, and Privacy Policy' },
-				{ route: 'NetworkStatus', app: 'Network Status' },
-			],
+			// company: [
+			// 	{ route: 'Roadmap', app: 'Roadmap' },
+			// 	{ route: 'Terms', app: 'Terms of Use, Service, and Privacy Policy' },
+			// 	{ route: 'NetworkStatus', app: 'Network Status' },
+			// ],
 			latest: [
 				{ route: 'LatestMemes', app: 'Memes' },
 			],
@@ -467,11 +476,13 @@ export default {
 		},
 		signOut() {
 			perf.trace('signOut').start()
-			auth.signOut().then(() => {
-				db.collection('users').doc(this.$root.username).update({ isLoggedIn: false }).catch(error => this.$notify(error.message))
-				this.$notify('Signed out successfully.')
-				this.$ga.event(this.$root.username, 'signed out')
-				perf.trace('signOut').stop()
+			db.collection('users').doc(this.$root.username).update({ isLoggedIn: false }).then(() => {
+				auth.signOut().then(() => {
+					this.$notify('Signed out successfully.')
+					this.$ga.event(this.$root.username, 'signed out')
+					perf.trace('signOut').stop()
+					this.$root.switch = 'Home'
+				}).catch(error => this.$notify(error.message))
 			}).catch(error => this.$notify(error.message))
 		},
 		changePass() {
@@ -576,24 +587,57 @@ export default {
 
 				var usersRef = db.collection('users')
 				usersRef.doc(this.$root.username).get().then(doc => {
-					this.$root.accountBio = doc.data().bio
-					this.$root.accountColor = doc.data().color
-					this.$root.moonrocks = doc.data().moonrocks
-					this.$root.isAdmin = doc.data().isAdmin
-					this.$root.isInnerCore = doc.data().isInnerCore
-					this.$root.isAnalytics = doc.data().isAnalytics
-					this.$root.isAsteroid = doc.data().isAsteroid
-					this.$root.isBanned = doc.data().isBanned
-					this.$root.strikes = doc.data().strikes
-					this.$root.isWriter = doc.data().isWriter
-					this.$root.accountPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
-					this.$root.my_chatrooms = doc.data().chatrooms
-					if (doc.data().strikes >= 3) {
-						this.$root.isBanned = true
-						db.collection('users').doc(this.$root.username).update({ isBanned: true })
+					if (doc.exists) {
+						this.$root.accountBio = doc.data().bio
+						this.$root.accountColor = doc.data().color
+						this.$root.moonrocks = doc.data().moonrocks
+						this.$root.isAdmin = doc.data().isAdmin
+						this.$root.isAsteroid = doc.data().isAsteroid
+						this.$root.isBanned = doc.data().isBanned
+						this.$root.strikes = doc.data().strikes
+						this.$root.isWriter = doc.data().isWriter
+						this.$root.accountPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
+						this.$root.my_chatrooms = doc.data().chatrooms
+						if (doc.data().strikes >= 3) {
+							this.$root.isBanned = true
+							db.collection('users').doc(this.$root.username).update({ isBanned: true })
+						} else {
+							this.$root.isBanned = false
+							db.collection('users').doc(this.$root.username).update({ isBanned: false })
+						}
+
+						db.collection('paradigm').doc('users_schema').get().then(doc2 => {
+							var users_schema = doc2.data()
+							var good_values = []
+							var bad_values = []
+
+							var value
+							for (value in doc.data()) {
+								if (users_schema[value] !== undefined) good_values.push(value)
+								else bad_values.push(value)
+							}
+
+							bad_values.forEach(value => {
+								usersRef.doc(this.$root.username).update({
+									[value]: firebase.firestore.FieldValue.delete()
+								})
+							})
+						})
 					} else {
-						this.$root.isBanned = false
-						db.collection('users').doc(this.$root.username).update({ isBanned: false })
+						usersRef.doc(this.$root.username).set({
+							bio: 'The user has not made a bio',
+							color: '#2196F3',
+							moonrocks: 0,
+							isAdmin: false,
+							isAsteroid: false,
+							isBanned: false,
+							strikes: 0,
+							isWriter: false,
+							pic: 'paradigm',
+							chatrooms: [],
+							uid: this.userInfo.uid,
+							isLoggedIn: true
+						})
 					}
 				})
 
@@ -605,8 +649,6 @@ export default {
 							this.$root.accountColor = doc.data().color
 							this.$root.moonrocks = doc.data().moonrocks
 							this.$root.isAdmin = doc.data().isAdmin
-							this.$root.isInnerCore = doc.data().isInnerCore
-							this.$root.isAnalytics = doc.data().isAnalytics
 							this.$root.isAsteroid = doc.data().isAsteroid
 							this.$root.isBanned = doc.data().isBanned
 							this.$root.strikes = doc.data().strikes
