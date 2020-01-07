@@ -354,7 +354,7 @@
 				<UISwitch v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !global_pnf && !shutdown" style="text-align: center;">
 					<h2 class="display-3 font-weight-thin text-uppercase" style="padding-top: 25vh;">Welcome!</h2>
-					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
+					<h3 class="headline font-weight-light grey--text text--lighten-1" style="margin: 25px;">Please login to continue.</h3>
 					<v-btn color="deep-purple" @click="$root.account_dialog = true">Login</v-btn>
 				</div>
 				<div class="lockdown" v-if="lockdown && !shutdown" style="text-align: center;">
@@ -417,7 +417,7 @@ export default {
 				{ icon: 'mdi-message', route: 'Flamechat', app: 'Flamechat' },
 				{ icon: 'mdi-play-network', route: 'Media', app: 'Media' },
 				{ icon: 'mdi-newspaper', route: 'News', app: 'The Paradox' },
-				// { icon: 'mdi-web', route: 'Satellite', app: 'Satellite' },
+				{ icon: 'mdi-web', route: 'Satellite', app: 'Satellite' },
 				// { icon: 'mdi-professional-hexagon', route: 'Asteroid', app: 'Asteroid' },
 				// { icon: 'mdi-counter', route: 'Scorecard', app: 'Scorecard' },
 				{ icon: 'mdi-folder-multiple', route: 'Drawer', app: 'Drawer' },

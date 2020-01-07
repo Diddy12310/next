@@ -1,18 +1,14 @@
 <template>
 	<div class="satellite">
-		<!-- <v-toolbar dense>
+		<v-toolbar dense color="blue-grey darken-2">
+			<v-toolbar-title>Satellite</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-title class="red--text font-weight-light">This page will likely be removed in a future release due to lack of functionality.</v-toolbar-title>
-      <v-spacer></v-spacer>
+			<v-text-field class="mt-7" label="Web Address" v-model="input"></v-text-field>
+			<v-btn text icon @click="changeURL()"><v-icon>mdi-send</v-icon></v-btn>
+
     </v-toolbar>
 
-		<v-text-field style="margin: 16px;" label="Web Address" v-model="input"></v-text-field>
-		<v-btn text icon @click="changeURL()"><v-icon>send</v-icon></v-btn>
-		<iframe id="satellite-embed" crossorigin="anonymous" :src="input"></iframe> -->
-		<div style="text-align: center; margin: 50px 0px;">
-			<h1 class="display-3 red--text font-weight-thin text-uppercase">Shutdown</h1>
-			<h6 class="headline white--text font-weight-thin mt-3">This page was temporarily shut down due to fatal bugs. It will be back in a future release.</h6>
-		</div>
+		<iframe id="satellite-embed" crossorigin="anonymous" :src="input"></iframe>
 	</div>
 </template>
 
@@ -41,7 +37,8 @@ div.satellite {
 }
 
 iframe {
-	height: calc(100vh - 210px);
+	height: calc(100vh - 120px);
 	width: 100%;
+	border: 0px;
 }
 </style>
