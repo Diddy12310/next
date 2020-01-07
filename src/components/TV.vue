@@ -62,10 +62,17 @@
 				<video autoplay :poster="watchShowCover" width="1000" :src="watchShowURL" controls></video>
 			</v-card>
 		</v-dialog> -->
-		<div style="text-align: center; margin: 50px 0px;">
-			<h1 class="display-3 blue--text font-weight-thin text-uppercase">Coming soon</h1>
-			<h6 class="headline white--text font-weight-thin mt-3">Development is in progress.</h6>
-		</div>
+		<v-container fluid class="text-center pt-0">
+      <v-row>
+        <v-col cols="12" sm="12" class="indigo darken-3 py-12 elevation-5">
+          <h1 class="display-3 font-weight-thin white--text">TV Shows</h1>
+        </v-col>
+        <v-col cols="12" sm="12">
+          <p class="title font-weight-regular px-6 pt-6">Watch your favorite TV shows wherever you are</p>
+          <v-btn color="indigo darken-3" disabled href="https://github.com/Paradigm-Dev/write-client/releases">Coming Soon</v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -155,8 +162,7 @@ export default {
 					this.newShowGenre = ''
 				})
 			} else {
-				this.$root.feedback = 'Fill in all of the fields'
-				this.$root.snackbar = true
+				this.$notify('Please fill in all of the required fields')
 			}
 		},
 		watchShow(title, url, cover) {

@@ -1,7 +1,7 @@
 <template>
 	<v-app>
     <!-- Toolbar -->
-		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'grey darken-4': shutdown }" v-if="app_loaded" style="z-index: 1000000000;">
+		<v-app-bar app :class="{ 'toolbar-no-ld': !lockdown && !shutdown, 'red': lockdown && !shutdown, 'grey darken-4': shutdown }" v-if="app_loaded" style="z-index: 15;">
 			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown" style="margin: 0px;"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
 				<img @click="$root.switch = 'Home'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" :class="{ 'logo': $root.userPresent, 'logo-nouser': !$root.userPresent || shutdown, 'hidden-xs-only': $root.accountColor }">
@@ -13,7 +13,7 @@
 		</v-app-bar>
 
 		<!-- Navigation drawer -->
-		<v-navigation-drawer v-model="drawer" app>
+		<v-navigation-drawer v-model="drawer" app style="z-index: 20;">
 			<template v-slot:prepend>
 				<v-card-actions class="grey darken-4 elevation-4 ma-0 pa-0">
 					<v-list shaped>
@@ -44,31 +44,33 @@
 			</template>
 
 			<v-list dense nav>
-				<v-list-item @click="$root.switch = 'Home'">
-					<v-list-item-icon>
-            <v-icon>mdi-home</v-icon>
-          </v-list-item-icon>
-					<v-list-item-content>
-						<v-list-item-title>Home</v-list-item-title>
-					</v-list-item-content>
-				</v-list-item>
-        <v-list-item v-for="link in apps" :key="link.route" link @click="$root.switch = `${link.route}`">
-					<v-list-item-icon>
-            <v-icon>{{ link.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ link.app }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-				<v-divider></v-divider>
-				<v-list-item class="mt-1" @click="$root.switch = 'Terms'">
-					<v-list-item-icon>
-            <v-icon>mdi-feather</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Terms of Service</v-list-item-title>
-          </v-list-item-content>
-				</v-list-item>
+				<v-list-item-group mandatory v-model="$root.switch">
+					<v-list-item value="Home">
+						<v-list-item-icon>
+							<v-icon>mdi-home</v-icon>
+						</v-list-item-icon>
+						<v-list-item-content>
+							<v-list-item-title>Home</v-list-item-title>
+						</v-list-item-content>
+					</v-list-item>
+					<v-list-item v-for="link in apps" :key="link.route" link :value="link.route">
+						<v-list-item-icon>
+							<v-icon>{{ link.icon }}</v-icon>
+						</v-list-item-icon>
+						<v-list-item-content>
+							<v-list-item-title>{{ link.app }}</v-list-item-title>
+						</v-list-item-content>
+					</v-list-item>
+					<!-- <v-divider></v-divider> -->
+					<v-list-item class="mt-1 d-none" value="Terms">
+						<v-list-item-icon>
+							<v-icon>mdi-feather</v-icon>
+						</v-list-item-icon>
+						<v-list-item-content>
+							<v-list-item-title>Terms of Service</v-list-item-title>
+						</v-list-item-content>
+					</v-list-item>
+				</v-list-item-group>
 				<!-- <v-list-group>
           <template v-slot:activator>
             <v-list-item>
@@ -120,7 +122,7 @@
       </v-list>
 			<template v-slot:append>
 				<p class="pl-2 ma-0 caption" style="padding-bottom: 5px;">v{{ version }}</p>
-				<div class="grey darken-4 elevation-14">
+				<div class="grey darken-4">
 					<v-divider></v-divider>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
@@ -136,7 +138,7 @@
 								<v-icon>mdi-github-circle</v-icon>
 							</v-btn>
 						</template>
-						<span>Github</span>
+						<span>GitHub</span>
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
@@ -148,7 +150,7 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="red" @click="$root.switch = 'Support'">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="red" @click="$root.support_dialog = true">
 								<v-icon>mdi-lifebuoy</v-icon>
 							</v-btn>
 						</template>
@@ -161,6 +163,14 @@
 							</v-btn>
 						</template>
 						<span>Report a bug</span>
+					</v-tooltip>
+					<v-tooltip top open-delay="1000">
+						<template v-slot:activator="{ on }">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="light-blue darken-3" @click="$root.switch = 'Terms'">
+								<v-icon>mdi-feather</v-icon>
+							</v-btn>
+						</template>
+						<span>Terms of Service</span>
 					</v-tooltip>
 				</div>
       </template>
@@ -194,7 +204,7 @@
 						<v-tab>Sign In</v-tab>
 						<v-tab-item>
 							<v-form>
-								<v-text-field clearable autocomplete="off" type="text" name="username" v-model="$root.username" label="Username"></v-text-field>
+								<v-text-field clearable autocomplete="off" autocapitalize="off" type="text" name="username" v-model="$root.username" label="Username"></v-text-field>
 								<v-text-field clearable autocomplete="off" type="password" name="password" v-model="password" label="Password"></v-text-field>
 								<v-btn @click="signIn" color="accent" text>Sign In</v-btn>
 							</v-form>
@@ -227,7 +237,7 @@
 				</v-card-text>
 				<v-divider v-if="!sign_up_enable"></v-divider>
 				<v-divider v-if="$root.userPresent"></v-divider>
-				<v-card-actions>
+				<v-card-actions v-if="!sign_up_enable || $root.userPresent">
 					<v-btn v-if="!$root.userPresent && !sign_up_enable" @click="signIn" color="accent" text>Sign In</v-btn>
 					<v-btn v-if="$root.userPresent" @click="signOut" color="accent" text>Sign Out</v-btn>
 				</v-card-actions>
@@ -288,10 +298,10 @@
 						<v-layout row wrap>
 							<v-flex v-for="pic in $root.avail_profile_pics" :key="pic" xs4>
 								<v-card @click="change_pic == pic ? change_pic = null : change_pic = pic" v-ripple flat tile>
-									<v-img :src="`https://relay.theparadigmdev.com/profile-pics/${pic}.jpg`" width="150px" height="150px"></v-img>
+									<v-img :src="`https://relay.theparadigmdev.com/profile-pics/${pic}.jpg`" width="150" height="150"></v-img>
 									<v-fade-transition>
 										<v-overlay v-if="change_pic == pic" absolute color="grey">
-											<v-icon>check</v-icon>
+											<v-icon>mdi-check</v-icon>
 										</v-overlay>
 									</v-fade-transition>
 								</v-card>
@@ -322,9 +332,14 @@
 			</v-card>
 		</v-dialog>
 
-		<!-- Account dialog -->
+		<!-- Bug report dialog -->
 		<v-dialog v-model="$root.bugreport_dialog" max-width="500">
 			<BugReport />
+		</v-dialog>
+
+		<!-- Support dialog -->
+		<v-dialog v-model="$root.support_dialog" max-width="500">
+			<Support />
 		</v-dialog>
 
 		<!-- Admin terminal -->
@@ -338,7 +353,7 @@
 				<!-- <router-view v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned"></router-view> -->
 				<UISwitch v-if="$root.userPresent && !lockdown && !global_pnf && !$root.isBanned && !shutdown"/>
 				<div class="noUser" v-if="!$root.userPresent &&!lockdown && !global_pnf && !shutdown" style="text-align: center;">
-					<h1 class="display-3 deep-purple--text font-weight-thin text-uppercase" style="margin: 100px 0px 25px 0px;">Welcome!</h1>
+					<h2 class="display-3 font-weight-thin text-uppercase" style="padding-top: 25vh;">Welcome!</h2>
 					<h3 class="headline font-weight-light" style="margin: 25px;">Please login to continue.</h3>
 					<v-btn color="deep-purple" @click="$root.account_dialog = true">Login</v-btn>
 				</div>
@@ -385,6 +400,7 @@ import firebase from 'firebase/app'
 import moment from 'moment'
 import Signup from './components/Signup'
 import BugReport from './components/BugReport'
+import Support from './components/Support'
 import Terminal from './components/Terminal'
 import MusicPlayer from './components/MusicPlayer'
 import Switch from './layout/Switch'
@@ -392,19 +408,19 @@ import Switch from './layout/Switch'
 export default {
 	name: 'Paradigm',
 	components: {
-		Signup, BugReport, 'UISwitch': Switch, Terminal, 'music-player': MusicPlayer
+		Signup, BugReport, 'UISwitch': Switch, Terminal, 'music-player': MusicPlayer, Support
 	},
 	data() {
 		return {
 			drawer: false,
 			apps: [
 				{ icon: 'mdi-message', route: 'Flamechat', app: 'Flamechat' },
+				{ icon: 'mdi-play-network', route: 'Media', app: 'Media' },
 				{ icon: 'mdi-newspaper', route: 'News', app: 'The Paradox' },
 				// { icon: 'mdi-web', route: 'Satellite', app: 'Satellite' },
 				// { icon: 'mdi-professional-hexagon', route: 'Asteroid', app: 'Asteroid' },
 				// { icon: 'mdi-counter', route: 'Scorecard', app: 'Scorecard' },
 				{ icon: 'mdi-folder-multiple', route: 'Drawer', app: 'Drawer' },
-				{ icon: 'mdi-play-network', route: 'Media', app: 'Media' },
 				// { icon: 'mdi-weather-pouring', route: 'Weather', app: 'Weather' },
 				// { icon: 'mdi-gamepad-variant', route: 'Games', app: 'Arcade' },
 				{ icon: 'mdi-file-document-box-multiple', route: 'Write', app: 'Write' },
@@ -450,38 +466,31 @@ export default {
 	methods: {
 		signIn() {
 			if(this.$root.username && this.password) {
-				perf.trace('signIn').start()
 				auth.signInWithEmailAndPassword(this.$root.username + '@theparadigmdev.com', this.password).then(() => {
 					this.$root.account_dialog = false
-					db.collection('users').doc(this.$root.username).update({ isLoggedIn: true })
-					perf.trace('signIn').stop()
 				}).catch(error => {
-					if(error.code == 'auth/invalid-email') {
-						this.$root.feedback = 'Do not use spaces or characters disallowed in an email address.'
-						this.$root.snackbar = true
-					}
-					if(error.code == 'auth/wrong-password') {
-						this.$root.feedback = 'Please check your password.'
-						this.$root.snackbar = true
-					}
-					if(error.code == 'auth/invalid-email' || 'auth/wrong-password') {
-						this.$root.feedback = error.message
-						this.$root.snackbar = true
+					switch (error.code) {
+						case 'auth/user-not-found':
+							this.$notify('There is no user associated with this username')
+							break
+						case 'auth/wrong-password':
+							this.$notify('Please check your password')
+							break
+						default:
+							this.$notify(error.message)
 					}
 				})
 			} else {
-				this.$root.feedback = 'Please fill in the required fields.'
-				this.$root.snackbar = true
+				this.$notify('Please fill in the required fields')
 			}
 		},
 		signOut() {
-			perf.trace('signOut').start()
 			db.collection('users').doc(this.$root.username).update({ isLoggedIn: false }).then(() => {
 				auth.signOut().then(() => {
 					this.$notify('Signed out successfully.')
 					this.$ga.event(this.$root.username, 'signed out')
-					perf.trace('signOut').stop()
 					this.$root.switch = 'Home'
+					this.account_dialog = false
 				}).catch(error => this.$notify(error.message))
 			}).catch(error => this.$notify(error.message))
 		},
@@ -578,7 +587,7 @@ export default {
 		this.$root.loadingBar = true
 		auth.onAuthStateChanged(firebaseUser => {
 			this.app_loaded = true
-			if(firebaseUser) {
+			if (firebaseUser) {
 				this.$notify('Signed in successfully.')
 				this.$root.userPresent = true
 				this.$root.username = firebaseUser.email.substring(0, firebaseUser.email.lastIndexOf("@"))
@@ -641,28 +650,31 @@ export default {
 					}
 				})
 
-				usersRef.onSnapshot(snapshot => {
-					snapshot.docChanges().forEach(change => {
-						if(change.type === "modified" && change.doc.id == this.$root.username) {
-							let doc = change.doc
-							this.$root.accountBio = doc.data().bio
-							this.$root.accountColor = doc.data().color
-							this.$root.moonrocks = doc.data().moonrocks
-							this.$root.isAdmin = doc.data().isAdmin
-							this.$root.isAsteroid = doc.data().isAsteroid
-							this.$root.isBanned = doc.data().isBanned
-							this.$root.strikes = doc.data().strikes
-							this.$root.isWriter = doc.data().isWriter
-							this.$root.my_chatrooms = doc.data().chatrooms
-							this.$root.accountPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
-							if (doc.data().strikes >= 3) {
-								this.$root.isBanned = true
-								db.collection('users').doc(this.$root.username).update({ isBanned: true })
-							} else {
-								this.$root.isBanned = false
-								db.collection('users').doc(this.$root.username).update({ isBanned: false })
+				db.collection('users').doc(this.$root.username).update({ isLoggedIn: true }).then(() => {
+					usersRef.onSnapshot(snapshot => {
+						snapshot.docChanges().forEach(change => {
+							if(change.type === "modified" && change.doc.id == this.$root.username) {
+								let doc = change.doc
+								this.$root.accountBio = doc.data().bio
+								this.$root.accountColor = doc.data().color
+								this.$root.moonrocks = doc.data().moonrocks
+								this.$root.isAdmin = doc.data().isAdmin
+								this.$root.isAsteroid = doc.data().isAsteroid
+								this.$root.isBanned = doc.data().isBanned
+								this.$root.strikes = doc.data().strikes
+								this.$root.isWriter = doc.data().isWriter
+								this.$root.my_chatrooms = doc.data().chatrooms
+								this.$root.accountPic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
+								if (doc.data().strikes >= 3) {
+									this.$root.isBanned = true
+									db.collection('users').doc(this.$root.username).update({ isBanned: true })
+								} else {
+									this.$root.isBanned = false
+									db.collection('users').doc(this.$root.username).update({ isBanned: false })
+								}
+								if (doc.data().isLoggedIn === false) this.signOut()
 							}
-						}
+						})
 					})
 				})
 			} else {
@@ -819,5 +831,16 @@ html {
 
 .v-list.v-sheet.v-sheet--tile.v-list--shaped {
 	padding: 0px;
+}
+
+.noUser {
+	text-align: center;
+	height: calc(100vh - 64px);
+	background: url('./assets/home_bg.jpg');
+	background-attachment: fixed;
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 100%;
+	background-size: cover;
 }
 </style>

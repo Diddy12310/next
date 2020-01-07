@@ -81,6 +81,7 @@ new Vue({
       terminalOpen: false,
       account_dialog: false,
       bugreport_dialog: false,
+      support_dialog: false,
       accountPic: '',
       my_chatrooms: [],
       moonrocks: '',

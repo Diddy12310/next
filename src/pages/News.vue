@@ -2,12 +2,15 @@
 	<div class="news">
 		<v-container fluid class="text-center pt-0">
       <v-row>
-        <v-col sm="12" class="light-blue darken-3 py-12 elevation-5" style="z-index: 5;">
+        <v-col xs="12" cols="12" class="light-blue darken-3 py-12 elevation-5" style="z-index: 5;">
           <h1 class="display-3 font-weight-thin white--text">The Paradox</h1>
         </v-col>
-				<v-col sm="12" class="blue-grey darken-3 elevation-5 py-4">
+				<v-col xs="12" cols="12" class="blue-grey darken-3 elevation-5 py-4">
 					<h3 class="mt-2 display-1 grey--text font-weight-light text-uppercase font-italic">Accuracy. Transparency. Legitimacy.</h3>
-					<v-text-field v-model="searchNews" label="Search..." color="white" style="width: 300px; position: absolute; top: 5px; right: 15px; z-index: 10;"></v-text-field>
+					<v-text-field v-if="$vuetify.breakpoint.lgAndUp" v-model="searchNews" label="Search..." color="white" style="width: 300px; position: absolute; top: 5px; right: 15px; z-index: 10;"></v-text-field>
+				</v-col>
+				<v-col xs="12" cols="12">
+					<v-text-field v-if="$vuetify.breakpoint.mdAndDown" v-model="searchNews" label="Search..." style="width: 300px; margin: auto;"></v-text-field>
 				</v-col>
       </v-row>
     </v-container>
@@ -170,8 +173,7 @@ export default {
 					this.newNewsCover = ''
 				})
 			} else {
-				this.$root.feedback = 'Fill in all of the fields'
-				this.$root.snackbar = true
+				this.$notify('Please fill in all of the required fields')
 			}
 		}
 	}

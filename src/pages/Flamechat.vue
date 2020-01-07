@@ -117,45 +117,50 @@
         </v-row>
       </v-container>
       <v-divider width="500" class="mx-auto"></v-divider>
-      <p class="mt-8">Here are some pre-made chatrooms. Their ID is below the summary. Type that ID in the Add field above the home icon.</p>
+      <p class="mt-8 px-4">Here are some pre-made chatrooms. Their ID is below the summary. Type that ID in the Add field above the home icon.</p>
       <v-container fluid>
         <v-row>
-          <v-col sm="6">
-            <div class="mb-6 mt-9">
+          <v-col lg="6" xs="12" cols="12">
+            <div class="mt-6">
               <h3 class="display-1">General</h3>
               <p class="mt-4 mb-1">General, miscellaneous chit-chat.</p>
               <p class="font-weight-thin">general</p>
             </div>
+            <v-divider></v-divider>
           </v-col>
 
-          <v-col sm="6">
+          <v-col lg="6" xs="12">
             <div class="mt-6">
               <h3 class="display-1">Dev</h3>
               <p class="mt-4 mb-1">This chatroom is for discussing upcoming features, software, and tools from Paradigm.</p>
               <p class="font-weight-thin">dev</p>
             </div>
+            <v-divider></v-divider>
           </v-col>
         </v-row>
-        <v-divider></v-divider>
+
         <v-row>
-          <v-col sm="6">
+          <v-col lg="6" xs="12" cols="12">
             <div class="mt-6">
               <h3 class="display-1">News</h3>
               <p class="mt-4 mb-1">Keep yourself up to date with the latest happenings around the world.</p>
               <p class="font-weight-thin">news</p>
             </div>
+            <v-divider></v-divider>
           </v-col>
-          <v-col sm="6">
+
+          <v-col lg="6" xs="12">
             <div class="mt-6">
               <h3 class="display-1">Politics</h3>
               <p class="mt-4 mb-1">Discuss politics in a civilized manner here. Challenge your political opposites.</p>
               <p class="font-weight-thin">politics</p>
             </div>
+            <v-divider></v-divider>
           </v-col>
         </v-row>
-        <v-divider></v-divider>
+
         <v-row>
-          <v-col sm="12">
+          <v-col xs="12">
             <div class="mt-6">
               <h3 class="display-1">Tech</h3>
               <p class="mt-4 mb-1">Talk about new developments in the world of technology.</p>
@@ -376,8 +381,7 @@ export default {
 		},
     deleteChat(id) {
 			db.collection('flamechat').doc('chatrooms').collection(this.current_chatroom.id).doc(id).delete().then(() => {
-				this.$root.feedback = 'Message deleted successfully.'
-				this.$root.snackbar = true
+				this.$notify('Message deleted successfully')
 				this.$ga.event(this.$root.username, 'deleted a message on ' + this.current_chatroom.name)
 			}).catch(error => {
 				this.$ga.event(this.$root.username, 'error: ' + error.message)
@@ -422,20 +426,24 @@ export default {
 			}
     },
     buyChatroom() {
-			db.collection('flamechat').doc(this.buy_chatroom_id).set({
-				name: this.buy_chatroom.name,
-				id: this.buy_chatroom_id,
-        theme: this.buy_chatroom.theme,
-				owner: this.$root.username
-			}).then(() => {
-				db.collection('users').doc(this.$root.username).update({
-					chatrooms: app.firestore.FieldValue.arrayUnion({ name: this.buy_chatroom.name, id: this.buy_chatroom_id, theme: this.buy_chatroom.theme, icon: 'mdi-forum', owner: this.$root.username }),
-					moonrocks: app.firestore.FieldValue.increment(-50)
-				}).then(() => {
-          this.setChatroom(this.buy_chatroom_id)
-          this.buy_chatroom.popup = false
-				})
-			})
+      if (this.$root.moonrocks >= 50) {
+        db.collection('flamechat').doc(this.buy_chatroom_id).set({
+          name: this.buy_chatroom.name,
+          id: this.buy_chatroom_id,
+          theme: this.buy_chatroom.theme,
+          owner: this.$root.username
+        }).then(() => {
+          db.collection('users').doc(this.$root.username).update({
+            chatrooms: app.firestore.FieldValue.arrayUnion({ name: this.buy_chatroom.name, id: this.buy_chatroom_id, theme: this.buy_chatroom.theme, icon: 'mdi-forum', owner: this.$root.username }),
+            moonrocks: app.firestore.FieldValue.increment(-50)
+          }).then(() => {
+            this.setChatroom(this.buy_chatroom_id)
+            this.buy_chatroom.popup = false
+          })
+        })
+      } else {
+        this.$notify('You do not have enough Moonrocks to buy a chatroom')
+      }
 		}
   },
   // created() {

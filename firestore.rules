@@ -7,12 +7,15 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if request.auth.uid != null;
     }
-    match /paradigm/config {
+    match /paradigm/{doc=**} {
       allow read;
       allow write: if request.auth.uid != null
     }
     match /users/{user=**} {
       allow read, write;
+    }
+    match /electorate/{doc=**} {
+    	allow read
     }
   }
 }

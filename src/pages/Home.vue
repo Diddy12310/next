@@ -1,7 +1,7 @@
 <template>
 	<div class="index">
 		<div class="home">
-			<img src="@/assets/plogo.png" alt=""  style="position: relative; text-align: center; margin: auto; padding-top: 30vh;">
+			<img src="@/assets/plogo.png" alt="" style="position: relative; text-align: center; margin: auto; padding-top: 30vh;">
 			<h2 class="display-3 font-weight-thin text-uppercase">Paradigm</h2>
 		</div>
 		<!-- <div style="text-align: center; padding: 25px;" class="blue-grey darken-4">

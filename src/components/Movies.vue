@@ -155,8 +155,7 @@ export default {
 					this.newMovieGenre = ''
 				})
 			} else {
-				this.$root.feedback = 'Fill in all of the fields'
-				this.$root.snackbar = true
+				this.$notify('Please fill in all of the required fields')
 			}
 		},
 		watchMovie(title, url, cover) {

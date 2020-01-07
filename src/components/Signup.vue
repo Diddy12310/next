@@ -21,7 +21,7 @@
       </v-window-item>
 
       <v-window-item :value="3">
-        <v-color-picker mode="hexa" hide-mode-switch style="background-color: #2E2E2E;" class="mt-3 mb-3" v-model="$root.accountColor"></v-color-picker>
+        <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3 elevation-0" v-model="$root.accountColor"></v-color-picker>
         <span class="caption grey--text text--darken-1">
           Pick a color for your account.
         </span>
@@ -42,7 +42,7 @@
                 <v-img :src="`https://relay.theparadigmdev.com/profile-pics/${pic}.jpg`" width="150px" height="150px"></v-img>
                 <v-fade-transition>
                   <v-overlay v-if="$root.accountPic == pic" absolute>
-                    <v-icon>check</v-icon>
+                    <v-icon>mdi-check</v-icon>
                   </v-overlay>
                 </v-fade-transition>
               </v-card>
@@ -53,14 +53,14 @@
 
       <v-window-item :value="6">
         <v-checkbox label="I have read and accept the Terms and Conditions" v-model="terms_accepted"></v-checkbox>
-        <v-btn href="http://relay.theparadigmdev.com/terms.html" text color="blue-grey lighten-2">View Terms</v-btn><br>
+        <v-btn href="http://relay.theparadigmdev.com/terms.html" text class="mt-4 blue-grey--text text--lighten-2">View Terms</v-btn><br>
         <span class="caption grey--text text--darken-1">
           Please read and accept the Terms and Conditions.
         </span>
       </v-window-item>
 
       <v-window-item :value="7">
-        <h1 class="display-2 text-xs-center">Welcome to Paradigm!</h1>
+        <h1 class="display-1 my-4 font-weight-light text-center">Welcome to Paradigm!</h1>
       </v-window-item>
     </v-window>
     <v-card-actions>
@@ -108,17 +108,13 @@ export default {
             this.$ga.event(this.$root.username, 'signed up')
             this.$root.account_dialog = false
 					}).catch(error => {
-						if(error.code == 'auth/invalid-email') {
-							this.$notify('Do not use spaces or other special characters.')
-						}
-						if(error.code == 'auth/wrong-password') {
-							this.$notify('Please check your password.')
-						}
-						if(error.code != 'auth/invalid-email' || 'auth/wrong-password') {
-							this.$notify(error.message)
-						} else {
-							this.$notify('Please fill in the required fields.')
-						}
+            switch (error.code) {
+              case 'auth/invalid-email':
+                this.$notify('Invalid username')
+                break
+              default:
+                this.$notify(error.message)
+            }
 					})
 				}
 			}

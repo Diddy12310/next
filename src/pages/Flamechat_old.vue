@@ -321,8 +321,7 @@ export default {
 	methods: {
 		deleteChat(id) {
 			db.collection('flamechat').doc('chatrooms').collection(this.chatroom_id).doc(id).delete().then(() => {
-				this.$root.feedback = 'Message deleted successfully.'
-				this.$root.snackbar = true
+				this.$notify('Message deleted successfully')
 				this.$ga.event(this.$root.username, 'deleted a message on ' + this.chatroom_name)
 			}).catch(error => {
 				this.$ga.event($root.username, 'error: ' + error.message)
@@ -334,8 +333,7 @@ export default {
 				db.collection('flamechat').doc('chatrooms').collection(this.chatroom_id).get().then(snapshot => {
 					snapshot.forEach(doc => {
 						doc.ref.delete()
-						this.$root.feedback = 'All messages purged.'
-						this.$root.snackbar = true
+						this.$notify('All messages purged')
 					}).catch(error => {
 						this.$ga.event($root.username, 'error: ' + error.message)
 					})

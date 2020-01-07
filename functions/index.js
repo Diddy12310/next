@@ -1,9 +1,5 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const ytdl = require('ytdl-core')
-const express = require('express');
-const cors = require('cors');
-const app = express();
 admin.initializeApp();
 
 exports.sendNotifications = functions.firestore.document('flamechat/chatrooms/{chatroom}/{message}').onCreate(snapshot => {
@@ -27,15 +23,35 @@ exports.sendNotifications = functions.firestore.document('flamechat/chatrooms/{c
 });
 
 exports.deleteUser = functions.https.onCall(data => {
-  if (data.isAdmin === true) {
-    admin.firestore().collection('users').doc(data.username).delete().then(() => {
-      admin.auth().deleteUser(data.uid).then(() => {
-        return true
-      })
-    })
-  } else {
-    return false
-  }
+  admin.firestore().collection('users').doc(data.username).delete().then(() => {
+    admin.auth().deleteUser(data.uid).then(() => {
+      return true
+    }).catch(error => { return error })
+  }).catch(error => { return error })
+})
+
+exports.createUser = functions.https.onCall(data => {
+  admin.auth().createUser({
+    email: `${data.username}@theparadigmdev.com`,
+    password: data.password
+  }).then(record => {
+    admin.firestore().collection('users').doc(data.username).set({
+      bio: `${data.username}'s account`,
+      chatrooms: [],
+      color: '#ffffff',
+      isAdmin: false,
+      isAsteroid: false,
+      isBanned: false,
+      isLoggedIn: false,
+      isWriter: false,
+      moonrocks: 0,
+      pic: 'paradigm',
+      strikes: 0,
+      uid: record.uid
+    }).then(() => {
+      return true
+    }).catch(error => { return error })
+  }).catch(error => { return error })
 })
 
 exports.clearChatroom = functions.https.onCall(data => {
@@ -71,9 +87,3 @@ exports.clearChatroom = functions.https.onCall(data => {
 //     });
 //     return admin.database().ref().update(tokensToRemove);
 //   }
-
-exports.getYTDownloadLink = functions.https.onCall((data, context) => {
-	ytdl.getInfo(data.url, (error, info) => {
-    return info.formats[0].url
-  })
-})

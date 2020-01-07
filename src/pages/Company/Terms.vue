@@ -10,7 +10,8 @@
           </v-col>
         </v-row>
       </v-container>
-      <div style="text-align: center; margin: auto; width: 80vw; padding-top: 20px;">
+      <div style="text-align: left; margin: auto; width: 80vw; padding-top: 20px;">
+        <p class="grey--text font-weight-light">Last updated: January 1st, 2020</p>
         <h4 class="title pb-2">Agreement to Terms</h4>
         <p>
           These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity
@@ -78,13 +79,13 @@
         <h4 class="title pb-2">Prohibited Activities</h4>
         <p>
           You may not access or use the Site for any purpose other than that for which we make the Site available. The Site may not
-          be used in connection with any commercial endeavors except those that are specificalty endorsed or approved by us.
+          be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us.
           As a user of the Site, you agree not to:
           <br>
           1. Systematically retrieve data or other content from the Site to create or compile, directly or indirectly, a collection,
           compilation, database, or directory without written permission from us.
           <br>
-          2. Make any unauthorized use ofthe Site, including collecting usemames and/or email addresses of users by electronic
+          2. Make any unauthorized use of the Site, including collecting usemames and/or email addresses of users by electronic
           or other means for the purpose of sending unsolicited email, or creating user accounts by automated means or under
           false pretenses
           <br>
@@ -117,7 +118,7 @@
           14. Use the Site as part of any effort to compete With us or otherwise use the Site and/or the Contentfor any revenue-
           generating endeavor or commercial enterprise.
           <br>
-          15. Decipher, decompile, disassemble, or reverse engineer any ofthe software comprising or in any way making up a
+          15. Decipher, decompile, disassemble, or reverse engineer any of the software comprising or in any way making up a
           part of the Site.
           <br>
           16. Attempt to bypass any measures of the Site designed to prevent or restrict access to the Site, or any portion of the site.

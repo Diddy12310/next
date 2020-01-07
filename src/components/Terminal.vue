@@ -232,12 +232,10 @@ export default {
 				this.lockdown = input
 				if (this.lockdown == true) {
 					this.$ga.event(this.$root.username, 'locked down')
-					this.$root.feedback = 'Locked down successfully.'
-					this.$root.snackbar = true
+					this.$notify('Locked down successfully')
 				} else {
 					this.$ga.event(this.$root.username, 'ended the lockdown')
-					this.$root.feedback = 'Lockdown ended successfully.'
-					this.$root.snackbar = true
+					this.$notify('Lockdown ended successfully')
 				}
 			}).catch(error => {
 				this.cmdError(`! an error occurred: ${error}`)
@@ -250,12 +248,10 @@ export default {
 				this.global_pnf = input
 				if (this.global_pnf == true) {
 					this.$ga.event(this.$root.username, '404ed')
-					this.$root.feedback = '404 successfully.'
-					this.$root.snackbar = true
+					this.$notify('404 enabled successfully')
 				} else {
 					this.$ga.event(this.$root.username, 'ended the 404')
-					this.$root.feedback = '404 ended successfully.'
-					this.$root.snackbar = true
+					this.$notify('404 disabled successfully')
 				}
 			}).catch(error => {
 				this.cmdError(`! an error occurred: ${error}`)
@@ -332,11 +328,11 @@ export default {
 			})
 		},
 		signOut() {
-			auth.signOut().then(() => {
-				db.collection('users').doc(this.$root.username).update({ isLoggedIn: false })
-				this.$root.feedback = 'Signed out successfully.'
-				this.$root.snackbar = true
-				this.$ga.event(this.$root.username, 'signed out')
+			db.collection('users').doc(this.$root.username).update({ isLoggedIn: false }).then(() => {
+				auth.signOut().then(() => {
+					this.$notify('Signed out successfully')
+					this.$ga.event(this.$root.username, 'signed out')
+				})
 			})
 		},
 		userDelete(username) {

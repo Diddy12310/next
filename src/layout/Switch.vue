@@ -1,30 +1,31 @@
 <template>
   <div class="switch">
-    <Home v-if="$root.switch == 'Home'"/>
-    <Flamechat v-if="$root.switch == 'Flamechat'"/>
-    <Roadmap v-if="$root.switch == 'Roadmap'"/>
-    <Terms v-if="$root.switch == 'Terms'"/>
-    <Drawer v-if="$root.switch == 'Drawer'"/>
-    <Scorecard v-if="$root.switch == 'Scorecard'"/>
-    <Support v-if="$root.switch == 'Support'"/>
-    <News v-if="$root.switch == 'News'"/>
-    <Satellite v-if="$root.switch == 'Satellite'"/>
-    <Asteroid v-if="$root.switch == 'Asteroid'"/>
-    <NetworkStatus v-if="$root.switch == 'NetworkStatus'"/>
-    <LatestMemes v-if="$root.switch == 'LatestMemes'"/>
-    <LatestVines v-if="$root.switch == 'LatestVines'"/>
-    <Contracts v-if="$root.switch == 'Contracts'"/>
-    <Databank v-if="$root.switch == 'Databank'"/>
-    <Relay v-if="$root.switch == 'Relay'"/>
-    <Media v-if="$root.switch == 'Media'"/>
-    <Weather v-if="$root.switch == 'Weather'"/>
-    <Notice v-if="$root.switch == 'Notice'"/>
-    <PageNotFound v-if="$root.switch == 'PageNotFound'"/>
-    <Arcade v-if="$root.switch == 'Games'"/>
-    <Write v-if="$root.switch == 'Write'"/>
-    <Show v-if="$root.switch == 'Show'"/>
-    <Spread v-if="$root.switch == 'Spread'"/>
-    <YTDL v-if="$root.switch == 'YTDL'"/>
+    <v-fade-transition mode="out-in">
+      <Home v-if="$root.switch == 'Home'"/>
+      <Flamechat v-if="$root.switch == 'Flamechat'"/>
+      <Roadmap v-if="$root.switch == 'Roadmap'"/>
+      <Terms v-if="$root.switch == 'Terms'"/>
+      <Drawer v-if="$root.switch == 'Drawer'"/>
+      <Scorecard v-if="$root.switch == 'Scorecard'"/>
+      <News v-if="$root.switch == 'News'"/>
+      <Satellite v-if="$root.switch == 'Satellite'"/>
+      <Asteroid v-if="$root.switch == 'Asteroid'"/>
+      <NetworkStatus v-if="$root.switch == 'NetworkStatus'"/>
+      <LatestMemes v-if="$root.switch == 'LatestMemes'"/>
+      <LatestVines v-if="$root.switch == 'LatestVines'"/>
+      <Contracts v-if="$root.switch == 'Contracts'"/>
+      <Databank v-if="$root.switch == 'Databank'"/>
+      <Relay v-if="$root.switch == 'Relay'"/>
+      <Media v-if="$root.switch == 'Media'"/>
+      <Weather v-if="$root.switch == 'Weather'"/>
+      <Notice v-if="$root.switch == 'Notice'"/>
+      <PageNotFound v-if="$root.switch == 'PageNotFound'"/>
+      <Arcade v-if="$root.switch == 'Games'"/>
+      <Write v-if="$root.switch == 'Write'"/>
+      <Show v-if="$root.switch == 'Show'"/>
+      <Spread v-if="$root.switch == 'Spread'"/>
+      <YTDL v-if="$root.switch == 'YTDL'"/>
+    </v-fade-transition>
   </div>
 </template>
 
@@ -35,7 +36,6 @@ import Roadmap from '@/pages/Company/Roadmap'
 import Terms from '@/pages/Company/Terms'
 import Drawer from '@/pages/Drawer'
 import Scorecard from '@/pages/Scorecard'
-import Support from '@/pages/Company/Support'
 import News from '@/pages/News'
 import Satellite from '@/pages/Satellite'
 import Asteroid from '@/pages/Asteroid'
@@ -60,7 +60,7 @@ import YTDL from '@/pages/YTDL'
 export default {
   name: 'Switch',
   components: {
-		Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, Support, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
+		Home, Flamechat, Roadmap, Terms, Drawer, Scorecard, News, Satellite, Asteroid, NetworkStatus, LatestMemes,
 		LatestVines, Contracts, Databank, Relay, Media, PageNotFound, Terminal, Weather, Notice, Arcade, Write, Show, Spread, YTDL
 	},
   data() {

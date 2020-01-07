@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-card-title>
-        <span>Report a Bug</span>
+				<h3 class="headline mb-0">Report a Bug</h3>
         <v-spacer></v-spacer>
         <v-btn icon @click="$root.bugreport_dialog = false" class="dialog-close-btn">
 					<v-icon>mdi-close</v-icon>
@@ -56,12 +56,10 @@ export default {
           category: this.bug_category,
           importance: this.bug_importance
         }).then(() => {
-          this.$root.feedback = 'Bug report submitted!'
-          this.$root.snackbar = true
+          this.$notify('Bug report submitted')
         })
       } else {
-        this.$root.feedback = 'Fill in all of the fields!'
-        this.$root.snackbar = true
+        this.$notify('Please fill in all of the required fields')
       }
     }
   }

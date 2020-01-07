@@ -7,7 +7,6 @@ import Terms from './pages/Company/Terms'
 import Notice from './pages/Company/Notice'
 import Drawer from './pages/Drawer'
 import Scorecard from './pages/Scorecard'
-import Support from './pages/Company/Support'
 import News from './pages/News'
 import Satellite from './pages/Satellite'
 import Asteroid from './pages/Asteroid'
@@ -71,11 +70,6 @@ export default new Router({
 		// 	path: '/scorecard',
 		// 	name: 'Scorecard',
 		// 	component: Scorecard
-		// },
-		// {
-		// 	path: '/company/support',
-		// 	name: 'Support',
-		// 	component: Support
 		// },
 		// {
 		// 	path: '/paradox',

@@ -26,3 +26,5 @@ docs/_book
 test/
 dist/
 dist_electron/
+
+file_server/
