@@ -3,7 +3,7 @@
     <v-toolbar dense color="cyan darken-2">
       <v-toolbar-title>Media</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-text-field v-model="search" label="Search..." class="mt-7"></v-text-field>
+      <v-text-field color="white" v-model="search" label="Search..." class="mt-7"></v-text-field>
     </v-toolbar>
 
     <v-tabs v-model="tab" centered icons-and-text class="elevation-5" color="white" background-color="cyan darken-2">

@@ -36,7 +36,7 @@
 
 					<v-tooltip bottom open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn v-on="on" v-if="$root.isAdmin" @click="$root.terminalOpen = true" icon class="mx-3" color="grey"><v-icon>mdi-console-line</v-icon></v-btn>
+							<v-btn v-on="on" v-if="$root.isAdmin === true" @click="$root.terminalOpen = true" icon class="mx-3" color="grey"><v-icon>mdi-console-line</v-icon></v-btn>
 						</template>
 						<span>Terminal</span>
 					</v-tooltip>

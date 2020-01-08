@@ -544,8 +544,28 @@
           <h1 class="display-3 font-weight-thin white--text">Write</h1>
         </v-col>
         <v-col cols="12" sm="12">
-          <p class="title font-weight-regular px-6 pt-6">A powerful, yet lightweight word processor. It is the first of our upcoming line of office software and tools.</p>
-          <v-btn color="blue darken-3" href="https://github.com/Paradigm-Dev/write-client/releases"><v-icon left>mdi-windows</v-icon> Download</v-btn>
+          <p class="title font-weight-regular px-6 pt-6">A lightweight, yet powerful word processor.</p>
+          <v-btn color="blue darken-3" class="mb-6" href="https://github.com/Paradigm-Dev/write-client/releases"><v-icon left>mdi-windows</v-icon> Download</v-btn>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12" sm="12" class="green darken-3 py-12 elevation-5">
+          <h1 class="display-3 font-weight-thin white--text">Spread</h1>
+        </v-col>
+        <v-col cols="12" sm="12">
+          <p class="title font-weight-regular px-6 pt-6">A lightweight, yet powerful spreadsheet software.</p>
+          <v-btn color="green darken-3" class="mb-6" disabled>Coming Soon</v-btn>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12" sm="12" class="red darken-3 py-12 elevation-5">
+          <h1 class="display-3 font-weight-thin white--text">Show</h1>
+        </v-col>
+        <v-col cols="12" sm="12">
+          <p class="title font-weight-regular px-6 pt-6">A lightweight, yet powerful presentation software.</p>
+          <v-btn color="red darken-3" class="mb-6" disabled>Coming Soon</v-btn>
         </v-col>
       </v-row>
     </v-container>

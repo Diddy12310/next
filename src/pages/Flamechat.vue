@@ -2,7 +2,7 @@
   <div class="flamechat">
     <v-navigation-drawer permanent mini-variant absolute>
       <v-list rounded>
-        <v-text-field @keypress.enter="addChatroom()" v-model="add_chatroom_id" label="Add..."></v-text-field>
+        <v-text-field class="mt-0" @keypress.enter="addChatroom()" v-model="add_chatroom_id" label="Add..."></v-text-field>
         <v-list-item-group mandatory v-model="current_chatroom_index">
           <v-tooltip right>
             <template v-slot:activator="{ on }">
@@ -31,6 +31,19 @@
             </template>
             <span>{{ chatroom.name }}</span>
           </v-tooltip>
+          <v-tooltip right>
+            <template v-slot:activator="{ on }">
+              <v-list-item :v-ripple="true" v-on="on" :value="-2">
+                <v-list-item-icon>
+                  <v-icon>mdi-message-lock</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+            <span>Direct Messages</span>
+          </v-tooltip>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -56,7 +69,8 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <main v-if="current_chatroom_index !== -1" style="margin-left: 80px;">
+
+    <main v-if="current_chatroom_index > -1" style="margin-left: 80px;">
       <v-toolbar dense :color="current_chatroom.theme ? current_chatroom.theme : 'deep-orange'">
         <v-spacer></v-spacer>
         <v-toolbar-title>{{ current_chatroom.name }}</v-toolbar-title>
@@ -102,6 +116,14 @@
           <v-btn text icon @click="sendChat()"><v-icon>mdi-send</v-icon></v-btn>
         </v-flex>
       </v-layout>
+    </main>
+
+    <main v-if="current_chatroom_index === -2">
+      <v-toolbar dense color="deep-orange">
+        <v-spacer></v-spacer>
+        <v-toolbar-title>Direct Messages</v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-toolbar>
     </main>
 
     <main v-if="current_chatroom_index === -1" style="margin-left: 80px; text-align: center;">
@@ -298,7 +320,7 @@ export default {
             icon: doc.data().icon,
             theme: doc.data().theme
           }
-					let ref = db.collection('flamechat').doc('chatrooms').collection(id).orderBy('timestamp', 'asc')
+					let ref = db.collection('flamechat').doc(id).collection('messages').orderBy('timestamp', 'asc')
 					// this.editing = null
 					// this.editMessage = ''
 					// this.editor = false
@@ -346,7 +368,7 @@ export default {
     },
     sendChat() {
 			if(this.new_message) {
-				db.collection('flamechat').doc('chatrooms').collection(this.current_chatroom.id).add({
+				db.collection('flamechat').doc(this.current_chatroom.id).collection('messages').add({
 					name: this.$root.username,
 					content: this.new_message,
 					color: this.$root.accountColor,
@@ -368,7 +390,7 @@ export default {
 			}
     },
     editChat(id) {
-			db.collection('flamechat').doc('chatrooms').collection(this.current_chatroom.id).doc(this.current_message.id).update({
+			db.collection('flamechat').doc(this.current_chatroom.id).collection('messages').doc(this.current_message.id).update({
 				content: this.edit_message
 			}).then(() => {
 				this.$notify('Message edited successfully.')
@@ -380,7 +402,7 @@ export default {
 			})
 		},
     deleteChat(id) {
-			db.collection('flamechat').doc('chatrooms').collection(this.current_chatroom.id).doc(id).delete().then(() => {
+			db.collection('flamechat').doc(this.current_chatroom.id).collection('messages').doc(id).delete().then(() => {
 				this.$notify('Message deleted successfully')
 				this.$ga.event(this.$root.username, 'deleted a message on ' + this.current_chatroom.name)
 			}).catch(error => {

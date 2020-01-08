@@ -4,7 +4,7 @@
       <v-toolbar-title>Drawer</v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- <input type="file" name="file" id="file" ref="file"> -->
-      <v-file-input prepend-icon="mdi-" class="mt-7" id="file" ref="file" v-model="files" multiple label="Upload"></v-file-input>
+      <v-file-input color="white" prepend-icon="mdi-" class="mt-7" id="file" ref="file" v-model="files" multiple label="Upload"></v-file-input>
       <v-btn @click="uploadFile()" icon><v-icon>mdi-upload</v-icon></v-btn>
       <v-btn icon @click="getFileList()"><v-icon>mdi-refresh</v-icon></v-btn>
     </v-toolbar>
