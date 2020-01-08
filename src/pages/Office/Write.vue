@@ -532,13 +532,19 @@
       </v-card>
     </v-dialog> -->
 
+    <v-toolbar dense color="purple darken-2">
+      <v-toolbar-title>Workshop</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn disabled>Coming Soon</v-btn>
+    </v-toolbar>
+
     <v-container fluid class="text-center pt-0">
       <v-row>
         <v-col cols="12" sm="12" class="blue darken-3 py-12 elevation-5">
           <h1 class="display-3 font-weight-thin white--text">Write</h1>
         </v-col>
         <v-col cols="12" sm="12">
-          <p class="title font-weight-regular px-6 pt-6">A powerful, yet lightweight word processor. It is the first of our upcoming line of office software and tools</p>
+          <p class="title font-weight-regular px-6 pt-6">A powerful, yet lightweight word processor. It is the first of our upcoming line of office software and tools.</p>
           <v-btn color="blue darken-3" href="https://github.com/Paradigm-Dev/write-client/releases"><v-icon left>mdi-windows</v-icon> Download</v-btn>
         </v-col>
       </v-row>

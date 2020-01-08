@@ -3,13 +3,12 @@
     <v-toolbar dense color="teal darken-3">
       <v-toolbar-title>Drawer</v-toolbar-title>
       <v-spacer></v-spacer>
-      <!-- <v-file-input id="file" label="Upload..."></v-file-input> -->
-      <input type="file" name="file" id="file" ref="file">
+      <!-- <input type="file" name="file" id="file" ref="file"> -->
+      <v-file-input prepend-icon="mdi-" class="mt-7" id="file" ref="file" v-model="files" multiple label="Upload"></v-file-input>
       <v-btn @click="uploadFile()" icon><v-icon>mdi-upload</v-icon></v-btn>
       <v-btn icon @click="getFileList()"><v-icon>mdi-refresh</v-icon></v-btn>
     </v-toolbar>
     <v-container>
-      <!-- <v-file-input id="file" ref="file" multiple label="Upload"></v-file-input> -->
       <v-data-table :headers="headers" :items="filelist" :items-per-page="10" class="elevation-1">
         <template v-slot:item.action="{ item }">
           <v-icon small class="light-blue--text mr-2" @click="downloadFile(item)">mdi-download</v-icon>
@@ -61,7 +60,6 @@ export default {
         })
     },
     uploadFile() {
-      this.files = this.$refs.file.files
       let formData = new FormData()
       for (var i = 0; i < this.files.length; i++ ) {
         let file = this.files[i]
@@ -75,13 +73,15 @@ export default {
         }
       ).then(() => {
         console.log('Upload: success')
+        this.files = null
         this.$nextTick(() => { this.getFileList() })
       })
       .catch(error => {
         console.log('Upload: failed', error)
+        this.files = null
         this.$nextTick(() => { this.getFileList() })
       })
-      this.$nextTick(() => { this.getFileList() })
+      // this.$nextTick(() => { this.getFileList() })
     },
     downloadFile(item) {
       window.open(`https://relay.theparadigmdev.com/download/${this.$root.username}/${item.path}`)

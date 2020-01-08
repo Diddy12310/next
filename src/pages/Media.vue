@@ -1,12 +1,13 @@
 <template>
   <div class="media">
-    <v-toolbar dense>
+    <v-toolbar dense color="cyan darken-2">
+      <v-toolbar-title>Media</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-title class="red--text font-weight-light">Rights to the items below are reserved for their owners.</v-toolbar-title>
+      <v-toolbar-title class="grey--text text--lighten-1 font-weight-light">Rights to the items below are reserved for their owners.</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-tabs v-model="tab" centered icons-and-text fixed-tabs class="elevation-5">
+    <v-tabs v-model="tab" centered icons-and-text class="elevation-5" color="white" background-color="cyan darken-2">
       <v-tabs-slider></v-tabs-slider>
 
       <v-tab>

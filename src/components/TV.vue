@@ -68,7 +68,7 @@
           <h1 class="display-3 font-weight-thin white--text">TV Shows</h1>
         </v-col>
         <v-col cols="12" sm="12">
-          <p class="title font-weight-regular px-6 pt-6">Watch your favorite TV shows wherever you are</p>
+          <p class="title font-weight-regular px-6 pt-6">Watch your favorite TV shows wherever you are.</p>
           <v-btn color="indigo darken-3" disabled href="https://github.com/Paradigm-Dev/write-client/releases">Coming Soon</v-btn>
         </v-col>
       </v-row>

@@ -423,7 +423,7 @@ export default {
 				{ icon: 'mdi-folder-multiple', route: 'Drawer', app: 'Drawer' },
 				// { icon: 'mdi-weather-pouring', route: 'Weather', app: 'Weather' },
 				// { icon: 'mdi-gamepad-variant', route: 'Games', app: 'Arcade' },
-				{ icon: 'mdi-file-document-box-multiple', route: 'Write', app: 'Write' },
+				{ icon: 'mdi-file-document-box-multiple', route: 'Workshop', app: 'Workshop' },
 				// { icon: 'mdi-presentation', route: 'Show', app: 'Show' },
 				// { icon: 'mdi-google-spreadsheet', route: 'Spread', app: 'Spread' }
 

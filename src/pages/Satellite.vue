@@ -19,7 +19,7 @@ export default {
 		return {
 			proxy: 'https://cors.io/?',
 			input: 'https://www.bing.com/',
-			output: 'https://cors.io/?https://www.google.com/'
+			output: 'https://cors.io/?https://www.bing.com/'
 		}
 	},
 	methods: {
@@ -31,11 +31,6 @@ export default {
 </script>
 
 <style scoped>
-div.satellite {
-	height: 100%;
-	width: 100%;
-}
-
 iframe {
 	height: calc(100vh - 120px);
 	width: 100%;

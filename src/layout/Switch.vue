@@ -21,7 +21,7 @@
       <Notice v-if="$root.switch == 'Notice'"/>
       <PageNotFound v-if="$root.switch == 'PageNotFound'"/>
       <Arcade v-if="$root.switch == 'Games'"/>
-      <Write v-if="$root.switch == 'Write'"/>
+      <Write v-if="$root.switch == 'Workshop'"/>
       <Show v-if="$root.switch == 'Show'"/>
       <Spread v-if="$root.switch == 'Spread'"/>
       <YTDL v-if="$root.switch == 'YTDL'"/>
