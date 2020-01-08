@@ -1,9 +1,5 @@
 <template>
   <div class="index">
-		<div class="title" style="margin: 24px 0px 12px 0px; text-align: center;">
-			<v-text-field v-model="searchBook" label="Search..." style="width: 300px; margin: auto;"></v-text-field>
-		</div>
-
 		<v-container fluid grid-list-md>
 			<v-layout wrap>
 				<v-flex v-for="(item, index) in filteredBooks" :key="index" xs12 sm6 md4 lg3 xl2>
@@ -61,11 +57,11 @@
 import { db } from '@/firebase'
 
 export default {
-  name: 'Bookshelf',
+	name: 'Bookshelf',
+	props: { search: String },
   data() {
     return {
 			bookshelf: [],
-			searchBook: '',
 			newBookDialog: false,
 			newBookTitle: '',
 			newBookGenre: '',
@@ -115,7 +111,7 @@ export default {
 	computed: {
 		filteredBooks() {
 			return this.bookshelf.filter(book => {
-				return book.title.toLowerCase().includes(this.searchBook.toLowerCase()) || book.author.toLowerCase().includes(this.searchBook.toLowerCase())
+				return book.title.toLowerCase().includes(this.search.toLowerCase()) || book.author.toLowerCase().includes(this.search.toLowerCase())
 			})
 		}
 	},

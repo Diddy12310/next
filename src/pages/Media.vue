@@ -3,8 +3,7 @@
     <v-toolbar dense color="cyan darken-2">
       <v-toolbar-title>Media</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-title class="grey--text text--lighten-1 font-weight-light">Rights to the items below are reserved for their owners.</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-text-field v-model="search" label="Search..." class="mt-7"></v-text-field>
     </v-toolbar>
 
     <v-tabs v-model="tab" centered icons-and-text class="elevation-5" color="white" background-color="cyan darken-2">
@@ -33,19 +32,19 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <books />
+        <books :search="search" />
       </v-tab-item>
 
       <v-tab-item>
-        <movies />
+        <movies :search="search" />
       </v-tab-item>
 
       <v-tab-item>
-        <music />
+        <music :search="search" />
       </v-tab-item>
 
       <v-tab-item>
-        <tv />
+        <tv :search="search" />
       </v-tab-item>
     </v-tabs-items>
   </div>
@@ -67,7 +66,8 @@ export default {
   },
   data() {
     return {
-      tab: 0
+      tab: 0,
+      search: ''
     }
   }
 }

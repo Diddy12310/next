@@ -1,9 +1,5 @@
 <template>
   <div class="index">
-		<div class="title" style="margin: 24px 0px 12px 0px; text-align: center;">
-			<v-text-field v-model="searchMovie" label="Search..." style="width: 300px; margin: auto;"></v-text-field>
-		</div>
-
 		<v-container fluid grid-list-md>
 			<v-layout wrap>
 				<v-flex v-for="(item, index) in filteredMovies" :key="index" xs12 sm6 md4 lg3 xl2>
@@ -73,11 +69,11 @@
 import { db } from '@/firebase'
 
 export default {
-  name: 'Movies',
+	name: 'Movies',
+	props: { search: String },
   data() {
     return {
 			movies: [],
-			searchMovie: '',
 			newMovieDialog: false,
 			newMovieTitle: '',
 			newMovieSummary: '',
@@ -130,7 +126,7 @@ export default {
 	computed: {
 		filteredMovies() {
 			return this.movies.filter(movie => {
-				return movie.title.toLowerCase().includes(this.searchMovie.toLowerCase()) || movie.genre.toLowerCase().includes(this.searchMovie.toLowerCase())
+				return movie.title.toLowerCase().includes(this.search.toLowerCase()) || movie.genre.toLowerCase().includes(this.search.toLowerCase())
 			})
 		}
 	},

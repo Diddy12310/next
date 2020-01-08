@@ -1,9 +1,5 @@
 <template>
   <div class="index">
-		<div class="title" style="margin: 24px 0px 12px 0px; text-align: center;">
-			<v-text-field v-model="searchMusic" label="Search..." style="width: 300px; margin: auto;"></v-text-field>
-		</div>
-
 		<v-container fluid grid-list-md>
 			<v-layout wrap>
 				<v-flex v-for="(item, index) in filteredMusic" :key="index" xs12 sm6 md4 lg3 xl2>
@@ -61,11 +57,11 @@
 import { db } from '@/firebase'
 
 export default {
-  name: 'Music',
+	name: 'Music',
+	props: { search: String },
   data() {
     return {
 			music: [],
-			searchMusic: '',
 			newMusicDialog: false,
 			newMusicTitle: null,
 			newMusicAlbum: null,
@@ -118,7 +114,7 @@ export default {
 	computed: {
 		filteredMusic() {
 			return this.music.filter(item => {
-				if (item.title.toLowerCase().includes(this.searchMusic.toLowerCase()) || item.album.toLowerCase().includes(this.searchMusic.toLowerCase()) || item.author.toLowerCase().includes(this.searchMusic.toLowerCase()) || item.genre.toLowerCase().includes(this.searchMusic.toLowerCase())) {
+				if (item.title.toLowerCase().includes(this.search.toLowerCase()) || item.album.toLowerCase().includes(this.search.toLowerCase()) || item.author.toLowerCase().includes(this.search.toLowerCase()) || item.genre.toLowerCase().includes(this.search.toLowerCase())) {
 					item.loaded = false
 					return item
 				}
