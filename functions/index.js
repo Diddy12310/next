@@ -71,6 +71,16 @@ exports.clearChatroom = functions.https.onCall(data => {
   }
 })
 
+exports.changeUsername = functions.https.onCall(data => {
+  admin.auth().updateUser(data.uid, {
+    email: `${data.new_username}@theparadigmdev.com`
+  }).then(() => {
+    console.log(`${data.old_username} changed their username to ${data.new_username}`)
+  }).catch(error => {
+    console.error(error)
+  })
+})
+
 // function cleanupTokens(response, tokens) {
 //   // For each notification we check if there was an error.
 //     const tokensToRemove = {};

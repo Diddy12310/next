@@ -5,7 +5,6 @@
       <v-spacer></v-spacer>
 			<v-text-field color="white" class="mt-7" label="Web Address" v-model="input"></v-text-field>
 			<v-btn text icon @click="changeURL()"><v-icon>mdi-arrow-right</v-icon></v-btn>
-
     </v-toolbar>
 
 		<iframe id="satellite-embed" crossorigin="anonymous" :src="input"></iframe>

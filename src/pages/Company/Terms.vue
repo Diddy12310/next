@@ -11,6 +11,7 @@
         </v-row>
       </v-container>
       <div style="text-align: left; margin: auto; width: 80vw; padding-top: 20px;">
+        <v-container>
         <p class="grey--text font-weight-light">Last updated: January 1st, 2020</p>
         <h4 class="title pb-2">Agreement to Terms</h4>
         <p>
@@ -635,7 +636,7 @@
           notify you either by prominently posting a notice of such changes or by directly sending you a notification. We encourage you
           to review this privacy policy frequently to be informed of how we are protecting your information.
         </p>
-
+        </v-container>
       </div>
     </div>
 </template>

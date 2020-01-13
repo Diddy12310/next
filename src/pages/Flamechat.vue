@@ -79,7 +79,7 @@
       <div class="messages pt-4" v-chat-scroll="{always: false, smooth: true}">
         <v-layout pb-4 wrap v-for="(message, index) in current_chatroom.messages" :key="index" align-start @mouseover="current_message = message" @click="current_message = message">
           <v-flex xs1 text-center>
-            <v-btn text icon x-large><v-avatar><v-img :src="message.pic"></v-img></v-avatar></v-btn>
+            <v-btn @click="openUsernamePopup(message.name)" text icon x-large><v-avatar><v-img :src="message.pic"></v-img></v-avatar></v-btn>
           </v-flex>
           <v-flex v-if="$root.isAdmin || $root.username == message.name" xs9 pl-2 @dblclick="startEditing(message.content, index)">
             <span class="font-weight-medium text-uppercase title" :style="{ 'color': message.color }">{{ message.name }}</span>
@@ -242,6 +242,34 @@
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
+
+    <v-dialog v-model="profile_popup.open" max-width="450">
+			<v-card>
+				<div v-if="profile_popup.db_ok">
+          <v-list-item>
+            <v-list-item-avatar>
+              <img :src="profile_popup.pic">
+            </v-list-item-avatar>
+            <v-list-item-content style="position: relative; left: -10px;">
+              <v-list-item-title class="headline font-weight-medium text-uppercase" :style="{ 'color': profile_popup.color }">{{ profile_popup.username }}</v-list-item-title>
+              <v-list-item-subtitle>{{ profile_popup.bio }}</v-list-item-subtitle>
+            </v-list-item-content>
+            <v-btn icon @click="closeUsernamePopup()" class="dialog-close-btn">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-list-item>
+					<v-card-text>
+						<img src="@/assets/isAdmin.png" alt="Administrator" class="moonrock-img" v-if="profile_popup.isAdmin" style="height: 25px !important;">
+						<img src="@/assets/asteroid.png" alt="Asteroid" class="moonrock-img" v-if="profile_popup.isAsteroid" style="height: 25px !important;"><br>
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium">{{ profile_popup.moonrocks }}</span>
+					</v-card-text>
+					<v-divider></v-divider>
+					<v-card-actions>
+						<v-btn text @click="$noFunc()" color="accent">Add Friend</v-btn>
+					</v-card-actions>
+				</div>
+			</v-card>
+		</v-dialog>
   </div>
 </template>
 
@@ -267,6 +295,10 @@ export default {
         popup: false,
         name: '',
         theme: ''
+      },
+      profile_popup: {
+        open: false,
+        db_ok: false
       }
     }
   },
@@ -276,6 +308,30 @@ export default {
 		}
 	},
   methods: {
+    openUsernamePopup(username) {
+			this.profile_popup = {
+        open: false,
+        db_ok: false
+      }
+			var usersRef = db.collection('users')
+			usersRef.doc(username).get().then(doc => {
+				this.profile_popup.bio = doc.data().bio,
+				this.profile_popup.color = doc.data().color
+				this.profile_popup.moonrocks = doc.data().moonrocks
+				this.profile_popup.username = username
+				this.profile_popup.isAdmin = doc.data().isAdmin
+				this.profile_popup.isAsteroid = doc.data().isAsteroid
+				this.profile_popup.pic = 'https://relay.theparadigmdev.com/profile-pics/' + doc.data().pic + '.jpg'
+				this.profile_popup.db_ok = true
+			})
+			this.profile_popup.open = true
+		},
+		closeUsernamePopup() {
+			this.profile_popup = {
+        open: false,
+        db_ok: false
+      }
+		},
     showChatroomMenu(e, id, index) {
       db.collection('flamechat').doc(id).get().then(doc => {
         this.chatroom_menu = {
