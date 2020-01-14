@@ -31,5 +31,5 @@ dist_electron/
 relay/node_modules/
 relay/uploads/
 relay/relay/
-relay/explorer/node_modules
-relay/explorer/dist
+relay/rover/node_modules
+relay/rover/dist

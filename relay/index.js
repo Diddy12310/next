@@ -16,7 +16,7 @@ app.use(cors())
 
 
 // EXPLORER
-app.use('/explorer', express.static('./explorer/dist'))
+app.use('/rover', express.static('./rover/dist'))
 
 
 // RELAY
