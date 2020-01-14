@@ -5,7 +5,7 @@
 				<v-flex v-for="(item, index) in filteredMusic" :key="index" xs12 sm6 md4 lg3 xl2>
 					<v-card class="music-item" ripple :disabled="!item.available" @click="$root.music_player = item, $root.music_player.open = true, $root.music_player.playing = true">
 						<v-img :src="item.cover">
-							<v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+							<v-card-title class="fill-height" style="background-image: linear-gradient(transparent, #212121);">
 								<div style="width: 100%;">
 									<h3 class="headline mb-0">{{ item.title }}</h3>
 									<h4 class="body-2 grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.album }}</h4>

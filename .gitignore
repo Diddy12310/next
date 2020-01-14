@@ -27,4 +27,9 @@ test/
 dist/
 dist_electron/
 
-file_server/
+# Relay
+relay/node_modules/
+relay/uploads/
+relay/relay/
+relay/explorer/node_modules
+relay/explorer/dist
