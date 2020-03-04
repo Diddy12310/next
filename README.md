@@ -1,16 +1,19 @@
-# Paradigm
+# flamechat
 
-### Project setup
+## Project setup
 ```
 npm install
 ```
 
-### Serves in a local development server
+### Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles for production and pushes to Firebase
+### Compiles and minifies for production
 ```
 npm run build
 ```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
