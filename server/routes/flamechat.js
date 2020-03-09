@@ -9,6 +9,7 @@ const UserModel = require('../models/User.js')
 // New chatroom
 router.post('/chatroom/new', (req, res) => {
   ChatroomModel.create({
+    _id: mongoose.Types.ObjectId(),
     icon: req.body.icon,
     id: req.body.id,
     name: req.body.name,
@@ -19,7 +20,11 @@ router.post('/chatroom/new', (req, res) => {
     ChatroomModel.findOne({ id: data.id }, async (error, data) => {
       if (!error) {
         var User = await UserModel.findOne({ username: req.body.owner })
-        User.chatrooms.push(data.id)
+        User.chatrooms.push({
+          name: data.name,
+          id: data.id,
+          icon: data.icon
+        })
         await User.save()
         res.json(data)
       }

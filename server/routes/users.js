@@ -54,7 +54,7 @@ router.post('/signin', (req, res, next) => {
       res.json({ msg: 'The username and password does not match an account.' })
     }
     if (!err && user) {
-      user.pic = 'http://localhost:80/relay/profile-pics/' + user.pic
+      user.pic = 'https://relay.theparadigmdev.com/relay/profile-pics/' + user.pic
       res.json(user)
       req.login(user, next)
     }
@@ -89,7 +89,7 @@ router.post('/update', async (req, res) => {
   user.bio = req.body.bio
   user.color = req.body.color
   await user.save()
-  user.pic = 'http://localhost:80/relay/profile-pics/' + user.pic
+  user.pic = 'https://relay.theparadigmdev.com/relay/profile-pics/' + user.pic
   res.json(user)
 })
 
@@ -106,7 +106,7 @@ router.get('/:uid/chatroom/:id/:func', (req, res) => {
             icon: data.icon
           })
           await User.save()
-          User.pic = 'http://localhost:80/relay/profile-pics/' + User.pic
+          User.pic = 'https://relay.theparadigmdev.com/relay/profile-pics/' + User.pic
           res.json(User)
         }
       })
@@ -153,12 +153,13 @@ router.post('/:uid/pic', (req, res) => {
     var User = await UserModel.findOne({ username: req.params.uid })
     User.pic = User.username + '.jpg'
     await User.save()
-    User.pic = 'http://localhost:80/relay/profile-pics/' + User.pic
+    User.pic = 'https://relay.theparadigmdev.com/relay/profile-pics/' + User.pic
     res.json(User)
   })
 })
 
 router.get('/:uid/delete', async (req, res) => {
+  var User = await UserModel.findOne({ username: req.params.uid })
   async function deleteFolderRecursive(path) {
     fs.readdir(path, async (error, files) => {
       if (error) console.error(error)
@@ -175,7 +176,7 @@ router.get('/:uid/delete', async (req, res) => {
         })
       }
       fs.rmdir(path, async error => {
-        fs.unlink(_path.join(__dirname + '/../files/profile-pics/' + req.params.uid + '.jpg'), async error => {
+        fs.unlink(_path.join(__dirname + '/../files/profile-pics/' + User.pic), async error => {
           if (error) console.error(error)
           await UserModel.findOneAndDelete({ username: req.params.uid })
           res.end()

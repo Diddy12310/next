@@ -49,14 +49,17 @@ const UserSchema = new mongoose.Schema({
   rights: {
     admin: Boolean,
     author: Boolean,
-    asteroid: Boolean
+    asteroid: Boolean  
   },
   moonrocks: Number,
   books: [UserBookSchema],
   movies: [UserMovieSchema],
   music: [UserMusicSchema],
   files: [FileSchema],
-  created: String
+  created: String,
+  banned: Boolean,
+  strikes: Number,
+  in: Boolean
 })
 
 const UserModel = mongoose.model('user', UserSchema)

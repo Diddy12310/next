@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcryptjs')
+const moment = require('moment')
 const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
@@ -28,7 +29,7 @@ router.post('/', (req, res) => {
             newUser.username = req.body.username
             newUser.bio = data.bio
             newUser.color = data.color
-            newUser.pic = `https://relay.theparadigmdev.com/relay/profile-pics/${data.pic}.jpg`
+            newUser.pic = `${data.pic}.jpg`
             newUser.chatrooms = []
             data.chatrooms.forEach(chatroom => {
               newUser.chatrooms.push({
@@ -47,10 +48,17 @@ router.post('/', (req, res) => {
             newUser.books = []
             newUser.movies = []
             newUser.music = []
+            newUser.created = moment().format('MM/DD/YYYY [at] HH:MM a')
+            newUser.strikes = 0
+            newUser.banned = false
+            newUser.in = false
+            newUser.files = []
       
             UserModel.create(newUser, (error, doc) => {
-              if (!error) res.json(doc)
-              else {
+              if (!error) {
+                doc.pic = 'https://relay.theparadigmdev.com/relay/profile-pics/' + doc.pic
+                res.json(doc)
+              } else {
                 console.error(error)
                 res.end()
               }
