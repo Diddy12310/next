@@ -23,3 +23,7 @@ yarn-error.log*
 /server/drawer
 /server/files
 /server/profile-pics
+/server/paradigm
+/server/rover
+/server/server.crt
+/server/server.key
