@@ -9,6 +9,7 @@
       <paradox key="paradox" v-else-if="$root.router === 'paradox'" />
       <drawer key="drawer" v-else-if="$root.router === 'drawer'" />
       <media key="media" v-else-if="$root.router === 'media'" />
+      <terminal key="terminal" v-else-if="$root.router === 'terminal'" />
     </v-fade-transition>
   </div>
 </template>
@@ -22,6 +23,7 @@ import Satellite from '@/views/Satellite.vue'
 import Paradox from '@/views/Paradox.vue'
 import Drawer from '@/views/Drawer.vue'
 import Media from '@/views/Media.vue'
+import Terminal from '@/views/Terminal.vue'
 
 export default {
   name: 'Router',
@@ -34,6 +36,7 @@ export default {
     'paradox': Paradox,
     'drawer': Drawer,
     'media': Media,
+    'terminal': Terminal
   }
 }
 </script>

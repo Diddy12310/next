@@ -5,15 +5,19 @@ const RouterConfigSchema = new mongoose.Schema({
   satellite: Boolean,
   paradox: Boolean,
   drawer: Boolean,
-  media: Boolean
+  media: Boolean,
+  home: Boolean
 })
 
 const ConfigSchema = new mongoose.Schema({
   sign_up: Boolean,
   migrate: Boolean,
-  router: RouterConfigSchema
+  shutdown: Boolean,
+  router: RouterConfigSchema,
+  version: String,
+  find: String
 }, { collection: 'config' })
 
-const ConfigModel = mongoose.Model('config', ConfigSchema)
+const ConfigModel = mongoose.model('config', ConfigSchema)
 
 module.exports = ConfigModel
