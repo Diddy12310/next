@@ -80,7 +80,7 @@
           <v-card class="fill-height">
             <v-card-text>
               <p>Chatrooms</p>
-              <v-list>
+              <v-list max-height="390" style="overflow: scroll;">
                 <v-list-item v-if="user.chatrooms.length <= 0">
                   <v-list-item-title class="text-center">You aren't in any chatrooms.</v-list-item-title>
                 </v-list-item>
@@ -178,12 +178,12 @@ export default {
   methods: {
     changePassword() {
       if (this.reset.new === this.reset.verify) {
-        this.$http.post('http://localhost:80/users/signin', {
+        this.$http.post('https://relay.theparadigmdev.com/users/signin', {
           username: this.$root.user.username,
           password: this.reset.current
         }).then(response => {
           if (!response.data.msg) {
-            this.$http.post('http://localhost:80/users/reset', {
+            this.$http.post('https://relay.theparadigmdev.com/users/reset', {
               username: this.$root.user.username,
               password: this.reset.new
             }).then(response => {
@@ -197,7 +197,7 @@ export default {
       }
     },
     saveChanges() {
-      this.$http.post('http://localhost:80/users/update', {
+      this.$http.post('https://relay.theparadigmdev.com/users/update', {
         old: this.$root.user.username,
         username: this.user.username,
         bio: this.user.bio,
@@ -214,7 +214,7 @@ export default {
         let file = this.new_pic[i]
         formData.append('files[' + i + ']', file)
       }
-      this.$http.post(`http://localhost:80/users/${this.$root.user.username}/pic`,
+      this.$http.post(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/pic`,
         formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -232,7 +232,7 @@ export default {
       })
     },
     deleteAccount() {
-      this.$http.get(`http://localhost:80/users/${this.$root.user.username}/delete`).then(response => {
+      this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/delete`).then(response => {
         this.$root.user = false
         this.$root.router = 'auth'
       }).catch(error => console.error(error))

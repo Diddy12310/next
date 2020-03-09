@@ -233,27 +233,27 @@ export default {
     }
   },
   created() {
-    this.$http.get('http://localhost:80/media/books/get').then(response => {
+    this.$http.get('https://relay.theparadigmdev.com/media/books/get').then(response => {
       this.books = response.data
     }).catch(error => console.error(error))
-    this.$http.get('http://localhost:80/media/movies/get').then(response => {
+    this.$http.get('https://relay.theparadigmdev.com/media/movies/get').then(response => {
       this.movies = response.data
     }).catch(error => console.error(error))
-    this.$http.get('http://localhost:80/media/music/get').then(response => {
+    this.$http.get('https://relay.theparadigmdev.com/media/music/get').then(response => {
       this.music = response.data
     }).catch(error => console.error(error))
   },
   methods: {
     // Books
     openBook(book) {
-      this.$http.get(`http://localhost:80/users/${this.$root.user.username}/media/books/${book}/get`).then(response => {
+      this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/books/${book}/get`).then(response => {
         this.current = response.data
         this.current.type = 'book'
         this.current.open = true
       }).catch(error => console.error(error))
     },
     updateUserBook() {
-      this.$http.post(`http://localhost:80/users/${this.$root.user.username}/media/books/${this.current._id}/update`, {
+      this.$http.post(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/books/${this.current._id}/update`, {
         rating: this.current.rating,
         favorite: this.current.favorite
       }).then(response => {
@@ -266,14 +266,14 @@ export default {
 
     // Movies
     openMovie(movie) {
-      this.$http.get(`http://localhost:80/users/${this.$root.user.username}/media/movies/${movie}/get`).then(response => {
+      this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/movies/${movie}/get`).then(response => {
         this.current = response.data
         this.current.type = 'movie'
         this.current.open = true
       }).catch(error => console.error(error))
     },
     updateUserMovie() {
-      this.$http.post(`http://localhost:80/users/${this.$root.user.username}/media/movies/${this.current._id}/update`, {
+      this.$http.post(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/movies/${this.current._id}/update`, {
         rating: this.current.rating,
         favorite: this.current.favorite
       }).then(response => {
@@ -286,14 +286,14 @@ export default {
 
     // Music
     openMusic(id) {
-      this.$http.get(`http://localhost:80/users/${this.$root.user.username}/media/music/${id}/get`).then(response => {
+      this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/music/${id}/get`).then(response => {
         this.current = response.data
         this.current.type = 'music'
         this.current.open = true
       }).catch(error => console.error(error))
     },
     updateUserMusic() {
-      this.$http.post(`http://localhost:80/users/${this.$root.user.username}/media/music/${this.current._id}/update`, {
+      this.$http.post(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/music/${this.current._id}/update`, {
         rating: this.current.rating,
         favorite: this.current.favorite
       }).then(response => {

@@ -48,7 +48,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-dialog v-model="buy_chatroom.popup" max-width="450">
+    <v-dialog v-model="buy_chatroom.popup" max-width="450" style="z-index: 1001;">
 			<v-card>
 				<v-card-title>
 					<h3 class="headline mb-0">Buy a Chatroom</h3>
@@ -86,28 +86,33 @@
 		</v-dialog>
 
     <main v-if="!current_id.includes('user_')">
-      <v-toolbar dense color="deep-orange">
+      <v-toolbar dense :style="{ backgroundColor: current.theme }">
         <v-toolbar-title>Flamechat</v-toolbar-title>
       </v-toolbar>
       <!-- <v-btn @click="createChatroom()">create</v-btn> -->
 
       <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }">
-        <v-list-item @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
-          <v-row>
-            <v-col sm="1" class="text-right">
-              <v-list-item-avatar class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
-            </v-col>
-            <v-col sm="10">
-              <v-list-item-content>
-                <v-list-item-title>{{ message.content }}</v-list-item-title>
-                <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="pl-2">{{ message.timestamp }}</span></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-col>
-            <v-col sm="1">
-              <v-btn small icon color="red" @click="deleteChat(message._id)"><v-icon>mdi-delete</v-icon></v-btn>
-            </v-col>
-          </v-row>
-        </v-list-item>
+        <v-fade-transition group>
+          <v-list-item class="d-none" :key="-1"></v-list-item>
+          <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
+            <v-row>
+              <v-col sm="1" class="text-right">
+                <v-list-item-avatar class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+              </v-col>
+              <v-col sm="10">
+                <v-list-item-content>
+                  <v-list-item-title v-html="message.content"></v-list-item-title>
+                  <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="pl-2">{{ message.timestamp }}</span></v-list-item-subtitle>
+                </v-list-item-content>
+              </v-col>
+              <v-col sm="1">
+                <v-fade-transition>
+                  <v-btn v-if="current_message == message" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                </v-fade-transition>
+              </v-col>
+            </v-row>
+          </v-list-item>
+        </v-fade-transition>
       </v-list>
 
       <v-layout justify-center align-center text-center px-4>
@@ -227,6 +232,7 @@
 
 <script>
 import io from 'socket.io-client'
+import moment from 'moment'
 
 var socket
 export default {
@@ -237,6 +243,7 @@ export default {
       add_chatroom_id: '',
       current_id: 'user_home',
       current_dm: '',
+      current_message: false,
       new_message: '',
       buy_chatroom: {
         popup: false,
@@ -253,12 +260,13 @@ export default {
   methods: {
     async changeChatroom(from, to) {
       if (from) socket.disconnect()
-      socket = await io.connect(`http://localhost:80/flamechat/${to}`)
+      socket = await io.connect(`https://relay.theparadigmdev.com/flamechat/${to}`)
       socket.on('data', data => {
         this.current = data
       })
       socket.on('message', data => {
         this.current.messages.push(data)
+        this.$notify('info', data.content, false)
       })
       socket.on('delete', async id => {
         var index = await this.current.messages.findIndex(message => {
@@ -269,24 +277,25 @@ export default {
       })
     },
     buyChatroom() {
-      this.$http.post('http://localhost:80/flamechat/chatroom/new', {
+      this.$http.post('https://relay.theparadigmdev.com/flamechat/chatroom/new', {
         icon: 'mdi-forum',
         id: this.buy_chatroom_id,
         name: this.buy_chatroom.name,
         owner: this.$root.user.username,
         theme: this.buy_chatroom.theme
       }).then(response => {
-        this.$http.get(`http://localhost:80/users/${this.$root.user.username}/moonrocks/-50`)
-        this.current = response.data
+        this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/moonrocks/-50`)
+        this.$root.user.chatrooms.push(response.data)
+        this.changeChatroom(false, response.data.id)
       }).catch(error => console.error(error))
     },
     getChatroom(id) {
-      this.$http.get(`http://localhost:80/flamechat/chatroom/${id}`).then(response => {
+      this.$http.get(`https://relay.theparadigmdev.com/flamechat/chatroom/${id}`).then(response => {
         if (response.data.__v != this.current.__v) this.current = response.data
       }).catch(error => console.error(error))
     },
     addChatroom() {
-      this.$http.get(`http://localhost:80/users/${this.$root.user.username}/chatroom/${this.add_chatroom_id}/add`).then(response => {
+      this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/chatroom/${this.add_chatroom_id}/add`).then(response => {
         this.$root.user = response.data
       }).catch(error => console.error(error))
     },
@@ -297,22 +306,23 @@ export default {
           username: this.$root.user.username,
           content: this.new_message,
           pic: this.$root.user.pic,
-          timestamp: Date.now()
+          timestamp: moment().format('MM/DD/YYYY [at] HH:MM a')
         })
         this.new_message = ''
       }
     },
-    deleteChat(id) {
-      // this.$http.get(`http://localhost:80/flamechat/chatroom/${this.current_id}/message/${id}/delete`).then(() => {
+    deleteChat(chat) {
+      // this.$http.get(`https://relay.theparadigmdev.com/flamechat/chatroom/${this.current_id}/message/${id}/delete`).then(() => {
       //   this.getChatroom()
       // })
-      socket.emit('delete', id)
+      console.log(chat._id)
+      socket.emit('delete', chat._id)
     }
   },
   mounted() {
     // setInterval(() => {
     //   if (!this.current_id.includes('user_')){
-    //     this.$http.get(`http://localhost:80/flamechat/chatroom/${this.current_id}/inspect/${this.current.__v}`).then(response => {
+    //     this.$http.get(`https://relay.theparadigmdev.com/flamechat/chatroom/${this.current_id}/inspect/${this.current.__v}`).then(response => {
     //       if (response.data.result == true) this.getChatroom()
     //     })
     //   }
@@ -335,7 +345,7 @@ main {
   margin-left: 74px;
 }
 
-.v-sheet, .v-sheet {
+.v-sheet:not(.v-card):not(.v-toolbar) {
   background: none !important;
 }
 </style>

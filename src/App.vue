@@ -41,7 +41,7 @@
 
 					<v-tooltip bottom open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn v-on="on" v-if="$root.user.rights.admin === true" @click="$root.terminal = true" icon class="mx-1" color="grey"><v-icon>mdi-console-line</v-icon></v-btn>
+							<v-btn @click="$root.router = 'terminal'" v-model="$root.router == 'terminal'" v-on="on" v-if="$root.user.rights.admin === true" icon class="mx-1" color="grey darken-2"><v-icon>mdi-console-line</v-icon></v-btn>
 						</template>
 						<span>Terminal</span>
 					</v-tooltip>
@@ -53,7 +53,11 @@
           <v-list-item value="account" class="d-none">
             <v-list-item-title>Account</v-list-item-title>
           </v-list-item>
-          <v-list-item :value="link.path" v-for="link in links" :key="link.path">
+					<v-list-item value="terminal" class="d-none" v-if="$root.user.rights.admin">
+            <v-list-item-title>Terminal</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item v-if="$root.config.router[link.path]" :value="link.path" v-for="link in links" :key="link.path">
             <v-list-item-icon><v-icon>{{ link.icon }}</v-icon></v-list-item-icon>
             <v-list-item-title>{{ link.content }}</v-list-item-title>
           </v-list-item>
@@ -90,7 +94,7 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="red" @click="$root.support_dialog = true">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="red" @click="window.open('mailto:paradigmdevelop@gmail.com')">
 								<v-icon>mdi-lifebuoy</v-icon>
 							</v-btn>
 						</template>
@@ -98,7 +102,7 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="lime" @click="$root.bugreport_dialog = true">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="lime" @click="window.open('https://github.com/Paradigm-Dev/paradigm/issues/new')">
 								<v-icon>mdi-bug</v-icon>
 							</v-btn>
 						</template>
@@ -118,14 +122,14 @@
     </v-navigation-drawer>
 
     <v-snackbar v-model="$root.alert.open" :color="$root.alert.type">
-      {{ $root.alert.text }}
+      <span v-html="$root.alert.text"></span>
       <v-btn v-if="$root.alert.btn" icon @click="$root.alert.open = false">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-snackbar>
 
     <v-content>
-      <router />
+      <router v-if="!$root.config.shutdown" />
     </v-content>
 
 		<!-- <v-bottom-sheet style="z-index: 1000000; height: 100vh;" v-model="$root.music.open">
@@ -174,14 +178,16 @@ export default {
       clock: {
         date: '',
         time: ''
-      }
+			},
+			window: window
     }
   },
   methods: {
     signOut() {
-      this.$http.get(`http://localhost:80/users/signout`).then(() => {
+      this.$http.get(`https://relay.theparadigmdev.com/users/signout`).then(() => {
+				this.$root.socket.emit('logout', this.$root.user)
         this.$root.user = false
-        this.$root.router = 'auth'
+				this.$root.router = 'auth'
       })
     },
     runClock() {
@@ -194,6 +200,12 @@ export default {
   created() {
     if (this.$root.user == null) this.$root.router = 'auth'
 		this.runClock()
+		this.$root.socket.on('connect', () => {
+			if (this.$root.user) this.$root.socket.emit('login', this.$root.user)
+			this.$root.socket.on('config', data => this.$root.config = data)
+			this.$root.socket.on('kick', username => { if (username == this.$root.user.username) this.signOut() })
+			this.$root.socket.on('kill', username => { if (username == this.$root.user.username) window.close() })
+		})
   }
 }
 </script>
@@ -215,14 +227,14 @@ export default {
   transform: translate(-50%, -50%);
 }
 
-* {
+/* * {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
+} */
 
 .clock { margin: 0px !important; }
 </style>

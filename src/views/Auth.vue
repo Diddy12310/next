@@ -6,13 +6,31 @@
       <v-card-text>
         <v-text-field v-model="username" label="Username"></v-text-field>
         <v-text-field v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
-        <p class="text-center">Have an old Paradigm v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
-        <p class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
+        <p v-if="$root.config.migrate" class="text-center">Have an old Paradigm v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
+        <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
       </v-card-text>
 
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="signIn()" text color="blue accent-1">Sign in</v-btn>
+      </v-card-actions>
+    </v-card>
+
+    <v-card width="500" class="mx-auto" style="margin-top: 100px;" v-if="method == 'migrate'">
+      <v-card-title class="display-1 font-weight-light">Migrate</v-card-title>
+
+      <v-card-text>
+        <v-text-field v-model="username" label="Username"></v-text-field>
+        <v-text-field v-model="password" label="Password" type="password"></v-text-field>
+        <v-checkbox label="I understand that this action is irreversible and may lead to data loss" v-model="migrate_confirm" class="mb-5"></v-checkbox>
+        <p class="text-center mb-8 font-italic"><b>Note:</b> Your username and password will remain the same.</p>
+        <p class="text-center">Already have a new Paradigm account? <a @click="method = 'in'">Sign in</a>.</p>
+        <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn :disabled="!migrate_confirm" @click="migrateAccount()" text color="blue accent-1">Migrate</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -84,7 +102,7 @@
         
         <v-divider class="my-8"></v-divider>
 
-        <p class="text-center">Have an old Paradigm v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
+        <p v-if="$root.config.migrate" class="text-center">Have an old Paradigm v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
         <p class="text-center">Already have an account? <a @click="method = 'in'">Sign in</a>.</p>
       </v-card-text>
 
@@ -95,6 +113,10 @@
         <v-btn color="primary" v-if="step === 7" @click="signUp()">Continue</v-btn>
       </v-card-actions>
     </v-card>
+
+    <v-footer app color="rgb(18, 18, 18)">
+      <p class="font-italic text-center pb-0 mb-0 ma-auto grey--text text--darken-2">We can't sell your data; we don't have your data... you do.</p>
+    </v-footer>
   </div>
 </template>
 
@@ -109,64 +131,72 @@ export default {
       password: '',
       method: 'in',
       step: 1,
-      new_user: {}
+      new_user: {},
+      migrate_confirm: false
     }
   },
   methods: {
     signIn() {
-      this.$http.post('http://localhost:80/users/signin', {
+      this.$http.post('https://relay.theparadigmdev.com/users/signin', {
         username: this.username,
         password: this.password
       }).then(response => {
         if (!response.data.msg) {
           this.$root.user = response.data
           this.$root.router = 'home'
+          this.$root.socket.emit('login', response.data)
         } else {
           this.$notify('error', response.data.msg)
         }
       }).catch(error => console.error(JSON.stringify(error)))
     },
     signUp() {
-      if (this.new_user.password === this.new_user.password_confirm && this.new_user.terms === true) {
-        this.$http.post('http://localhost:80/users/register', {
-          username: this.new_user.username,
-          password: this.new_user.password,
-          bio: this.new_user.bio,
-          color: this.new_user.color.hex,
-          pic: 'paradigm.jpg',
-          rights: {
-            admin: false,
-            author: false,
-            asteroid: false
-          },
-          moonrocks: 0
-        }).then(response => {
-          let formData = new FormData()
-          formData.append('files[0]', this.new_user.pic)
-          this.$http.post(`http://localhost:80/users/${this.new_user.username}/pic`,
-            formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            }
-          ).then(response => {
-            this.$root.user = response.data
-            this.$root.router = 'home'
-          })
-          .catch(error => {
-            console.log('Upload: failed', error)
-          })
-        }).catch(error => {
-          console.log(error)
-        })
-      }
+      if (this.new_user.password === this.new_user.password_confirm) {
+        if (this.new_user.terms === true) {
+          var regex = /([0-9A-Za-z_~.-])/gi
+          if (regex.test(this.new_user.username)) {
+            this.$http.post('https://relay.theparadigmdev.com/users/register', {
+              username: this.new_user.username,
+              password: this.new_user.password,
+              bio: this.new_user.bio,
+              color: this.new_user.color.hex,
+              pic: 'paradigm.jpg',
+              rights: {
+                admin: false,
+                author: false,
+                asteroid: false
+              },
+              moonrocks: 0
+            }).then(response => {
+              let formData = new FormData()
+              formData.append('files[0]', this.new_user.pic)
+              this.$http.post(`https://relay.theparadigmdev.com/users/${this.new_user.username}/pic`,
+                formData, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  }
+                }
+              ).then(response => {
+                this.$root.user = response.data
+                this.$root.router = 'home'
+              })
+              .catch(error => {
+                console.log('Upload: failed', error)
+              })
+            }).catch(error => {
+              console.log(error)
+            })
+          } else this.$notify('error', 'Username contains invalid special characters')
+        } else this.$notify('error', 'Read and accept the terms')
+      } else this.$notify('error', 'Passwords do not match')
     },
     migrateAccount() {
-      this.$http.post('http://localhost:80/users/migrate', {
+      this.$http.post('https://relay.theparadigmdev.com/users/migrate', {
         username: this.username,
         password: this.password
       }).then(response => {
-        console.log(response)
+        this.$root.user = response.data
+        this.$root.router = 'home'
       }).catch(error => {
         console.error(error)
       })

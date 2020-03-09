@@ -11,12 +11,12 @@ Vue.use(VueChatScroll)
 
 Vue.config.productionTip = false
 
-var socket = io.connect('http://localhost:80/flamechat/np5u9')
+var socket = io.connect('https://relay.theparadigmdev.com')
 
 Vue.mixin({
   data() {
     return {
-      $url: 'http://localhost:80'
+      $url: 'https://relay.theparadigmdev.com'
     }
   },
   methods: {

@@ -141,7 +141,7 @@ export default {
 	},
 	methods: {
 		getNews() {
-			this.$http.get('http://localhost:80/paradox/get').then(response => {
+			this.$http.get('https://relay.theparadigmdev.com/paradox/get').then(response => {
 				this.news = response.data
 			})
 		},
@@ -158,7 +158,7 @@ export default {
 		},
 		addNews() {
 			if (this.new_news.title && this.new_news.content && this.new_news.published && this.new_news.cover) {
-				this.$http.post('http://localhost:80/paradox/add', {
+				this.$http.post('https://relay.theparadigmdev.com/paradox/add', {
 					title: this.new_news.title,
 					author: this.$root.user.username,
 					content: this.new_news.content,
