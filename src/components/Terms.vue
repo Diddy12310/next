@@ -53,11 +53,8 @@
         information and personal use only. Except as expressly provided in these Terms of Use, no part of the Site and no Content or
         Marks may be copied, reproduced, aggregated, republished, uploaded, posted, publicly displayed, encoded, translated,
         transmitted, distributed, sold, licensed, or otherwise exploited for any commercial purpose whatsoever, without our express
-        prior written permission.
-        <br>
-        Provided that you are eligible to use the Site, you are granted a limited license to access and use the Site and to download or
-        print a copy of any portion of the Content to which you have properly gained access solely for your personal, non-commercial
-        use. We reserve all rights not expressly granted to you in and to the Site, the Content and the Marks.
+        prior written permission. You are NOT granted permission to download, print, screenshot, or photograph a copy of any portion
+        of the Content.
       </p>
       <h4 class="title pb-2">User Representations</h4>
       <p>
@@ -73,8 +70,8 @@
       </p>
       <h4 class="title pb-2">User Registration</h4>
       <p>
-        You may be required to register with the Site. You agree to keep your password confidential and will be responsible for all use
-        of your account and password. We reserve the right to remove, reclaim, or change a username you select if we determine, in
+        You are required to register with the Site. You agree to keep your password confidential and will be responsible for all use
+        of your account and password. We reserve the right to remove, reclaim, or edit your account if we determine, in
         our sole discretion, that such username is inappropriate, obscene, or otherwise objectionable.
       </p>
       <h4 class="title pb-2">Prohibited Activities</h4>
@@ -100,8 +97,8 @@
         <br>
         6. Engage in unauthorized framing of or linking to the Site.
         <br>
-        7. Trick, defraud, or mislead us and other users, especially in any attempt to leam sensitive account information such as
-        user passwords.
+        7. Trick, defraud, or mislead us and other users, especially in any attempt to learn sensitive account information, such as
+        passwords.
         <br>
         8. Make improper use of our support services or submit false reports of abuse or misconduct.
         <br>
@@ -116,7 +113,7 @@
         <br>
         13. Use any information obtained trom the Site in orderto harass, abuse, or harm another person.
         <br>
-        14. Use the Site as part of any effort to compete With us or otherwise use the Site and/or the Contentfor any revenue-
+        14. Use the Site as part of any effort to compete with us or otherwise use the Site and/or the Content for any revenue
         generating endeavor or commercial enterprise.
         <br>
         15. Decipher, decompile, disassemble, or reverse engineer any of the software comprising or in any way making up a
@@ -126,21 +123,21 @@
         <br>
         17. Harass, annoy, intimidate, or threaten any of our employees or agents engaged in providing any portion of the Site to you.
         <br>
-        18 Delete the copyright or other proprietary rights notice from any Content.
+        18. Delete the copyright or other proprietary rights notice from any Content.
         <br>
-        19. Copy or adapt the Site's software, including but not limited to Flash, FHP, HTML, JavaScript, or other code.
+        19. Copy or adapt the Site's software, including but not limited to HTML, JavaScript, CSS, or other code.
         <br>
-        20. Upload or transmit (or attempt to upload orto transmit) viruses, Trojan horses, or other material, including excessive
-        use of capital letters and spamming (continuous posting of repetitive text), that interferes with any pang's uninterrupted
+        20. Upload or transmit (or attempt to upload or to transmit) viruses, Trojan horses, or other material, including excessive
+        use of capital letters and spamming (continuous posting of repetitive text), that interferes with any user's uninterrupted
         use and enjoyment of the Site or modifies, impairs, disrupts, alters, or interferes with the use, features, functions,
         operation, or maintenance of the Site.
         <br>
-        21. Upload or transmit (or attempt to upload orto transmit) any material that acts as a passive or active information
+        21. Upload or transmit (or attempt to upload or to transmit) any material that acts as a passive or active information
         collection or transmission mechanism, including without limitation, clear graphics interchange formats ("gifs'), 1x1 pixels,
         web bugs, cookies, or other similar devices (sometimes referred to as "spyware" or "passive collection mechanisms" or
         "pcms").
         <br>
-        22. Disparage, tamish, or otherwise harm, in our opinion, us and/or the Site.
+        22. Disparage, tarnish, or otherwise harm, in our opinion, us and/or the Site.
         <br>
         23. Use the Site in a manner inconsistent with any applicable laws or regulation.
         <br>
@@ -154,11 +151,11 @@
         and may provide you with the opportunity to create, submit, post, display, transmit, perform, publish, distribute, or broadcast
         content and materials to us or on the Site, including but not limited to text, writings, video, audio, photographs, graphics,
         comments, suggestions, or personal information or other material (collectively, "Contributions"). Contributions may be viewable
-        by other users of the Site and through third-party websites. As such, any Contributions you transmit may be treated as non-
+        by other users of the Site, but not through third-party websites. As such, any Contributions you transmit may be treated as non-
         confidential and non-proprietary. When you create or make available any Contributions, you thereby represent and warrant
         that:
         <br>
-        1. The creation, distribution, transmission, public display, or performance, and the accessing, downloading, or copying of
+        1. The creation, distribution, transmission, public display, or performance, and accessing
         your Contributions do not and will not infringe the proprietary rights, including but not limited to the copyright, patent,
         trademark, trade secret, or moral rights of any third party.
         <br>
@@ -191,7 +188,7 @@
         exploits people under the age of 18 in a sexual or violent manner.
         <br>
         12. Your Contributions do not violate any federal or state law concerning child pornography, or otherwise intended to
-        protect the health or well-being of minors;
+        protect the health or well-being of minors.
         <br>
         13. Your Contributions do not include any offensive comments that are connected to race, national origin, gender, sexual
         preference, or physical handicap.
@@ -204,10 +201,10 @@
       <h4 class="title pb-2">Contribution License</h4>
       <p>
         By posting your Contributions to any part of the Site, you automatically grant, and you represent and warrant that you have the
-        right to grant, to us an unrestricted, unlimited, irrevocable, perpetual, non-exclusive, transferable, royalty-free, fully-paid,
-        worldwide right, and license to host, use, copy, reproduce, disclose, sell, resell, publish, broadcast, retitle, archive, store,
-        cache, publiClY perform, publiClY display, reformat, translate, transmit, excerpt (in Whole or in part), and distribute such
-        Contributions (including, Without limitation, your image and voice) for any purpose, commercial, advertising, or otherwise, and
+        right to grant, to us an unrestricted, unlimited, irrevocable, perpetual, exclusive, non-transferable, royalty-free, fully-paid,
+        worldwide right, and license to host, use, archive, store,
+        cache, reformat, translate, and distribute such
+        Contributions (excluding your image and voice) for any purpose and
         to prepare derivative works of, or incorporate into other works, such Contributions, and grant and authorize sublicenses of the
         foregoing. The use and distribution may occur in any media formats and through any media channels.
         <br>
