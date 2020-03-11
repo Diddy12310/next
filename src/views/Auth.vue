@@ -138,7 +138,7 @@ export default {
   methods: {
     signIn() {
       this.$http.post('https://relay.theparadigmdev.com/users/signin', {
-        username: this.username,
+        username: this.username.toLowerCase(),
         password: this.password
       }).then(response => {
         if (!response.data.msg) {
@@ -156,7 +156,7 @@ export default {
           var regex = /([0-9A-Za-z_~.-])/gi
           if (regex.test(this.new_user.username)) {
             this.$http.post('https://relay.theparadigmdev.com/users/register', {
-              username: this.new_user.username,
+              username: this.new_user.username.toLowerCase(),
               password: this.new_user.password,
               bio: this.new_user.bio,
               color: this.new_user.color.hex,

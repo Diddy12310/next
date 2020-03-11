@@ -1,6 +1,6 @@
 <template>
   <div class="router">
-    <v-fade-transition hide-on-leave group>
+    <v-fade-transition hide-on-leave group v-if="$root.user ? !$root.user.banned : true">
       <home key="home" v-if="$root.router === 'home'" />
       <auth key="auth" v-else-if="$root.router === 'auth'" />
       <account key="account" v-else-if="$root.router === 'account'" />
