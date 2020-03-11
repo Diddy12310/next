@@ -12,7 +12,7 @@
     </v-container>
     <div style="text-align: left; margin: auto; width: 80vw; padding-top: 20px;">
       <v-container>
-      <p class="grey--text font-weight-light">Last updated: March 1st, 2020</p>
+      <p class="grey--text font-weight-light">Last updated: March 11th, 2020</p>
       <h4 class="title pb-2">Agreement to Terms</h4>
       <p>
         These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity

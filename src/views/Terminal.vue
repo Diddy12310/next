@@ -8,7 +8,7 @@
       <p style="font-family: Roboto Mono;" class="pb-0 pt-0 mt-0" v-for="(item, index) in history" :key="index" v-html="item"></p>
     </div>
 
-    <input type="text" placeholder="Enter command..." @keypress.enter="sendCommand()" style="width: 100%;" class="pa-3" v-model="input">
+    <label style="display: flex; padding-left: 16px; font-family: Roboto Mono;">><input @keypress.enter="sendCommand()" placeholder="enter command" autofocus v-model="input"></label>
   </div>
 </template>
 
@@ -50,6 +50,12 @@ export default {
             this.$root.socket.emit('list', 'connections')
           }
           break
+        case 'me':
+          this.$log(JSON.stringify(this.$root.user))
+          break
+        default:
+          this.$log(`command ${this.output[0]} does not exist!`)
+          this.input = ''
       }
       this.input = ''
     },
@@ -60,12 +66,14 @@ export default {
         config: this.$root.config
       }
       socket.emit('config', payload)
+      this.$log(`set config.${query} to ${input}`)
     },
     user(username, key, value) {
       console.log(username, key, value)
       switch (key) {
         case 'ban':
           socket.emit('ban', { username: username, value: this.parseBool(value) })
+          this.$log(`user ${username}.banned set to ${value}`)
           break
         case 'view':
           this.$http.get(`https://relay.theparadigmdev.com/terminal/user/${username}/view`).then(response => {
@@ -79,50 +87,65 @@ export default {
               &nbsp;&nbsp;&nbsp;&nbsp;# rights.admin:     ${ response.data.rights.admin }<br>
               &nbsp;&nbsp;&nbsp;&nbsp;# rights.author:    ${ response.data.rights.author }<br>
               &nbsp;&nbsp;&nbsp;&nbsp;# rights.asteroid:  ${ response.data.rights.asteroid }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# Banned:           ${ response.data.banned }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# Strikes:          ${ response.data.strikes }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# Logged in:        ${ response.data.in }<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;# banned:           ${ response.data.banned }<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;# strikes:          ${ response.data.strikes }<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;# logged in:        ${ response.data.in }<br>
             </p>`)
           })
           break
         case 'rights.admin':
           socket.emit('rights.admin', { username, value: this.parseBool(value) })
+          this.$log(`user ${username}.rights.admin set to ${value}`)
           break
         case 'rights.author':
           socket.emit('rights.author', { username, value: this.parseBool(value) })
+          this.$log(`user ${username}.rights.author set to ${value}`)
           break
         case 'rights.asteroid':
           socket.emit('rights.asteroid', { username, value: this.parseBool(value) })
+          this.$log(`user ${username}.rights.asteroid set to ${value}`)
           break
         case 'strike':
           this.$http.get(`https://relay.theparadigmdev.com/terminal/user/${username}/strike`)
+          this.$log(`user ${username}.strikes incremented by 1`)
           break
         case 'kick':
           socket.emit('kick', username)
+          this.$log(`user ${username} kicked`)
           break
         case 'kill':
           socket.emit('kill', username)
+          this.$log(`user ${username} session killed`)
           break
         case 'delete':
           socket.emit('kick', username)
           this.$http.get(`https://relay.theparadigmdev.com/terminal/user/${username}/delete`)
+          this.$log(`user ${username} deleted`)
           break
         case 'mrocks':
           socket.emit('moonrocks', { username, value: parseInt(value, 10) })
+          this.$log(`user ${username}.moonrocks incremented by ${value}`)
           break
       }
     },
     list(query) {
       this.$http.get(`https://relay.theparadigmdev.com/terminal/list/${query}`).then(response => {
-        this.history.push(response.data.toString())
+        this.$log(response.data.toString())
       })
+    },
+    $log(input) {
+      this.history.push(`<p class="ml-8 grey--text"># ${input}</p>`)
     }
   },
   async created() {
     socket = await io.connect(`https://relay.theparadigmdev.com/terminal`)
 
     this.$root.socket.on('list', async connections => {
-      this.history.push(connections)
+      var data = []
+      connections.forEach(connection => {
+        data.push(`{ username: ${connection.username}, socket: ${connection.socket} }`)
+      })
+      this.$log(data.toString())
     })
   }
 }
@@ -138,6 +161,12 @@ export default {
 }
 
 input {
+	outline: none;
+	font-family: 'Roboto Mono', monospace;
+	width: 100%;
+	height: 100%;
+	padding: 0px 16px 16px 16px;
+  width: 100%;
   position: relative;
   bottom: 0px;
 }

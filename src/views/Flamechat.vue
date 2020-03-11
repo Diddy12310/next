@@ -33,7 +33,7 @@
           <v-divider></v-divider>
           <v-tooltip right v-for="(chatroom, index) in $root.user.chatrooms" :key="index">
             <template v-slot:activator="{ on }">
-              <v-list-item class="my-2" :v-ripple="true" v-on="on" :value="chatroom.id" @click="changeChatroom(current.id, chatroom.id)">
+              <v-list-item class="my-2" :v-ripple="true" v-on="on" :value="chatroom.id" @contextmenu.prevent @click="changeChatroom(current.id, chatroom.id)">
                 <v-list-item-icon>
                   <v-icon>{{ chatroom.icon }}</v-icon>
                 </v-list-item-icon>
@@ -337,7 +337,7 @@ export default {
 
 <style scoped>
 .messages {
-  height: calc(100vh - 182px);
+  height: calc(100vh - 174px);
   overflow-y: auto;
 }
 
