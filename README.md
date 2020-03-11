@@ -1,4 +1,4 @@
-# flamechat
+# Paradigm
 
 ## Project setup
 ```
