@@ -226,7 +226,7 @@
       <h4 class="title pb-2">Submissions</h4>
       <p>
         You acknowledge and agree that any questions, comments, suggestions, ideas, feedback, or other information regarding the
-        Site ("Submissions") provided by you to us are non-confidential and shall become our sole property. We shall own exclusive
+        Site ("Submissions") provided by you to us are confidential and shall remain your sole property. We shall own exclusive
         rights, including all intellectual property rights, and shall be entitled to the unrestricted use and dissemination of these
         Submissions for any lawful purpose, commercial or otherwise, without acknowledgment or compensation to you. You hereby
         waive all moral rights to any such Submissions, and you hereby warrant that any such Submissions are original with you or
