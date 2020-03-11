@@ -89,6 +89,14 @@ io.on('connection', async socket => {
     var User = await UserModel.findOne({ username: data.username })
     User.in = true
     await User.save()
+    setInterval(async () => {
+      var newUser = await UserModel.findOne({ username: data.username })
+      if (newUser != User) {
+        User = newUser
+        User.pic = `https://relay.theparadigmdev.com/relay/profile-pics/${User.pic}`
+        socket.emit('user', User)
+      }
+    }, 2000)
   })
 
   socket.on('logout', async data => {
