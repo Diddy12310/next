@@ -31,7 +31,7 @@
             <v-row>
               <v-col v-for="(book, index) in books" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="book" ripple :disabled="!book.live" @click="openBook(book._id)">
-                  <v-img max-height="530" :src="book.cover">
+                  <v-img max-height="400" :src="book.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
                       <div style="width: 100%;">
                         <h3 class="headline mb-0">{{ book.title }}</h3>
@@ -55,7 +55,7 @@
             <v-row>
               <v-col v-for="(movie, index) in movies" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="movie" ripple :disabled="!movie.live" @click="openMovie(movie._id)">
-                  <v-img max-height="530" :src="movie.cover">
+                  <v-img max-height="400" :src="movie.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
                       <div style="width: 100%;">
                         <h3 class="headline mb-0">{{ movie.title }}</h3>
@@ -187,7 +187,7 @@
           </v-card-actions>
           <!-- </p> -->
           <v-list nav>
-            <v-list-item @click="playSong(song)" v-for="(song, index) in current.songs" :key="index">
+            <v-list-item @click="playSong(song)" v-for="(song, index) in music_songs" :key="index">
               <v-list-item-icon>{{ song.track }}</v-list-item-icon>
               <v-list-item-title>
                 <v-row>
@@ -232,28 +232,35 @@ export default {
       current: {}
     }
   },
+  computed: {
+    music_songs() {
+      if (this.current.songs) {
+        return this.current.songs.sort((a, b) => (parseInt(a.track) > parseInt(b.track)) ? 1 : -1)
+      }
+    }
+  },
   created() {
-    this.$http.get('https://relay.theparadigmdev.com/media/books/get').then(response => {
+    this.$http.get('https://www.theparadigmdev.com/media/books/get').then(response => {
       this.books = response.data
     }).catch(error => console.error(error))
-    this.$http.get('https://relay.theparadigmdev.com/media/movies/get').then(response => {
+    this.$http.get('https://www.theparadigmdev.com/media/movies/get').then(response => {
       this.movies = response.data
     }).catch(error => console.error(error))
-    this.$http.get('https://relay.theparadigmdev.com/media/music/get').then(response => {
+    this.$http.get('https://www.theparadigmdev.com/media/music/get').then(response => {
       this.music = response.data
     }).catch(error => console.error(error))
   },
   methods: {
     // Books
     openBook(book) {
-      this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/books/${book}/get`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/media/books/${book}/get`).then(response => {
         this.current = response.data
         this.current.type = 'book'
         this.current.open = true
       }).catch(error => console.error(error))
     },
     updateUserBook() {
-      this.$http.post(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/books/${this.current._id}/update`, {
+      this.$http.post(`https://www.theparadigmdev.com/users/${this.$root.user.username}/media/books/${this.current._id}/update`, {
         rating: this.current.rating,
         favorite: this.current.favorite
       }).then(response => {
@@ -266,14 +273,14 @@ export default {
 
     // Movies
     openMovie(movie) {
-      this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/movies/${movie}/get`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/media/movies/${movie}/get`).then(response => {
         this.current = response.data
         this.current.type = 'movie'
         this.current.open = true
       }).catch(error => console.error(error))
     },
     updateUserMovie() {
-      this.$http.post(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/movies/${this.current._id}/update`, {
+      this.$http.post(`https://www.theparadigmdev.com/users/${this.$root.user.username}/media/movies/${this.current._id}/update`, {
         rating: this.current.rating,
         favorite: this.current.favorite
       }).then(response => {
@@ -286,14 +293,14 @@ export default {
 
     // Music
     openMusic(id) {
-      this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/music/${id}/get`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/media/music/${id}/get`).then(response => {
         this.current = response.data
         this.current.type = 'music'
         this.current.open = true
       }).catch(error => console.error(error))
     },
     updateUserMusic() {
-      this.$http.post(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/media/music/${this.current._id}/update`, {
+      this.$http.post(`https://www.theparadigmdev.com/users/${this.$root.user.username}/media/music/${this.current._id}/update`, {
         rating: this.current.rating,
         favorite: this.current.favorite
       }).then(response => {
@@ -320,6 +327,10 @@ export default {
 <style scoped>
 .scroll-container {
   height: calc(100vh - 160px);
-  overflow: scroll;
+  overflow-y: auto;
+}
+
+.v-slide-group__prev {
+  display: none !important;
 }
 </style>

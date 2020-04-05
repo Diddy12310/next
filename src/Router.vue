@@ -10,6 +10,7 @@
       <drawer key="drawer" v-else-if="$root.router === 'drawer'" />
       <media key="media" v-else-if="$root.router === 'media'" />
       <terminal key="terminal" v-else-if="$root.router === 'terminal'" />
+      <patriot key="patriot" v-else-if="$root.router === 'patriot'" />
     </v-fade-transition>
   </div>
 </template>
@@ -24,6 +25,7 @@ import Paradox from '@/views/Paradox.vue'
 import Drawer from '@/views/Drawer.vue'
 import Media from '@/views/Media.vue'
 import Terminal from '@/views/Terminal.vue'
+import Patriot from '@/views/Patriot.vue'
 
 export default {
   name: 'Router',
@@ -36,7 +38,8 @@ export default {
     'paradox': Paradox,
     'drawer': Drawer,
     'media': Media,
-    'terminal': Terminal
+    'terminal': Terminal,
+    'patriot': Patriot
   }
 }
 </script>

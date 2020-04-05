@@ -33,7 +33,7 @@
           <v-divider></v-divider>
           <v-tooltip right v-for="(chatroom, index) in $root.user.chatrooms" :key="index">
             <template v-slot:activator="{ on }">
-              <v-list-item class="my-2" :v-ripple="true" v-on="on" :value="chatroom.id" @contextmenu.prevent @click="changeChatroom(current.id, chatroom.id)">
+              <v-list-item class="my-2" :v-ripple="true" v-on="on" :value="chatroom.id" @contextmenu.prevent="showChatroomMenu($event, chatroom.id)" @click="changeChatroom(current.id, chatroom.id)">
                 <v-list-item-icon>
                   <v-icon>{{ chatroom.icon }}</v-icon>
                 </v-list-item-icon>
@@ -48,42 +48,27 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-dialog v-model="buy_chatroom.popup" max-width="450" style="z-index: 1001;">
-			<v-card>
-				<v-card-title>
-					<h3 class="headline mb-0">Buy a Chatroom</h3>
-					<v-spacer></v-spacer>
-					<v-btn icon @click="buy_chatroom.popup = false" class="dialog-close-btn">
-						<v-icon>mdi-close</v-icon>
-					</v-btn>
-				</v-card-title>
-				<v-card-text>
-					<p>Chatroom ID: <span class="font-weight-light">{{ buy_chatroom_id }}</span></p>
-					<v-text-field v-model="buy_chatroom.name" label="Chatroom Name"></v-text-field>
-          <p>Chatroom Color</p>
-          <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3 elevation-0" v-model="buy_chatroom.theme"></v-color-picker>
-          <p>Icon selection is not implemented yet.</p>
-					<div v-if="$root.user.moonrocks > 50">
-						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
-						<p class="green--text">You have enough moonrocks to purchase a chatroom.</p>
-						<p>New Balance: <span class="font-weight-light">{{ $root.user.moonrocks - 50 }} Moonrocks</span></p>
-					</div>
-					<div v-if="$root.user.moonrocks == 50">
-						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
-						<p class="orange--text">You have just enough moonrocks to purchase a chatroom.</p>
-					</div>
-					<div v-if="$root.user.moonrocks < 50">
-						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
-						<p class="red--text">You do <b>not</b> have enough moonrocks to purchase a chatroom.</p>
-					</div>
-				</v-card-text>
-				<v-divider></v-divider>
-				<v-card-actions>
-					<v-btn @click="buyChatroom()" color="warning" text>Buy</v-btn>
-					<v-btn @click="buy_chatroom.popup = false" text color="blue accent-1">Cancel</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog>
+    <v-menu v-model="chatroom_menu.open" v-if="chatroom_menu.open" :position-x="chatroom_menu.x" :position-y="chatroom_menu.y" absolute offset-y>
+      <v-list dense class="chatroom-menu">
+        <v-list-item @click="$noFunc()">
+          <v-list-item-icon><v-icon class="blue--text darken-2">mdi-account-multiple-plus</v-icon></v-list-item-icon>
+          <v-list-item-title class="blue--text darken-2">Invite a friend</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="leaveChatroom()">
+          <v-list-item-icon><v-icon class="deep-orange--text">mdi-exit-run</v-icon></v-list-item-icon>
+          <v-list-item-title class="deep-orange--text">Leave chatroom</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="$noFunc()">
+          <v-list-item-icon><v-icon>mdi-content-copy</v-icon></v-list-item-icon>
+          <v-list-item-title>Copy ID</v-list-item-title>
+        </v-list-item>
+        <v-divider v-if="$root.user.username == chatroom_menu.owner || $root.user.rights.admin == true"></v-divider>
+        <v-list-item @click="delete_verify_popup = true" v-if="$root.user.username == chatroom_menu.owner || $root.user.rights.admin == true">
+          <v-list-item-icon><v-icon class="red--text">mdi-delete</v-icon></v-list-item-icon>
+          <v-list-item-title class="red--text">Delete chatroom</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <main v-if="!current_id.includes('user_')">
       <v-toolbar dense :style="{ backgroundColor: current.theme }">
@@ -106,8 +91,9 @@
                 </v-list-item-content>
               </v-col>
               <v-col sm="1">
-                <v-fade-transition>
-                  <v-btn v-if="current_message == message" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                <v-fade-transition group>
+                  <v-btn key="edit" v-if="current_message == message ? message.username == $root.user.username ? true : current.owner == $root.user.username ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
+                  <v-btn key="delete" v-if="current_message == message ? current.owner == $root.user.username ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
                 </v-fade-transition>
               </v-col>
             </v-row>
@@ -133,6 +119,7 @@
       <v-navigation-drawer absolute style="left: +74px;">
         <v-list nav rounded class="fill-height">
           <v-list-item-group v-model="current_dm">
+            <p class="text-center grey--text font-italic mt-12" v-if="$root.user.friends.length < 1">You have no friends.</p>
             <v-list-item v-for="(friend, index) in $root.user.friends" :key="index" :value="friend">
               <v-list-item-avatar><v-img :src="friend.pic"></v-img></v-list-item-avatar>
               <v-list-item-title class="text-uppercase font-weight-medium" :style="{ color: friend.color }">{{ friend.username }}</v-list-item-title>
@@ -174,7 +161,8 @@
         </v-row>
       </v-container>
       <v-divider width="500" class="mx-auto"></v-divider>
-      <p class="mt-8 px-4">Here are some pre-made chatrooms. Their ID is below the summary. Type that ID in the Add field above the home icon.</p>
+      <p class="mt-8 px-4">Direct messages and friends are coming soon.</p>
+      <!-- <p class="mt-8 px-4">Here are some pre-made chatrooms. Their ID is below the summary. Type that ID in the Add field above the home icon.</p>
       <v-container fluid>
         <v-row>
           <v-col lg="6" xs="12" cols="12">
@@ -225,8 +213,72 @@
             </div>
           </v-col>
         </v-row>
-      </v-container>
+      </v-container> -->
     </main>
+
+    <v-dialog v-model="edit.open" max-width="300" @click:outside="edit = { open: false }">
+      <v-card style="text-align: center">
+        <v-card-title>Edit Chat</v-card-title>
+        <v-card-text>
+          <v-text-field @keypress.enter="editChatSave()" v-model="edit.content" label="Message content"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn text color="red" @click="deleteChat(edit)">Delete</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn text color="blue accent-1" @click="editChatSave()">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="buy_chatroom.popup" max-width="450" style="z-index: 1001;">
+			<v-card>
+				<v-card-title>
+					<h3 class="headline mb-0">Buy a Chatroom</h3>
+					<v-spacer></v-spacer>
+					<v-btn icon @click="buy_chatroom.popup = false" class="dialog-close-btn">
+						<v-icon>mdi-close</v-icon>
+					</v-btn>
+				</v-card-title>
+				<v-card-text>
+					<p>Chatroom ID: <span class="font-weight-light">{{ buy_chatroom_id }}</span></p>
+					<v-text-field v-model="buy_chatroom.name" label="Chatroom Name"></v-text-field>
+          <p>Chatroom Color</p>
+          <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3 elevation-0" v-model="buy_chatroom.theme"></v-color-picker>
+          <p>Icon selection is not ready yet.</p>
+					<div v-if="$root.user.moonrocks > 50">
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
+						<p class="green--text">You have enough moonrocks to purchase a chatroom.</p>
+						<p>New Balance: <span class="font-weight-light">{{ $root.user.moonrocks - 50 }} Moonrocks</span></p>
+					</div>
+					<div v-if="$root.user.moonrocks == 50">
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
+						<p class="orange--text">You have just enough moonrocks to purchase a chatroom.</p>
+					</div>
+					<div v-if="$root.user.moonrocks < 50">
+						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
+						<p class="red--text">You do <b>not</b> have enough moonrocks to purchase a chatroom.</p>
+					</div>
+				</v-card-text>
+				<v-divider></v-divider>
+				<v-card-actions>
+					<v-btn @click="buyChatroom()" color="warning" text>Buy</v-btn>
+					<v-btn @click="buy_chatroom.popup = false" text color="blue accent-1">Cancel</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+
+    <v-dialog v-model="delete_verify_popup" max-width="400">
+			<v-card>
+				<v-card-title><h3 class="headline mb-0">Delete Chatroom</h3></v-card-title>
+				<v-card-text>Are you sure you want to delete this chatroom? A refund will not be issued.</v-card-text>
+				<v-divider></v-divider>
+				<v-card-actions>
+					<v-btn @click="deleteChatroom()" color="red" text>Yes</v-btn>
+					<v-spacer></v-spacer>
+					<v-btn @click="delete_verify_popup = false" color="green" text>Cancel</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
   </div>
 </template>
 
@@ -250,6 +302,9 @@ export default {
         name: '',
         theme: ''
       },
+      edit: { open: false },
+      chatroom_menu: { open: false },
+      delete_verify_popup: false
     }
   },
   computed: {
@@ -260,7 +315,7 @@ export default {
   methods: {
     async changeChatroom(from, to) {
       if (from) socket.disconnect()
-      socket = await io.connect(`https://relay.theparadigmdev.com/flamechat/${to}`)
+      socket = await io.connect(`https://www.theparadigmdev.com/flamechat/${to}`)
       socket.on('data', data => {
         this.current = data
       })
@@ -275,27 +330,43 @@ export default {
         console.log(index)
         this.current.messages.splice(index, 1)
       })
+      socket.on('edit', async data => {
+        var index = await this.current.messages.findIndex(message => {
+          return message._id == data.oldID
+        })
+        console.log(index)
+        this.current.messages[index] = data
+      })
+      socket.on('kill', async () => {
+        this.leaveChatroom()
+      })
     },
     buyChatroom() {
-      this.$http.post('https://relay.theparadigmdev.com/flamechat/chatroom/new', {
+      this.$http.post('https://www.theparadigmdev.com/flamechat/chatroom/new', {
         icon: 'mdi-forum',
         id: this.buy_chatroom_id,
         name: this.buy_chatroom.name,
         owner: this.$root.user.username,
         theme: this.buy_chatroom.theme
       }).then(response => {
-        this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/moonrocks/-50`)
+        this.$root.socket.emit('new_chatroom')
+        this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/moonrocks/-50`)
         this.$root.user.chatrooms.push(response.data)
         this.changeChatroom(false, response.data.id)
+        this.buy_chatroom = {
+          popup: false,
+          name: '',
+          theme: ''
+        }
       }).catch(error => console.error(error))
     },
     getChatroom(id) {
-      this.$http.get(`https://relay.theparadigmdev.com/flamechat/chatroom/${id}`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${id}`).then(response => {
         if (response.data.__v != this.current.__v) this.current = response.data
       }).catch(error => console.error(error))
     },
     addChatroom() {
-      this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/chatroom/${this.add_chatroom_id}/add`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/chatroom/${this.add_chatroom_id}/add`).then(response => {
         this.$root.user = response.data
       }).catch(error => console.error(error))
     },
@@ -306,23 +377,66 @@ export default {
           username: this.$root.user.username,
           content: this.new_message,
           pic: this.$root.user.pic,
-          timestamp: moment().format('MM/DD/YYYY [at] HH:MM a')
+          timestamp: moment().format('MM/DD/YYYY [at] HH:MM a'),
+          edits: 0
         })
         this.new_message = ''
       }
     },
     deleteChat(chat) {
-      // this.$http.get(`https://relay.theparadigmdev.com/flamechat/chatroom/${this.current_id}/message/${id}/delete`).then(() => {
+      // this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${this.current_id}/message/${id}/delete`).then(() => {
       //   this.getChatroom()
       // })
       console.log(chat._id)
       socket.emit('delete', chat._id)
+    },
+    editChat(chat) {
+      this.edit = chat
+      this.edit.open = true
+    },
+    editChatSave() {
+      console.log(this.edit)
+      socket.emit('edit', this.edit)
+      this.edit = { open: false }
+    },
+    showChatroomMenu(e, id) {
+      this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${id}`).then(response => {        
+        this.chatroom_menu = {
+          x: e.clientX,
+          y: e.clientY,
+          open: false,
+          id: id,
+          _id: response.data._id,
+          name: response.data.name,
+          owner: response.data.owner
+        }
+        this.$nextTick(() => {
+          this.chatroom_menu.open = true
+        })
+      })
+    },
+    leaveChatroom() {
+      this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/chatroom/${this.chatroom_menu.id}/leave`).then(response => {
+        this.$root.user = response.data
+        this.current_id = 'user_home'
+        this.current = false
+      })
+    },
+    async deleteChatroom() {
+			if (this.chatroom_menu.owner == this.$root.user.username || this.$root.user.rights.admin == true) {
+        this.changeChatroom(false, this.chatroom_menu.id)
+        socket.emit('kill')
+        this.leaveChatroom()
+        this.$notify('Chatroom deleted')
+        this.delete_verify_popup = false
+        await this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${this.chatroom_menu.id}/delete`)
+      }
     }
   },
   mounted() {
     // setInterval(() => {
     //   if (!this.current_id.includes('user_')){
-    //     this.$http.get(`https://relay.theparadigmdev.com/flamechat/chatroom/${this.current_id}/inspect/${this.current.__v}`).then(response => {
+    //     this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${this.current_id}/inspect/${this.current.__v}`).then(response => {
     //       if (response.data.result == true) this.getChatroom()
     //     })
     //   }
@@ -345,7 +459,12 @@ main {
   margin-left: 74px;
 }
 
-.v-sheet:not(.v-card):not(.v-toolbar) {
+.v-sheet:not(.v-card):not(.v-toolbar):not(.chatroom-menu) {
   background: none !important;
+}
+
+.moonrock-count {
+  position: relative;
+  bottom: 45px;
 }
 </style>

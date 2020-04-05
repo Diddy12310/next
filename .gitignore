@@ -20,10 +20,5 @@ yarn-error.log*
 *.sln
 *.sw?
 
-/server/drawer
-/server/files
-/server/profile-pics
-/server/paradigm
-/server/rover
-/server/server.crt
-/server/server.key
+/src/assets/patriot
+/src/views/Patriot.vue

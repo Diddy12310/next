@@ -114,7 +114,7 @@ export default {
 						this.close()
 						break
 					case 'help':
-						this.cmdLog(`<a href="https://relay.theparadigmdev.com/terminal.html">https://relay.theparadigmdev.com/terminal.html</a>`)
+						this.cmdLog(`<a href="https://www.theparadigmdev.com/terminal.html">https://www.theparadigmdev.com/terminal.html</a>`)
 						break
 					case 'set':
 						switch (this.cmd_output[1]) {

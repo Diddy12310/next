@@ -1,11 +1,12 @@
 <template>
-  <div class="auth">
+  <div class="auth pa-3">
     <v-card width="500" class="mx-auto" style="margin-top: 100px;" v-if="method == 'in'">
       <v-card-title class="display-1 font-weight-light">Sign in</v-card-title>
 
       <v-card-text>
         <v-text-field v-model="username" label="Username"></v-text-field>
         <v-text-field v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
+        <p class="text-center">Can't remember your password? Well, you're SOL.</p>
         <p v-if="$root.config.migrate" class="text-center">Have an old Paradigm v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
         <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
       </v-card-text>
@@ -73,7 +74,7 @@
               <v-layout row wrap>
                 <v-flex v-for="pic in $root.avail_profile_pics" :key="pic" xs4>
                   <v-card @click="$root.accountPic == pic ? $root.accountPic = null : $root.accountPic = pic" v-ripple flat tile>
-                    <v-img :src="`https://relay.theparadigmdev.com/relay/profile-pics/${pic}.jpg`" width="150px" height="150px"></v-img>
+                    <v-img :src="`https://www.theparadigmdev.com/relay/profile-pics/${pic}.jpg`" width="150px" height="150px"></v-img>
                     <v-fade-transition>
                       <v-overlay v-if="$root.accountPic == pic" absolute>
                         <v-icon>mdi-check</v-icon>
@@ -114,8 +115,8 @@
       </v-card-actions>
     </v-card>
 
-    <v-footer app color="rgb(18, 18, 18)">
-      <p class="font-italic text-center pb-0 mb-0 ma-auto grey--text text--darken-2">We can't sell your data; we don't have your data... you do.</p>
+    <v-footer app color="rgb(18, 18, 18)" v-if="$vuetify.breakpoint.smAndUp">
+      <p class="font-italic text-center pb-0 mb-0 ma-auto"><a @click="$root.view.quote = true" class="grey--text text--darken-2">Here's to the crazy ones...</a></p>
     </v-footer>
   </div>
 </template>
@@ -137,7 +138,7 @@ export default {
   },
   methods: {
     signIn() {
-      this.$http.post('https://relay.theparadigmdev.com/users/signin', {
+      this.$http.post('https://www.theparadigmdev.com/users/signin', {
         username: this.username.toLowerCase(),
         password: this.password
       }).then(response => {
@@ -145,6 +146,8 @@ export default {
           this.$root.user = response.data
           this.$root.router = 'home'
           this.$root.socket.emit('login', response.data)
+          var cookie = this.$getCookie('buggy_dialog')
+          if (!cookie) this.$root.view.buggy_dialog = true
         } else {
           this.$notify('error', response.data.msg)
         }
@@ -155,7 +158,7 @@ export default {
         if (this.new_user.terms === true) {
           var regex = /([0-9A-Za-z_~.-])/gi
           if (regex.test(this.new_user.username)) {
-            this.$http.post('https://relay.theparadigmdev.com/users/register', {
+            this.$http.post('https://www.theparadigmdev.com/users/register', {
               username: this.new_user.username.toLowerCase(),
               password: this.new_user.password,
               bio: this.new_user.bio,
@@ -170,7 +173,7 @@ export default {
             }).then(response => {
               let formData = new FormData()
               formData.append('files[0]', this.new_user.pic)
-              this.$http.post(`https://relay.theparadigmdev.com/users/${this.new_user.username}/pic`,
+              this.$http.post(`https://www.theparadigmdev.com/users/${this.new_user.username}/pic`,
                 formData, {
                   headers: {
                     'Content-Type': 'multipart/form-data'
@@ -191,7 +194,7 @@ export default {
       } else this.$notify('error', 'Passwords do not match')
     },
     migrateAccount() {
-      this.$http.post('https://relay.theparadigmdev.com/users/migrate', {
+      this.$http.post('https://www.theparadigmdev.com/users/migrate', {
         username: this.username,
         password: this.password
       }).then(response => {

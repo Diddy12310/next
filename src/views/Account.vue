@@ -4,126 +4,129 @@
       <v-toolbar-title>Account</v-toolbar-title>
     </v-toolbar>
 
-    <v-container>
-      <div class="text-center my-12">
-        <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img :src="user.pic"></v-img></v-avatar><br>
-        <input type="text" @input="change = true" class="display-2 font-weight-medium text-uppercase mt-8" style="text-align: center;" :style="{ color: user.color }" v-model="user.username">
-        <p class="grey--text text--darken-1 font-weight-light">{{ user._id }}</p>
-        <div class="text-center mt-3" style="width: 250px; margin: auto;">
-          <img height="50" width="50" src="@/assets/moonrocks.png">
-          <span style="position: relative; top: -18px;" class="font-weight-light">{{ user.moonrocks }}</span>
+    <div style="height: calc(100vh - 112px); overflow: auto;">
+      <v-container>
+        <div class="text-center my-12">
+          <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img :src="user.pic"></v-img></v-avatar><br>
+          <input type="text" @input="change = true" class="display-2 font-weight-medium text-uppercase mt-8" style="text-align: center; width: auto;" :style="{ color: user.color }" v-model="user.username">
+          <p class="grey--text text--darken-1 font-weight-light">{{ user._id }}</p>
+          <div class="text-center mt-3" style="width: 250px; margin: auto;">
+            <img height="50" width="50" src="@/assets/moonrocks.png">
+            <span style="position: relative; top: -18px;" class="font-weight-light">{{ user.moonrocks }}</span>
+          </div>
         </div>
-      </div>
-      <v-row>
-        <v-col sm="6">
-          <v-card class="fill-height">
-            <v-card-text>
-              <p>Settings</p>
-              <v-text-field @input="change = true" v-model="user.bio" label="Bio"></v-text-field>
-              <p>Color</p>
-              <v-color-picker @input="change = true" v-model="user.color" class="elevation-0"></v-color-picker>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col sm="6">
-          <v-card class="fill-height">
-            <v-card-text>
-              <p>Rights</p>
-              <v-simple-table>
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">Key</th>
-                      <th class="text-left">Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Administrator</td>
-                      <td>{{ user.rights.admin }}</td>
-                    </tr>
-                    <tr>
-                      <td>Author</td>
-                      <td>{{ user.rights.author }}</td>
-                    </tr>
-                    <tr>
-                      <td>Asteroid</td>
-                      <td>{{ user.rights.asteroid }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+        <v-row>
+          <v-col sm="6">
+            <v-card class="fill-height">
+              <v-card-text>
+                <p>Settings</p>
+                <v-text-field @input="change = true" v-model="user.bio" label="Bio"></v-text-field>
+                <p>Color</p>
+                <v-color-picker @input="change = true" v-model="user.color" class="elevation-0"></v-color-picker>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col sm="6">
+            <v-card class="fill-height">
+              <v-card-text>
+                <p>Rights</p>
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">Key</th>
+                        <th class="text-left">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Administrator</td>
+                        <td>{{ user.rights.admin }}</td>
+                      </tr>
+                      <tr>
+                        <td>Author</td>
+                        <td>{{ user.rights.author }}</td>
+                      </tr>
+                      <tr>
+                        <td>Asteroid</td>
+                        <td>{{ user.rights.asteroid }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
 
-      <v-row>
-        <v-col sm="6">
-          <v-card class="fill-height">
-            <v-card-text>
-              <p>Friends</p>
-              <v-list>
-                <v-list-item v-if="user.friends.length <= 0">
-                  <v-list-item-title class="text-center">You have no friends.</v-list-item-title>
-                </v-list-item>
+        <v-row>
+          <v-col sm="6">
+            <v-card class="fill-height">
+              <v-card-text>
+                <p>Friends</p>
+                <v-list>
+                  <v-list-item v-if="user.friends.length <= 0">
+                    <v-list-item-title class="text-center">You have no friends.</v-list-item-title>
+                  </v-list-item>
 
-                <v-list-item v-for="(friend, index) in user.friends" :key="index">
-                  <v-list-item-avatar><v-img :src="friend.pic"></v-img></v-list-item-avatar>
-                  <v-list-item-title class="text-uppercase font-weight-medium" :style="{ color: friend.color }">{{ friend.username }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col sm="6">
-          <v-card class="fill-height">
-            <v-card-text>
-              <p>Chatrooms</p>
-              <v-list max-height="390" style="overflow: scroll;">
-                <v-list-item v-if="user.chatrooms.length <= 0">
-                  <v-list-item-title class="text-center">You aren't in any chatrooms.</v-list-item-title>
-                </v-list-item>
+                  <v-list-item v-for="(friend, index) in user.friends" :key="index">
+                    <v-list-item-avatar><v-img :src="friend.pic"></v-img></v-list-item-avatar>
+                    <v-list-item-title class="text-uppercase font-weight-medium" :style="{ color: friend.color }">{{ friend.username }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col sm="6">
+            <v-card class="fill-height">
+              <v-card-text>
+                <p>Chatrooms</p>
+                <v-list max-height="390" style="overflow: auto;">
+                  <v-list-item v-if="user.chatrooms.length <= 0">
+                    <v-list-item-title class="text-center">You aren't in any chatrooms.</v-list-item-title>
+                  </v-list-item>
 
-                <v-list-item v-for="(chatroom, index) in user.chatrooms" :key="index">
-                  <v-list-item-icon><v-icon>{{ chatroom.icon }}</v-icon></v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ chatroom.name }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ chatroom.id }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+                  <v-list-item v-for="(chatroom, index) in user.chatrooms" :key="index">
+                    <v-list-item-icon><v-icon>{{ chatroom.icon }}</v-icon></v-list-item-icon>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ chatroom.name }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ chatroom.id }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
 
-      <v-row>
-        <v-col sm="6">
-          <v-card class="fill-height">
-            <v-card-text>
-              <p>Change Password</p>
-              <v-text-field type="password" label="Current Password" v-model="reset.current"></v-text-field>
-              <v-text-field type="password" label="New Password" v-model="reset.new"></v-text-field>
-              <v-text-field @keypress.enter="changePassword()" type="password" label="Verify New Password" v-model="reset.verify"></v-text-field>
-            </v-card-text>
+        <v-row>
+          <v-col sm="6">
+            <v-card class="fill-height">
+              <v-card-text>
+                <p>Change Password</p>
+                <v-text-field type="password" label="Current Password" v-model="reset.current"></v-text-field>
+                <v-text-field type="password" label="New Password" v-model="reset.new"></v-text-field>
+                <v-text-field @keypress.enter="changePassword()" type="password" label="Verify New Password" v-model="reset.verify"></v-text-field>
+              </v-card-text>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn :disabled="!reset.current || !reset.new || !reset.verify || reset.new !== reset.verify" text color="blue accent-1" @click="changePassword()">Change</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-        <v-col sm="6">
-          <v-card class="fill-height">
-            <v-card-text class="text-center">
-              <p class="text-left">Danger Zone</p>
-              <v-btn style="margin-top: 95px;" color="red" @click="delete_dialog = true">Delete Account</v-btn>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn :disabled="!reset.current || !reset.new || !reset.verify || reset.new !== reset.verify" text color="blue accent-1" @click="changePassword()">Change</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+          <v-col sm="6">
+            <v-card class="fill-height">
+              <v-card-text class="text-center">
+                <p class="text-left">Danger Zone</p>
+                <v-btn style="margin-top: 95px;" color="red" @click="delete_dialog = true">Delete Account</v-btn>
+              </v-card-text>
+              <v-btn fab absolute top right x-small text v-if="$root.user.rights.patriot" @click="$root.router = 'patriot'"></v-btn>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
 
     <v-dialog v-model="uploader" max-width="300">
       <v-card>
@@ -155,8 +158,6 @@
       </v-card>
     </v-dialog>
 
-    <p class="text-center mb-12 mt-8 grey--text">Account created on {{ user.created }}</p>
-
     <v-btn style="z-index: 1000;" large fab absolute top right color="blue" v-if="change == true" @click="saveChanges()"><v-icon>mdi-content-save</v-icon></v-btn>
   </div>
 </template>
@@ -173,17 +174,18 @@ export default {
       uploader: false,
       delete_dialog: false,
       delete_verify: false,
+      console: console
     }
   },
   methods: {
     changePassword() {
       if (this.reset.new === this.reset.verify) {
-        this.$http.post('https://relay.theparadigmdev.com/users/signin', {
+        this.$http.post('https://www.theparadigmdev.com/users/signin', {
           username: this.$root.user.username,
           password: this.reset.current
         }).then(response => {
           if (!response.data.msg) {
-            this.$http.post('https://relay.theparadigmdev.com/users/reset', {
+            this.$http.post('https://www.theparadigmdev.com/users/reset', {
               username: this.$root.user.username,
               password: this.reset.new
             }).then(response => {
@@ -197,7 +199,7 @@ export default {
       }
     },
     saveChanges() {
-      this.$http.post('https://relay.theparadigmdev.com/users/update', {
+      this.$http.post('https://www.theparadigmdev.com/users/update', {
         old: this.$root.user.username,
         username: this.user.username,
         bio: this.user.bio,
@@ -214,7 +216,7 @@ export default {
         let file = this.new_pic[i]
         formData.append('files[' + i + ']', file)
       }
-      this.$http.post(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/pic`,
+      this.$http.post(`https://www.theparadigmdev.com/users/${this.$root.user.username}/pic`,
         formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -232,7 +234,7 @@ export default {
       })
     },
     deleteAccount() {
-      this.$http.get(`https://relay.theparadigmdev.com/users/${this.$root.user.username}/delete`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/delete`).then(response => {
         this.$root.user = false
         this.$root.router = 'auth'
       }).catch(error => console.error(error))

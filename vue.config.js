@@ -7,5 +7,5 @@ module.exports = {
   devServer: {
     https: true
   },
-  outputDir: path.join(__dirname, '/server/paradigm')
+  outputDir: path.join(__dirname, '/../relay/paradigm')
 }
