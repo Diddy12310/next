@@ -1,19 +1,16 @@
 # Paradigm
 
-## Project setup
+## Package installation
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compile for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Compile and minify for production
 ```
 npm run build
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
