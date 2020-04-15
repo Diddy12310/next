@@ -120,7 +120,7 @@ export default {
 				timestamp: timestamp,
 				cover: cover,
 				content: content,
-				timestamp: moment().format('MM/DD/YYYY [at] HH:MM a')
+				timestamp: moment().format('MM/DD/YYYY [at] H:MM a')
 			}
 			this.dialog = true
 		},
@@ -132,7 +132,7 @@ export default {
 					content: this.new_news.content,
 					live: this.new_news.live,
 					cover: this.new_news.cover,
-					timestamp: moment().format('MM/DD/YYYY [at] HH:MM a')
+					timestamp: moment().format('MM/DD/YYYY [at] H:MM a')
 				}).then(response => {
 					this.getNews()
 					this.new_news = {
