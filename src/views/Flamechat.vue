@@ -76,7 +76,7 @@
       </v-toolbar>
       <!-- <v-btn @click="createChatroom()">create</v-btn> -->
 
-      <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }">
+      <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.mdAndUp">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -86,7 +86,7 @@
               </v-col>
               <v-col sm="10">
                 <v-list-item-content>
-                  <v-list-item-title v-html="message.content"></v-list-item-title>
+                  <p v-html="message.content"></p>
                   <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="pl-2">{{ message.timestamp }}</span></v-list-item-subtitle>
                 </v-list-item-content>
               </v-col>
@@ -97,6 +97,36 @@
                 </v-fade-transition>
               </v-col>
             </v-row>
+          </v-list-item>
+        </v-fade-transition>
+      </v-list>
+
+      <v-list class="messages" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndDown">
+        <v-fade-transition group>
+          <v-list-item class="d-none" :key="-1"></v-list-item>
+          <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
+            <v-container fluid>
+              <v-row no-gutters align="end">
+                <v-col sm="6">
+                  <v-list-item-avatar class="ma-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                </v-col>
+                <v-col sm="6" class="text-right">
+                  <v-fade-transition group>
+                    <v-btn key="edit" v-if="current_message == message ? message.username == $root.user.username ? true : current.owner == $root.user.username ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
+                    <v-btn key="delete" v-if="current_message == message ? current.owner == $root.user.username ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                  </v-fade-transition>
+                </v-col>
+              </v-row>
+
+              <v-row no-gutters>
+                <v-col sm="12">
+                  <v-list-item-content>
+                    <p v-html="message.content"></p>
+                    <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="pl-2">{{ message.timestamp }}</span></v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-list-item>
         </v-fade-transition>
       </v-list>
@@ -152,7 +182,8 @@
       <v-container fluid class="text-center pt-0 mb-4">
         <v-row>
           <v-col sm="12" class="deep-orange py-12 elevation-5">
-            <h1 class="display-3 font-weight-thin white--text">Welcome to Flamechat!</h1>
+            <h1 class="display-3 font-weight-thin white--text hidden-sm-and-down">Welcome to Flamechat!</h1>
+            <h1 class="display-2 font-weight-thin white--text hidden-md-and-up">Welcome to Flamechat!</h1>
           </v-col>
           <v-col sm="12">
             <p class="title font-weight-regular px-6 pt-6">Select a chatroom from the left.</p>
@@ -377,7 +408,7 @@ export default {
           username: this.$root.user.username,
           content: this.new_message,
           pic: this.$root.user.pic,
-          timestamp: moment().format('MM/DD/YYYY [at] HH:MM a'),
+          timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
           edits: 0
         })
         this.new_message = ''
