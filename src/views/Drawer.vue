@@ -8,7 +8,15 @@
       <v-btn icon @click="getFileList()"><v-icon>mdi-refresh</v-icon></v-btn>
     </v-toolbar>
     <v-container>
-      <v-data-table no-data-text="No files found" :headers="headers" :items="filelist" :items-per-page="10" class="elevation-1">
+      <v-data-table no-data-text="No files found" :headers="headers" :items="filelist" :items-per-page="10" class="elevation-1" dense v-if="$vuetify.breakpoint.xsOnly">
+        <template v-slot:item.action="{ item }">
+          <v-icon small class="light-blue--text mr-2" @click="downloadFile(item._id)">mdi-download</v-icon>
+          <v-icon small class="red--text mr-2" @click="deleteFile(item._id)">mdi-delete</v-icon>
+          <v-icon small class="white--text" @click="startRename(item)">mdi-textbox</v-icon>
+        </template>
+      </v-data-table>
+
+      <v-data-table no-data-text="No files found" :headers="headers" :items="filelist" :items-per-page="10" class="elevation-1" v-else>
         <template v-slot:item.action="{ item }">
           <v-icon small class="light-blue--text mr-2" @click="downloadFile(item._id)">mdi-download</v-icon>
           <v-icon small class="red--text mr-2" @click="deleteFile(item._id)">mdi-delete</v-icon>
@@ -30,7 +38,7 @@
 
 <script>
 export default {
-  name: 'App',
+  name: 'Drawer',
   data() {
     return {
       headers: [
