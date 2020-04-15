@@ -205,15 +205,17 @@ export default {
   },
   methods: {
     signOut() {
-      this.$http.get(`https://www.theparadigmdev.com/users/signout`).then(() => {
-				this.$root.socket.emit('logout', this.$root.user)
-        this.$root.user = false
-				this.$root.router = 'auth'
-				this.$root.view = {
-					terms: false,
-					buggy_dialog: false
-				}
-      })
+			if (this.$root.user) {
+				this.$http.get(`https://www.theparadigmdev.com/users/signout`).then(() => {
+					this.$root.socket.emit('logout', this.$root.user)
+					this.$root.user = false
+					this.$root.router = 'auth'
+					this.$root.view = {
+						terms: false,
+						buggy_dialog: false
+					}
+				})
+			}
     },
     runClock() {
 			var today = new Date()
