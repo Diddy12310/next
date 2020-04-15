@@ -1,9 +1,9 @@
 <template>
   <v-app style="overflow: auto;">
-		<v-app-bar app style="background: linear-gradient(135deg, #162fa1 0%, #50336e 100%); z-index: 100;">
-			<v-app-bar-nav-icon v-if="$root.user && !$root.user.banned" @click="$root.drawer = !$root.drawer"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
+		<v-app-bar app style="background: linear-gradient(135deg, #162fa1 0%, #50336e 100%); z-index: 100;" v-if="$root.user">
+			<v-app-bar-nav-icon v-if="!$root.user.banned" @click="$root.drawer = !$root.drawer"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
-				<img :class="{ 'true': $root.user, 'false': !$root.user || $root.user.banned }" @click="$root.user ? $root.router = 'home' : $root.router = 'auth'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" class="logo">
+				<img :class="{ 'true': $root.user, 'false': $root.user.banned }" @click="$root.user ? $root.router = 'home' : $root.router = 'auth'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" class="logo">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-btn text icon v-if="$root.music.playing" class="mr-2"><v-icon>mdi-music-note</v-icon></v-btn>
@@ -138,10 +138,6 @@
 				<p class="text-center pt-6 title font-weight-light grey--text">Try refreshing your page.</p>
 			</div>
 		</v-content>
-
-		<!-- <v-bottom-sheet style="z-index: 1000000; height: 100vh;" v-model="$root.music.open">
-			<music-player :autoPlay="true" :file="$root.music.file" />
-		</v-bottom-sheet> -->
 
 		<v-slide-y-reverse-transition>
 			<v-footer app style="z-index: 1001;" class="pa-0" v-show="$root.music.open" v-if="$root.music.playing">

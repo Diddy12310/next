@@ -58,7 +58,7 @@ new Vue({
     return {
       user: null,
       config: {},
-      version: version,
+      version,
       router: 'home',
       drawer: true,
       alert: {

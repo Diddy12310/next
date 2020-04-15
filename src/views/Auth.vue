@@ -1,13 +1,13 @@
 <template>
-  <div class="auth pa-3">
-    <v-card width="500" class="mx-auto" style="margin-top: 100px;" v-if="method == 'in'">
+  <div class="auth pa-3" v-if="$root.config != {}">
+    <v-card width="500" class="mx-auto" style="margin-top: 150px;" v-if="method == 'in'">
       <v-card-title class="display-1 font-weight-light">Sign in</v-card-title>
 
       <v-card-text>
         <v-text-field v-model="username" label="Username"></v-text-field>
         <v-text-field v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
-        <p class="text-center">Can't remember your password? Well, you're SOL.</p>
-        <p v-if="$root.config.migrate" class="text-center">Have an old Paradigm v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
+        <p v-if="$root.config.reset" class="text-center">Can't remember your password? Oh well.</p>
+        <p v-if="$root.config.migrate" class="text-center">Have an old v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
         <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
       </v-card-text>
 
@@ -115,9 +115,9 @@
       </v-card-actions>
     </v-card>
 
-    <v-footer app color="rgb(18, 18, 18)" v-if="$vuetify.breakpoint.smAndUp">
+    <!-- <v-footer app color="rgb(18, 18, 18)" v-if="$vuetify.breakpoint.smAndUp">
       <p class="font-italic text-center pb-0 mb-0 ma-auto"><a @click="$root.view.quote = true" class="grey--text text--darken-2">Here's to the crazy ones...</a></p>
-    </v-footer>
+    </v-footer> -->
   </div>
 </template>
 
