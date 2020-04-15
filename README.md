@@ -1,4 +1,5 @@
 # Paradigm
+The public repository for Paradigm.
 
 ## Package installation
 ```

@@ -1,18 +1,5 @@
 <template>
   <v-app>
-    <!-- System toolbar -->
-    <v-system-bar app window style="-webkit-app-region: drag;" class="grey darken-4">
-		  <img src="./assets/logo.png" height="18" style="margin-right: 4px;">
-      <span>Terminal</span>
-      <v-spacer></v-spacer>
-      <div style="-webkit-app-region: no-drag;">
-        <v-icon @click="minimize()" v-ripple class="appbar-icon">mdi-minus</v-icon>
-        <v-icon @click="maximized ? unmaximize() : maximize()" v-ripple class="appbar-icon">mdi-crop-square</v-icon>
-        <v-icon @click="close()" v-ripple class="appbar-icon">mdi-close</v-icon>
-      </div>
-    </v-system-bar>
-
-		<!-- Site content -->
 		<v-content style="background-color: #212121;">
 			<div v-if="user.signed_in" v-chat-scroll id="output" style="height: calc(100vh - 76px) !important; overflow: scroll; padding: 0px 16px;">
 				<p style="font-family: Roboto Mono;" class="pb-0 pt-0 mt-0" v-for="(item, index) in history" :key="index" v-html="item"></p>
@@ -37,15 +24,10 @@
 </template>
 
 <script>
-const remote = require('electron').remote
-import { db, auth, func, app } from './firebase'
-
 export default {
-	name: 'app',
+	name: 'Terminalold',
 	data() {
 		return {
-			win: remote.getCurrentWindow(),
-      maximized: remote.getCurrentWindow().isMaximized(),
       cmd_input: '',
       cmd_output: '',
       cmd_class: 'white--text',
@@ -77,34 +59,6 @@ export default {
 		})
 	},
   methods: {
-    close() {
-      this.win.close()
-    },
-    maximize() {
-      this.win.maximize()
-      this.maximized = remote.getCurrentWindow().isMaximized()
-    },
-    unmaximize() {
-      this.win.unmaximize()
-      this.maximized = remote.getCurrentWindow().isMaximized()
-    },
-    minimize() {
-      this.win.minimize()
-		},
-		signIn() {
-			auth.signInWithEmailAndPassword(this.user.name + '@theparadigmdev.com', this.user.password).then(() => {
-				var username = this.user.name
-				db.collection('users').doc(this.user.name).get().then(doc => {
-					var data = doc.data()
-					if (data.isAdmin !== true) {
-						this.signOut()
-						this.user_is_not_admin = true
-						this.username_saved = false
-					}
-					this.user.name = username
-				})
-			}).catch(error => console.error(error))
-		},
     sendCmd() {
 			this.history.push('> ' + this.cmd_input)
 			this.cmd_output = this.cmd_input.split(' ')
@@ -404,13 +358,6 @@ export default {
 			db.collection('users').doc(input).get().then(doc => {
 				if (doc != null) return true
 				if (doc == null) return false
-			})
-		},
-		signOut() {
-			db.collection('users').doc(this.user.name).update({ isLoggedIn: false }).then(() => {
-				auth.signOut().then(() => {
-					this.history = []
-				})
 			})
 		},
 		userDelete(username) {
