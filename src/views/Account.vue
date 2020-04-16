@@ -183,12 +183,12 @@ export default {
   methods: {
     changePassword() {
       if (this.reset.new === this.reset.verify) {
-        this.$http.post('https://www.theparadigmdev.com/users/signin', {
+        this.$http.post('https://www.theparadigmdev.com/api/users/signin', {
           username: this.$root.user.username,
           password: this.reset.current
         }).then(response => {
           if (!response.data.msg) {
-            this.$http.post('https://www.theparadigmdev.com/users/reset', {
+            this.$http.post('https://www.theparadigmdev.com/api/users/reset', {
               username: this.$root.user.username,
               password: this.reset.new
             }).then(response => {
@@ -202,7 +202,7 @@ export default {
       }
     },
     saveChanges() {
-      this.$http.post('https://www.theparadigmdev.com/users/update', {
+      this.$http.post('https://www.theparadigmdev.com/api/users/update', {
         old: this.$root.user.username,
         username: this.user.username,
         bio: this.user.bio,
@@ -219,7 +219,7 @@ export default {
         let file = this.new_pic[i]
         formData.append('files[' + i + ']', file)
       }
-      this.$http.post(`https://www.theparadigmdev.com/users/${this.$root.user.username}/pic`,
+      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/pic`,
         formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -237,7 +237,7 @@ export default {
       })
     },
     deleteAccount() {
-      this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/delete`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/delete`).then(response => {
         this.$root.user = false
         this.$root.router = 'auth'
       }).catch(error => console.error(error))

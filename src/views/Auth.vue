@@ -141,7 +141,7 @@ export default {
   },
   methods: {
     signIn() {
-      this.$http.post('https://www.theparadigmdev.com/users/signin', {
+      this.$http.post('https://www.theparadigmdev.com/api/users/signin', {
         username: this.username.toLowerCase(),
         password: this.password
       }).then(response => {
@@ -161,7 +161,7 @@ export default {
         if (this.new_user.terms === true) {
           var regex = /([0-9A-Za-z_~.-])/gi
           if (regex.test(this.new_user.username)) {
-            this.$http.post('https://www.theparadigmdev.com/users/register', {
+            this.$http.post('https://www.theparadigmdev.com/api/users/register', {
               username: this.new_user.username.toLowerCase(),
               password: this.new_user.password,
               bio: this.new_user.bio,
@@ -176,7 +176,7 @@ export default {
             }).then(response => {
               let formData = new FormData()
               formData.append('files[0]', this.new_user.pic)
-              this.$http.post(`https://www.theparadigmdev.com/users/${this.new_user.username}/pic`,
+              this.$http.post(`https://www.theparadigmdev.com/api/users/${this.new_user.username}/pic`,
                 formData, {
                   headers: {
                     'Content-Type': 'multipart/form-data'
@@ -197,7 +197,7 @@ export default {
       } else this.$notify('error', 'Passwords do not match')
     },
     migrateAccount() {
-      this.$http.post('https://www.theparadigmdev.com/users/migrate', {
+      this.$http.post('https://www.theparadigmdev.com/api/users/migrate', {
         username: this.username,
         password: this.password
       }).then(response => {

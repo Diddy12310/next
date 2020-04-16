@@ -56,7 +56,7 @@ export default {
   methods: {
     getFileList() {
       this.filelist = []
-      this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/drawer/list`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/drawer/list`).then(response => {
         this.filelist = response.data
       }).catch(error => {
         console.error('File list: failed')
@@ -68,7 +68,7 @@ export default {
         let file = this.files[i]
         formData.append('files[' + i + ']', file)
       }
-      this.$http.post(`https://www.theparadigmdev.com/drawer/${this.$root.user.username}/upload`,
+      this.$http.post(`https://www.theparadigmdev.com/api/drawer/${this.$root.user.username}/upload`,
         formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -85,10 +85,10 @@ export default {
       })
     },
     downloadFile(id) {
-      window.open(`https://www.theparadigmdev.com/drawer/${this.$root.user.username}/download/${id}`)
+      window.open(`https://www.theparadigmdev.com/api/drawer/${this.$root.user.username}/download/${id}`)
     },
     deleteFile(id) {
-      this.$http.delete(`https://www.theparadigmdev.com/drawer/${this.$root.user.username}/delete/${id}`).then(response => {
+      this.$http.delete(`https://www.theparadigmdev.com/api/drawer/${this.$root.user.username}/delete/${id}`).then(response => {
         this.getFileList()
       }).catch(error => {
         this.getFileList()
@@ -100,7 +100,7 @@ export default {
       this.rename.open = true
     },
     renameFile(id) {
-      this.$http.post(`https://www.theparadigmdev.com/drawer/${this.$root.user.username}/rename/${id}`, {
+      this.$http.post(`https://www.theparadigmdev.com/api/drawer/${this.$root.user.username}/rename/${id}`, {
         name: this.rename.name
       }).then(response => {
         this.rename = { open: false }

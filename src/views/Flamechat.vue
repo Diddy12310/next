@@ -373,7 +373,7 @@ export default {
       })
     },
     buyChatroom() {
-      this.$http.post('https://www.theparadigmdev.com/flamechat/chatroom/new', {
+      this.$http.post('https://www.theparadigmdev.com/api/flamechat/chatroom/new', {
         icon: 'mdi-forum',
         id: this.buy_chatroom_id,
         name: this.buy_chatroom.name,
@@ -381,7 +381,7 @@ export default {
         theme: this.buy_chatroom.theme
       }).then(response => {
         this.$root.socket.emit('new_chatroom')
-        this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/moonrocks/-50`)
+        this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/moonrocks/-50`)
         this.$root.user.chatrooms.push(response.data)
         this.changeChatroom(false, response.data.id)
         this.buy_chatroom = {
@@ -392,12 +392,12 @@ export default {
       }).catch(error => console.error(error))
     },
     getChatroom(id) {
-      this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${id}`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${id}`).then(response => {
         if (response.data.__v != this.current.__v) this.current = response.data
       }).catch(error => console.error(error))
     },
     addChatroom() {
-      this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/chatroom/${this.add_chatroom_id}/add`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/chatroom/${this.add_chatroom_id}/add`).then(response => {
         this.$root.user = response.data
       }).catch(error => console.error(error))
     },
@@ -431,7 +431,7 @@ export default {
       this.edit = { open: false }
     },
     showChatroomMenu(e, id) {
-      this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${id}`).then(response => {        
+      this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${id}`).then(response => {        
         this.chatroom_menu = {
           x: e.clientX,
           y: e.clientY,
@@ -447,7 +447,7 @@ export default {
       })
     },
     leaveChatroom() {
-      this.$http.get(`https://www.theparadigmdev.com/users/${this.$root.user.username}/chatroom/${this.chatroom_menu.id}/leave`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/chatroom/${this.chatroom_menu.id}/leave`).then(response => {
         this.$root.user = response.data
         this.current_id = 'user_home'
         this.current = false
@@ -460,7 +460,7 @@ export default {
         this.leaveChatroom()
         this.$notify('Chatroom deleted')
         this.delete_verify_popup = false
-        await this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${this.chatroom_menu.id}/delete`)
+        await this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.chatroom_menu.id}/delete`)
       }
     }
   },

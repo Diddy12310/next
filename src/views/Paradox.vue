@@ -108,7 +108,7 @@ export default {
 	},
 	methods: {
 		getNews() {
-			this.$http.get('https://www.theparadigmdev.com/paradox/get').then(response => {
+			this.$http.get('https://www.theparadigmdev.com/api/paradox/get').then(response => {
 				this.news = response.data
 			})
 		},
@@ -125,7 +125,7 @@ export default {
 		},
 		addNews() {
 			if (this.new_news.title && this.new_news.content && this.new_news.cover) {
-				this.$http.post('https://www.theparadigmdev.com/paradox/add', {
+				this.$http.post('https://www.theparadigmdev.com/api/paradox/add', {
 					title: this.new_news.title,
 					author: this.$root.user.username,
 					content: this.new_news.content,
