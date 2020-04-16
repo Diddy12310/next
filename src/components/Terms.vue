@@ -12,7 +12,7 @@
     </v-container>
     <div style="text-align: left; margin: auto; width: 80vw; padding-top: 20px;">
       <v-container>
-      <p class="grey--text font-weight-light">Last updated: March 11th, 2020</p>
+      <p class="grey--text font-weight-light">Last updated: April 16th, 2020</p>
       <h4 class="title pb-2">Agreement to Terms</h4>
       <p>
         These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity
@@ -440,7 +440,7 @@
               <v-divider></v-divider>
       <h4 class="headline pb-2 pt-3">Privacy Policy</h4>
       <p>
-        Thank you for choosing to be part of our community at Paradigm Development, Inc. ("Company", "we", "us", or "our"). We are
+        Thank you for choosing to be part of our community at Paradigm Development ("Company", "we", "us", or "our"). We are
         committed to protecting your personal information and your right to privacy. If you have any questions or concerns about our
         policy, or our practices with regards to your personal information, please contact us at aidanliddy@outlook.com.
         <br>
@@ -450,7 +450,7 @@
         time to read through it carefully, as it is important. If there are any terms in this privacy policy that you do not agree with,
         please discontinue use of our Sites and our services.
         <br>
-        This privacy policy applies to all information collected through our website (such as www.theparadigmdev.ga), and/or any
+        This privacy policy applies to all information collected through our website (such as www.theparadigmdev.com), and/or any
         related services, sales, marketing or events (we refer to them collectively in this privacy policy as the "Sites").
         <br><br>
         <b>Please read this privacy policy carefully as it will help you make informed decisions about sharing your personal
