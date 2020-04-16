@@ -4,7 +4,7 @@
       <v-toolbar-title style="font-family: Roboto;">Terminal</v-toolbar-title>
     </v-toolbar>
 
-    <div v-chat-scroll id="output" style="height: calc(100vh - 160px) !important; overflow: scroll; padding: 0px 16px;">
+    <div v-chat-scroll id="output" style="height: calc(100vh - 160px) !important; overflow: auto; padding: 0px 16px;">
       <p style="font-family: Roboto Mono;" class="pb-0 pt-0 mt-0" v-for="(item, index) in history" :key="index" v-html="item"></p>
     </div>
 

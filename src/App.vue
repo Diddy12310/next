@@ -60,8 +60,8 @@
 						<v-list-item-title>Patriot</v-list-item-title>
 					</v-list-item>
 
-					<v-list-item v-if="$root.config.router[link.path]" :value="link.path" v-for="link in links" :key="link.path">
-						<v-list-item-icon><v-icon>{{ link.icon }}</v-icon></v-list-item-icon>
+					<v-list-item :disabled="link.disabled" v-if="$root.config.router[link.path]" :value="link.path" v-for="link in links" :key="link.path">
+						<v-list-item-icon><v-icon :color="link.disabled ? 'grey' : 'white'">{{ link.icon }}</v-icon></v-list-item-icon>
 						<v-list-item-title>{{ link.content }}</v-list-item-title>
 					</v-list-item>
 				</v-list-item-group>
@@ -199,13 +199,14 @@ export default {
   data() {
     return {
       links: [
-        { icon: 'mdi-home', content: 'Home', path: 'home' },
-        { icon: 'mdi-message', content: 'Flamechat', path: 'flamechat' },
-        { icon: 'mdi-web', content: 'Satellite', path: 'satellite' },
-        { icon: 'mdi-newspaper', content: 'The Paradox', path: 'paradox' },
-        { icon: 'mdi-folder-multiple', content: 'Drawer', path: 'drawer' },
-        { icon: 'mdi-play', content: 'Media', path: 'media' },
-        // { icon: 'mdi-hospital', content: 'Coronavirus', path: 'corona' }
+        { icon: 'mdi-home', content: 'Home', path: 'home', disabled: false },
+        { icon: 'mdi-message', content: 'Flamechat', path: 'flamechat', disabled: false },
+        { icon: 'mdi-web', content: 'Satellite', path: 'satellite', disabled: false },
+        { icon: 'mdi-newspaper', content: 'The Paradox', path: 'paradox', disabled: false },
+        { icon: 'mdi-folder-multiple', content: 'Drawer', path: 'drawer', disabled: false },
+        { icon: 'mdi-play', content: 'Media', path: 'media', disabled: false },
+        { icon: 'mdi-pencil', content: 'Write', path: 'write', disabled: true },
+        { icon: 'mdi-virus', content: 'Coronavirus', path: 'corona', disabled: true }
       ],
       clock: {
         date: '',
