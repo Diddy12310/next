@@ -4,7 +4,7 @@
       <v-card-title class="display-1 font-weight-light">Sign in</v-card-title>
 
       <v-card-text>
-        <v-text-field v-model="username" label="Username"></v-text-field>
+        <v-text-field v-model="username" label="Username" ref="username_field"></v-text-field>
         <v-text-field v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
         <p v-if="$root.config.reset" class="text-center">Can't remember your password? Oh well.</p>
         <p v-if="$root.config.migrate" class="text-center">Have an old v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
@@ -135,6 +135,9 @@ export default {
       new_user: {},
       migrate_confirm: false
     }
+  },
+  mounted() {
+    this.$refs.username_field.$el.children[0].focus()
   },
   methods: {
     signIn() {

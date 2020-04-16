@@ -9,7 +9,13 @@
 
 <script>
 export default {
-  name: 'Home'
+	name: 'Home',
+	created() {
+		this.$root.view.corona = true
+	},
+	beforeDestroy() {
+		this.$root.view.corona = false
+	}
 }
 </script>
 

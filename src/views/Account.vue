@@ -8,7 +8,7 @@
       <v-container>
         <div class="text-center my-12">
           <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img :src="user.pic"></v-img></v-avatar><br>
-          <input type="text" @input="change = true" class="display-2 font-weight-medium text-uppercase mt-8" style="text-align: center; width: auto;" :style="{ color: user.color }" v-model="user.username">
+          <input type="text" @input="change = true" class="display-2 font-weight-medium text-uppercase mt-8" style="text-align: center; width: 100%;" :style="{ color: user.color }" v-model="user.username">
           <p class="grey--text text--darken-1 font-weight-light">{{ user._id }}</p>
           <div class="text-center mt-3" style="width: 250px; margin: auto;">
             <img height="50" width="50" src="@/assets/moonrocks.png">
@@ -66,7 +66,7 @@
                 <p>Friends</p>
                 <v-list>
                   <v-list-item v-if="user.friends.length <= 0">
-                    <v-list-item-title class="text-center">You have no friends.</v-list-item-title>
+                    <v-list-item-title class="text-center grey--text font-italic">You have no friends.</v-list-item-title>
                   </v-list-item>
 
                   <v-list-item v-for="(friend, index) in user.friends" :key="index">
@@ -104,7 +104,7 @@
             <v-card class="fill-height">
               <v-card-text>
                 <p>Change Password</p>
-                <v-text-field type="password" label="Current Password" v-model="reset.current"></v-text-field>
+                <v-text-field style="min-width: 320px;" type="password" label="Current Password" v-model="reset.current"></v-text-field>
                 <v-text-field type="password" label="New Password" v-model="reset.new"></v-text-field>
                 <v-text-field @keypress.enter="changePassword()" type="password" label="Verify New Password" v-model="reset.verify"></v-text-field>
               </v-card-text>
@@ -119,12 +119,15 @@
             <v-card class="fill-height">
               <v-card-text class="text-center">
                 <p class="text-left">Danger Zone</p>
-                <v-btn style="margin-top: 95px;" color="red" @click="delete_dialog = true">Delete Account</v-btn>
+                <v-btn style="margin: 95px 0px 95px 0px;" color="red" @click="delete_dialog = true">Delete Account</v-btn>
               </v-card-text>
               <v-btn fab absolute top right x-small text v-if="$root.user.rights.patriot" @click="$root.router = 'patriot'"></v-btn>
             </v-card>
           </v-col>
         </v-row>
+
+        <p class="grey--text font-italic pt-8 pb-4 text-center">Your account was created on {{ $root.user.created }}.</p>
+
       </v-container>
     </div>
 
@@ -193,7 +196,7 @@ export default {
               this.user = response.data
             })
           } else {
-            this.$notify('error', 'The current password entered ')
+            this.$notify('error', 'Your current password is incorrect')
           }
         }).catch(error => console.error(JSON.stringify(error)))
       }
