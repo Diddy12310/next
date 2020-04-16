@@ -11,6 +11,7 @@
       <media key="media" v-else-if="$root.router === 'media'" />
       <terminal key="terminal" v-else-if="$root.router === 'terminal'" />
       <patriot key="patriot" v-else-if="$root.router === 'patriot'" />
+      <!-- <corona key="corona" v-else-if="$root.router === 'corona'" /> -->
     </v-fade-transition>
   </div>
 </template>
@@ -26,6 +27,7 @@ import Drawer from '@/views/Drawer.vue'
 import Media from '@/views/Media.vue'
 import Terminal from '@/views/Terminal.vue'
 import Patriot from '@/views/Patriot.vue'
+import Corona from '@/views/Corona.vue'
 
 export default {
   name: 'Router',
@@ -39,7 +41,8 @@ export default {
     'drawer': Drawer,
     'media': Media,
     'terminal': Terminal,
-    'patriot': Patriot
+    'patriot': Patriot,
+    'corona': Corona
   }
 }
 </script>
