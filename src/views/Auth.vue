@@ -90,7 +90,8 @@
 
           <v-window-item :value="6">
             <v-checkbox label="I have read and accept the Terms and Conditions" v-model="new_user.terms"></v-checkbox>
-            <v-btn @click="$root.view.terms = true" text class="mt-4 blue-grey--text text--lighten-2">View Terms</v-btn><br>
+            <v-btn @click="window.open('https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md')" text class="mt-4 blue-grey--text text--lighten-2">View Terms</v-btn><br>
+            <!-- <v-btn @click="$root.view.terms = true" text class="mt-4 blue-grey--text text--lighten-2">View Terms</v-btn><br> -->
             <span class="caption grey--text text--darken-1">
               Please read and accept the Terms and Conditions.
             </span>
@@ -133,7 +134,8 @@ export default {
       method: 'in',
       step: 1,
       new_user: {},
-      migrate_confirm: false
+      migrate_confirm: false,
+      window
     }
   },
   mounted() {

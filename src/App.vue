@@ -103,9 +103,17 @@
 						</template>
 						<span>Report a bug</span>
 					</v-tooltip>
-					<v-tooltip top open-delay="1000">
+					<!-- <v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn small v-on="on" class="my-2 mr-2" icon color="light-blue darken-3" @click="$root.view.terms = true">
+								<v-icon>mdi-feather</v-icon>
+							</v-btn>
+						</template>
+						<span>Terms of Service</span>
+					</v-tooltip> -->
+					<v-tooltip top open-delay="1000">
+						<template v-slot:activator="{ on }">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="light-blue darken-3" @click="window.open('https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md')">
 								<v-icon>mdi-feather</v-icon>
 							</v-btn>
 						</template>
@@ -203,7 +211,7 @@ export default {
         date: '',
         time: ''
 			},
-			window: window
+			window
     }
   },
   methods: {

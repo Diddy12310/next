@@ -281,7 +281,7 @@
         to perform maintenance related to the Site, resulting in interruptions, delays, or errors. We reserve the right to change, revise,
         update, suspend, discontinue, or othewise modify the Site at any time or for any reason without notice to you. You agree that
         we have no liability whatsoever for any loss, damage, or inconvenience caused by your inability to access or use the Site
-        during any downtime or discontinuance of the Site. Nothing in these Terms of LJse will be construed to obligate us to maintain
+        during any downtime or discontinuance of the Site. Nothing in these Terms of Use will be construed to obligate us to maintain
         and support the Site or to supply any corrections, updates, or releases in connection therewith.
       </p>
       <h4 class="title pb-2">Governing Law</h4>
@@ -303,7 +303,7 @@
       <p>
         If the Parties are unable to resolve a Dispute through informal negotiations; the Dispute (except those Disputes expressly
         excluded below) will be finally and exclusively resolved by binding arbitration. YOU UNDERSTAND THAT WITHOUT THIS
-        PROVISION YOU WOULD HAVE THE RIGHT TO SUE IN COURT AND HAVE A JURY TRIAC The arbitration shall be
+        PROVISION YOU WOULD HAVE THE RIGHT TO SUE IN COURT AND HAVE A JURY TRIAL The arbitration shall be
         commenced and conducted under the Commercial Arbitration Rules of the American Arbitration Association ("AAA") and;
         where appropriate; the AAA's Supplementary Procedures for Consumer Related Disputes ("AAA Consumer Rules"), both of
         which are available at the AAA website wwwadrorg. Your arbitration fees and your share of arbitrator compensation shall be
@@ -437,12 +437,12 @@
         them. you hereby waive any and all defenses you may have based on the electronic form Of these Terms of use and the lack
         of signing by the parties hereto to execute these Terms of Use.
       </p>
-              <v-divider></v-divider>
+      <v-divider></v-divider>
       <h4 class="headline pb-2 pt-3">Privacy Policy</h4>
       <p>
         Thank you for choosing to be part of our community at Paradigm Development ("Company", "we", "us", or "our"). We are
         committed to protecting your personal information and your right to privacy. If you have any questions or concerns about our
-        policy, or our practices with regards to your personal information, please contact us at aidanliddy@outlook.com.
+        policy, or our practices with regards to your personal information, please contact us at paradigmdevelop@gmail.com.
         <br>
         When you visit our website www.theparadigmdev.com, and use our services, you trust us with your personal information. We
         take your privacy very seriously. In this privacy notice, we describe our privacy policy. We seek to explain to you in the clearest
@@ -457,34 +457,18 @@
         information with us.</b><br>
       </p>
       <h4 class="title pb-2">Information Collection</h4>
-      <h6 class="subtitle-1 pb-2">Information Sutomatically Collected</h6>
       <p>
-        <i><b>In Short:</b> Some information — such as IP address and/or browser and device characteristics — is collected automatically when
-        you visit our Sites.</i>
-        <br>
-        We automatically collect certain information when you visit, use or navigate the Sites. This information does not reveal your
-        specific identity (like your name or contact information) but may include device and usage information, such as your IP
-        address, browser and device characteristics, operating system, language preferences, referring URLs, device name, country,
-        location, information about how and when you use our Sites and other technical information. This information is primarily
-        needed to maintain the security and operation of our Sites, and for our internal analytics and reporting purposes.
+        Zero information is saved about you, your device, or your network when you visit our Site.
       </p>
       <h6 class="subtitle-1 pb-2">Information Collection from Other Sources</h6>
         <i><b>In Short:</b> We may collect limited data from public databases, marketing partners, and other outside sources.</i>
         <br>
       <p>
-        We may obtain information about you from other sources, such as public databases, joint marketing partners, as well as from
-        other third parties. Examples of the information we receive from other sources include: social media profile information;
-        marketing leads and search results and links, including paid listings (such as sponsored links).
+        We do NOT collect data from public databases, marketing partners, or other outside sources.
       </p>
       <h4 class="title pb-2">Information Use</h4>
       <p>
-        <i><b>In Short:</b> We process your information for purposes based on legitimate business interests, the fulfillment of our contract with
-        you, compliance with our legal obligations, and/or your consent.</i>
-        <br>
-        We use personal information collected via our Sites for a variety of business purposes described below. We process your
-        personal information for these purposes in reliance on our legitimate business interests, in order to enter into or perform a
-        contract with you, with your consent, and/or for compliance with our legal obligations. We indicate the specific processing
-        grounds we rely on next to each purpose listed below.
+        We process your information for purposes based on compliance with our legal obligations.
         <br>
         We use the information we collect or receive:
         <br>
