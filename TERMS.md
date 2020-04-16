@@ -32,6 +32,7 @@ You are required to register with the Site. You agree to keep your password conf
 ## Prohibited Activities
 
 You may not access or use the Site for any purpose other than that for which we make the Site available. The Site may not be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us. As a user of the Site, you agree not to:
+
 1. Systematically retrieve data or other content from the Site to create or compile, directly or indirectly, a collection, compilation, database, or directory without written permission from us.
 2. Make any unauthorized use of the Site, including collecting usemames and/or email addresses of users by electronic or other means for the purpose of sending unsolicited email, or creating user accounts by automated means or under false pretenses
 3. Use a buying agent or purchasing agent to make purchases on the Site.
@@ -190,7 +191,7 @@ We do NOT collect data from public databases, marketing partners, or other outsi
 
 ## Information Use
 
-We process your information for purposes based on legitimate business interests, the fulfillment of our contract with you, compliance with our legal obligations, and/or your consent.
+We process your information for purposes based on compliance with our legal obligations.
 
 We use the information we collect or receive...
 
@@ -202,7 +203,7 @@ We use the information we collect or receive...
 
 ## Information Sharing
 
-In Short: We only share information with your consent to comply with laws or to protect your rights.
+We only share information with your consent to comply with laws or to protect your rights.
 
 We may process or share data based on the following legal basis:
 
@@ -221,7 +222,8 @@ We have implemented appropriate technical security measures designed to protect 
 
 ## Privacy Rights
 
-In Short: You may review, change, or terminate your account at any time.
+You may review, change, or terminate your account at any time.
+
 If you are resident in the European Economic Area and you believe we are unlawfully processing your personal information, you also have the right to complain to your local data protection supervisory authority. You can find their contact details here.
 
 ### Account Information
