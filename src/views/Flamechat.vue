@@ -17,7 +17,7 @@
             </template>
             <span>Home</span>
           </v-tooltip>
-          <v-tooltip right>
+          <!-- <v-tooltip right>
             <template v-slot:activator="{ on }">
               <v-list-item class="my-2" :v-ripple="true" v-on="on" value="user_dm">
                 <v-list-item-icon>
@@ -29,7 +29,7 @@
               </v-list-item>
             </template>
             <span>Direct Messages</span>
-          </v-tooltip>
+          </v-tooltip> -->
           <v-divider></v-divider>
           <v-tooltip right v-for="(chatroom, index) in $root.user.chatrooms" :key="index">
             <template v-slot:activator="{ on }">
