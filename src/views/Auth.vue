@@ -1,6 +1,6 @@
 <template>
   <div class="auth pa-3" v-if="$root.config != {}">
-    <v-card width="500" class="mx-auto" style="margin-top: 150px;" v-if="method == 'in'">
+    <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'in'">
       <v-card-title class="display-1 font-weight-light">Sign in</v-card-title>
 
       <v-card-text>
@@ -17,7 +17,7 @@
       </v-card-actions>
     </v-card>
 
-    <v-card width="500" class="mx-auto" style="margin-top: 100px;" v-if="method == 'migrate'">
+    <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'migrate'">
       <v-card-title class="display-1 font-weight-light">Migrate</v-card-title>
 
       <v-card-text>
@@ -35,7 +35,7 @@
       </v-card-actions>
     </v-card>
 
-    <v-card width="500" class="mx-auto" style="margin-top: 100px;" v-if="method == 'up'">
+    <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'up'">
       <v-card-title class="display-1 font-weight-light">Sign up</v-card-title>
 
       <v-card-text>
@@ -151,6 +151,7 @@ export default {
           this.$root.socket.emit('login', response.data)
           var cookie = this.$getCookie('buggy_dialog')
           if (!cookie) this.$root.view.buggy_dialog = true
+          document.title = 'Paradigm'
         } else {
           this.$notify('error', response.data.msg)
         }
@@ -185,6 +186,7 @@ export default {
               ).then(response => {
                 this.$root.user = response.data
                 this.$root.router = 'home'
+                document.title = 'Paradigm'
               })
               .catch(error => {
                 console.log('Upload: failed', error)
@@ -203,6 +205,7 @@ export default {
       }).then(response => {
         this.$root.user = response.data
         this.$root.router = 'home'
+        document.title = 'Paradigm'
       }).catch(error => {
         console.error(error)
       })

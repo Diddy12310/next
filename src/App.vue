@@ -209,7 +209,7 @@ export default {
   methods: {
     signOut() {
 			if (this.$root.user) {
-				this.$http.get(`https://www.theparadigmdev.com/users/signout`).then(() => {
+				this.$http.get(`https://www.theparadigmdev.com/api/users/signout`).then(() => {
 					this.$root.socket.emit('logout', this.$root.user)
 					this.$root.user = false
 					this.$root.router = 'auth'
@@ -217,6 +217,7 @@ export default {
 						terms: false,
 						buggy_dialog: false
 					}
+					document.title = 'Authentication'
 				})
 			}
     },
