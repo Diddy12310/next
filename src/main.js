@@ -70,7 +70,8 @@ new Vue({
       view: {
         terms: false,
         buggy_dialog: false,
-        quote: false
+        quote: false,
+        corona: false
       },
       socket: socket
     }

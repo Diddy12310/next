@@ -169,6 +169,8 @@
 				<v-btn fab fixed top right text @click="$root.view.quote = false"><v-icon>mdi-close</v-icon></v-btn>
 			</v-card>
 		</v-dialog>
+
+		<!-- <v-snackbar bottom right :timeout="0" v-model="$root.view.corona"><v-icon left color="red">mdi-hospital</v-icon> Get the facts about the COVID-19 outbreak<v-btn text color="red" @click="$root.router = 'corona'">Go<v-icon right>mdi-arrow-right</v-icon></v-btn></v-snackbar> -->
   </v-app>
 </template>
 
@@ -195,6 +197,7 @@ export default {
         { icon: 'mdi-newspaper', content: 'The Paradox', path: 'paradox' },
         { icon: 'mdi-folder-multiple', content: 'Drawer', path: 'drawer' },
         { icon: 'mdi-play', content: 'Media', path: 'media' },
+        // { icon: 'mdi-hospital', content: 'Coronavirus', path: 'corona' }
       ],
       clock: {
         date: '',
