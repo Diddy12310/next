@@ -16,7 +16,7 @@
 					<v-list shaped>
 						<v-tooltip bottom open-delay="1000">
 							<template v-slot:activator="{ on }">
-								<v-list-item @click="$root.router = 'account'" v-model="$root.router == 'account'" value="account" v-on="on" two-line v-ripple="{ class: `${$root.user.color}--text` }" class="my-n2" style="cursor: pointer;">
+								<v-list-item @click="$root.router = 'account'" :input-value="$root.router == 'account'" value="account" v-on="on" two-line v-ripple="{ class: `${$root.user.color}--text` }" class="my-n2" style="cursor: pointer;">
 									<v-list-item-avatar class="my-0">
 										<img :src="$root.user.pic">
 									</v-list-item-avatar>
@@ -41,7 +41,7 @@
 
 					<v-tooltip bottom open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn @click="$root.router = 'terminal'" v-model="$root.router == 'terminal'" v-on="on" v-if="$root.user.rights.admin === true" icon class="mx-1" color="grey darken-2"><v-icon>mdi-console-line</v-icon></v-btn>
+							<v-btn @click="$root.router = 'terminal'" :input-value="$root.router == 'terminal'" v-on="on" v-if="$root.user.rights.admin === true" icon class="mx-1" color="grey darken-2"><v-icon>mdi-console-line</v-icon></v-btn>
 						</template>
 						<span>Terminal</span>
 					</v-tooltip>
