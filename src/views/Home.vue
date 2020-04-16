@@ -23,7 +23,7 @@ export default {
 .home {
 	text-align: center;
 	height: calc(100vh - 64px);
-	background: url('./../assets/home_bg.jpg');
+	background: url('./../assets/home.jpg');
 	background-attachment: fixed;
 	background-position: center;
 	background-repeat: no-repeat;
