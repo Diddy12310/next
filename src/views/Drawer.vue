@@ -110,6 +110,10 @@ export default {
   },
   created() {
     this.getFileList()
+    this.$notify('Drawer is not fully secured yet. Please refrain from uploading sensitive material.', 'warning', 'mdi-alert', true, 0)
+  },
+  beforeDestroy() {
+    this.$root.alert.open = false
   }
 }
 </script>

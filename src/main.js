@@ -22,10 +22,12 @@ Vue.mixin({
     }
   },
   methods: {
-    $notify(type, text, button) {
+    $notify(text, type, icon, button, timeout) {
       this.$root.alert.type = type
       this.$root.alert.text = text
       this.$root.alert.btn = button
+      this.$root.alert.timeout = timeout
+      this.$root.alert.icon = icon
       this.$root.alert.open = true
     },
     $getCookie(cname) {
@@ -48,6 +50,10 @@ Vue.mixin({
       this.$root.alert.text = 'This function is not ready yet.'
       this.$root.alert.btn = false
       this.$root.alert.open = true
+    },
+    $lock() {
+      this.$root.user = false
+      this.$root.router = 'auth'
     }
   }
 })
@@ -59,12 +65,14 @@ new Vue({
       user: null,
       config: {},
       version,
-      router: 'home',
+      router: 'auth',
       drawer: true,
       alert: {
         open: false,
         text: '',
-        btn: false
+        btn: false,
+        timeout: 3000,
+        icon: ''
       },
       music: {},
       view: {

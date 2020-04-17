@@ -132,8 +132,9 @@
 
 		</v-navigation-drawer>
 
-		<v-snackbar v-model="$root.alert.open" :color="$root.alert.type">
-			<span v-html="$root.alert.text"></span>
+		<v-snackbar v-model="$root.alert.open" :color="$root.alert.type" :timeout="$root.alert.timeout">
+			<v-icon left>{{ $root.alert.icon }}</v-icon>
+			<p class="ma-0 text-left" v-html="$root.alert.text"></p>
 			<v-btn v-if="$root.alert.btn" icon @click="$root.alert.open = false">
 				<v-icon>mdi-close</v-icon>
 			</v-btn>
@@ -242,7 +243,7 @@ export default {
 		}
   },
   created() {
-    if (this.$root.user == null) this.$root.router = 'auth'
+    if (this.$root.user == false) this.$root.router = 'auth'
 		this.runClock()
 		this.$root.socket.on('connect', () => {
 			this.$root.socket.on('nuke', () => {
@@ -258,15 +259,33 @@ export default {
 				this.$root.socket = io.connect('https://www.theparadigmdev.com')
 			})
 			this.$root.socket.on('config', data => this.$root.config = data)
-			this.$root.socket.on('kick', username => { if (username == this.$root.user.username) this.signOut() })
+			this.$root.socket.on('kick', username => {
+				if (username == this.$root.user.username) {
+					this.signOut()
+					this.$notify('You were kicked out', 'error', 'mdi-alert-circle', false, 3000)
+				}
+			})
 			this.$root.socket.on('kill', username => { if (username == this.$root.user.username) window.close() })
 			this.$root.socket.on('disconnect', () => {
-				this.signOut()
+				this.$lock()
+				this.$notify('Disconnected from server', 'error', 'mdi-alert-circle', false, 3000)
 			})
-			this.$root.socket.on('connect_error', error => this.signOut())
-			this.$root.socket.on('connect_timeout', timeout => this.signOut())
-			this.$root.socket.on('reconnect_error', error => this.signOut())
-			this.$root.socket.on('reconnect_failed', () => this.signOut())
+			this.$root.socket.on('connect_error', error => {
+				this.$lock()
+				this.$notify('Connection to server disrupted', 'error', 'mdi-alert-circle', false, 3000)
+			})
+			this.$root.socket.on('connect_timeout', timeout => {
+				this.$lock()
+				this.$notify('Connection to server timed out', 'error', 'mdi-alert-circle', false, 3000)
+			})
+			this.$root.socket.on('reconnect_error', error => {
+				this.$lock()
+				this.$notify('Error occurred when reconnecting to server', 'error', 'mdi-alert-circle', false, 3000)
+			})
+			this.$root.socket.on('reconnect_failed', () => {
+				this.$lock()
+				this.$notify('Could not reconnect to server', 'error', 'mdi-alert-circle', false, 3000)
+			})
 		})
   }
 }
