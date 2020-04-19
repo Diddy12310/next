@@ -9,7 +9,7 @@
           <v-col sm="6">
           </v-col>
           <v-col sm="4">
-            <v-text-field color="white" v-model="search" label="Search..." class="mt-3"></v-text-field>
+            <v-text-field disabled color="white" v-model="search" label="Search..." class="mt-3"></v-text-field>
           </v-col>
         </v-row>
       </v-container>
