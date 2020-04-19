@@ -196,7 +196,7 @@ export default {
               this.user = response.data
             })
           } else {
-            this.$notify('error', 'Your current password is incorrect')
+            this.$notify('Your current password is incorrect', 'error', 'mdi-lock', false, 3000)
           }
         }).catch(error => console.error(JSON.stringify(error)))
       }

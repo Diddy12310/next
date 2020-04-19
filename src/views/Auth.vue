@@ -155,7 +155,7 @@ export default {
           if (!cookie) this.$root.view.buggy_dialog = true
           document.title = 'Paradigm'
         } else {
-          this.$notify('error', response.data.msg)
+          this.$notify(response.data.msg, 'error', 'mdi-alert-circle', false, 3000)
         }
       }).catch(error => console.error(JSON.stringify(error)))
     },
@@ -196,9 +196,9 @@ export default {
             }).catch(error => {
               console.log(error)
             })
-          } else this.$notify('error', 'Username contains invalid special characters')
-        } else this.$notify('error', 'Read and accept the terms')
-      } else this.$notify('error', 'Passwords do not match')
+          } else this.$notify('Username contains invalid special characters', 'error', 'mdi-account-plus', false, 3000)
+        } else this.$notify('Read and accept the terms', 'error', 'mdi-account-plus', false, 3000)
+      } else this.$notify('Passwords do not match', 'error', 'mdi-account-plus', false, 3000)
     },
     migrateAccount() {
       this.$http.post('https://www.theparadigmdev.com/api/users/migrate', {

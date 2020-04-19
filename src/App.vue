@@ -34,16 +34,16 @@
 
 					<v-tooltip bottom open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn v-on="on" @click="signOut()" icon color="grey darken-2" class="ml-1"><v-icon>mdi-lock</v-icon></v-btn>
+							<v-btn @click="$root.router = 'terminal'" :input-value="$root.router == 'terminal'" v-on="on" v-if="$root.user.rights.admin === true" icon class="ml-1" color="grey darken-2"><v-icon>mdi-console-line</v-icon></v-btn>
 						</template>
-						<span>Sign out</span>
+						<span>Terminal</span>
 					</v-tooltip>
 
 					<v-tooltip bottom open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn @click="$root.router = 'terminal'" :input-value="$root.router == 'terminal'" v-on="on" v-if="$root.user.rights.admin === true" icon class="mx-1" color="grey darken-2"><v-icon>mdi-console-line</v-icon></v-btn>
+							<v-btn v-on="on" @click="signOut()" icon color="grey darken-2" class="mx-2"><v-icon>mdi-lock</v-icon></v-btn>
 						</template>
-						<span>Terminal</span>
+						<span>Sign out</span>
 					</v-tooltip>
 				</v-card-actions>
 			</template>
@@ -251,7 +251,7 @@ export default {
 			})
 			if (this.$root.user) this.$root.socket.emit('login', this.$root.user)
 			this.$root.socket.on('user', data => {
-				if (data.strikes != this.$root.user.strikes) this.$notify('warning', `You have ${data.strikes} strikes!`)
+				if (data.strikes != this.$root.user.strikes) this.$notify(`You have ${data.strikes} strikes!`, 'warning', 'mdi-gavel', false, 3000)
 				this.$root.user = data
 			})
 			this.$root.socket.on('logout', () => {
@@ -268,7 +268,6 @@ export default {
 			this.$root.socket.on('kill', username => { if (username == this.$root.user.username) window.close() })
 			this.$root.socket.on('disconnect', () => {
 				this.$lock()
-				this.$notify('Disconnected from server', 'error', 'mdi-alert-circle', false, 3000)
 			})
 			this.$root.socket.on('connect_error', error => {
 				this.$lock()
