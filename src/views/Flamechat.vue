@@ -76,44 +76,47 @@
       </v-toolbar>
       <!-- <v-btn @click="createChatroom()">create</v-btn> -->
 
-      <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.mdAndUp">
+      <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
-            <v-row>
+            <v-row v-if="message.type === 'message'">
               <v-col sm="1" class="text-right">
                 <v-list-item-avatar class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10">
                 <v-list-item-content>
                   <p v-html="message.content"></p>
-                  <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="pl-2">{{ message.timestamp }}</span></v-list-item-subtitle>
+                  <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="px-2">{{ message.timestamp }}</span><span v-if="message.edits != 0">|<span class="pl-2">{{ message.edits }} {{ message.edits > 1 ? 'edits' : 'edit' }}</span></span></v-list-item-subtitle>
                 </v-list-item-content>
               </v-col>
               <v-col sm="1">
                 <v-fade-transition group>
-                  <v-btn key="edit" v-if="current_message == message ? message.username == $root.user.username ? true : current.owner == $root.user.username ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
-                  <v-btn key="delete" v-if="current_message == message ? current.owner == $root.user.username ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                  <v-btn key="edit" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner_id == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
+                  <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner_id == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
                 </v-fade-transition>
               </v-col>
             </v-row>
+
+            <v-list-item-subtitle class="text-center" v-if="message.type === 'left'"><span :style="{ color: message.color }">{{ message.username }}</span> has left</v-list-item-subtitle>
+            <v-list-item-subtitle class="text-center" v-if="message.type === 'join'"><span :style="{ color: message.color }">{{ message.username }}</span> has joined</v-list-item-subtitle>
           </v-list-item>
         </v-fade-transition>
       </v-list>
 
-      <v-list class="messages" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndDown">
+      <v-list class="messages" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
-            <v-container fluid>
+            <v-container fluid v-if="message.type === 'message'">
               <v-row no-gutters align="end">
                 <v-col sm="6">
                   <v-list-item-avatar class="ma-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
-                    <v-btn key="edit" v-if="current_message == message ? message.username == $root.user.username ? true : current.owner == $root.user.username ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
-                    <v-btn key="delete" v-if="current_message == message ? current.owner == $root.user.username ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                    <v-btn key="edit" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner_id == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
+                    <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner_id == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
                   </v-fade-transition>
                 </v-col>
               </v-row>
@@ -122,21 +125,25 @@
                 <v-col sm="12">
                   <v-list-item-content>
                     <p v-html="message.content"></p>
-                    <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="pl-2">{{ message.timestamp }}</span></v-list-item-subtitle>
+                    <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="px-2">{{ message.timestamp }}</span><span v-if="message.edits != 0">|<span class="pl-2">{{ message.edits }} {{ message.edits > 1 ? 'edits' : 'edit' }}</span></span></v-list-item-subtitle>
                   </v-list-item-content>
                 </v-col>
               </v-row>
             </v-container>
+
+            <v-list-item-subtitle class="text-center" v-if="message.type === 'left'"><span :style="{ color: message.color }">{{ message.username }}</span> has left</v-list-item-subtitle>
+            <v-list-item-subtitle class="text-center" v-if="message.type === 'join'"><span :style="{ color: message.color }">{{ message.username }}</span> has joined</v-list-item-subtitle>
           </v-list-item>
         </v-fade-transition>
       </v-list>
 
+      <span class="ml-4 mb-n1 grey--text font-italic body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
       <v-layout justify-center align-center text-center px-4>
         <v-flex xs11>
-          <v-text-field @keypress.enter="sendChat()" v-model="new_message" :label="`Message ${current.name}...`"></v-text-field>
+          <v-text-field :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" @keypress="startTyping()" @keypress.enter="sendChat()" v-model="new_message" :label="`Message ${current.name}...`"></v-text-field>
         </v-flex>
         <v-flex xs1>
-          <v-btn text icon @click="sendChat()"><v-icon>mdi-send</v-icon></v-btn>
+          <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" text icon @click="sendChat()"><v-icon>mdi-send</v-icon></v-btn>
         </v-flex>
       </v-layout>
     </main>
@@ -318,6 +325,7 @@ import io from 'socket.io-client'
 import moment from 'moment'
 
 var socket
+var typingTimeout
 export default {
   name: 'Flamechat',
   data() {
@@ -335,7 +343,9 @@ export default {
       },
       edit: { open: false },
       chatroom_menu: { open: false },
-      delete_verify_popup: false
+      delete_verify_popup: false,
+      socket,
+      typers: []
     }
   },
   computed: {
@@ -350,26 +360,37 @@ export default {
       socket.on('data', data => {
         this.current = data
       })
-      socket.on('message', data => {
+      socket.on('send', data => {
         this.current.messages.push(data)
-        this.$notify('info', data.content, false)
       })
       socket.on('delete', async id => {
         var index = await this.current.messages.findIndex(message => {
           return message._id == id
         })
-        console.log(index)
-        this.current.messages.splice(index, 1)
+        await this.current.messages.splice(index, 1)
       })
       socket.on('edit', async data => {
         var index = await this.current.messages.findIndex(message => {
           return message._id == data.oldID
         })
-        console.log(index)
         this.current.messages[index] = data
       })
       socket.on('kill', async () => {
         this.leaveChatroom()
+      })
+      socket.on('typing', data => {
+        let filteredData = data
+        let exists = false
+        filteredData.forEach(user => {
+          if (user.user == this.$root.user.username) exists = true
+        })
+        if (exists) {
+          const index = filteredData.findIndex(user => {
+            return this.$root.user.username == user.user
+          })
+          filteredData.splice(index, 1)
+        }
+        this.typers = filteredData
       })
     },
     buyChatroom() {
@@ -378,6 +399,7 @@ export default {
         id: this.buy_chatroom_id,
         name: this.buy_chatroom.name,
         owner: this.$root.user.username,
+        owner_id: this.$root.user._id,
         theme: this.buy_chatroom.theme
       }).then(response => {
         this.$root.socket.emit('new_chatroom')
@@ -398,27 +420,36 @@ export default {
     },
     addChatroom() {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/chatroom/${this.add_chatroom_id}/add`).then(response => {
+        socket.emit('send', {
+          color: this.$root.user.color,
+          username: this.$root.user.username,
+          user_id: this.$root.user._id,
+          pic: this.$root.user.pic,
+          timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+          type: 'join'
+        })
         this.$root.user = response.data
+        this.add_chatroom_id = ''
       }).catch(error => console.error(error))
     },
     sendChat() {
       if (this.new_message.length > 0) {
-        socket.emit('message', {
+        clearTimeout(typingTimeout)
+        socket.emit('typing', { user: this.$root.user.username, is: false, color: this.$root.user.color })
+        socket.emit('send', {
           color: this.$root.user.color,
           username: this.$root.user.username,
+          user_id: this.$root.user._id,
           content: this.new_message,
           pic: this.$root.user.pic,
           timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
-          edits: 0
+          edits: 0,
+          type: 'message'
         })
         this.new_message = ''
       }
     },
     deleteChat(chat) {
-      // this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${this.current_id}/message/${id}/delete`).then(() => {
-      //   this.getChatroom()
-      // })
-      console.log(chat._id)
       socket.emit('delete', chat._id)
     },
     editChat(chat) {
@@ -447,21 +478,36 @@ export default {
       })
     },
     leaveChatroom() {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/chatroom/${this.chatroom_menu.id}/leave`).then(response => {
-        this.$root.user = response.data
-        this.current_id = 'user_home'
-        this.current = false
-      })
+      if (this.$root.user.username != this.current.owner) {
+        this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/chatroom/${this.chatroom_menu.id}/leave`).then(response => {
+          this.$root.user = response.data
+          socket.emit('send', {
+            color: this.$root.user.color,
+            username: this.$root.user.username,
+            user_id: this.$root.user._id,
+            pic: this.$root.user.pic,
+            timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+            type: 'left'
+          })
+          this.current_id = 'user_home'
+          this.current = false
+        })
+      } else this.$notify('You can&#39;t leave this chatroom, you own it!', 'warning', 'mdi-warning', true, 3000)
     },
     async deleteChatroom() {
 			if (this.chatroom_menu.owner == this.$root.user.username || this.$root.user.rights.admin == true) {
         this.changeChatroom(false, this.chatroom_menu.id)
         socket.emit('kill')
         this.leaveChatroom()
-        this.$notify('Chatroom deleted')
+        this.$notify('Chatroom deleted', 'info', 'mdi-delete', false, 3000)
         this.delete_verify_popup = false
         await this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.chatroom_menu.id}/delete`)
       }
+    },
+    startTyping() {
+      clearTimeout(typingTimeout)
+      socket.emit('typing', { user: this.$root.user.username, is: true, color: this.$root.user.color })
+      typingTimeout = setTimeout(() => socket.emit('typing', { user: this.$root.user.username, is: false }), 3000)
     }
   },
   mounted() {
@@ -482,7 +528,7 @@ export default {
 
 <style scoped>
 .messages {
-  height: calc(100vh - 174px);
+  height: calc(100vh - 198px);
   overflow-y: auto;
 }
 
@@ -497,5 +543,11 @@ main {
 .moonrock-count {
   position: relative;
   bottom: 45px;
+}
+
+.typers {
+  /* position: relative;
+  bottom: 16px;
+  display: block; */
 }
 </style>
