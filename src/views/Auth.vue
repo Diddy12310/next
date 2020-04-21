@@ -4,8 +4,8 @@
       <v-card-title class="display-1 font-weight-light">Sign in</v-card-title>
 
       <v-card-text>
-        <v-text-field v-model="username" label="Username" ref="username_field"></v-text-field>
-        <v-text-field v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
+        <v-text-field @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
+        <v-text-field :disabled="!user_auth_info.exists && !user_auth_info.in" v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
         <p v-if="$root.config.reset" class="text-center">Can't remember your password? Oh well.</p>
         <p v-if="$root.config.migrate" class="text-center">Have an old v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
         <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
@@ -21,8 +21,8 @@
       <v-card-title class="display-1 font-weight-light">Migrate</v-card-title>
 
       <v-card-text>
-        <v-text-field v-model="username" label="Username"></v-text-field>
-        <v-text-field v-model="password" label="Password" type="password"></v-text-field>
+        <v-text-field @keyup="checkIfUserExistsMigrate" v-model="username" label="Username"></v-text-field>
+        <v-text-field :disabled="!username_exists" v-model="password" label="Password" type="password"></v-text-field>
         <v-checkbox label="I understand that this action is irreversible and may lead to data loss" v-model="migrate_confirm" class="mb-5"></v-checkbox>
         <p class="text-center mb-8 font-italic"><b>Note:</b> Your username and password will remain the same.</p>
         <p class="text-center">Already have a new Paradigm account? <a @click="method = 'in'">Sign in</a>.</p>
@@ -116,6 +116,18 @@
       </v-card-actions>
     </v-card>
 
+    <v-dialog v-model="user_auth_info.in" max-width="350">
+			<v-card color="red">
+				<v-card-title class="title text-center font-weight-medium text-uppercase">Error</v-card-title>
+				<v-card-text>This user is logged in on another client. If you continue, that client's connection will be closed.</v-card-text>
+				<v-card-actions>
+					<v-btn text color="grey" @click="dup_client_dialog = false">Cancel</v-btn>
+					<v-spacer></v-spacer>
+					<v-btn text color="white" @click="closeDupClient()">Confirm</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+
     <!-- <v-footer app color="rgb(18, 18, 18)" v-if="$vuetify.breakpoint.smAndUp">
       <p class="font-italic text-center pb-0 mb-0 ma-auto"><a @click="$root.view.quote = true" class="grey--text text--darken-2">Here's to the crazy ones...</a></p>
     </v-footer> -->
@@ -131,11 +143,16 @@ export default {
     return {
       username: '',
       password: '',
+      user_auth_info: {
+        exists: false,
+        in: false
+      },
       method: 'in',
       step: 1,
       new_user: {},
       migrate_confirm: false,
-      window
+      window,
+      dup_client_dialog: false
     }
   },
   mounted() {
@@ -173,7 +190,9 @@ export default {
               rights: {
                 admin: false,
                 author: false,
-                asteroid: false
+                asteroid: false,
+                patriot: false,
+                developer: false
               },
               moonrocks: 0
             }).then(response => {
@@ -211,6 +230,26 @@ export default {
       }).catch(error => {
         console.error(error)
       })
+    },
+    checkIfUserExists() {
+      if (this.username.length < 1) this.username_exists = false
+      else {
+        this.$http.get(`https://www.theparadigmdev.com/api/users/check/${this.username}`).then(response => {
+          this.user_auth_info = response.data
+        })
+      }
+    },
+    checkIfUserExistsMigrate() {
+      if (this.username.length < 1) this.username_exists = false
+      else { 
+        this.$http.get(`https://www.theparadigmdev.com/api/users/migrate/check/${this.username}`).then(response => {
+          this.user_auth_info.exists = response.data.exists
+        })
+      }
+    },
+    closeDupClient() {
+      this.$root.socket.emit('kick', this.username)
+      this.user_auth_info.in = false
     }
   }
 }
