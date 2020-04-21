@@ -163,7 +163,7 @@
 		</v-dialog>
 
 		<v-dialog v-model="$root.view.buggy_dialog" max-width="350">
-			<v-card color="red">
+			<v-card color="orange">
 				<v-card-title class="title text-center font-weight-medium text-uppercase">Warning</v-card-title>
 				<v-card-text>This is experimental software. By continuing, you acknowledge the risk involved. If you have any questions or concerns, please contact support.</v-card-text>
 				<v-card-actions>

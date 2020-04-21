@@ -51,6 +51,10 @@
                         <td>Asteroid</td>
                         <td>{{ user.rights.asteroid }}</td>
                       </tr>
+                      <tr>
+                        <td>Developer</td>
+                        <td>{{ user.rights.developer }}</td>
+                      </tr>
                     </tbody>
                   </template>
                 </v-simple-table>
