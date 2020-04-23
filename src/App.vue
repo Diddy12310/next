@@ -21,7 +21,7 @@
 										<img :src="$root.user.pic">
 									</v-list-item-avatar>
 									<v-list-item-content>
-										<v-list-item-title class="text-uppercase font-weight-medium" :style="{ 'color': $root.user.color }">{{ $root.user.username }}</v-list-item-title>
+										<v-list-item-title class="font-weight-medium" :style="{ 'color': $root.user.color }">{{ $root.user.username }}</v-list-item-title>
 										<v-list-item-subtitle>Logged in</v-list-item-subtitle>
 									</v-list-item-content>
 								</v-list-item>
@@ -206,6 +206,8 @@ export default {
         { icon: 'mdi-newspaper', content: 'The Paradox', path: 'paradox', disabled: false },
         { icon: 'mdi-folder-multiple', content: 'Drawer', path: 'drawer', disabled: false },
         { icon: 'mdi-play', content: 'Media', path: 'media', disabled: false },
+        { icon: 'mdi-account-group', content: 'People', path: 'people', disabled: false },
+        { icon: 'mdi-satellite-uplink', content: 'Broadcast', path: 'broadcast', disabled: false },
         { icon: 'mdi-pencil', content: 'Write', path: 'write', disabled: true },
         { icon: 'mdi-virus', content: 'Coronavirus', path: 'corona', disabled: true }
       ],
