@@ -63,7 +63,7 @@
           </v-window-item>
 
           <v-window-item :value="4">
-            <v-text-field autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Bio"></v-text-field>
+            <v-text-field :count="50" autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Bio"></v-text-field>
             <span class="caption grey--text text--darken-1">
               Enter a shot biography.
             </span>

@@ -8,7 +8,7 @@
       <v-container>
         <div class="text-center my-12">
           <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img :src="user.pic"></v-img></v-avatar><br>
-          <input type="text" @input="change = true" class="display-2 font-weight-medium text-uppercase mt-8" style="text-align: center; width: 100%;" :style="{ color: user.color }" v-model="user.username">
+          <input type="text" @input="change = true" class="display-2 font-weight-medium mt-8" style="text-align: center; width: 100%;" :style="{ color: user.color }" v-model="user.username">
           <p class="grey--text text--darken-1 font-weight-light">{{ user._id }}</p>
           <div class="text-center mt-3" style="width: 250px; margin: auto;">
             <img height="50" width="50" src="@/assets/moonrocks.png">
@@ -20,7 +20,7 @@
             <v-card class="fill-height">
               <v-card-text>
                 <p>Settings</p>
-                <v-text-field @input="change = true" v-model="user.bio" label="Bio"></v-text-field>
+                <v-text-field @input="change = true" v-model="user.bio" label="Bio" :counter="75"></v-text-field>
                 <p>Color</p>
                 <v-color-picker @input="change = true" v-model="user.color" class="elevation-0"></v-color-picker>
               </v-card-text>
@@ -67,18 +67,102 @@
           <v-col sm="6">
             <v-card class="fill-height">
               <v-card-text>
-                <p>Friends</p>
-                <v-list>
-                  <v-list-item v-if="user.friends.length <= 0">
-                    <v-list-item-title class="text-center grey--text font-italic">You have no friends.</v-list-item-title>
-                  </v-list-item>
-
-                  <v-list-item v-for="(friend, index) in user.friends" :key="index">
-                    <v-list-item-avatar><v-img :src="friend.pic"></v-img></v-list-item-avatar>
-                    <v-list-item-title class="text-uppercase font-weight-medium" :style="{ color: friend.color }">{{ friend.username }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
+                <p class="mb-0">People</p>
               </v-card-text>
+              <v-tabs centered grow v-model="people_tab">
+                <v-tab>Approved</v-tab>
+                <v-tab>Requests</v-tab>
+                <v-tab>Sent</v-tab>
+                <v-tab>Blocked</v-tab>
+              </v-tabs>
+
+              <v-tabs-items v-model="people_tab">
+                <v-tab-item>
+                  <v-list>
+                    <v-list-item v-if="user.people.approved.length <= 0">
+                      <v-list-item-title class="text-center grey--text font-italic">You have no friends.</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item v-for="(person, index) in user.people.approved" :key="index">
+                      <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+                      <v-row>
+                        <v-col sm="10" class="py-0">
+                          <v-list-item-content>
+                            <v-list-item-title class="font-weight-medium" :style="{ color: person.color }">{{ person.username }}</v-list-item-title>
+                            <v-list-item-subtitle>{{ person._id }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-col>
+                        <v-col sm="2" align-self="center" class="text-right py-0">
+                          <v-btn icon color="red" @click="removeFriend(person._id)"><v-icon>mdi-close</v-icon></v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-list-item>
+                  </v-list>
+                </v-tab-item>
+
+                <v-tab-item>
+                  <v-list>
+                    <v-list-item v-if="user.people.requests.length <= 0">
+                      <v-list-item-title class="text-center grey--text font-italic">You have no friend requests.</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item v-for="(person, index) in user.people.requests" :key="index">
+                      <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+                      <v-row>
+                        <v-col sm="8" class="py-0">
+                          <v-list-item-content>
+                            <v-list-item-title class="font-weight-medium" :style="{ color: person.color }">{{ person.username }}</v-list-item-title>
+                            <v-list-item-subtitle>{{ person._id }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-col>
+                        <v-col sm="4" align-self="center" class="text-right py-0">
+                          <v-btn icon color="green" @click="approveRequest(person._id)"><v-icon>mdi-check</v-icon></v-btn>
+                          <v-btn icon color="red" @click="declineRequest(person._id)"><v-icon>mdi-close</v-icon></v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-list-item>
+                  </v-list>
+                </v-tab-item>
+
+                <v-tab-item>
+                  <v-list>
+                    <v-list-item v-if="user.people.sent.length <= 0">
+                      <v-list-item-title class="text-center grey--text font-italic">You haven't sent any friend requests.</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item v-for="(person, index) in user.people.sent" :key="index">
+                      <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+                      <v-row>
+                        <v-col sm="10" class="py-0">
+                          <v-list-item-content>
+                            <v-list-item-title class="font-weight-medium" :style="{ color: person.color }">{{ person.username }}</v-list-item-title>
+                            <v-list-item-subtitle>{{ person._id }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-col>
+                        <v-col sm="2" align-self="center" class="text-right py-0">
+                          <v-btn icon color="blue lighten-1" @click="retractRequest(person._id)"><v-icon>mdi-undo-variant</v-icon></v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-list-item>
+                  </v-list>
+                </v-tab-item>
+
+                <v-tab-item>
+                  <v-list>
+                    <v-list-item v-if="user.people.blocked.length <= 0">
+                      <v-list-item-title class="text-center grey--text font-italic">You haven't blocked anybody.</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item v-for="(person, index) in user.people.blocked" :key="index">
+                      <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title class="font-weight-medium" :style="{ color: person.color }">{{ person.username }}</v-list-item-title>
+                        <v-list-item-subtitle>{{ person._id }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-tab-item>
+              </v-tabs-items>
             </v-card>
           </v-col>
           <v-col sm="6">
@@ -181,10 +265,14 @@ export default {
       uploader: false,
       delete_dialog: false,
       delete_verify: false,
-      console: console
+      console,
+      people_tab: 0
     }
   },
   methods: {
+    fixData() {
+      this.user = JSON.parse(JSON.stringify(this.$root.user))
+    },
     changePassword() {
       if (this.reset.new === this.reset.verify) {
         this.$http.post('https://www.theparadigmdev.com/api/users/signin', {
@@ -245,11 +333,28 @@ export default {
         this.$root.user = false
         this.$root.router = 'auth'
       }).catch(error => console.error(error))
+    },
+    approveRequest(person) {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/approve`).then(response => { this.$root.user = response.data; this.fixData(); }).catch(error => console.error(error))
+    },
+    declineRequest(person) {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/decline`).then(response => { this.$root.user = response.data; this.fixData(); }).catch(error => console.error(error))
+    },
+    retractRequest(person) {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/retract`).then(response => { this.$root.user = response.data; this.fixData(); }).catch(error => console.error(error))
+    },
+    removeFriend(person) {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${person}`).then(response => { this.$root.user = response.data; this.fixData(); }).catch(error => console.error(error))
     }
   },
   created() {
-    this.user = JSON.parse(JSON.stringify(this.$root.user))
-  }
+    this.fixData()
+  },
+  // beforeMount() {
+  //   this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people`).then(response => {
+  //     this.people = response.data
+  //   }).catch(error => console.error(error))
+  // }
 }
 </script>
 
