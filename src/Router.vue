@@ -11,6 +11,8 @@
       <media key="media" v-else-if="$root.router === 'media'" />
       <terminal key="terminal" v-else-if="$root.router === 'terminal'" />
       <patriot key="patriot" v-else-if="$root.router === 'patriot'" />
+      <people key="people" v-else-if="$root.router === 'people'" />
+      <broadcast key="broadcast" v-else-if="$root.router === 'broadcast'" />
       <!-- <corona key="corona" v-else-if="$root.router === 'corona'" /> -->
     </v-fade-transition>
   </div>
@@ -27,6 +29,8 @@ import Drawer from '@/views/Drawer.vue'
 import Media from '@/views/Media.vue'
 import Terminal from '@/views/Terminal.vue'
 import Patriot from '@/views/Patriot.vue'
+import People from '@/views/People.vue'
+import Broadcast from '@/views/Broadcast.vue'
 import Corona from '@/views/Corona.vue'
 
 export default {
@@ -42,6 +46,8 @@ export default {
     'media': Media,
     'terminal': Terminal,
     'patriot': Patriot,
+    'people': People,
+    'broadcast': Broadcast,
     'corona': Corona
   }
 }

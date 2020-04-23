@@ -81,7 +81,8 @@ new Vue({
         quote: false,
         corona: false
       },
-      socket: socket
+      socket,
+      profile: false
     }
   },
   render: h => h(App)

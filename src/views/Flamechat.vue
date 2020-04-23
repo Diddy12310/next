@@ -82,7 +82,7 @@
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
             <v-row v-if="message.type === 'message'">
               <v-col sm="1" class="text-right">
-                <v-list-item-avatar class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10">
                 <v-list-item-content>
@@ -508,6 +508,15 @@ export default {
       clearTimeout(typingTimeout)
       socket.emit('typing', { user: this.$root.user.username, is: true, color: this.$root.user.color })
       typingTimeout = setTimeout(() => socket.emit('typing', { user: this.$root.user.username, is: false }), 3000)
+    },
+    viewProfile(uid) {
+      if (uid == this.$root.user._id) this.$root.router = 'account'
+      else {
+        this.$http.get(`https://www.theparadigmdev.com/api/users/${uid}/info`).then(response => {
+          this.$root.profile = response.data
+          this.$root.router = 'people'
+        })
+      }
     }
   },
   mounted() {
