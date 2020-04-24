@@ -155,10 +155,17 @@
 
                     <v-list-item v-for="(person, index) in user.people.blocked" :key="index">
                       <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title class="font-weight-medium" :style="{ color: person.color }">{{ person.username }}</v-list-item-title>
-                        <v-list-item-subtitle>{{ person._id }}</v-list-item-subtitle>
-                      </v-list-item-content>
+                      <v-row>
+                        <v-col sm="10" class="py-0">
+                          <v-list-item-content>
+                            <v-list-item-title class="font-weight-medium" :style="{ color: person.color }">{{ person.username }}</v-list-item-title>
+                            <v-list-item-subtitle>{{ person._id }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-col>
+                        <v-col sm="2" align-self="center" class="text-right py-0">
+                          <v-btn icon color="green" @click="unblockPerson(person._id)"><v-icon>mdi-minus</v-icon></v-btn>
+                        </v-col>
+                      </v-row>
                     </v-list-item>
                   </v-list>
                 </v-tab-item>
@@ -335,16 +342,19 @@ export default {
       }).catch(error => console.error(error))
     },
     approveRequest(person) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/approve`).then(response => { this.$root.user = response.data; this.fixData(); }).catch(error => console.error(error))
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/approve`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
     },
     declineRequest(person) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/decline`).then(response => { this.$root.user = response.data; this.fixData(); }).catch(error => console.error(error))
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/decline`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
     },
     retractRequest(person) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/retract`).then(response => { this.$root.user = response.data; this.fixData(); }).catch(error => console.error(error))
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/retract`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
     },
     removeFriend(person) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${person}`).then(response => { this.$root.user = response.data; this.fixData(); }).catch(error => console.error(error))
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${person}`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
+    },
+    unblockPerson(person) {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/unblock/${person}`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
     }
   },
   created() {

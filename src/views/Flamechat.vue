@@ -510,13 +510,19 @@ export default {
       typingTimeout = setTimeout(() => socket.emit('typing', { user: this.$root.user.username, is: false }), 3000)
     },
     viewProfile(uid) {
-      if (uid == this.$root.user._id) this.$root.router = 'account'
-      else {
-        this.$http.get(`https://www.theparadigmdev.com/api/users/${uid}/info`).then(response => {
-          this.$root.profile = response.data
-          this.$root.router = 'people'
-        })
-      }
+      this.$root.user.people.blocked.forEach(person => {
+        if (person._id != uid) {
+          if (uid == this.$root.user._id) this.$root.router = 'account'
+          else {
+            this.$http.get(`https://www.theparadigmdev.com/api/users/${uid}/info`).then(response => {
+              if (!response.data.error) {
+                this.$root.profile = response.data
+                this.$root.router = 'people'
+              } else this.$notify(response.data.error, 'error', 'mdi-alert-circle', false, 3000)
+            })
+          }
+        } else this.$notify('You blocked this person', 'warning', 'mdi-account-cancel', false, 3000)
+      })
     }
   },
   mounted() {
