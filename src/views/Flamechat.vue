@@ -137,7 +137,9 @@
         </v-fade-transition>
       </v-list>
 
-      <span class="ml-4 mb-n1 grey--text font-italic body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
+      <v-fade-transition leave-absolute>
+        <span class="ml-4 mb-n1 grey--text font-italic body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
+      </v-fade-transition>
       <v-layout justify-center align-center text-center px-4>
         <v-flex xs11>
           <v-text-field :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" @keypress="startTyping()" @keypress.enter="sendChat()" v-model="new_message" :label="`Message ${current.name}...`"></v-text-field>
