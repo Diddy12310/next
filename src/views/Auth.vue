@@ -251,7 +251,7 @@ export default {
       }
     },
     closeDupClient() {
-      this.$root.socket.emit('kick', this.username)
+      this.$root.socket.emit('kick', this.username.toLowerCase())
       this.user_auth_info.in = false
     }
   }
