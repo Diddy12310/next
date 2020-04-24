@@ -1,5 +1,9 @@
 <template>
   <div class="auth pa-3" v-if="$root.config != {}">
+    <v-card class="mx-auto text-center" style="margin-top: 100px;" width="400" v-if="window.location.hostname == 'www.liddy.cf' || window.location.hostname == 'liddy.cf'">
+      <v-card-title class="title font-weight-light text-center elevation-6">Looking for Aidan's campaign?<v-btn text class="ml-4" @click="window.location.assign('https://www.liddy.cf/campaign')">Go<v-icon right>mdi-chevron-right</v-icon></v-btn></v-card-title>
+    </v-card>
+
     <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'in'">
       <v-card-title class="display-1 font-weight-light">Sign in</v-card-title>
 
@@ -233,7 +237,7 @@ export default {
     checkIfUserExists() {
       if (this.username.length < 1) this.username_exists = false
       else {
-        this.$http.get(`https://www.theparadigmdev.com/api/users/check/${this.username}`).then(response => {
+        this.$http.get(`https://www.theparadigmdev.com/api/users/check/${this.username.toLowerCase()}`).then(response => {
           this.user_auth_info = response.data
         })
       }
@@ -241,7 +245,7 @@ export default {
     checkIfUserExistsMigrate() {
       if (this.username.length < 1) this.username_exists = false
       else { 
-        this.$http.get(`https://www.theparadigmdev.com/api/users/migrate/check/${this.username}`).then(response => {
+        this.$http.get(`https://www.theparadigmdev.com/api/users/migrate/check/${this.username.toLowerCase()}`).then(response => {
           this.user_auth_info.exists = response.data.exists
         })
       }

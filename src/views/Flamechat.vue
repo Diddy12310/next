@@ -559,10 +559,4 @@ main {
   position: relative;
   bottom: 45px;
 }
-
-.typers {
-  /* position: relative;
-  bottom: 16px;
-  display: block; */
-}
 </style>

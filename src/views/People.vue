@@ -6,10 +6,10 @@
       <v-text-field color="white" label="Search..." class="mt-7"></v-text-field>
     </v-toolbar>
 
-    <v-container>
+    <v-container style="height: calc(100vh - 112px); overflow: auto;">
       <v-fade-transition group hide-on-leave>
         <v-row key="list" v-if="!$root.profile">
-          <v-col sm="4" v-for="(user, index) in filtered_people" :key="index" class="text-center">
+          <v-col sm="6" md="4" cols="12" v-for="(user, index) in filtered_people" :key="index" class="text-center">
             <v-card @click="$root.profile = user" class="pa-4 fill-height">
               <v-badge bordered bottom offset-x="30" offset-y="30" color="green" :value="user.in">
                 <v-avatar size="150px"><img style="border-radius: 150px;" :src="user.pic"></v-avatar>
@@ -21,7 +21,7 @@
         </v-row>
 
         <v-row key="profile" v-if="$root.profile">
-          <v-col md="4">
+          <v-col xs="12" md="4" cols="12">
             <v-btn class="mt-n2 mb-2" color="grey" text @click="$root.profile = false"><v-icon left>mdi-chevron-left</v-icon>Back</v-btn><br>
             <div class="text-center">
               <v-badge bordered bottom offset-x="30" offset-y="30" color="green" :value="$root.profile.in">
@@ -37,7 +37,7 @@
             </div>
           </v-col>
 
-          <v-col md="8">
+          <v-col xs="12" md="8" cols="12">
             <p class="grey--text text-center">Waves</p>
             <v-card class="mx-auto my-6" color="indigo darken-3" max-width="400" v-for="(post, index) in $root.profile.posts" :key="index">
               <v-card-text class="headline" v-html="post.content"></v-card-text>
