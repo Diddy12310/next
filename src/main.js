@@ -54,6 +54,8 @@ Vue.mixin({
     $lock() {
       this.$root.user = false
       this.$root.router = 'auth'
+      document.title = 'Authentication'
+      this.$root.profile = false
     }
   }
 })

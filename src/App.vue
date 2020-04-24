@@ -230,6 +230,7 @@ export default {
 						buggy_dialog: false
 					}
 					document.title = 'Authentication'
+					this.$root.profile = false
 				})
 			}
     },
