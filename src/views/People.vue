@@ -32,17 +32,59 @@
               <v-btn v-if="is_sent" block text disabled class="mb-2"><v-icon left>mdi-account-plus</v-icon>Friend Request Pending...</v-btn>
               <v-btn v-else-if="is_approved" @click="removeFriend()" block text class="mb-2" color="blue"><v-icon left>mdi-account-minus</v-icon>Remove Friend...</v-btn>
               <v-btn v-else @click="addFriend()" block text color="blue" class="mb-2"><v-icon left>mdi-account-plus</v-icon> Add Friend</v-btn>
-              <v-btn v-if="!is_blocked" block text color="red" class="mb-2"><v-icon left>mdi-account-cancel</v-icon>Block</v-btn>
-              <v-btn v-else block text color="red" class="mb-2"><v-icon left>mdi-account-cancel</v-icon>Unblock</v-btn>
+              <v-btn v-if="!is_blocked && !is_sent && !is_approved" @click="block_confirmer = true" block text color="red" class="mb-2"><v-icon left>mdi-account-cancel</v-icon>Block</v-btn>
+              <v-btn v-if="is_blocked" block text color="red" class="mb-2"><v-icon left>mdi-account-cancel</v-icon>Unblock</v-btn>
             </div>
           </v-col>
 
           <v-col md="8">
-            status posts
+            <p class="grey--text text-center">Waves</p>
+            <v-card class="mx-auto my-6" color="indigo darken-3" max-width="400" v-for="(post, index) in $root.profile.posts" :key="index">
+              <v-card-text class="headline" v-html="post.content"></v-card-text>
+
+              <v-card-actions>
+                <v-row no-gutters align="center" justify="end">
+                  <v-col>
+                    <v-list-item class="grow">
+                      <v-list-item-avatar color="grey darken-3">
+                        <v-img class="elevation-6" :src="$root.profile.pic"></v-img>
+                      </v-list-item-avatar>
+
+                      <v-list-item-content>
+                        <v-list-item-title class="font-weight-medium" :style="{ color: $root.profile.color }">{{ $root.profile.username }}</v-list-item-title>
+                        <v-list-item-subtitle>{{ post.timestamp }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
+
+                  <v-col class="text-right">
+                    <v-btn class="mr-1" icon><v-icon>mdi-heart</v-icon></v-btn>
+                    <span class="subheading mr-2">{{ post.likes }}</span>
+                    <span class="mr-1">·</span>
+                    <v-btn class="mr-1" icon><v-icon>mdi-share-variant</v-icon></v-btn>
+                    <span class="subheading mr-6">{{ post.reposts }}</span>
+                  </v-col>
+                </v-row>
+              </v-card-actions>
+            </v-card>
           </v-col>
         </v-row>
       </v-fade-transition>
     </v-container>
+
+    <v-dialog max-width="350" v-model="block_confirmer">
+      <v-card color="orange">
+        <v-card-title>ARE YOU SURE?</v-card-title>
+        <v-card-text>
+          If you block {{ $root.profile.username }}, you won't see any of his Waves nor be able to DM him (coming soon). But, you will still see their posts in a chatroom.
+        </v-card-text>
+        <v-card-actions>
+          <v-btn text>Cancel</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn text @click="blockPerson()">Confirm</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -50,13 +92,18 @@
 export default {
   name: 'People',
   data() { return {
-    people: []
+    people: [],
+    block_confirmer: false
   }},
   computed: {
     filtered_people() {
       var people = []
       this.people.forEach(person => {
-        if (person._id != this.$root.user._id) people.push(person)
+        var blocked = false
+        this.$root.user.people.blocked.forEach(profile => {
+          if (profile._id === person._id) blocked = true
+        })
+        if (person._id != this.$root.user._id && !this.$root.user.people.blocked_by.includes(person._id) && !blocked) people.push(person)
       })
       return people
     },
@@ -87,12 +134,18 @@ export default {
       this.people = response.data
     })
   },
+  destroyed() {
+    this.$root.profile = false
+  },
   methods: {
     addFriend() {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/send/${this.$root.profile._id}`)
     },
     removeFriend() {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${this.$root.profile._id}`).then(response => this.$root.user = response.data).catch(error => console.error(error))
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${this.$root.profile._id}`).then(response => this.$root.user.people = response.data).catch(error => console.error(error))
+    },
+    blockPerson() {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/block/${this.$root.profile._id}`).then(response => { this.$root.user.people = response.data; this.$root.profile = false; this.block_confirmer = false; }).catch(error => console.error(error))
     }
   }
 }
