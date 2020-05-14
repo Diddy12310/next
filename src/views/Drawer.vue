@@ -3,7 +3,7 @@
     <v-toolbar dense color="teal darken-3">
       <v-toolbar-title>Drawer</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-file-input color="white" prepend-icon="mdi-" class="mt-7" id="file" ref="file" v-model="files" multiple label="Upload"></v-file-input>
+      <v-file-input style="max-width: 500px;" color="white" prepend-icon="mdi-" class="mt-7" id="file" ref="file" v-model="files" multiple label="Upload"></v-file-input>
       <v-btn :disabled="!files" @click="uploadFile()" icon><v-icon>mdi-upload</v-icon></v-btn>
       <v-btn icon @click="getFileList()"><v-icon>mdi-refresh</v-icon></v-btn>
     </v-toolbar>
@@ -56,7 +56,7 @@ export default {
   methods: {
     getFileList() {
       this.filelist = []
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/drawer/list`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/drawer/list`).then(response => {
         this.filelist = response.data
       }).catch(error => {
         console.error('File list: failed')
@@ -68,7 +68,7 @@ export default {
         let file = this.files[i]
         formData.append('files[' + i + ']', file)
       }
-      this.$http.post(`https://www.theparadigmdev.com/api/drawer/${this.$root.user.username}/upload`,
+      this.$http.post(`https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/upload`,
         formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -85,10 +85,10 @@ export default {
       })
     },
     downloadFile(id) {
-      window.open(`https://www.theparadigmdev.com/api/drawer/${this.$root.user.username}/download/${id}`)
+      window.open(`https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/download/${id}`)
     },
     deleteFile(id) {
-      this.$http.delete(`https://www.theparadigmdev.com/api/drawer/${this.$root.user.username}/delete/${id}`).then(response => {
+      this.$http.delete(`https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/delete/${id}`).then(response => {
         this.getFileList()
       }).catch(error => {
         this.getFileList()
@@ -100,7 +100,7 @@ export default {
       this.rename.open = true
     },
     renameFile(id) {
-      this.$http.post(`https://www.theparadigmdev.com/api/drawer/${this.$root.user.username}/rename/${id}`, {
+      this.$http.post(`https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/rename/${id}`, {
         name: this.rename.name
       }).then(response => {
         this.rename = { open: false }
