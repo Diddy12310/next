@@ -142,7 +142,7 @@ export default {
   },
   async created() {
     socket = await io.connect(`https://www.theparadigmdev.com/terminal`)
-
+    socket.on('log', log => console.log(log))
     this.$root.socket.on('list', async connections => {
       var data = []
       connections.forEach(connection => {
