@@ -3,7 +3,7 @@
     <v-toolbar dense color="green darken-3">
       <v-toolbar-title>People</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-text-field color="white" label="Search..." class="mt-7"></v-text-field>
+      <v-text-field style="max-width: 500px;" color="white" label="Search..." class="mt-7" v-model="search"></v-text-field>
     </v-toolbar>
 
     <v-container style="height: calc(100vh - 112px); overflow: auto;">
@@ -38,7 +38,7 @@
           </v-col>
 
           <v-col xs="12" md="8" cols="12">
-            <p class="grey--text text-center">Waves</p>
+            <p class="grey--text text-center">Broadcasts</p>
             <v-card class="mx-auto my-6" color="indigo darken-3" max-width="400" v-for="(post, index) in $root.profile.posts" :key="index">
               <v-card-text class="headline" v-html="post.content"></v-card-text>
 
@@ -58,7 +58,7 @@
                   </v-col>
 
                   <v-col class="text-right">
-                    <v-btn class="mr-1" icon><v-icon>mdi-heart</v-icon></v-btn>
+                    <v-btn @click="likePost(post._id)" class="mr-1" icon><v-icon>mdi-heart</v-icon></v-btn>
                     <span class="subheading mr-2">{{ post.likes }}</span>
                     <span class="mr-1">·</span>
                     <v-btn class="mr-1" icon><v-icon>mdi-share-variant</v-icon></v-btn>
@@ -76,7 +76,7 @@
       <v-card color="orange">
         <v-card-title>ARE YOU SURE?</v-card-title>
         <v-card-text>
-          If you block {{ $root.profile.username }}, you won't see any of his Waves nor be able to DM him (coming soon). But, you will still see their posts in a chatroom.
+          If you block {{ $root.profile.username }}, you won't see any of their Broadcasts nor be able to DM them (coming soon). But, you will still see their posts in a chatroom.
         </v-card-text>
         <v-card-actions>
           <v-btn text>Cancel</v-btn>
@@ -93,7 +93,8 @@ export default {
   name: 'People',
   data() { return {
     people: [],
-    block_confirmer: false
+    block_confirmer: false,
+    search: ''
   }},
   computed: {
     filtered_people() {
@@ -105,7 +106,9 @@ export default {
         })
         if (person._id != this.$root.user._id && !this.$root.user.people.blocked_by.includes(person._id) && !blocked) people.push(person)
       })
-      return people
+      return people.filter(person => {
+				return person.username.toLowerCase().includes(this.search.toLowerCase()) || person.bio.toLowerCase().includes(this.search.toLowerCase()) || person.bio.toLowerCase().includes(this.search.toLowerCase())
+			})
     },
     is_approved() {
       var is = false
@@ -146,6 +149,12 @@ export default {
     },
     blockPerson() {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/block/${this.$root.profile._id}`).then(response => { this.$root.user.people = response.data; this.$root.profile = false; this.block_confirmer = false; }).catch(error => console.error(error))
+    },
+    likePost(id) {
+      this.$http.get(`https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/like/${this.$root.profile._id}/${id}`).then(response => {
+        this.$root.profile = response.data
+        // this.
+      }).catch(error => console.error(error))
     }
   }
 }

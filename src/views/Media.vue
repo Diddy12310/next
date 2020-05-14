@@ -1,20 +1,11 @@
 <template>
   <div class="media">
     <v-toolbar dense color="cyan darken-2">
-      <v-container fluid>
-        <v-row style="height: 48px;" no-gutters>
-          <v-col sm="2">
-            <v-toolbar-title class="mt-2 ml-n3">Media</v-toolbar-title>
-          </v-col>
-          <v-col sm="6">
-          </v-col>
-          <v-col sm="4">
-            <v-text-field disabled color="white" v-model="search" label="Search..." class="mt-3"></v-text-field>
-          </v-col>
-        </v-row>
-      </v-container>
+      <v-toolbar-title>Media</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-text-field style="max-width: 500px;" disabled color="white" v-model="search" label="Search..." class="mt-7"></v-text-field>
     </v-toolbar>
-    <v-tabs v-model="tab" centered background-color="cyan darken-2" color="white" class="elevation-5">
+    <v-tabs v-model="tab" centered background-color="cyan darken-2" color="white">
       <v-tab>Books</v-tab>
       <v-tab>Movies</v-tab>
       <v-tab>Music</v-tab>
@@ -32,7 +23,7 @@
               <v-col v-for="(book, index) in books" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="book" ripple :disabled="!book.live" @click="openBook(book._id)">
                   <v-img max-height="400" :src="book.cover">
-                    <v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+                    <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
                         <h3 class="headline mb-0">{{ book.title }}</h3>
                         <div class="d-flex">
@@ -56,7 +47,7 @@
               <v-col v-for="(movie, index) in movies" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="movie" ripple :disabled="!movie.live" @click="openMovie(movie._id)">
                   <v-img max-height="400" :src="movie.cover">
-                    <v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+                    <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
                         <h3 class="headline mb-0">{{ movie.title }}</h3>
                         <div class="d-flex">
@@ -80,7 +71,7 @@
               <v-col v-for="(item, index) in music" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="music" ripple :disabled="!item.live" @click="openMusic(item._id)">
                   <v-img :src="item.cover">
-                    <v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+                    <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
                         <h3 class="headline mb-0">{{ item.title }}</h3>
                         <div class="d-flex">
@@ -144,7 +135,7 @@
     <v-dialog width="600" style="z-index: 99991;" v-model="current.open" @click:outside="current = {}">
       <v-card>
         <v-img :src="current.cover" style="height: 90vh;" v-if="current.type != 'music'">
-          <v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+          <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
             <div style="width: 100%;">
               <h3 class="headline mb-0">{{ current.title }}</h3>
               <div class="d-flex">
@@ -159,7 +150,7 @@
         </v-img>
 
         <v-img :src="current.cover" v-if="current.type == 'music'">
-          <v-card-title class="align-end fill-height" style="background-image: linear-gradient(transparent, #212121);">
+          <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
             <div style="width: 100%;">
               <h3 class="headline mb-0">{{ current.title }}</h3>
               <div class="d-flex">

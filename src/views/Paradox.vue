@@ -3,7 +3,7 @@
 		<v-toolbar dense color="blue darken-2">
 			<v-toolbar-title>The Paradox</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-text-field v-model="search" label="Search..." color="white" class="mt-7"></v-text-field>
+			<v-text-field style="max-width: 500px;" v-model="search" label="Search..." color="white" class="mt-7"></v-text-field>
 		</v-toolbar>
 
 		<div style="overflow: auto; height: calc(100vh - 112px);">

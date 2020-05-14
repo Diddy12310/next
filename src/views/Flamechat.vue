@@ -81,16 +81,16 @@
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
             <v-row v-if="message.type === 'message'">
-              <v-col sm="1" class="text-right">
+              <v-col sm="1" cols="12" class="text-right">
                 <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
-              <v-col sm="10">
+              <v-col sm="10" cols="12">
                 <v-list-item-content>
-                  <p v-html="message.content"></p>
+                  <p style="word-wrap: break-word; max-width: 100%;" v-html="message.content"></p>
                   <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="px-2">{{ message.timestamp }}</span><span v-if="message.edits != 0">|<span class="pl-2">{{ message.edits }} {{ message.edits > 1 ? 'edits' : 'edit' }}</span></span></v-list-item-subtitle>
                 </v-list-item-content>
               </v-col>
-              <v-col sm="1">
+              <v-col sm="1" cols="12">
                 <v-fade-transition group>
                   <v-btn key="edit" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner_id == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
                   <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner_id == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
@@ -263,7 +263,7 @@
           <v-text-field @keypress.enter="editChatSave()" v-model="edit.content" label="Message content"></v-text-field>
         </v-card-text>
         <v-card-actions>
-          <v-btn text color="red" @click="deleteChat(edit)">Delete</v-btn>
+          <v-btn text color="red" @click="deleteChat(edit), edit.open = false">Delete</v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="blue accent-1" @click="editChatSave()">Save</v-btn>
         </v-card-actions>

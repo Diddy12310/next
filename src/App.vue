@@ -208,8 +208,7 @@ export default {
         { icon: 'mdi-play', content: 'Media', path: 'media', disabled: false },
         { icon: 'mdi-account-group', content: 'People', path: 'people', disabled: false },
         { icon: 'mdi-satellite-uplink', content: 'Broadcast', path: 'broadcast', disabled: false },
-        { icon: 'mdi-pencil', content: 'Write', path: 'write', disabled: true },
-        { icon: 'mdi-virus', content: 'Coronavirus', path: 'corona', disabled: true }
+        { icon: 'mdi-pencil', content: 'Write', path: 'write', disabled: true }
       ],
       clock: {
         date: '',
@@ -219,7 +218,7 @@ export default {
     }
   },
   methods: {
-    signOut() {
+    signOut( 		) {
 			if (this.$root.user) {
 				this.$http.get(`https://www.theparadigmdev.com/api/users/signout`).then(() => {
 					this.$root.socket.emit('logout', this.$root.user)
@@ -231,6 +230,7 @@ export default {
 					}
 					document.title = 'Authentication'
 					this.$root.profile = false
+					this.$root.music = {}
 				})
 			}
     },

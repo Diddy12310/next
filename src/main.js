@@ -56,6 +56,7 @@ Vue.mixin({
       this.$root.router = 'auth'
       document.title = 'Authentication'
       this.$root.profile = false
+      this.$root.music = {}
     }
   }
 })

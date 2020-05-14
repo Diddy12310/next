@@ -189,7 +189,6 @@ export default {
               password: this.new_user.password,
               bio: this.new_user.bio,
               color: this.new_user.color.hex,
-              pic: 'paradigm.jpg',
               rights: {
                 admin: false,
                 author: false,

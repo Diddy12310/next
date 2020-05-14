@@ -13,7 +13,6 @@
       <patriot key="patriot" v-else-if="$root.router === 'patriot'" />
       <people key="people" v-else-if="$root.router === 'people'" />
       <broadcast key="broadcast" v-else-if="$root.router === 'broadcast'" />
-      <!-- <corona key="corona" v-else-if="$root.router === 'corona'" /> -->
     </v-fade-transition>
   </div>
 </template>
@@ -31,7 +30,6 @@ import Terminal from '@/views/Terminal.vue'
 import Patriot from '@/views/Patriot.vue'
 import People from '@/views/People.vue'
 import Broadcast from '@/views/Broadcast.vue'
-import Corona from '@/views/Corona.vue'
 
 export default {
   name: 'Router',
@@ -47,8 +45,7 @@ export default {
     'terminal': Terminal,
     'patriot': Patriot,
     'people': People,
-    'broadcast': Broadcast,
-    'corona': Corona
+    'broadcast': Broadcast
   }
 }
 </script>
