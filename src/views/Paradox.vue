@@ -17,7 +17,7 @@
 						<v-card-title primary-title>
 							<div>
 								<h3 class="headline mb-0">{{ item.title }}</h3>
-								<h4 class="subtitle-1 grey--text">{{ item.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ item.timestamp }}</h4>
+								<h4 class="subtitle-1 grey--text">{{ item.author }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ item.timestamp }}</h4>
 							</div>
 						</v-card-title>
 					</div>
@@ -31,7 +31,7 @@
 				<v-card-title primary-title>
 					<div>
 						<h3 class="headline mb-0">{{ current.title }}</h3>
-						<h4 class="subtitle-1 grey--text">{{ current.author }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ current.timestamp }}</h4>
+						<h4 class="subtitle-1 grey--text">{{ current.author }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ current.timestamp }}</h4>
 					</div>
 				</v-card-title>
 				<v-card-text>

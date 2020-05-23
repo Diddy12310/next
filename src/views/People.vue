@@ -74,12 +74,12 @@
 
     <v-dialog max-width="350" v-model="block_confirmer">
       <v-card color="orange">
-        <v-card-title>ARE YOU SURE?</v-card-title>
+				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
         <v-card-text>
           If you block {{ $root.profile.username }}, you won't see any of their Broadcasts nor be able to DM them (coming soon). But, you will still see their posts in a chatroom.
         </v-card-text>
         <v-card-actions>
-          <v-btn text>Cancel</v-btn>
+          <v-btn text color="grey">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-btn text @click="blockPerson()">Confirm</v-btn>
         </v-card-actions>

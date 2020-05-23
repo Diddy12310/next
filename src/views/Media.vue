@@ -156,7 +156,7 @@
               <div class="d-flex">
                 <h4 v-if="current.type == 'book'" class="body-2 grey--text">{{ current.author }}</h4>
                 <h4 v-if="current.type == 'movie'" class="body-2 grey--text">{{ current.genre }}</h4>
-                <h4 v-if="current.type == 'music'" class="body-2 grey--text">{{ current.artist }}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{ current.genre }}</h4>
+                <h4 v-if="current.type == 'music'" class="body-2 grey--text">{{ current.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ current.genre }}</h4>
                 <v-spacer></v-spacer>
                 <h4 class="body-2 red--text font-weight-medium" v-if="!current.live">UNAVAILABLE</h4>
               </div>

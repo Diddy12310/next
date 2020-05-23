@@ -43,7 +43,7 @@
       <v-card-title class="display-1 font-weight-light">Sign up</v-card-title>
 
       <v-card-text>
-        <v-window v-model="step">
+        <v-window v-model="step" style="height: 310px;">
           <v-window-item :value="1">
             <v-text-field clearable autocomplete="off" type="text" name="username" v-model="new_user.username" label="Username"></v-text-field>
             <span class="caption grey--text text--darken-1">

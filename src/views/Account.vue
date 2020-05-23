@@ -243,15 +243,15 @@
 
     <v-dialog v-model="delete_dialog" max-width="350">
       <v-card color="red" class="text-center">
-        <v-card-title class="text-center">DELETE ACCOUNT</v-card-title>
+				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
         <v-card-text>
           <v-checkbox label="By checking this box, you acknowledge that deleting your account is irreversible. Your drawer files will be deleted. Your data will be deleted." color="white" v-model="delete_verify"></v-checkbox>
           <p class="text-center mb-0"></p>
         </v-card-text>
         <v-card-actions>
+          <v-btn text color="grey" @click="delete_dialog = false">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-btn :disabled="!delete_verify" text color="white" @click="deleteAccount()">Delete</v-btn>
-          <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
     </v-dialog>
