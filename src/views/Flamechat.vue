@@ -33,7 +33,7 @@
           <v-divider></v-divider>
           <v-tooltip right v-for="(chatroom, index) in $root.user.chatrooms" :key="index">
             <template v-slot:activator="{ on }">
-              <v-list-item class="my-2" :v-ripple="true" v-on="on" :value="chatroom.id" @contextmenu.prevent="showChatroomMenu($event, chatroom.id)" @click="changeChatroom(current.id, chatroom.id)">
+              <v-list-item class="my-2" :v-ripple="true" v-on="on" :value="chatroom.id" @contextmenu.prevent="showChatroomMenu($event, chatroom.id)" @click="changeChatroom(current, chatroom)">
                 <v-list-item-icon>
                   <v-icon>{{ chatroom.icon }}</v-icon>
                 </v-list-item-icon>
@@ -62,8 +62,8 @@
           <v-list-item-icon><v-icon>mdi-content-copy</v-icon></v-list-item-icon>
           <v-list-item-title>Copy ID</v-list-item-title>
         </v-list-item>
-        <v-divider v-if="$root.user.username == chatroom_menu.owner || $root.user.rights.admin == true"></v-divider>
-        <v-list-item @click="delete_verify_popup = true" v-if="$root.user.username == chatroom_menu.owner || $root.user.rights.admin == true">
+        <v-divider v-if="$root.user._id == chatroom_menu.owner || $root.user.rights.admin == true"></v-divider>
+        <v-list-item @click="delete_verify_popup = true" v-if="$root.user._id == chatroom_menu.owner || $root.user.rights.admin == true">
           <v-list-item-icon><v-icon class="red--text">mdi-delete</v-icon></v-list-item-icon>
           <v-list-item-title class="red--text">Delete chatroom</v-list-item-title>
         </v-list-item>
@@ -73,10 +73,13 @@
     <main v-if="!current_id.includes('user_')">
       <v-toolbar dense :style="{ backgroundColor: current.theme }">
         <v-toolbar-title>Flamechat</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon v-if="$root.user._id == chatroom_menu.owner || $root.user.rights.admin == true" @click="people_dialog = true"><v-icon>mdi-account-multiple</v-icon></v-btn>
+        <v-btn icon v-if="$root.user._id == chatroom_menu.owner || $root.user.rights.admin == true" @click="purge_confirm = true"><v-icon>mdi-notification-clear-all</v-icon></v-btn>
       </v-toolbar>
       <!-- <v-btn @click="createChatroom()">create</v-btn> -->
 
-      <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp">
+      <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp && current_status == 'approved'">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -87,24 +90,43 @@
               <v-col sm="10" cols="12">
                 <v-list-item-content>
                   <p style="word-wrap: break-word; max-width: 100%;" v-html="message.content"></p>
-                  <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="px-2">{{ message.timestamp }}</span><span v-if="message.edits != 0">|<span class="pl-2">{{ message.edits }} {{ message.edits > 1 ? 'edits' : 'edit' }}</span></span></v-list-item-subtitle>
+                  <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span><span v-if="message.edits != 0">•<span class="pl-2">{{ message.edits }} {{ message.edits > 1 ? 'edits' : 'edit' }}</span></span></v-list-item-subtitle>
                 </v-list-item-content>
               </v-col>
               <v-col sm="1" cols="12">
                 <v-fade-transition group>
-                  <v-btn key="edit" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner_id == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
-                  <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner_id == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                  <v-btn key="edit" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
+                  <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner== $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
                 </v-fade-transition>
               </v-col>
             </v-row>
 
             <v-list-item-subtitle class="text-center" v-if="message.type === 'left'"><span :style="{ color: message.color }">{{ message.username }}</span> has left</v-list-item-subtitle>
             <v-list-item-subtitle class="text-center" v-if="message.type === 'join'"><span :style="{ color: message.color }">{{ message.username }}</span> has joined</v-list-item-subtitle>
+
+            <v-row v-if="message.type === 'file'">
+              <v-col sm="1" cols="12" class="text-right">
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+              </v-col>
+              <v-col sm="10" cols="12">
+                <v-list-item-content>
+                  <v-card @click="window.open(message.url)" max-width="500">
+                    <v-card-title><v-icon left class="mr-4">mdi-download</v-icon>{{ message.content }}</v-card-title>
+                  </v-card>
+                  <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span></v-list-item-subtitle>
+                </v-list-item-content>
+              </v-col>
+              <v-col sm="1" cols="12">
+                <v-fade-transition group>
+                  <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner== $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                </v-fade-transition>
+              </v-col>
+            </v-row>
           </v-list-item>
         </v-fade-transition>
       </v-list>
 
-      <v-list class="messages" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly">
+      <v-list class="messages" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly && current_status == 'approved'">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -115,8 +137,8 @@
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
-                    <v-btn key="edit" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner_id == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
-                    <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner_id == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                    <v-btn key="edit" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
+                    <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
                   </v-fade-transition>
                 </v-col>
               </v-row>
@@ -125,7 +147,7 @@
                 <v-col sm="12">
                   <v-list-item-content>
                     <p v-html="message.content"></p>
-                    <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>|<span class="px-2">{{ message.timestamp }}</span><span v-if="message.edits != 0">|<span class="pl-2">{{ message.edits }} {{ message.edits > 1 ? 'edits' : 'edit' }}</span></span></v-list-item-subtitle>
+                    <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span><span v-if="message.edits != 0">•<span class="pl-2">{{ message.edits }} {{ message.edits > 1 ? 'edits' : 'edit' }}</span></span></v-list-item-subtitle>
                   </v-list-item-content>
                 </v-col>
               </v-row>
@@ -133,21 +155,51 @@
 
             <v-list-item-subtitle class="text-center" v-if="message.type === 'left'"><span :style="{ color: message.color }">{{ message.username }}</span> has left</v-list-item-subtitle>
             <v-list-item-subtitle class="text-center" v-if="message.type === 'join'"><span :style="{ color: message.color }">{{ message.username }}</span> has joined</v-list-item-subtitle>
+
+            <v-container fluid v-if="message.type === 'file'">
+              <v-row no-gutters align="end">
+                <v-col sm="6">
+                  <v-list-item-avatar class="ma-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                </v-col>
+                <v-col sm="6" class="text-right">
+                  <v-fade-transition group>
+                    <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                  </v-fade-transition>
+                </v-col>
+              </v-row>
+
+              <v-row no-gutters>
+                <v-col sm="12">
+                  <v-list-item-content>
+                    <v-card @click="window.open(message.url)" max-width="350">
+                      <v-card-title>{{ message.content }}</v-card-title>
+                    </v-card>
+                    <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span></v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-list-item>
         </v-fade-transition>
       </v-list>
 
-      <v-fade-transition leave-absolute>
+      <v-fade-transition leave-absolute v-if="current_status == 'approved'">
         <span class="ml-4 mb-n1 grey--text font-italic body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
       </v-fade-transition>
-      <v-layout justify-center align-center text-center px-4>
-        <v-flex xs11>
+      <v-layout justify-center align-center text-center px-4 v-if="current_status == 'approved'">
+        <v-flex xs10>
           <v-text-field :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" @keypress="startTyping()" @keypress.enter="sendChat()" v-model="new_message" :label="`Message ${current.name}...`"></v-text-field>
         </v-flex>
-        <v-flex xs1>
+        <v-flex xs2>
           <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" text icon @click="sendChat()"><v-icon>mdi-send</v-icon></v-btn>
+          <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" text icon @click="uploader = true"><v-icon>mdi-paperclip</v-icon></v-btn>
         </v-flex>
       </v-layout>
+
+      <div v-if="current_status == 'requested'" class="text-center">
+        <h1 class="display-1 mt-12">You have requested to join this chatroom</h1>
+        <v-btn @click="rejectRequest($root.user._id)" class="mt-6" color="blue lighten-1" text><v-icon left>mdi-undo-variant</v-icon>Retract</v-btn>
+      </div>
     </main>
 
     <main v-else-if="current_id === 'user_dm'" class="fill-height" style="margin-left: 330px;">
@@ -172,7 +224,7 @@
           <v-list-item-avatar><v-img :src="message.pic"></v-img></v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ message.content }}</v-list-item-title>
-            <v-list-item-subtitle>{{ message.username }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ message.timestamp }}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{ message.username }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ message.timestamp }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -307,18 +359,119 @@
 			</v-card>
 		</v-dialog>
 
-    <v-dialog v-model="delete_verify_popup" max-width="400">
-			<v-card>
-				<v-card-title><h3 class="headline mb-0">Delete Chatroom</h3></v-card-title>
+    <v-dialog v-model="delete_verify_popup" max-width="350">
+			<v-card color="orange">
+				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
 				<v-card-text>Are you sure you want to delete this chatroom? A refund will not be issued.</v-card-text>
-				<v-divider></v-divider>
 				<v-card-actions>
-					<v-btn @click="deleteChatroom()" color="red" text>Yes</v-btn>
+					<v-btn @click="delete_verify_popup = false" color="grey" text>Cancel</v-btn>
 					<v-spacer></v-spacer>
-					<v-btn @click="delete_verify_popup = false" color="green" text>Cancel</v-btn>
+					<v-btn @click="deleteChatroom()" color="white" text>Yes</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
+
+    <v-dialog v-model="purge_confirm" max-width="350">
+			<v-card color="orange">
+				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
+				<v-card-text>Are you sure you want to purge this chatroom? All messages will be deleted.</v-card-text>
+				<v-card-actions>
+					<v-btn @click="purge_confirm = false" color="grey" text>Cancel</v-btn>
+					<v-spacer></v-spacer>
+					<v-btn @click="purgeChatroom()" color="white" text>Yes</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+
+    <v-dialog v-model="uploader" max-width="350">
+			<v-card>
+				<v-card-title class="title text-center font-weight-medium text-uppercase">Upload File</v-card-title>
+				<v-card-text><v-file-input prepend-icon="" id="file" ref="file" v-model="file" multiple label="Upload..."></v-file-input></v-card-text>
+				<v-card-actions>
+					<v-btn @click="uploader = false; file = null" color="grey" text>Cancel</v-btn>
+					<v-spacer></v-spacer>
+					<v-btn @click="uploadFileAndSend()" color="white" text>Yes</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+
+    <v-dialog v-if="current" v-model="people_dialog" style="z-index: 1000;" max-width="500">
+      <v-card>
+        <v-card-title>People</v-card-title>
+        <v-card-text>
+          Approved
+          <v-list>
+            <v-list-item v-if="current.people.approved.length <= 0">
+              <v-list-item-title class="text-center grey--text font-italic">Nobody is in this chatroom.</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-for="(person, index) in current.people.approved" :key="index">
+              <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+              <v-row>
+                <v-col sm="8" class="py-0">
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-medium" :style="{ color: person.color }">{{ person.username }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ person._id }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-col>
+                <v-col sm="4" align-self="center" class="text-right py-0">
+                  <v-btn icon color="red" @click="removePerson(person._id)"><v-icon>mdi-close</v-icon></v-btn>
+                </v-col>
+              </v-row>
+            </v-list-item>
+          </v-list>
+
+          Requested
+          <v-list>
+            <v-list-item v-if="current.people.requested.length <= 0">
+              <v-list-item-title class="text-center grey--text font-italic">Nobody has requested to join this chatroom.</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-for="(person, index) in current.people.requested" :key="index">
+              <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+              <v-row>
+                <v-col sm="8" class="py-0">
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-medium" :style="{ color: person.color }">{{ person.username }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ person._id }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-col>
+                <v-col sm="4" align-self="center" class="text-right py-0">
+                  <v-btn icon color="green" @click="approveRequest(person._id)"><v-icon>mdi-check</v-icon></v-btn>
+                  <v-btn icon color="red" @click="rejectRequest(person._id)"><v-icon>mdi-close</v-icon></v-btn>
+                </v-col>
+              </v-row>
+            </v-list-item>
+          </v-list>
+
+          Banned
+          <v-list>
+            <v-list-item v-if="current.people.banned.length <= 0">
+              <v-list-item-title class="text-center grey--text font-italic">Nobody has been banned in this chatroom.</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-for="(person, index) in current.people.banned" :key="index">
+              <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+              <v-row>
+                <v-col sm="8" class="py-0">
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-medium" :style="{ color: person.color }">{{ person.username }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ person._id }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-col>
+                <v-col sm="4" align-self="center" class="text-right py-0">
+                  <v-btn icon color="green" @click="unban(person._id)"><v-icon>mdi-minus</v-icon></v-btn>
+                </v-col>
+              </v-row>
+            </v-list-item>
+          </v-list>
+          <v-row no-gutters>
+            <v-col sm="10"><v-text-field label="Username" v-model="ban_username"></v-text-field></v-col>
+            <v-col class="mt-4 text-center" sm="2"><v-btn color="blue lighten-1" icon @click="ban()"><v-icon>mdi-cancel</v-icon></v-btn></v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -334,6 +487,7 @@ export default {
     return {
       current: false,
       add_chatroom_id: '',
+      current_index: null,
       current_id: 'user_home',
       current_dm: '',
       current_message: false,
@@ -347,7 +501,14 @@ export default {
       chatroom_menu: { open: false },
       delete_verify_popup: false,
       socket,
-      typers: []
+      typers: [],
+      current_status: '',
+      people_dialog: false,
+      ban_username: '',
+      purge_confirm: false,
+      uploader: false,
+      file: null,
+      window
     }
   },
   computed: {
@@ -358,9 +519,14 @@ export default {
   methods: {
     async changeChatroom(from, to) {
       if (from) socket.disconnect()
-      socket = await io.connect(`https://www.theparadigmdev.com/flamechat/${to}`)
+      socket = await io.connect(`https://www.theparadigmdev.com/flamechat/${to.id}`)
+      this.current_status = to.status
       socket.on('data', data => {
         this.current = data
+        if (this.$root.user.chatrooms) {
+          this.current_index = this.$root.user.chatrooms.findIndex(chatroom => { return chatroom.id == to.id })
+          if (this.$root.user.chatrooms[this.current_index].status == 'requested') socket.emit('people', to.id)
+        }
       })
       socket.on('send', data => {
         this.current.messages.push(data)
@@ -394,14 +560,15 @@ export default {
         }
         this.typers = filteredData
       })
+      socket.on('people', data => this.current.people = data)
+      socket.on('purge', () => this.current.messages = [])
     },
     buyChatroom() {
       this.$http.post('https://www.theparadigmdev.com/api/flamechat/chatroom/new', {
         icon: 'mdi-forum',
         id: this.buy_chatroom_id,
         name: this.buy_chatroom.name,
-        owner: this.$root.user.username,
-        owner_id: this.$root.user._id,
+        owner: this.$root.user._id,
         theme: this.buy_chatroom.theme
       }).then(response => {
         this.$root.socket.emit('new_chatroom')
@@ -421,17 +588,11 @@ export default {
       }).catch(error => console.error(error))
     },
     addChatroom() {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/chatroom/${this.add_chatroom_id}/add`).then(response => {
-        socket.emit('send', {
-          color: this.$root.user.color,
-          username: this.$root.user.username,
-          user_id: this.$root.user._id,
-          pic: this.$root.user.pic,
-          timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
-          type: 'join'
-        })
-        this.$root.user = response.data
-        this.add_chatroom_id = ''
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/chatroom/${this.add_chatroom_id}/request`).then(response => {
+        if (!response.data.error) {
+          this.$root.user = response.data
+          this.add_chatroom_id = ''
+        } else this.$notify('You cannot join this chatroom', 'error', 'mdi-cancel', true, 3000)
       }).catch(error => console.error(error))
     },
     sendChat() {
@@ -464,6 +625,7 @@ export default {
       this.edit = { open: false }
     },
     showChatroomMenu(e, id) {
+      console.log(id)
       this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${id}`).then(response => {        
         this.chatroom_menu = {
           x: e.clientX,
@@ -480,8 +642,8 @@ export default {
       })
     },
     leaveChatroom() {
-      if (this.$root.user.username != this.current.owner) {
-        this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/chatroom/${this.chatroom_menu.id}/leave`).then(response => {
+      if (this.$root.user._id != this.current.owner) {
+        this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/chatroom/${this.chatroom_menu.id}/leave`).then(response => {
           this.$root.user = response.data
           socket.emit('send', {
             color: this.$root.user.color,
@@ -497,7 +659,7 @@ export default {
       } else this.$notify('You can&#39;t leave this chatroom, you own it!', 'warning', 'mdi-warning', true, 3000)
     },
     async deleteChatroom() {
-			if (this.chatroom_menu.owner == this.$root.user.username || this.$root.user.rights.admin == true) {
+			if (this.chatroom_menu.owner == this.$root.user._id || this.$root.user.rights.admin == true) {
         this.changeChatroom(false, this.chatroom_menu.id)
         socket.emit('kill')
         this.leaveChatroom()
@@ -524,6 +686,74 @@ export default {
             })
           }
         } else this.$notify('You blocked this person', 'warning', 'mdi-account-cancel', false, 3000)
+      })
+    },
+    removePerson(id) {
+      if (id != this.current.owner) {
+        this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current_id}/remove/${id}`).then(response => {
+          socket.emit('send', {
+            color: response.data.color,
+            username: response.data.username,
+            user_id: response.data._id,
+            pic: response.data.pic,
+            timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+            type: 'left'
+          })
+          socket.emit('people', this.current_id)
+        })
+      } else this.$notify('You can&#39;t remove this person, they own this chatroom!', 'warning', 'mdi-warning', true, 3000)
+    },
+    approveRequest(id) {
+      this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current_id}/request/${id}/approve`).then(response => {        
+        socket.emit('send', {
+          color: response.data.color,
+          username: response.data.username,
+          user_id: response.data._id,
+          pic: response.data.pic,
+          timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+          type: 'join'
+        })
+        socket.emit('people', this.current_id)
+      }).catch(error => console.error(error))
+    },
+    rejectRequest(id) {
+      this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current_id}/request/${id}/reject`).then(() => socket.emit('people', this.current_id)).catch(error => console.error(error))
+    },
+    ban() {
+      this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current_id}/ban/${this.ban_username}`).then(() => socket.emit('people', this.current_id)).catch(error => console.error(error))
+    },
+    unban(id) {
+      this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current_id}/unban/${id}`).then(() => socket.emit('people', this.current_id)).catch(error => console.error(error))
+    },
+    purgeChatroom() {
+      this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current_id}/purge`).then(() => { socket.emit('purge'); this.purge_confirm = false }).catch(error => console.error(error))
+    },
+    uploadFileAndSend() {
+      let formData = new FormData()
+      formData.append('file', this.file[0])
+      this.$http.post(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current_id}/file`,
+        formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then(response => {
+        socket.emit('send', {
+          color: this.$root.user.color,
+          username: this.$root.user.username,
+          user_id: this.$root.user._id,
+          pic: this.$root.user.pic,
+          timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+          content: this.file[0].name,
+          url: `https://www.theparadigmdev.com/flamechat/chatroom/${this.current_id}/${this.file[0].name}`,
+          type: 'file'
+        })
+        this.file = null
+        this.uploader = false
+      })
+      .catch(error => {
+        console.log('Upload: failed', error)
+        this.file = null
       })
     }
   },
