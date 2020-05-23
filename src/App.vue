@@ -246,6 +246,7 @@ export default {
 		}
   },
   created() {
+		this.$http.get('https://api.ipify.org/').then(response => this.$root.ip = response.data)
     if (this.$root.user == false) this.$root.router = 'auth'
 		this.runClock()
 		this.$root.socket.on('connect', () => {
@@ -255,13 +256,23 @@ export default {
 			if (this.$root.user) this.$root.socket.emit('login', this.$root.user)
 			this.$root.socket.on('user', data => {
 				if (data.strikes != this.$root.user.strikes) this.$notify(`You have ${data.strikes} strikes!`, 'warning', 'mdi-gavel', false, 3000)
-				this.$root.user = data
+				if (this.$root.router != 'error') this.$root.user = data
 			})
 			this.$root.socket.on('logout', () => {
 				this.$root.socket.disconnect()
 				this.$root.socket = io.connect('https://www.theparadigmdev.com')
 			})
-			this.$root.socket.on('config', data => this.$root.config = data)
+			this.$root.socket.on('config', data => {
+				this.$root.config = data
+				if (this.$root.config.banned.includes(this.$root.ip)) {
+					if (this.$root.user) this.$http.get('https://www.theparadigmdev.com/api/users/signout')
+					this.$root.router = 'error'
+					this.$root.user = false
+					document.title = 'Error'
+					this.$root.profile = false
+					this.$root.music = {}
+				}
+			})
 			this.$root.socket.on('kick', username => {
 				if (username == this.$root.user.username) {
 					this.signOut()

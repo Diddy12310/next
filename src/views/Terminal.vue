@@ -56,6 +56,9 @@ export default {
         case 'me':
           this.$log(JSON.stringify(this.$root.user))
           break
+        case 'ban':
+          this.ban(this.output[1])
+          break
         default:
           this.$log(`command ${this.output[0]} does not exist!`)
           this.input = ''
@@ -135,6 +138,10 @@ export default {
       this.$http.get(`https://www.theparadigmdev.com/terminal/list/${query}`).then(response => {
         this.$log(response.data.toString())
       })
+    },
+    ban(ip) {
+      socket.emit('ip', ip)
+      this.$log(`ip ${ip} banned`)
     },
     $log(input) {
       this.history.push(`<p class="ml-8 grey--text"># ${input}</p>`)
