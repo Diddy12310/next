@@ -10,6 +10,7 @@
       <v-card-text>
         <v-text-field @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
         <v-text-field :disabled="!user_auth_info.exists && !user_auth_info.in" v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
+        <p class="text-center">By logging in, you agree to the <a style="text-decoration: none;" href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
         <p v-if="$root.config.reset" class="text-center">Can't remember your password? Oh well.</p>
         <p v-if="$root.config.migrate" class="text-center">Have an old v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
         <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
@@ -29,7 +30,8 @@
         <v-text-field :disabled="!username_exists" v-model="password" label="Password" type="password"></v-text-field>
         <v-checkbox label="I understand that this action is irreversible and may lead to data loss" v-model="migrate_confirm" class="mb-5"></v-checkbox>
         <p class="text-center mb-8 font-italic"><b>Note:</b> Your username and password will remain the same.</p>
-        <p class="text-center">Already have a new Paradigm account? <a @click="method = 'in'">Sign in</a>.</p>
+        <p class="text-center">By migrating your account, you agree to the <a style="text-decoration: none;" href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
+        <p class="text-center">Already migrated or created your Paradigm account? <a @click="method = 'in'">Sign in</a>.</p>
         <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
       </v-card-text>
 
