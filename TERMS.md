@@ -1,11 +1,12 @@
+<img src="https://www.theparadigmdev.com/relay/img/paradigm.png" alt="Logo" width="150" height="150"></img>
 # Terms of Service and Use
-### Paradigm Development
+### Paradigm
 
-Last updated: April 16th, 2020
+Last updated: May 28th, 2020
 
 ## Agreement to Terms
 
-These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and Paradigm Development, Inc. ("Company", "We", "us", or "our"), concerning your access to and use of the www.theparadigmdev.com website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the "Site"). You agree that by accessing the Site, you have read, understood, and agreed to be bound by all of these Terms of Use.
+These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and Paradigm. ("Company", "We", "us", or "our"), concerning your access to and use of the www.theparadigmdev.com website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the "Site"). You agree that by accessing the Site, you have read, understood, and agreed to be bound by all of these Terms of Use.
 
 **IF YOU DO NOT AGREE WITH ALL OF THESE TERMS OF USE, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SITE AND YOU MUST DISCONTINUE USE IMMEDIATELY.**
 
@@ -173,7 +174,7 @@ These Terms of Use and any policies or operating rules posted by us on the Site 
 
 # Privacy Policy
 
-Thank you for choosing to be part of our community at Paradigm Development ("Company", "we", "us", or "our"). We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about our policy, or our practices with regards to your personal information, please contact us at [paradigmdevelop@gmail.com](mailto:paradigmdevelop@gmail.com).
+Thank you for choosing to be part of our community at Paradigm ("Company", "we", "us", or "our"). We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about our policy, or our practices with regards to your personal information, please contact us at [paradigmdevelop@gmail.com](mailto:paradigmdevelop@gmail.com).
 
 When you visit our website www.theparadigmdev.com, and use our services, you trust us with your personal information. We take your privacy very seriously. In this privacy notice, we describe our privacy policy. We seek to explain to you in the clearest way possible what information we collect, how we use it and what rights you have in relation to it. We hope you take some time to read through it carefully, as it is important. If there are any terms in this privacy policy that you do not agree with, please discontinue use of our Sites and our services.
 
