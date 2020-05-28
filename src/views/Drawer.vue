@@ -12,7 +12,17 @@
         <template v-slot:item.action="{ item }">
           <v-icon small class="light-blue--text mr-2" @click="downloadFile(item._id)">mdi-download</v-icon>
           <v-icon small class="red--text mr-2" @click="deleteFile(item._id)">mdi-delete</v-icon>
-          <v-icon small class="white--text" @click="startRename(item)">mdi-textbox</v-icon>
+          <v-icon small class="blue-grey--text text--lighten-2 mr-2" @click="startRename(item)">mdi-form-textbox</v-icon>
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on }">
+              <v-icon small class="white--text" v-on="on" @click="getLink(item._id)">mdi-link</v-icon>
+            </template>
+            <v-list>
+              <v-list-item>
+                <v-list-item-subtitle>{{ link }}</v-list-item-subtitle>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </template>
       </v-data-table>
 
@@ -20,7 +30,17 @@
         <template v-slot:item.action="{ item }">
           <v-icon small class="light-blue--text mr-2" @click="downloadFile(item._id)">mdi-download</v-icon>
           <v-icon small class="red--text mr-2" @click="deleteFile(item._id)">mdi-delete</v-icon>
-          <v-icon small class="white--text" @click="startRename(item)">mdi-textbox</v-icon>
+          <v-icon small class="blue-grey--text text--lighten-2 mr-2" @click="startRename(item)">mdi-form-textbox</v-icon>
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on }">
+              <v-icon small class="white--text" v-on="on" @click="getLink(item._id)">mdi-link</v-icon>
+            </template>
+            <v-list>
+              <v-list-item>
+                <v-list-item-subtitle>{{ link }}</v-list-item-subtitle>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </template>
       </v-data-table>
     </v-container>
@@ -46,11 +66,12 @@ export default {
         { text: 'Type', value: 'type' },
         { text: 'Size', value: 'size' },
         { text: 'Uploaded', value: 'date', width: 200 },
-        { text: 'Actions', value: 'action', sortable: false, width: 100 }
+        { text: 'Actions', value: 'action', sortable: false, width: 125 }
       ],
       filelist: [],
       files: null,
-      rename: { open: false }
+      rename: { open: false },
+      link: ''
     }
   },
   methods: {
@@ -106,14 +127,13 @@ export default {
         this.rename = { open: false }
         this.getFileList()
       })
+    },
+    getLink(id) {
+      this.link = `https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/download/${id}`
     }
   },
   created() {
     this.getFileList()
-    this.$notify('Drawer is not fully secured yet. Please refrain from uploading sensitive material.', 'warning', 'mdi-alert', true, 0)
-  },
-  beforeDestroy() {
-    this.$root.alert.open = false
   }
 }
 </script>
