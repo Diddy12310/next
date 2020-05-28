@@ -1,6 +1,6 @@
 <template>
   <v-app style="overflow: auto;">
-		<v-app-bar app style="background: linear-gradient(135deg, #162fa1 0%, #50336e 100%); z-index: 100;" v-if="$root.user">
+		<v-app-bar app style="background: linear-gradient(135deg, #0E2280 0%, #50336E 100%); z-index: 100;" v-if="$root.user">
 			<v-app-bar-nav-icon v-if="!$root.user.banned" @click="$root.drawer = !$root.drawer"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
 				<img :class="{ 'true': $root.user, 'false': $root.user.banned }" @click="$root.user ? $root.router = 'home' : $root.router = 'auth'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" class="logo">
