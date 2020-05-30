@@ -133,10 +133,6 @@
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
-
-    <!-- <v-footer app color="rgb(18, 18, 18)" v-if="$vuetify.breakpoint.smAndUp">
-      <p class="font-italic text-center pb-0 mb-0 ma-auto"><a @click="$root.view.quote = true" class="grey--text text--darken-2">Here's to the crazy ones...</a></p>
-    </v-footer> -->
   </div>
 </template>
 
