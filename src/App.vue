@@ -1,6 +1,6 @@
 <template>
   <v-app style="overflow: auto;">
-		<v-app-bar app style="background: linear-gradient(135deg, #0E2280 0%, #50336E 100%); z-index: 100;" v-if="$root.user">
+		<v-app-bar app style="background: linear-gradient(135deg, #1A237E 0%, #6A1B9A 100%); z-index: 100;" v-if="$root.user">
 			<v-app-bar-nav-icon v-if="!$root.user.banned" @click="$root.drawer = !$root.drawer"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
 				<img :class="{ 'true': $root.user, 'false': $root.user.banned }" @click="$root.user ? $root.router = 'home' : $root.router = 'auth'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" class="logo">
@@ -52,6 +52,9 @@
 				<v-list-item-group mandatory v-model="$root.router">
 					<v-list-item value="account" class="d-none">
 						<v-list-item-title>Account</v-list-item-title>
+					</v-list-item>
+					<v-list-item value="privacy" class="d-none">
+						<v-list-item-title>Privacy</v-list-item-title>
 					</v-list-item>
 					<v-list-item value="terminal" class="d-none" v-if="$root.user.rights.admin">
 						<v-list-item-title>Terminal</v-list-item-title>
@@ -121,8 +124,8 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="grey darken-2" @click="$root.view.quote = true">
-								<v-icon>mdi-format-quote-close</v-icon>
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="grey darken-2" @click="$root.router = 'privacy'">
+								<v-icon>mdi-shield-half-full</v-icon>
 							</v-btn>
 						</template>
 						<span>Here's to the crazy ones...</span>
@@ -170,12 +173,6 @@
 					<v-spacer></v-spacer>
 					<v-btn text color="white" @click="saveBuggyDialog()">Continue</v-btn>
 				</v-card-actions>
-			</v-card>
-		</v-dialog>
-
-		<v-dialog fullscreen v-model="$root.view.quote" style="z-index: 1000;">
-			<v-card class="quote">
-				<v-btn fab fixed top right text @click="$root.view.quote = false"><v-icon>mdi-close</v-icon></v-btn>
 			</v-card>
 		</v-dialog>
 
@@ -351,13 +348,5 @@ html { overflow: hidden !important; }
   left: 50%;
   transform: translate(-50%, -50%);
 	text-align: center;
-}
-
-.quote {
-	background: url('./assets/quote.jpg');
-	background-attachment: fixed;
-	background-position: right;
-	background-size: auto 100vh;
-	background-repeat: no-repeat;
 }
 </style>
