@@ -3,7 +3,7 @@
     <v-toolbar dense color="cyan darken-2">
       <v-toolbar-title>Media</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-text-field style="max-width: 500px;" disabled color="white" v-model="search" label="Search..." class="mt-7"></v-text-field>
+      <v-text-field style="max-width: 500px;" color="white" v-model="search" label="Search..." class="mt-7"></v-text-field>
     </v-toolbar>
     <v-tabs v-model="tab" centered background-color="cyan darken-2" color="white">
       <v-tab>Books</v-tab>
@@ -20,7 +20,7 @@
         <v-tab-item>
           <v-container fluid>
             <v-row>
-              <v-col v-for="(book, index) in books" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
+              <v-col v-for="(book, index) in filteredBooks" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="book" ripple :disabled="!book.live" @click="openBook(book._id)">
                   <v-img max-height="400" :src="book.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
@@ -44,7 +44,7 @@
         <v-tab-item>
           <v-container fluid>
             <v-row>
-              <v-col v-for="(movie, index) in movies" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
+              <v-col v-for="(movie, index) in filteredMovies" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="movie" ripple :disabled="!movie.live" @click="openMovie(movie._id)">
                   <v-img max-height="400" :src="movie.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
@@ -68,7 +68,7 @@
         <v-tab-item>
           <v-container fluid>
             <v-row>
-              <v-col v-for="(item, index) in music" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
+              <v-col v-for="(item, index) in filteredMusic" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="music" ripple :disabled="!item.live" @click="openMusic(item._id)">
                   <v-img :src="item.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
@@ -228,6 +228,25 @@ export default {
       if (this.current.songs) {
         return this.current.songs.sort((a, b) => (parseInt(a.track) > parseInt(b.track)) ? 1 : -1)
       }
+    },
+    filteredBooks() {
+      return this.books.filter(book => {
+				return book.title.toLowerCase().includes(this.search.toLowerCase()) || book.author.toLowerCase().includes(this.search.toLowerCase())
+			})
+    },
+    filteredMovies() {
+      return this.movies.filter(movie => {
+				return movie.title.toLowerCase().includes(this.search.toLowerCase()) || movie.genre.toLowerCase().includes(this.search.toLowerCase())
+			})
+    },
+    filteredMusic() {
+      return this.music.filter(item => {
+        var isSong = false
+        item.songs.forEach(song => {
+          if (song.title.toLowerCase().includes(this.search.toLowerCase())) isSong = true
+        })
+				return item.title.toLowerCase().includes(this.search.toLowerCase()) || item.artist.toLowerCase().includes(this.search.toLowerCase()) || item.genre.toLowerCase().includes(this.search.toLowerCase()) || isSong
+			})
     }
   },
   created() {
