@@ -342,7 +342,7 @@ export default {
       }).catch(error => console.error(error))
     },
     approveRequest(person) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/approve`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/approve`).then(response => { this.$root.user.people = response.data; this.fixData(); this.$root.socket.emit('new_chatroom'); }).catch(error => console.error(error))
     },
     declineRequest(person) {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/decline`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
@@ -351,7 +351,7 @@ export default {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/retract`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
     },
     removeFriend(person) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${person}`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${person}`).then(response => { this.$root.user.people = response.data; this.fixData(); this.$root.socket.emit('new_chatroom'); }).catch(error => console.error(error))
     },
     unblockPerson(person) {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/unblock/${person}`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
