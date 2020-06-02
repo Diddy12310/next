@@ -41,72 +41,35 @@
       </v-card-actions>
     </v-card>
 
-    <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'up'">
+    <v-card width="500" class="mx-auto elevation-12" :style="{ margin: $vuetify.breakpoint.smAndUp ? '100px 0px 100px 0px' : '0px' }" v-if="method == 'up'">
       <v-card-title class="display-1 font-weight-light">Sign up</v-card-title>
 
       <v-card-text>
-        <v-window v-model="step" style="height: 310px;">
-          <v-window-item :value="1">
-            <v-text-field clearable autocomplete="off" type="text" name="username" v-model="new_user.username" label="Username"></v-text-field>
-            <span class="caption grey--text text--darken-1">
-              This is the username you will use to login to your Paradigm account.
-            </span>
-          </v-window-item>
-
-          <v-window-item :value="2">
-            <v-text-field clearable autocomplete="off" type="password" name="password" v-model="new_user.password" label="Password"></v-text-field>
-            <v-text-field clearable autocomplete="off" type="password" name="password" v-model="new_user.password_confirm" label="Confirm Password"></v-text-field>
-            <span class="caption grey--text text--darken-1">
-              Enter a password to sign in to your account.
-            </span>
-          </v-window-item>
-
-          <v-window-item :value="3">
-            <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3 elevation-0" v-model="new_user.color"></v-color-picker>
-            <span class="caption grey--text text--darken-1">
-              Pick a color for your account.
-            </span>
-          </v-window-item>
-
-          <v-window-item :value="4">
-            <v-text-field :count="50" autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Bio"></v-text-field>
-            <span class="caption grey--text text--darken-1">
-              Enter a shot biography.
-            </span>
-          </v-window-item>
-
-          <v-window-item :value="5">
-            <!-- <v-container style="margin: auto;" fluid>
-              <v-layout row wrap>
-                <v-flex v-for="pic in $root.avail_profile_pics" :key="pic" xs4>
-                  <v-card @click="$root.accountPic == pic ? $root.accountPic = null : $root.accountPic = pic" v-ripple flat tile>
-                    <v-img :src="`https://www.theparadigmdev.com/relay/profile-pics/${pic}.jpg`" width="150px" height="150px"></v-img>
-                    <v-fade-transition>
-                      <v-overlay v-if="$root.accountPic == pic" absolute>
-                        <v-icon>mdi-check</v-icon>
-                      </v-overlay>
-                    </v-fade-transition>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-container> -->
-
-            <v-file-input prepend-icon="" class="mt-7" id="file" ref="file" v-model="new_user.pic" label="Profile pic..."></v-file-input>
-          </v-window-item>
-
+        <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden">
+          <v-text-field autocomplete="off" type="text" name="username" v-model="new_user.username" label="Username"></v-text-field>
+          <span class="grey--text">This will be used to sign into your account. All other users on the platform will be able to see it, choose wisely.</span>
+          <v-text-field autocomplete="off" type="password" name="password" v-model="new_user.password" label="Password"></v-text-field>
+          <v-text-field autocomplete="off" type="password" name="password" v-model="new_user.password_confirm" label="Confirm Password"></v-text-field>
+          <span class="grey--text">Choose a memorable, yet secure password. Remember it! If you forget it, there is no way to recover your account.</span>
+          <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3" flat style="margin: auto;" v-model="new_user.color"></v-color-picker>
+          <span class="grey--text">Your color should represent yourself. Anywhere your username is displayed, so is your color.</span>
+          <v-text-field :count="50" autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Bio"></v-text-field>
+          <span class="grey--text">A short and sweet summary of yourself.</span>
+          <v-file-input prepend-icon="" id="file" ref="file" v-model="new_user.pic" label="Profile pic..."></v-file-input>
+          <span class="grey--text">A visual representation of yourself.</span>
+          <v-checkbox label="I have read and accept the Terms and Conditions." v-model="new_user.terms" class="mb-4"></v-checkbox>
+          <span class="grey--text">Please read and accept the <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>. Confirm that you are over the age of 13. If you are under 18, parental permission is required. <a href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Read more</a></span>
+        </div>
+        <!-- <v-window v-model="step" style="height: 310px;">
           <v-window-item :value="6">
-            <v-checkbox label="I have read and accept the Terms and Conditions" v-model="new_user.terms"></v-checkbox>
-            <v-btn @click="window.open('https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md')" text class="mt-4 blue-grey--text text--lighten-2">View Terms</v-btn><br>
-            <!-- <v-btn @click="$root.view.terms = true" text class="mt-4 blue-grey--text text--lighten-2">View Terms</v-btn><br> -->
             <span class="caption grey--text text--darken-1">
-              Please read and accept the Terms and Conditions.
             </span>
           </v-window-item>
 
           <v-window-item :value="7">
             <h1 class="display-1 my-4 font-weight-light text-center">Welcome to Paradigm!</h1>
           </v-window-item>
-        </v-window>
+        </v-window> -->
         
         <v-divider class="my-8"></v-divider>
 
