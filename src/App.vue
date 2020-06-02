@@ -124,11 +124,11 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="grey darken-2" @click="$root.router = 'privacy'">
+							<v-btn :input-value="$root.router == 'privacy'" small v-on="on" class="my-2 mr-2" icon color="grey darken-2" @click="$root.router = 'privacy'">
 								<v-icon>mdi-shield-half-full</v-icon>
 							</v-btn>
 						</template>
-						<span>Here's to the crazy ones...</span>
+						<span>Privacy</span>
 					</v-tooltip>
 				</div>
 			</template>
