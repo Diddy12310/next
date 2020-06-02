@@ -58,11 +58,13 @@
                   </v-col>
 
                   <v-col class="text-right">
-                    <v-btn @click="likePost(post._id)" class="mr-1" icon><v-icon>mdi-heart</v-icon></v-btn>
+                    <v-btn @click="$root.user.people.approved[profile_index].liked_posts.includes(post._id) ? unLikePost(post._id, index) : likePost(post._id, index)" :input-value="$root.user.people.approved[profile_index].liked_posts.includes(post._id)" class="mr-1" icon>
+                      <v-icon>{{ $root.user.people.approved[profile_index].liked_posts.includes(post._id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+                    </v-btn>
                     <span class="subheading mr-2">{{ post.likes }}</span>
                     <span class="mr-1">·</span>
-                    <v-btn class="mr-1" icon><v-icon>mdi-share-variant</v-icon></v-btn>
-                    <span class="subheading mr-6">{{ post.reposts }}</span>
+                    <v-btn class="mr-1" icon disabled><v-icon>mdi-share-variant</v-icon></v-btn>
+                    <span class="subheading mr-6 grey--text">{{ post.reposts }}</span>
                   </v-col>
                 </v-row>
               </v-card-actions>
@@ -76,7 +78,7 @@
       <v-card color="orange">
 				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
         <v-card-text>
-          If you block {{ $root.profile.username }}, you won't see any of their Broadcasts nor be able to DM them (coming soon). But, you will still see their posts in a chatroom.
+          If you block {{ $root.profile.username }}, you won't see any of their Broadcasts nor be able to DM them. But, you will still see their posts in a chatroom.
         </v-card-text>
         <v-card-actions>
           <v-btn text color="grey">Cancel</v-btn>
@@ -94,7 +96,8 @@ export default {
   data() { return {
     people: [],
     block_confirmer: false,
-    search: ''
+    search: '',
+    profile_index: null
   }},
   computed: {
     filtered_people() {
@@ -112,8 +115,11 @@ export default {
     },
     is_approved() {
       var is = false
-      this.$root.user.people.approved.forEach(person => {
-        if (this.$root.profile._id === person._id) is = true
+      this.$root.user.people.approved.forEach((person, index) => {
+        if (this.$root.profile._id === person._id) {
+          is = true
+          this.profile_index = index
+        }
       })
       return is
     },
@@ -150,10 +156,18 @@ export default {
     blockPerson() {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/block/${this.$root.profile._id}`).then(response => { this.$root.user.people = response.data; this.$root.profile = false; this.block_confirmer = false; }).catch(error => console.error(error))
     },
-    likePost(id) {
+    likePost(id, index) {
       this.$http.get(`https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/like/${this.$root.profile._id}/${id}`).then(response => {
-        this.$root.profile = response.data
-        // this.
+        this.$root.profile = response.data.profile
+        this.$root.user = response.data.user
+        this.$root.profile.posts[index].likes++
+      }).catch(error => console.error(error))
+    },
+    unLikePost(id, index) {
+      this.$http.get(`https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/unlike/${this.$root.profile._id}/${id}`).then(response => {
+        this.$root.profile = response.data.profile
+        this.$root.user = response.data.user
+        this.$root.profile.posts[index].likes--
       }).catch(error => console.error(error))
     }
   }
