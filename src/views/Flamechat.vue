@@ -560,8 +560,17 @@
             </v-list-item>
           </v-list>
           <v-row no-gutters>
-            <v-col sm="10"><v-text-field label="Username" v-model="ban_username"></v-text-field></v-col>
-            <v-col class="mt-4 text-center" sm="2"><v-btn color="blue lighten-1" icon @click="ban()"><v-icon>mdi-cancel</v-icon></v-btn></v-col>
+            <v-col sm="10">
+              <v-autocomplete
+                v-model="ban_username"
+                :items="people"
+                :search-input.sync="search"
+                hide-no-data
+                label="Username"
+                clearable
+              ></v-autocomplete>
+            </v-col>
+            <v-col class="mt-4 text-center" sm="2"><v-btn color="blue lighten-1" icon @click="ban()" :disabled="!ban_username"><v-icon>mdi-cancel</v-icon></v-btn></v-col>
           </v-row>
         </v-card-text>
       </v-card>
@@ -603,7 +612,9 @@ export default {
       purge_confirm: false,
       uploader: false,
       file: null,
-      window
+      window,
+      search: '',
+      people: []
     }
   },
   computed: {
@@ -929,6 +940,7 @@ export default {
     //     })
     //   }
     // }, 1000)
+    this.$http.get('https://www.theparadigmdev.com/api/users/shortlist').then(response => this.people = response.data)
   },
   beforeDestroy() {
     this.current = false
@@ -947,7 +959,7 @@ main {
   margin-left: 74px;
 }
 
-.v-sheet:not(.v-card):not(.v-toolbar):not(.chatroom-menu) {
+.v-sheet:not(.v-card):not(.v-toolbar):not(.chatroom-menu):not(.v-select-list) {
   background: none !important;
 }
 
