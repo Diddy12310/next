@@ -2,7 +2,7 @@
 # Terms of Service and Use
 ### Paradigm
 
-Last updated: May 28th, 2020
+Last updated: June 2nd, 2020
 
 ## Agreement to Terms
 
@@ -35,29 +35,28 @@ You are required to register with the Site. You agree to keep your password conf
 You may not access or use the Site for any purpose other than that for which we make the Site available. The Site may not be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us. As a user of the Site, you agree not to:
 
 1. Systematically retrieve data or other content from the Site to create or compile, directly or indirectly, a collection, compilation, database, or directory without written permission from us.
-2. Make any unauthorized use of the Site, including collecting usemames and/or email addresses of users by electronic or other means for the purpose of sending unsolicited email, or creating user accounts by automated means or under false pretenses
-3. Use a buying agent or purchasing agent to make purchases on the Site.
-4. Use the Site to advertise or offer to sell goods and services.
-5. Circumvent, disable, or otherwise interfere with security-related features of the Site, including features that prevent or restrict the use or copying of any Content or enforce limitations on the use of the Site and/or the Content contained therein.
-6. Engage in unauthorized framing of or linking to the Site.
-7. Trick, defraud, or mislead us and other users, especially in any attempt to learn sensitive account information, such as passwords.
-8. Make improper use of our support services or submit false reports of abuse or misconduct.
-9. Engage in any automated use of the system, such as using scripts to send comments or messages, or using any data mining, robots, or similar data gathering and extraction tools.
-10. Interfere with, disrupt, or create an undue burden on the Site or the networks or services connected to the Site.
-11. Attempt to impersonate another user or person or use the username of another user.
-12. Sell or otherwise transfer your profile.
-13. Use any information obtained trom the Site in orderto harass, abuse, or harm another person.
-14. Use the Site as part of any effort to compete with us or otherwise use the Site and/or the Content for any revenue generating endeavor or commercial enterprise.
-15. Decipher, decompile, disassemble, or reverse engineer any of the software comprising or in any way making up a part of the Site.
-16. Attempt to bypass any measures of the Site designed to prevent or restrict access to the Site, or any portion of the site.
-17. Harass, annoy, intimidate, or threaten any of our employees or agents engaged in providing any portion of the Site to you.
-18. Delete the copyright or other proprietary rights notice from any Content.
-19. Copy or adapt the Site's software, including but not limited to HTML, JavaScript, CSS, or other code.
-20. Upload or transmit (or attempt to upload or to transmit) viruses, Trojan horses, or other material, including excessive use of capital letters and spamming (continuous posting of repetitive text), that interferes with any user's uninterrupted use and enjoyment of the Site or modifies, impairs, disrupts, alters, or interferes with the use, features, functions, operation, or maintenance of the Site.
-21. Upload or transmit (or attempt to upload or to transmit) any material that acts as a passive or active information collection or transmission mechanism, including without limitation, clear graphics interchange formats ("gifs'), 1x1 pixels, web bugs, cookies, or other similar devices (sometimes referred to as "spyware" or "passive collection mechanisms" or "pcms").
-22. Disparage, tarnish, or otherwise harm, in our opinion, us and/or the Site.
-23. Use the Site in a manner inconsistent with any applicable laws or regulation.
-24. Except as may be the result of standard search engine or Internet browser usage, use, launch, develop, or distribute any automated system, including without limitation, any spider, robot, cheat utility, scraper, or offline reader that accesses the Site, or using or launching any unauthorized script or other software.
+2. Make any unauthorized use of the Site or creating user accounts by automated means or under false pretenses
+3. Use the Site to advertise or offer to sell goods and services.
+4. Circumvent, disable, or otherwise interfere with security-related features of the Site, including features that prevent or restrict the use or copying of any Content or enforce limitations on the use of the Site and/or the Content contained therein.
+5. Engage in unauthorized framing of or linking to the Site.
+6. Trick, defraud, or mislead Us and other users, especially in any attempt to learn sensitive account information, such as passwords.
+7. Make improper use of our support services or submit false reports of abuse or misconduct.
+8. Engage in any automated use of the system, such as using scripts to send comments or messages, or using any data mining, robots, or similar data gathering and extraction tools.
+9. Interfere with, disrupt, or create an undue burden on the Site or the networks or services connected to the Site.
+10. Attempt to impersonate another user or person or use the username of another user.
+11. Sell or otherwise transfer your profile.
+12. Use any information obtained trom the Site in orderto harass, abuse, or harm another person.
+13. Use the Site as part of any effort to compete with us or otherwise use the Site and/or the Content for any revenue generating endeavor or commercial enterprise.
+14. Decipher, decompile, disassemble, or reverse engineer any of the software comprising or in any way making up a part of the Site.
+15. Attempt to bypass any measures of the Site designed to prevent or restrict access to the Site, or any portion of the site.
+16. Harass, annoy, intimidate, or threaten any of our employees or agents engaged in providing any portion of the Site to you.
+17. Delete the copyright or other proprietary rights notice from any Content.
+18. Copy or adapt the Site's software, including but not limited to HTML, JavaScript, CSS, or other code.
+19. Upload or transmit (or attempt to upload or to transmit) viruses, Trojan horses, or other material, including excessive use of capital letters and spamming (continuous posting of repetitive text), that interferes with any user's uninterrupted use and enjoyment of the Site or modifies, impairs, disrupts, alters, or interferes with the use, features, functions, operation, or maintenance of the Site.
+20. Upload or transmit (or attempt to upload or to transmit) any material that acts as a passive or active information collection or transmission mechanism, including without limitation, clear graphics interchange formats ("gifs'), 1x1 pixels, web bugs, cookies, or other similar devices (sometimes referred to as "spyware" or "passive collection mechanisms" or "pcms").
+21. Disparage, tarnish, or otherwise harm, in our opinion, us and/or the Site.
+22. Use the Site in a manner inconsistent with any applicable laws or regulation.
+23. Except as may be the result of standard search engine or Internet browser usage, use, launch, develop, or distribute any automated system, including without limitation, any spider, robot, cheat utility, scraper, or offline reader that accesses the Site, or using or launching any unauthorized script or other software.
 
 ## User Generated Contributions
 
@@ -74,8 +73,7 @@ The Site may invite you to chat, contribute to, or participate in blogs, message
 10. Your Contributions do not violate the privacy or publicity rights of any third party.
 11. Your Contributions do not contain any material that solicits personal information from anyone under the age of 18 or exploits people under the age of 18 in a sexual or violent manner.
 12. Your Contributions do not violate any federal or state law concerning child pornography, or otherwise intended to protect the health or well-being of minors.
-13. Your Contributions do not include any offensive comments that are connected to race, national origin, gender, sexual preference, or physical handicap.
-14. Your Contributions do not otherwise violate, or link to material that violates, any provision of these Terms of Use, or any applicable law or regulation.
+13. Your Contributions do not otherwise violate, or link to material that violates, any provision of these Terms of Use, or any applicable law or regulation.
 
 Any use of the Site in violation of the foregoing violates these Terms of Use and may result in, among other things, termination or suspension of your rights to use the Site.
 
