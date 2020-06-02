@@ -18,7 +18,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="signIn()" text color="blue accent-1">Sign in</v-btn>
+        <v-btn @click="signIn()" text color="blue accent-1" :disabled="!username || !password">Sign in</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -27,7 +27,7 @@
 
       <v-card-text>
         <v-text-field @keyup="checkIfUserExistsMigrate" v-model="username" label="Username"></v-text-field>
-        <v-text-field :disabled="!username_exists" v-model="password" label="Password" type="password"></v-text-field>
+        <v-text-field :disabled="!user_auth_info.exists" v-model="password" label="Password" type="password"></v-text-field>
         <v-checkbox label="I understand that this action is irreversible and may lead to data loss" v-model="migrate_confirm" class="mb-5"></v-checkbox>
         <p class="text-center mb-8 font-italic"><b>Note:</b> Your username and password will remain the same.</p>
         <p class="text-center">By migrating your account, you agree to the <a style="text-decoration: none;" href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
@@ -37,7 +37,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :disabled="!migrate_confirm" @click="migrateAccount()" text color="blue accent-1">Migrate</v-btn>
+        <v-btn @click="migrateAccount()" text color="blue accent-1" :disabled="!username || !password || !migrate_confirm">Migrate</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -53,9 +53,9 @@
           <span class="grey--text">Choose a memorable, yet secure password. Remember it! If you forget it, there is no way to recover your account.</span>
           <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3" flat style="margin: auto;" v-model="new_user.color"></v-color-picker>
           <span class="grey--text">Your color should represent yourself. Anywhere your username is displayed, so is your color.</span>
-          <v-text-field :count="50" autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Bio"></v-text-field>
+          <v-text-field :count="50" autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Biography"></v-text-field>
           <span class="grey--text">A short and sweet summary of yourself.</span>
-          <v-file-input prepend-icon="" id="file" ref="file" v-model="new_user.pic" label="Profile pic..."></v-file-input>
+          <v-file-input prepend-icon="" id="file" ref="file" v-model="new_user.pic" label="Profile Picture"></v-file-input>
           <span class="grey--text">A visual representation of yourself.</span>
           <v-checkbox label="I have read and accept the Terms and Conditions." v-model="new_user.terms" class="mb-4"></v-checkbox>
           <span class="grey--text">Please read and accept the <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>. Confirm that you are over the age of 13. If you are under 18, parental permission is required. <a href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Read more</a></span>
@@ -78,10 +78,10 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn :disabled="step === 1 || step === 7" text @click="step--">Back</v-btn>
         <v-spacer></v-spacer>
-        <v-btn v-if="step !== 7" color="primary" @click="step++">Next</v-btn>
-        <v-btn color="primary" v-if="step === 7" @click="signUp()">Continue</v-btn>
+        <v-btn @click="signUp()" text color="blue accent-1"
+          :disabled="!new_user.username || new_user.password != new_user.password_confirm || !new_user.color || !new_user.bio || !new_user.pic || !new_user.terms"
+        >Sign up</v-btn>
       </v-card-actions>
     </v-card>
 
