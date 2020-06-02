@@ -57,6 +57,7 @@ Vue.mixin({
       document.title = 'Authentication'
       this.$root.profile = false
       this.$root.music = {}
+      this.$root.transmission = false
     }
   }
 })
@@ -82,11 +83,12 @@ new Vue({
         terms: false,
         buggy_dialog: false,
         quote: false,
-        corona: false
+        transmission: false
       },
       socket,
       profile: false,
-      ip: ''
+      ip: '',
+      transmission: false
     }
   },
   render: h => h(App)

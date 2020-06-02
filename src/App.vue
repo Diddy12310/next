@@ -176,7 +176,13 @@
 			</v-card>
 		</v-dialog>
 
-		<!-- <v-snackbar bottom right :timeout="0" v-model="$root.view.corona"><v-icon left color="red">mdi-hospital</v-icon> Get the facts about the COVID-19 outbreak<v-btn text color="red" @click="$root.router = 'corona'">Go<v-icon right>mdi-arrow-right</v-icon></v-btn></v-snackbar> -->
+		<v-bottom-sheet v-if="$root.transmission" v-model="$root.view.transmission" persistent>
+      <v-sheet class="text-center" height="200px">
+        <v-btn class="my-6 mx-3" color="success" @click="acceptTransmissionCall()"><v-icon left>mdi-check</v-icon>Accept</v-btn>
+        <v-btn class="my-6 mx-3" color="error" @click="$root.view.transmission = false"><v-icon left>mdi-close</v-icon>Decline</v-btn>
+        <div><span :style="{ color: $root.transmission.from.color }">{{ $root.transmission.from.username }}</span> is calling you...</div>
+      </v-sheet>
+    </v-bottom-sheet>
   </v-app>
 </template>
 
@@ -205,6 +211,7 @@ export default {
         { icon: 'mdi-play', content: 'Media', path: 'media', disabled: false },
         { icon: 'mdi-account-group', content: 'People', path: 'people', disabled: false },
         { icon: 'mdi-satellite-uplink', content: 'Broadcast', path: 'broadcast', disabled: false },
+        { icon: 'mdi-video-wireless', content: 'Transmission', path: 'transmission', disabled: true },
         { icon: 'mdi-pencil', content: 'Write', path: 'write', disabled: true }
       ],
       clock: {
@@ -228,6 +235,7 @@ export default {
 					document.title = 'Authentication'
 					this.$root.profile = false
 					this.$root.music = {}
+					this.$root.transmission = false
 				})
 			}
     },
@@ -240,6 +248,10 @@ export default {
 		saveBuggyDialog() {
 			document.cookie = 'buggy_dialog=true'
 			this.$root.view.buggy_dialog = false
+		},
+		acceptTransmissionCall() {
+			this.$root.view.transmission = false
+			this.$root.router = 'transmission'
 		}
   },
   created() {
@@ -268,6 +280,7 @@ export default {
 					document.title = 'Error'
 					this.$root.profile = false
 					this.$root.music = {}
+					this.$root.transmission = false
 				}
 			})
 			this.$root.socket.on('kick', username => {
@@ -277,6 +290,10 @@ export default {
 				}
 			})
 			this.$root.socket.on('kill', username => { if (username == this.$root.user.username) window.close() })
+			this.$root.socket.on('transmit_received', data => {
+				this.$root.transmission = data
+				this.$root.view.transmission = true
+			})
 			this.$root.socket.on('disconnect', () => {
 				this.$lock()
 			})
@@ -348,5 +365,10 @@ html { overflow: hidden !important; }
   left: 50%;
   transform: translate(-50%, -50%);
 	text-align: center;
+}
+
+/* html body div#app.v-application.v-application--is-ltr.theme--dark div.v-dialog__content.v-dialog__content--active, html body div#app.v-application.v-application--is-ltr.theme--dark div.v-overlay.v-overlay--active.theme--dark { */
+html body div#app.v-application.v-application--is-ltr.theme--dark div.v-dialog__content.v-dialog__content--active {
+	z-index: 10000 !important;
 }
 </style>
