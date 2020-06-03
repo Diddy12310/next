@@ -84,16 +84,16 @@
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
             <v-row v-if="message.type === 'message'">
-              <v-col sm="1" cols="12" class="text-right">
+              <v-col sm="1" cols="12" class="text-right py-0">
                 <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
-              <v-col sm="10" cols="12">
+              <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
                   <p style="word-wrap: break-word; max-width: 100%;" v-html="message.content"></p>
                   <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span><span v-if="message.edits != 0">•<span class="pl-2">{{ message.edits }} {{ message.edits > 1 ? 'edits' : 'edit' }}</span></span></v-list-item-subtitle>
                 </v-list-item-content>
               </v-col>
-              <v-col sm="1" cols="12">
+              <v-col sm="1" cols="12" class="py-0">
                 <v-fade-transition group>
                   <v-btn key="edit" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
                   <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner== $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
@@ -105,10 +105,10 @@
             <v-list-item-subtitle class="text-center" v-if="message.type === 'join'"><span :style="{ color: message.color }">{{ message.username }}</span> has joined</v-list-item-subtitle>
 
             <v-row v-if="message.type === 'file'">
-              <v-col sm="1" cols="12" class="text-right">
+              <v-col sm="1" cols="12" class="text-right py-0">
                 <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
-              <v-col sm="10" cols="12">
+              <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
                   <v-card @click="window.open(message.url)" max-width="500">
                     <v-card-title><v-icon left class="mr-4">mdi-download</v-icon>{{ message.content }}</v-card-title>
@@ -116,7 +116,7 @@
                   <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span></v-list-item-subtitle>
                 </v-list-item-content>
               </v-col>
-              <v-col sm="1" cols="12">
+              <v-col sm="1" cols="12" class="py-0">
                 <v-fade-transition group>
                   <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner== $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
                 </v-fade-transition>
@@ -130,7 +130,7 @@
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
-            <v-container fluid v-if="message.type === 'message'">
+            <v-container fluid v-if="message.type === 'message'" class="py-0">
               <v-row no-gutters align="end">
                 <v-col sm="6">
                   <v-list-item-avatar class="ma-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
@@ -226,16 +226,16 @@
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
             <v-row v-if="message.type === 'message'">
-              <v-col sm="1" cols="12" class="text-right">
+              <v-col sm="1" cols="12" class="text-right py-0">
                 <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
-              <v-col sm="10" cols="12">
+              <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
                   <p style="word-wrap: break-word; max-width: 100%;" v-html="message.content"></p>
                   <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span><span v-if="message.edits != 0">•<span class="pl-2">{{ message.edits }} {{ message.edits > 1 ? 'edits' : 'edit' }}</span></span></v-list-item-subtitle>
                 </v-list-item-content>
               </v-col>
-              <v-col sm="1" cols="12">
+              <v-col sm="1" cols="12" class="py-0">
                 <v-fade-transition group>
                   <v-btn key="edit" v-if="current_message == message ? message.user_id == $root.user._id ? true : false : false" small icon color="grey darken-3" @click="editChat(message)"><v-icon>mdi-pencil</v-icon></v-btn>
                   <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
@@ -244,10 +244,10 @@
             </v-row>
 
             <v-row v-if="message.type === 'file'">
-              <v-col sm="1" cols="12" class="text-right">
+              <v-col sm="1" cols="12" class="text-right py-0">
                 <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
-              <v-col sm="10" cols="12">
+              <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
                   <v-card @click="window.open(message.url)" max-width="500">
                     <v-card-title><v-icon left class="mr-4">mdi-download</v-icon>{{ message.content }}</v-card-title>
@@ -255,7 +255,7 @@
                   <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span></v-list-item-subtitle>
                 </v-list-item-content>
               </v-col>
-              <v-col sm="1" cols="12">
+              <v-col sm="1" cols="12" class="py-0">
                 <v-fade-transition group>
                   <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner== $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
                 </v-fade-transition>
