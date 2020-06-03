@@ -486,6 +486,13 @@
 					<v-spacer></v-spacer>
 					<v-btn @click="uploadFileAndSend()" color="white" text>Yes</v-btn>
 				</v-card-actions>
+        <v-progress-linear
+          :active="upload_file_loading"
+          :indeterminate="true"
+          absolute
+          bottom
+          color="deep-purple accent-4"
+        ></v-progress-linear>
 			</v-card>
 		</v-dialog>
 
@@ -614,7 +621,8 @@ export default {
       file: null,
       window,
       search: '',
-      people: []
+      people: [],
+      upload_file_loading: false
     }
   },
   computed: {
@@ -877,6 +885,7 @@ export default {
       this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current_id}/purge`).then(() => { socket.emit('purge'); this.purge_confirm = false }).catch(error => console.error(error))
     },
     uploadFileAndSend() {
+      this.upload_file_loading = true
       let formData = new FormData()
       formData.append('file', this.file[0])
       if (this.current_dm) {
@@ -897,6 +906,7 @@ export default {
             url: `https://www.theparadigmdev.com/flamechat/dm/${this.current_dm}/${this.file[0].name}`,
             type: 'file'
           })
+          this.upload_file_loading = false
           this.file = null
           this.uploader = false
         })
