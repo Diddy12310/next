@@ -220,9 +220,6 @@
             </v-card>
           </v-col>
         </v-row>
-
-        <p class="grey--text font-italic pt-8 pb-4 text-center">Your account was created on {{ $root.user.created }}.</p>
-
       </v-container>
     </div>
 
@@ -303,7 +300,7 @@ export default {
     saveChanges() {
       this.$http.post('https://www.theparadigmdev.com/api/users/update', {
         old: this.$root.user.username,
-        username: this.user.username,
+        username: this.user.username.toLowerCase(),
         bio: this.user.bio,
         color: this.user.color
       }).then(response => {
