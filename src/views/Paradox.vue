@@ -16,8 +16,8 @@
 
 						<v-card-title primary-title>
 							<div>
-								<h3 class="headline mb-0">{{ item.title }}</h3>
-								<h4 class="subtitle-1 grey--text">{{ item.author }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ item.timestamp }}</h4>
+								<h3 class="text-h5 mb-0">{{ item.title }}</h3>
+								<h4 class="text-subtitle-2 grey--text">{{ item.author }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ item.timestamp }}</h4>
 							</div>
 						</v-card-title>
 					</div>
@@ -30,8 +30,8 @@
 				<v-img :src="current.cover"></v-img>
 				<v-card-title primary-title>
 					<div>
-						<h3 class="headline mb-0">{{ current.title }}</h3>
-						<h4 class="subtitle-1 grey--text">{{ current.author }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ current.timestamp }}</h4>
+						<h3 class="text-h5 mb-0">{{ current.title }}</h3>
+						<h4 class="text-subtitle-2 grey--text">{{ current.author }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ current.timestamp }}</h4>
 					</div>
 				</v-card-title>
 				<v-card-text>
@@ -51,7 +51,7 @@
 		<v-dialog v-model="new_news.open" max-width="500">
 			<v-card>
 				<v-card-title>
-					<h3 class="headline mb-0">Write a Story</h3>
+					<h3 class="text-h5 mb-0">Write a Story</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="new_news.open = false" class="dialog-close-btn">
 						<v-icon>mdi-close</v-icon>
@@ -119,7 +119,7 @@ export default {
 				timestamp: timestamp,
 				cover: cover,
 				content: content,
-				timestamp: moment().format('MM/DD/YYYY [at] H:MM a')
+				timestamp: moment().format('MM/DD/YYYY [at] h:mm a')
 			}
 			this.dialog = true
 		},
@@ -131,7 +131,7 @@ export default {
 					content: this.new_news.content,
 					live: this.new_news.live,
 					cover: this.new_news.cover,
-					timestamp: moment().format('MM/DD/YYYY [at] H:MM a')
+					timestamp: moment().format('MM/DD/YYYY [at] h:mm a')
 				}).then(response => {
 					this.getNews()
 					this.new_news = {

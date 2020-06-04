@@ -7,7 +7,7 @@
     <div style="height: calc(100vh - 112px); overflow: auto;">
       <v-fade-transition group>
         <v-card class="mx-auto mt-6" color="indigo darken-3" max-width="500" key="new">
-          <v-card-text class="headline">
+          <v-card-text class="text-h5">
             <v-textarea @keypress.shift.enter.exact.prevent="post()" label="Content..." v-model="content"></v-textarea>
           </v-card-text>
 
@@ -19,7 +19,7 @@
         </v-card>
 
         <v-card class="mx-auto my-6" color="indigo darken-3" max-width="500" v-for="(post, index) in $root.user.posts" :key="index">
-          <v-card-text class="headline" v-html="post.content"></v-card-text>
+          <v-card-text class="text-h5" v-html="post.content"></v-card-text>
 
           <v-card-actions>
             <v-row no-gutters align="center" justify="end">
@@ -68,7 +68,7 @@ export default {
     post() {
       this.$http.post(`https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/create`, {
         content: this.content,
-        timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+        timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
         likes: 0,
         reposts: 0,
       }).then(response => { this.$root.user.posts = response.data; this.content = '' }).catch(error => console.error(error))

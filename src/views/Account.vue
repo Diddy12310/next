@@ -8,7 +8,7 @@
       <v-container>
         <div class="text-center my-12">
           <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img :src="user.pic"></v-img></v-avatar><br>
-          <input type="text" @input="change = true" class="display-2 font-weight-medium mt-8" style="text-align: center; width: 100%;" :style="{ color: user.color }" v-model="user.username">
+          <input type="text" @input="change = true" class="text-h3 font-weight-medium mt-8" style="text-align: center; width: 100%;" :style="{ color: user.color }" v-model="user.username">
           <p class="grey--text text--darken-1 font-weight-light">{{ user._id }}</p>
           <div class="text-center mt-3" style="width: 250px; margin: auto;">
             <img height="50" width="50" src="@/assets/moonrocks.png">

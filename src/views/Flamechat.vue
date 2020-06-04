@@ -184,7 +184,7 @@
       </v-list>
 
       <v-fade-transition leave-absolute v-if="current_status == 'approved'">
-        <span class="ml-4 mb-n1 grey--text font-italic body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
+        <span class="ml-4 mb-n1 grey--text font-italic text-body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
       </v-fade-transition>
       <v-layout justify-center align-center text-center px-4 v-if="current_status == 'approved'">
         <v-flex xs10>
@@ -197,7 +197,7 @@
       </v-layout>
 
       <div v-if="current_status == 'requested'" class="text-center">
-        <h1 class="display-1 mt-12">You have requested to join this chatroom</h1>
+        <h1 class="text-h4 mt-12">You have requested to join this chatroom</h1>
         <v-btn @click="rejectRequest($root.user._id)" class="mt-6" color="blue lighten-1" text><v-icon left>mdi-undo-variant</v-icon>Retract</v-btn>
       </div>
     </main>
@@ -320,7 +320,7 @@
       </v-list>
 
       <v-fade-transition leave-absolute v-if="current_dm">
-        <span class="ml-4 mb-n1 grey--text font-italic body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
+        <span class="ml-4 mb-n1 grey--text font-italic text-body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
       </v-fade-transition>
       <v-layout justify-center align-center text-center px-4 v-if="current_dm">
         <v-flex xs10>
@@ -337,8 +337,8 @@
       <v-container fluid class="text-center pt-0 mb-4">
         <v-row>
           <v-col sm="12" class="deep-orange py-12 elevation-5">
-            <h1 class="display-3 font-weight-thin white--text hidden-sm-and-down">Welcome to Flamechat!</h1>
-            <h1 class="display-2 font-weight-thin white--text hidden-md-and-up">Welcome to Flamechat!</h1>
+            <h1 class="text-h2 font-weight-thin white--text hidden-sm-and-down">Welcome to Flamechat!</h1>
+            <h1 class="text-h3 font-weight-thin white--text hidden-md-and-up">Welcome to Flamechat!</h1>
           </v-col>
           <v-col sm="12">
             <p class="title font-weight-regular px-6 pt-6">Select a chatroom from the left.</p>
@@ -353,7 +353,7 @@
         <v-row>
           <v-col lg="6" xs="12" cols="12">
             <div class="mt-6">
-              <h3 class="display-1">General</h3>
+              <h3 class="text-h4">General</h3>
               <p class="mt-4 mb-1">General, miscellaneous chit-chat.</p>
               <p class="font-weight-thin">general</p>
             </div>
@@ -362,7 +362,7 @@
 
           <v-col lg="6" xs="12">
             <div class="mt-6">
-              <h3 class="display-1">Dev</h3>
+              <h3 class="text-h4">Dev</h3>
               <p class="mt-4 mb-1">This chatroom is for discussing upcoming features, software, and tools from Paradigm.</p>
               <p class="font-weight-thin">dev</p>
             </div>
@@ -373,7 +373,7 @@
         <v-row>
           <v-col lg="6" xs="12" cols="12">
             <div class="mt-6">
-              <h3 class="display-1">News</h3>
+              <h3 class="text-h4">News</h3>
               <p class="mt-4 mb-1">Keep yourself up to date with the latest happenings around the world.</p>
               <p class="font-weight-thin">news</p>
             </div>
@@ -382,7 +382,7 @@
 
           <v-col lg="6" xs="12">
             <div class="mt-6">
-              <h3 class="display-1">Politics</h3>
+              <h3 class="text-h4">Politics</h3>
               <p class="mt-4 mb-1">Discuss politics in a civilized manner here. Challenge your political opposites.</p>
               <p class="font-weight-thin">politics</p>
             </div>
@@ -393,7 +393,7 @@
         <v-row>
           <v-col xs="12">
             <div class="mt-6">
-              <h3 class="display-1">Tech</h3>
+              <h3 class="text-h4">Tech</h3>
               <p class="mt-4 mb-1">Talk about new developments in the world of technology.</p>
               <p class="font-weight-thin">tech</p>
             </div>
@@ -419,7 +419,7 @@
     <v-dialog v-model="buy_chatroom.popup" max-width="450" style="z-index: 1001;">
 			<v-card>
 				<v-card-title>
-					<h3 class="headline mb-0">Buy a Chatroom</h3>
+					<h3 class="text-h5 mb-0">Buy a Chatroom</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="buy_chatroom.popup = false" class="dialog-close-btn">
 						<v-icon>mdi-close</v-icon>
@@ -761,7 +761,7 @@ export default {
           user_id: this.$root.user._id,
           content: this.new_message,
           pic: this.$root.user.pic,
-          timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+          timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
           edits: 0,
           type: 'message'
         })
@@ -806,7 +806,7 @@ export default {
             username: this.$root.user.username,
             user_id: this.$root.user._id,
             pic: this.$root.user.pic,
-            timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+            timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             type: 'left'
           })
           this.current_id = 'user_home'
@@ -852,7 +852,7 @@ export default {
             username: response.data.username,
             user_id: response.data._id,
             pic: response.data.pic,
-            timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+            timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             type: 'left'
           })
           socket.emit('people', this.current_id)
@@ -866,7 +866,7 @@ export default {
           username: response.data.username,
           user_id: response.data._id,
           pic: response.data.pic,
-          timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+          timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
           type: 'join'
         })
         socket.emit('people', this.current_id)
@@ -901,9 +901,9 @@ export default {
             username: this.$root.user.username,
             user_id: this.$root.user._id,
             pic: this.$root.user.pic,
-            timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+            timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             content: this.file[0].name,
-            url: `https://www.theparadigmdev.com/flamechat/dm/${this.current_dm}/${this.file[0].name}`,
+            url: `https://www.theparadigmdev.com/relay/flamechat/dm/${this.current_dm}/${this.file[0].name}`,
             type: 'file'
           })
           this.upload_file_loading = false
@@ -927,9 +927,9 @@ export default {
             username: this.$root.user.username,
             user_id: this.$root.user._id,
             pic: this.$root.user.pic,
-            timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+            timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             content: this.file[0].name,
-            url: `https://www.theparadigmdev.com/flamechat/chatroom/${this.current_id}/${this.file[0].name}`,
+            url: `https://www.theparadigmdev.com/relay/flamechat/chatroom/${this.current_id}/${this.file[0].name}`,
             type: 'file'
           })
           this.file = null

@@ -16,7 +16,7 @@
 					<v-list shaped>
 						<v-tooltip bottom open-delay="1000">
 							<template v-slot:activator="{ on }">
-								<v-list-item @click="$root.router = 'account'" :input-value="$root.router == 'account'" value="account" v-on="on" two-line v-ripple="{ class: `${$root.user.color}--text` }" class="my-n2" style="cursor: pointer;">
+								<v-list-item @click="$root.router = 'account'" :input-value="$root.router == 'account'" value="account" v-on="on" two-line v-ripple class="my-n2" style="cursor: pointer;">
 									<v-list-item-avatar class="my-0">
 										<img :src="$root.user.pic">
 									</v-list-item-avatar>
@@ -71,7 +71,7 @@
 			</v-list>
 
 			<template v-slot:append>
-				<p class="pl-2 ma-0 caption" style="padding-bottom: 5px; cursor: pointer;" @click="window.open(`https://github.com/Paradigm-Dev/paradigm/releases/tag/v${$root.version}`)">v{{ $root.version }}</p>
+				<p class="pl-2 ma-0 text-caption" style="padding-bottom: 5px; cursor: pointer;" @click="window.open(`https://github.com/Paradigm-Dev/paradigm/releases/tag/v${$root.version}`)">v{{ $root.version }}</p>
 				<div class="grey darken-4">
 					<v-divider></v-divider>
 					<v-tooltip top open-delay="1000">
@@ -137,7 +137,7 @@
 
 		<v-snackbar v-model="$root.alert.open" :color="$root.alert.type" :timeout="$root.alert.timeout">
 			<v-icon left>{{ $root.alert.icon }}</v-icon>
-			<p class="ma-0 text-left" v-html="$root.alert.text"></p>
+			<span class="ma-0 text-left" v-html="$root.alert.text"></span>
 			<v-btn v-if="$root.alert.btn" icon @click="$root.alert.open = false">
 				<v-icon>mdi-close</v-icon>
 			</v-btn>
@@ -146,7 +146,7 @@
 		<v-content>
 			<router v-if="!$root.config.shutdown" />
 			<div v-else>
-				<h1 class="display-2 font-weight-thin text-uppercase text-center px-12 deep-purple--text text--lighten-1" style="margin-top: 100px;">A Connection Could not be Established</h1>
+				<h1 class="text-h3 font-weight-thin text-uppercase text-center px-12 deep-purple--text text--lighten-1" style="margin-top: 100px;">A Connection Could not be Established</h1>
 				<p class="text-center pt-6 title font-weight-light grey--text">Try refreshing your page.</p>
 			</div>
 		</v-content>
@@ -366,6 +366,8 @@ html { overflow: hidden !important; }
   transform: translate(-50%, -50%);
 	text-align: center;
 }
+
+input { outline: none; }
 
 /* html body div#app.v-application.v-application--is-ltr.theme--dark div.v-dialog__content.v-dialog__content--active, html body div#app.v-application.v-application--is-ltr.theme--dark div.v-overlay.v-overlay--active.theme--dark {
 	z-index: 10000 !important;

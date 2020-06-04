@@ -7,8 +7,8 @@
         <div :class="{ 'd-flex': true, 'align-center': true, 'text-center mt-2': $vuetify.breakpoint.xsOnly }">
           <img style="height: 80px; width: 80px;" class="hidden-xs-only" :src="$root.music.cover">
           <div :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }" style="width: 100%;">
-            <h3 class="headline mb-0 pt-1">{{ $root.music.title }}</h3>
-            <h4 class="subtitle-1 grey--text">{{ $root.music.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music.album }}</h4>
+            <h3 class="text-h5 mb-0 pt-1">{{ $root.music.title }}</h3>
+            <h4 class="text-subtitle-2 grey--text">{{ $root.music.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music.album }}</h4>
           </div>
         </div>
       </v-flex>

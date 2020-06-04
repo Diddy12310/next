@@ -5,7 +5,7 @@
     </v-card>
 
     <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'in'">
-      <v-card-title class="display-1 font-weight-light">Sign in</v-card-title>
+      <v-card-title class="text-h4 font-weight-light">Sign in</v-card-title>
 
       <v-card-text>
         <v-text-field @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
@@ -23,7 +23,7 @@
     </v-card>
 
     <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'migrate'">
-      <v-card-title class="display-1 font-weight-light">Migrate</v-card-title>
+      <v-card-title class="text-h4 font-weight-light">Migrate</v-card-title>
 
       <v-card-text>
         <v-text-field @keyup="checkIfUserExistsMigrate" v-model="username" label="Username"></v-text-field>
@@ -42,7 +42,7 @@
     </v-card>
 
     <v-card width="500" class="mx-auto elevation-12" :style="{ margin: $vuetify.breakpoint.smAndUp ? '100px 0px 100px 0px' : '0px' }" v-if="method == 'up'">
-      <v-card-title class="display-1 font-weight-light">Sign up</v-card-title>
+      <v-card-title class="text-h4 font-weight-light">Sign up</v-card-title>
 
       <v-card-text>
         <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden">
@@ -60,17 +60,7 @@
           <v-checkbox label="I have read and accept the Terms and Conditions." v-model="new_user.terms" class="mb-4"></v-checkbox>
           <span class="grey--text">Please read and accept the <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>. Confirm that you are over the age of 13. If you are under 18, parental permission is required. <a href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Read more</a></span>
         </div>
-        <!-- <v-window v-model="step" style="height: 310px;">
-          <v-window-item :value="6">
-            <span class="caption grey--text text--darken-1">
-            </span>
-          </v-window-item>
 
-          <v-window-item :value="7">
-            <h1 class="display-1 my-4 font-weight-light text-center">Welcome to Paradigm!</h1>
-          </v-window-item>
-        </v-window> -->
-        
         <v-divider class="my-8"></v-divider>
 
         <p v-if="$root.config.migrate" class="text-center">Have an old Paradigm v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>

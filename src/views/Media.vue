@@ -25,11 +25,11 @@
                   <v-img max-height="400" :src="book.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
-                        <h3 class="headline mb-0">{{ book.title }}</h3>
+                        <h3 class="text-h5 mb-0">{{ book.title }}</h3>
                         <div class="d-flex">
-                          <h4 class="body-2 grey--text">{{ book.author }}</h4>
+                          <h4 class="text-body-2 grey--text">{{ book.author }}</h4>
                           <v-spacer></v-spacer>
-                          <h4 class="body-2 red--text font-weight-medium" v-if="!book.live">UNAVAILABLE</h4>
+                          <h4 class="text-body-2 red--text font-weight-medium" v-if="!book.live">UNAVAILABLE</h4>
                         </div>
                       </div>
                     </v-card-title>
@@ -49,11 +49,11 @@
                   <v-img max-height="400" :src="movie.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
-                        <h3 class="headline mb-0">{{ movie.title }}</h3>
+                        <h3 class="text-h5 mb-0">{{ movie.title }}</h3>
                         <div class="d-flex">
-                          <h4 class="body-2 grey--text">{{ movie.genre }}</h4>
+                          <h4 class="text-body-2 grey--text">{{ movie.genre }}</h4>
                           <v-spacer></v-spacer>
-                          <h4 class="body-2 red--text font-weight-medium" v-if="!movie.live">UNAVAILABLE</h4>
+                          <h4 class="text-body-2 red--text font-weight-medium" v-if="!movie.live">UNAVAILABLE</h4>
                         </div>
                       </div>
                     </v-card-title>
@@ -73,11 +73,11 @@
                   <v-img :src="item.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
-                        <h3 class="headline mb-0">{{ item.title }}</h3>
+                        <h3 class="text-h5 mb-0">{{ item.title }}</h3>
                         <div class="d-flex">
-                          <h4 class="body-2 grey--text">{{ item.artist }}</h4>
+                          <h4 class="text-body-2 grey--text">{{ item.artist }}</h4>
                           <v-spacer></v-spacer>
-                          <h4 class="body-2 red--text font-weight-medium" v-if="!item.live">UNAVAILABLE</h4>
+                          <h4 class="text-body-2 red--text font-weight-medium" v-if="!item.live">UNAVAILABLE</h4>
                         </div>
                       </div>
                     </v-card-title>
@@ -92,7 +92,7 @@
           <v-container fluid class="text-center pt-0">
             <v-row>
               <v-col cols="12" sm="12" class="indigo darken-3 py-12 elevation-5">
-                <h1 class="display-3 font-weight-thin white--text">Podcasts</h1>
+                <h1 class="text-h2 font-weight-thin white--text">Podcasts</h1>
               </v-col>
               <v-col cols="12" sm="12">
                 <p class="title font-weight-regular px-6 pt-6">Listen to the news, talk shows, and more.</p>
@@ -106,7 +106,7 @@
           <v-container fluid class="text-center pt-0">
             <v-row>
               <v-col cols="12" sm="12" class="indigo darken-3 py-12 elevation-5">
-                <h1 class="display-3 font-weight-thin white--text">TV Shows</h1>
+                <h1 class="text-h2 font-weight-thin white--text">TV Shows</h1>
               </v-col>
               <v-col cols="12" sm="12">
                 <p class="title font-weight-regular px-6 pt-6">Watch your favorite TV shows, no matter where you are.</p>
@@ -120,7 +120,7 @@
           <v-container fluid class="text-center pt-0">
             <v-row>
               <v-col cols="12" sm="12" class="indigo darken-3 py-12 elevation-5">
-                <h1 class="display-3 font-weight-thin white--text">Live TV</h1>
+                <h1 class="text-h2 font-weight-thin white--text">Live TV</h1>
               </v-col>
               <v-col cols="12" sm="12">
                 <p class="title font-weight-regular px-6 pt-6">Watch your favorite live TV channels, without a subscription.</p>
@@ -137,13 +137,13 @@
         <v-img :src="current.cover" style="height: 90vh;" v-if="current.type != 'music'">
           <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
             <div style="width: 100%;">
-              <h3 class="headline mb-0">{{ current.title }}</h3>
+              <h3 class="text-h5 mb-0">{{ current.title }}</h3>
               <div class="d-flex">
-                <h4 v-if="current.type == 'book'" class="body-2 grey--text">{{ current.author }}</h4>
-                <h4 v-if="current.type == 'movie'" class="body-2 grey--text">{{ current.genre }}</h4>
-                <h4 v-if="current.type == 'music'" class="body-2 grey--text">{{ current.artist }}</h4>
+                <h4 v-if="current.type == 'book'" class="text-body-2 grey--text">{{ current.author }}</h4>
+                <h4 v-if="current.type == 'movie'" class="text-body-2 grey--text">{{ current.genre }}</h4>
+                <h4 v-if="current.type == 'music'" class="text-body-2 grey--text">{{ current.artist }}</h4>
                 <v-spacer></v-spacer>
-                <h4 class="body-2 red--text font-weight-medium" v-if="!current.live">UNAVAILABLE</h4>
+                <h4 class="text-body-2 red--text font-weight-medium" v-if="!current.live">UNAVAILABLE</h4>
               </div>
             </div>
           </v-card-title>
@@ -152,13 +152,13 @@
         <v-img :src="current.cover" v-if="current.type == 'music'">
           <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
             <div style="width: 100%;">
-              <h3 class="headline mb-0">{{ current.title }}</h3>
+              <h3 class="text-h5 mb-0">{{ current.title }}</h3>
               <div class="d-flex">
-                <h4 v-if="current.type == 'book'" class="body-2 grey--text">{{ current.author }}</h4>
-                <h4 v-if="current.type == 'movie'" class="body-2 grey--text">{{ current.genre }}</h4>
-                <h4 v-if="current.type == 'music'" class="body-2 grey--text">{{ current.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ current.genre }}</h4>
+                <h4 v-if="current.type == 'book'" class="text-body-2 grey--text">{{ current.author }}</h4>
+                <h4 v-if="current.type == 'movie'" class="text-body-2 grey--text">{{ current.genre }}</h4>
+                <h4 v-if="current.type == 'music'" class="text-body-2 grey--text">{{ current.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ current.genre }}</h4>
                 <v-spacer></v-spacer>
-                <h4 class="body-2 red--text font-weight-medium" v-if="!current.live">UNAVAILABLE</h4>
+                <h4 class="text-body-2 red--text font-weight-medium" v-if="!current.live">UNAVAILABLE</h4>
               </div>
             </div>
           </v-card-title>
