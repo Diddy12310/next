@@ -82,7 +82,7 @@ export default {
           this.$log(`user ${username}.banned set to ${value}`)
           break
         case 'view':
-          this.$http.get(`https://www.theparadigmdev.com/terminal/user/${username}/view`).then(response => {
+          this.$http.get(`https://www.theparadigmdev.com/api/terminal/user/${username}/view`).then(response => {
             this.history.push(`
             <p class="grey--text">
               &nbsp;&nbsp;&nbsp;&nbsp;# <span style="color: ${response.data.color};">${ response.data.username }</span><br>
@@ -112,7 +112,7 @@ export default {
           this.$log(`user ${username}.rights.asteroid set to ${value}`)
           break
         case 'strike':
-          this.$http.get(`https://www.theparadigmdev.com/terminal/user/${username}/strike`)
+          this.$http.get(`https://www.theparadigmdev.com/api/terminal/user/${username}/strike`)
           this.$log(`user ${username}.strikes incremented by 1`)
           break
         case 'kick':
@@ -125,7 +125,7 @@ export default {
           break
         case 'delete':
           socket.emit('kick', username)
-          this.$http.get(`https://www.theparadigmdev.com/terminal/user/${username}/delete`)
+          this.$http.get(`https://www.theparadigmdev.com/api/terminal/user/${username}/delete`)
           this.$log(`user ${username} deleted`)
           break
         case 'mrocks':
@@ -135,7 +135,7 @@ export default {
       }
     },
     list(query) {
-      this.$http.get(`https://www.theparadigmdev.com/terminal/list/${query}`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/terminal/list/${query}`).then(response => {
         this.$log(response.data.toString())
       })
     },
@@ -179,5 +179,6 @@ input {
   width: 100%;
   position: relative;
   bottom: 0px;
+  color: white;
 }
 </style>
