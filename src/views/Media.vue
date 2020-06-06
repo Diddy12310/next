@@ -173,8 +173,8 @@
             <v-spacer></v-spacer>
             <v-rating color="yellow darken-2" background-color="grey darken-3" @input="updateUserMusic()" v-model="current.rating"></v-rating>
             <v-btn color="pink lighten-1" icon @click="current.favorite = !current.favorite, updateUserMusic()"><v-icon>{{ current.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon></v-btn>
-            <v-btn icon color="blue accent-1" class="mr-1"><v-icon>mdi-shuffle</v-icon></v-btn>
-            <v-btn text color="blue accent-1"><v-icon left>mdi-play</v-icon>Play</v-btn>
+            <v-btn icon color="blue accent-1" class="mr-1" disabled><v-icon>mdi-shuffle</v-icon></v-btn>
+            <v-btn text color="blue accent-1" disabled><v-icon left>mdi-play</v-icon>Play</v-btn>
           </v-card-actions>
           <!-- </p> -->
           <v-list nav>

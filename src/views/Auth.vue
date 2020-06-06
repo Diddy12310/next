@@ -31,7 +31,7 @@
         <v-checkbox label="I understand that this action is irreversible and may lead to data loss" v-model="migrate_confirm" class="mb-5"></v-checkbox>
         <p class="text-center mb-8 font-italic"><b>Note:</b> Your username and password will remain the same.</p>
         <p class="text-center">By migrating your account, you agree to the <a style="text-decoration: none;" href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
-        <p class="text-center">Already migrated or created your Paradigm account? <a @click="method = 'in'">Sign in</a>.</p>
+        <p class="text-center">Already migrated or created a Paradigm account? <a @click="method = 'in'">Sign in</a>.</p>
         <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
       </v-card-text>
 
@@ -104,7 +104,9 @@ export default {
       },
       method: 'in',
       step: 1,
-      new_user: {},
+      new_user: {
+        color: '#FF0000'
+      },
       migrate_confirm: false,
       window
     }

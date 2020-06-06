@@ -22,7 +22,7 @@
                 <p>Settings</p>
                 <v-text-field @input="change = true" v-model="user.bio" label="Bio" :counter="75"></v-text-field>
                 <p>Color</p>
-                <v-color-picker @input="change = true" v-model="user.color" class="elevation-0"></v-color-picker>
+                <v-color-picker mode="hexa" hide-mode-switch @input="change = true" v-model="user.color" class="elevation-0"></v-color-picker>
               </v-card-text>
             </v-card>
           </v-col>
@@ -235,6 +235,14 @@
           <v-btn text color="blue accent-1" @click="uploadNewPic()">Upload</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
+        <v-progress-linear
+          :active="upload_file_loading"
+          :indeterminate="true"
+          absolute
+          bottom
+          color="deep-purple accent-4"
+        ></v-progress-linear>
+
       </v-card>
     </v-dialog>
 
@@ -270,7 +278,8 @@ export default {
       delete_dialog: false,
       delete_verify: false,
       console,
-      people_tab: 0
+      people_tab: 0,
+      upload_file_loading: false
     }
   },
   methods: {
@@ -310,6 +319,7 @@ export default {
       }).catch(error => console.error(error))
     },
     uploadNewPic() {
+      this.upload_file_loading = true
       let formData = new FormData()
       for (var i = 0; i < this.new_pic.length; i++ ) {
         let file = this.new_pic[i]
@@ -325,6 +335,7 @@ export default {
         this.$root.user = response.data
         this.user = response.data
         this.new_pic = null
+        this.upload_file_loading = false
         this.uploader = false
       })
       .catch(error => {

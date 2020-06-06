@@ -179,6 +179,5 @@ input {
   width: 100%;
   position: relative;
   bottom: 0px;
-  color: white;
 }
 </style>

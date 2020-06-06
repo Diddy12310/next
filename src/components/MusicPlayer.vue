@@ -7,8 +7,8 @@
         <div :class="{ 'd-flex': true, 'align-center': true, 'text-center mt-2': $vuetify.breakpoint.xsOnly }">
           <img style="height: 80px; width: 80px;" class="hidden-xs-only" :src="$root.music.cover">
           <div :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }" style="width: 100%;">
-            <h3 class="text-h5 mb-0 pt-1">{{ $root.music.title }}</h3>
-            <h4 class="text-subtitle-2 grey--text">{{ $root.music.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music.album }}</h4>
+            <h3 class="text-h5 mb-0">{{ $root.music.title }}</h3>
+            <h4 class="text-subtitle-2 font-weight-regular grey--text">{{ $root.music.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music.album }}</h4>
           </div>
         </div>
       </v-flex>
@@ -34,7 +34,7 @@
         <v-btn text icon class="primary--text" v-model="repeat" @click.native="repeat = !repeat">
           <v-icon>mdi-repeat</v-icon>
         </v-btn>
-        <v-btn text icon class="primary--text" @click.native="download()">
+        <v-btn v-if="$root.user.rights.asteroid" text icon class="primary--text" @click.native="download()">
           <v-icon>mdi-download</v-icon>
         </v-btn>
         <v-btn text icon class="primary--text" @click.native="clearSession()">
