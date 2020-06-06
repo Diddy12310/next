@@ -202,21 +202,25 @@
       </div>
     </main>
 
-    <main v-else-if="current_id === 'user_dm'" class="fill-height" style="margin-left: 330px;">
+    <main v-else-if="current_id === 'user_dm'" class="fill-height" style="margin-left: 148px;">
       <v-toolbar dense color="deep-orange">
         <v-toolbar-title>Flamechat: Direct Messages</v-toolbar-title>
       </v-toolbar>
 
-      <v-navigation-drawer absolute style="left: +74px;">
+      <v-navigation-drawer mini-variant permanent absolute style="width: 74px; left: +74px;">
         <v-list nav rounded class="fill-height">
           <v-list-item-group v-model="current_dm">
             <p class="text-center grey--text font-italic mt-12" v-if="$root.user.people.approved.length < 1">You have no friends.</p>
-            <v-list-item @click="changeDM(current, friend)" v-for="(friend, index) in $root.user.people.approved" :key="index" :value="friend.dm">
-              <v-badge style="position: relative; left: -15px;" bordered bottom dot offset-x="25" offset-y="17" color="green" :value="friend.in">
-                <v-list-item-avatar><v-img :src="friend.pic"></v-img></v-list-item-avatar>
-              </v-badge>
-              <v-list-item-title style="position: relative; left: -15px;" class="font-weight-medium" :style="{ color: friend.color }">{{ friend.username }}</v-list-item-title>
-            </v-list-item>
+            <v-tooltip right v-for="(friend, index) in $root.user.people.approved" :key="index">
+              <template v-slot:activator="{ on }">
+                <v-list-item v-on="on" @click="changeDM(current, friend)" :value="friend.dm">
+                  <v-badge style="position: relative; left: -15px;" bordered bottom dot offset-x="25" offset-y="17" color="green" :value="friend.in">
+                    <v-list-item-avatar><v-img :src="friend.pic"></v-img></v-list-item-avatar>
+                  </v-badge>
+                </v-list-item>
+              </template>
+              <span :style="{ color: friend.color }">{{ friend.username }}</span>
+            </v-tooltip>
           </v-list-item-group>
         </v-list>
       </v-navigation-drawer>
@@ -347,7 +351,7 @@
         </v-row>
       </v-container>
       <v-divider width="500" class="mx-auto"></v-divider>
-      <p class="mt-8 px-4">Direct messages and friends are coming soon.</p>
+      <p class="mt-8 px-4">Direct messages are accessible under the Home button.</p>
       <!-- <p class="mt-8 px-4">Here are some pre-made chatrooms. Their ID is below the summary. Type that ID in the Add field above the home icon.</p>
       <v-container fluid>
         <v-row>
@@ -606,7 +610,7 @@ export default {
       buy_chatroom: {
         popup: false,
         name: '',
-        theme: ''
+        theme: '#FF0000'
       },
       edit: { open: false },
       chatroom_menu: { open: false },
