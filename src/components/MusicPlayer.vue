@@ -8,7 +8,7 @@
           <img style="height: 80px; width: 80px;" class="hidden-xs-only" :src="$root.music.cover">
           <div :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }" style="width: 100%;">
             <h3 class="text-h5 mb-0">{{ $root.music.title }}</h3>
-            <h4 class="text-subtitle-2 font-weight-regular grey--text">{{ $root.music.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music.album }}</h4>
+            <h4 class="text-body-1 font-weight-regular grey--text">{{ $root.music.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music.album }}</h4>
           </div>
         </div>
       </v-flex>

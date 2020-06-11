@@ -10,14 +10,14 @@
 			<v-container>
 				<p class="text-center font-italic grey--text mt-12" v-if="filteredNews.length <= 0">No articles.</p>
 
-				<v-card v-for="item in filteredNews" :key="item.id" class="news-home" @click="setNews(item.title, item.author, item.timestamp, item.cover, item.content)">
+				<v-card v-for="item in filteredNews" :key="item.id" class="news-home" @click="setNews(item)">
 					<div v-if="item.live">
 						<v-img :src="item.cover"></v-img>
 
 						<v-card-title primary-title>
 							<div>
 								<h3 class="text-h5 mb-0">{{ item.title }}</h3>
-								<h4 class="text-subtitle-2 grey--text">{{ item.author }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ item.timestamp }}</h4>
+								<h4 class="text-body-1 grey--text">{{ item.author }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ item.timestamp }}</h4>
 							</div>
 						</v-card-title>
 					</div>
@@ -31,14 +31,16 @@
 				<v-card-title primary-title>
 					<div>
 						<h3 class="text-h5 mb-0">{{ current.title }}</h3>
-						<h4 class="text-subtitle-2 grey--text">{{ current.author }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ current.timestamp }}</h4>
+						<h4 class="text-body-1 grey--text">{{ current.author }}&nbsp;&nbsp;•&nbsp;&nbsp;{{ current.timestamp }}</h4>
 					</div>
 				</v-card-title>
 				<v-card-text>
-					<div class="detitem" v-html="current.content"></div>
+					<div class="text-body-2" v-html="current.content"></div>
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
+					<!-- <v-btn icon @click=""></v-btn> -->
+					<v-spacer></v-spacer>
 					<v-btn text color="blue accent-1" @click="dialog = false">Close</v-btn>
 				</v-card-actions>
 			</v-card>
@@ -96,9 +98,6 @@ export default {
 			}
 		}
 	},
-	created() {
-		this.getNews()
-	},
 	computed: {
 		filteredNews() {
 			return this.news.filter(item => {
@@ -107,20 +106,14 @@ export default {
 		}
 	},
 	methods: {
-		getNews() {
-			this.$http.get('https://www.theparadigmdev.com/api/paradox/get').then(response => {
+		async getNews() {
+			await this.$http.get('https://www.theparadigmdev.com/api/paradox/get').then(response => {
 				this.news = response.data
 			})
 		},
-		setNews(title, author, timestamp, cover, content) {
-			this.current = {
-				title: title,
-				author: author,
-				timestamp: timestamp,
-				cover: cover,
-				content: content,
-				timestamp: moment().format('MM/DD/YYYY [at] h:mm a')
-			}
+		setNews(item) {
+			this.current = item
+			this.current.timestamp = moment().format('MM/DD/YYYY [at] h:mm a')
 			this.dialog = true
 		},
 		addNews() {
@@ -146,6 +139,16 @@ export default {
 				})
 			}
 		}
+	},
+	async created() {
+		await this.getNews()
+		if (this.$root.url[1] == 'paradox') {
+      this.news.forEach(item => {
+        if (this.$root.url[2] == item._id) {
+					this.setNews(item)
+        }
+      })
+    }
 	}
 }
 </script>

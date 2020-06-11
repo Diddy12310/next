@@ -143,13 +143,13 @@
 			</v-btn>
 		</v-snackbar>
 
-		<v-content>
+		<v-main>
 			<router v-if="!$root.config.shutdown" />
 			<div v-else>
 				<h1 class="text-h3 font-weight-thin text-uppercase text-center px-12 deep-purple--text text--lighten-1" style="margin-top: 100px;">A Connection Could not be Established</h1>
 				<p class="text-center pt-6 title font-weight-light grey--text">Try refreshing your page.</p>
 			</div>
-		</v-content>
+		</v-main>
 
 		<v-slide-y-reverse-transition>
 			<v-footer app style="z-index: 1001;" class="pa-0" v-show="$root.music.open" v-if="$root.music.playing">
@@ -314,6 +314,8 @@ export default {
 				this.$notify('Could not reconnect to server', 'error', 'mdi-alert-circle', false, 3000)
 			})
 		})
+		this.$root.url = window.location.pathname.split('/')
+		window.history.replaceState(null, 'Paradigm', '/')
   }
 }
 </script>

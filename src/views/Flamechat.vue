@@ -211,7 +211,7 @@
         <v-list nav rounded class="fill-height">
           <v-list-item-group v-model="current_dm">
             <p class="text-center grey--text font-italic mt-12" v-if="$root.user.people.approved.length < 1">You have no friends.</p>
-            <v-tooltip right v-for="(friend, index) in $root.user.people.approved" :key="index">
+            <v-tooltip right v-for="(friend, index) in approved_friends" :key="index">
               <template v-slot:activator="{ on }">
                 <v-list-item v-on="on" @click="changeDM(current, friend)" :value="friend.dm">
                   <v-badge style="position: relative; left: -15px;" bordered bottom dot offset-x="25" offset-y="17" color="green" :value="friend.in">
@@ -632,7 +632,16 @@ export default {
   computed: {
 		buy_chatroom_id() {
 			return Math.random().toString(36).substring(7)
-		}
+    },
+    approved_friends() {
+      var friends = []
+      this.$root.user.people.approved.forEach(async person => {
+        const index = this.people.findIndex(p => { return p._id == person._id })
+        person.in = this.people[index].in
+        friends.push(person)
+      })
+      return friends
+    }
 	},
   methods: {
     async changeChatroom(from, to) {
@@ -732,7 +741,7 @@ export default {
         theme: this.buy_chatroom.theme
       }).then(response => {
         this.$root.socket.emit('new_chatroom')
-        this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/moonrocks/-50`)
+        this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/moonrocks/-50`)
         this.$root.user.chatrooms.push(response.data)
         this.changeChatroom(false, response.data.id)
         this.buy_chatroom = {
@@ -946,7 +955,7 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
     // setInterval(() => {
     //   if (!this.current_id.includes('user_')){
     //     this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${this.current_id}/inspect/${this.current.__v}`).then(response => {
@@ -955,6 +964,26 @@ export default {
     //   }
     // }, 1000)
     this.$http.get('https://www.theparadigmdev.com/api/users/shortlist').then(response => this.people = response.data)
+
+    if (this.$root.url[1] == 'flamechat') {
+      if (this.$root.url[2] != 'dm') {
+        await this.$root.user.chatrooms.forEach(async chatroom => {
+          if (this.$root.url[2] == chatroom.id) {
+            await this.changeChatroom(this.current, chatroom)
+            this.current_id = this.$root.url[2]
+          }
+        })
+      } else {
+        await this.$root.user.people.approved.forEach(async person => {
+          if (this.$root.url[3] == person.username) {
+            await this.changeDM(this.current, person)
+            this.current_dm = person.dm
+            this.current_id = 'user_dm'
+            this.current_dm_person = person.username
+          }
+        })
+      }
+    }
   },
   beforeDestroy() {
     this.current = false

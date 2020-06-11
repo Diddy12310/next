@@ -325,7 +325,7 @@ export default {
         let file = this.new_pic[i]
         formData.append('files[' + i + ']', file)
       }
-      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/pic`,
+      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/pic`,
         formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -344,7 +344,7 @@ export default {
       })
     },
     deleteAccount() {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/delete`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/delete`).then(response => {
         this.$root.user = false
         this.$root.router = 'auth'
       }).catch(error => console.error(error))

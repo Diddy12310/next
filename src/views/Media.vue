@@ -249,28 +249,57 @@ export default {
 			})
     }
   },
-  created() {
-    this.$http.get('https://www.theparadigmdev.com/api/media/books/get').then(response => {
+  async created() {
+    await this.$http.get('https://www.theparadigmdev.com/api/media/books/get').then(response => {
       this.books = response.data
     }).catch(error => console.error(error))
-    this.$http.get('https://www.theparadigmdev.com/api/media/movies/get').then(response => {
+    await this.$http.get('https://www.theparadigmdev.com/api/media/movies/get').then(response => {
       this.movies = response.data
     }).catch(error => console.error(error))
-    this.$http.get('https://www.theparadigmdev.com/api/media/music/get').then(response => {
+    await this.$http.get('https://www.theparadigmdev.com/api/media/music/get').then(response => {
       this.music = response.data
     }).catch(error => console.error(error))
+
+    if (this.$root.url[1] == 'media') {
+      switch (this.$root.url[2]) {
+        case 'books':
+          await this.books.forEach(async book => {
+            if (this.$root.url[3] == book._id) {
+              this.tab = 0
+              await this.openBook(book._id)
+            }
+          })
+          break
+        case 'movies':
+          await this.movies.forEach(async movie => {
+            if (this.$root.url[3] == movie._id) {
+              this.tab = 1
+              await this.openMovie(movie._id)
+            }
+          })
+          break
+        case 'music':
+          await this.music.forEach(async item => {
+            if (this.$root.url[3] == item._id) {
+              this.tab = 2
+              await this.openMusic(item._id)
+            }
+          })
+          break
+      }
+    }
   },
   methods: {
     // Books
     openBook(book) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/media/books/${book}/get`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/books/${book}/get`).then(response => {
         this.current = response.data
         this.current.type = 'book'
         this.current.open = true
       }).catch(error => console.error(error))
     },
     updateUserBook() {
-      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/media/books/${this.current._id}/update`, {
+      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/books/${this.current._id}/update`, {
         rating: this.current.rating,
         favorite: this.current.favorite
       }).then(response => {
@@ -283,14 +312,14 @@ export default {
 
     // Movies
     openMovie(movie) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/media/movies/${movie}/get`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/movies/${movie}/get`).then(response => {
         this.current = response.data
         this.current.type = 'movie'
         this.current.open = true
       }).catch(error => console.error(error))
     },
     updateUserMovie() {
-      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/media/movies/${this.current._id}/update`, {
+      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/movies/${this.current._id}/update`, {
         rating: this.current.rating,
         favorite: this.current.favorite
       }).then(response => {
@@ -303,14 +332,14 @@ export default {
 
     // Music
     openMusic(id) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/media/music/${id}/get`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/music/${id}/get`).then(response => {
         this.current = response.data
         this.current.type = 'music'
         this.current.open = true
       }).catch(error => console.error(error))
     },
     updateUserMusic() {
-      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/media/music/${this.current._id}/update`, {
+      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/music/${this.current._id}/update`, {
         rating: this.current.rating,
         favorite: this.current.favorite
       }).then(response => {

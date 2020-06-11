@@ -138,10 +138,17 @@ export default {
       return is
     }
   },
-  created() {
-    this.$http.get('https://www.theparadigmdev.com/api/users/list').then(response => {
+  async created() {
+    await this.$http.get('https://www.theparadigmdev.com/api/users/list').then(response => {
       this.people = response.data
     })
+    if (this.$root.url[1] == 'people') {
+      this.people.forEach(person => {
+        if (this.$root.url[2] == person.username) {
+          this.$root.profile = person
+        }
+      })
+    }
   },
   destroyed() {
     this.$root.profile = false

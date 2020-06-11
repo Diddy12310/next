@@ -21,7 +21,7 @@
         linked, or otherwise connected thereto (collectively, the "Site"). You agree that by accessing the Site, you have read,
         understood, and agreed to be bound by all of these Terms of Use.
         <br><br>
-        <b class="text-subtitle-2 font-weight-bold">IF YOU DO NOT AGREE WITH ALL OF THESE TERMS
+        <b class="text-body-1 font-weight-bold">IF YOU DO NOT AGREE WITH ALL OF THESE TERMS
         OF USE, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SITE AND YOU MUST DISCONTINUE USE
         IMMEDIATELY.</b>
         <br><br>
@@ -291,7 +291,7 @@
         Pennsylvania, without regard to its conflict of law principles.
       </p>
       <h4 class="title pb-2">Dispute Resolution</h4>
-      <h6 class="text-subtitle-2 pb-2">Informal Negotiations</h6>
+      <h6 class="text-body-1 pb-2">Informal Negotiations</h6>
       <p>
         To expedite resolution and control the cost of any dispute, controversy, or claim related to these Terms of Use (each a
         "'Dispute" and collectively, the "Disputes") brought by either you or us (individually, a "Party/' and collectively, the "Parties"); the
@@ -299,7 +299,7 @@
         thirty (30) days before initiating arbitration. Such informal negotiations commence upon written notice from one Party to the
         other Party.
       </p>
-      <h6 class="text-subtitle-2 pb-2">Binding Arbitration</h6>
+      <h6 class="text-body-1 pb-2">Binding Arbitration</h6>
       <p>
         If the Parties are unable to resolve a Dispute through informal negotiations; the Dispute (except those Disputes expressly
         excluded below) will be finally and exclusively resolved by binding arbitration. YOU UNDERSTAND THAT WITHOUT THIS
@@ -327,14 +327,14 @@
         by a court of competent jurisdiction within the courts listed for jurisdiction above, and the Parties agree to submit to the
         personal jurisdiction of that court.
       </p>
-      <h6 class="text-subtitle-2 pb-2">Restrictions</h6>
+      <h6 class="text-body-1 pb-2">Restrictions</h6>
       <p>
         The Parties agree that any arbitration shall be limited to the Dispute between the Parties individually. To the full extent
         permitted by law, (a) no arbitration shall be joined with any other proceeding; (b) there is no right or authority for any Dispute to
         be arbitrated on a class-action basis or to utilize class action procedures; and (c) there is no right or authority for any Dispute
         to be brought in a purported representative capacity on behalf of the general public or any other persons.
       </p>
-      <h6 class="text-subtitle-2 pb-2">Exeptions to Informal Negotiations and Arbitrations</h6>
+      <h6 class="text-body-1 pb-2">Exeptions to Informal Negotiations and Arbitrations</h6>
       <p>
         The Parties agree that the following Disputes are not subject to the above provisions concerning informal negotiations and
         binding arbitration: (a) any Disputes seeking to enforce or protect, or concerning the validity of, any of the intellectual property
@@ -460,7 +460,7 @@
       <p>
         Zero information is saved about you, your device, or your network when you visit our Site.
       </p>
-      <h6 class="text-subtitle-2 pb-2">Information Collection from Other Sources</h6>
+      <h6 class="text-body-1 pb-2">Information Collection from Other Sources</h6>
         <i><b>In Short:</b> We may collect limited data from public databases, marketing partners, and other outside sources.</i>
         <br>
       <p>
@@ -562,7 +562,7 @@
         <a href="https://ec.europa.eu/justice/data-protection/bodies/authorities/index_en.html">here</a>.
         <br>
       </p>
-      <h6 class="text-subtitle-2 pb-2">Account Information</h6>
+      <h6 class="text-body-1 pb-2">Account Information</h6>
       <p>
         If you would at any time like to review or change the information in your account or terminate your account, you can:
         <br>

@@ -114,6 +114,9 @@ export default {
   mounted() {
     this.$refs.username_field.$el.children[0].focus()
   },
+  destroyed() {
+    if (this.$root.url) this.$root.router = this.$root.url[1]
+  },
   methods: {
     signIn() {
       this.$http.post('https://www.theparadigmdev.com/api/users/signin', {
