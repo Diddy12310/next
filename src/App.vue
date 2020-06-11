@@ -71,7 +71,7 @@
 			</v-list>
 
 			<template v-slot:append>
-				<p class="pl-2 ma-0 text-caption" style="padding-bottom: 5px; cursor: pointer;" @click="window.open(`https://github.com/Paradigm-Dev/paradigm/releases/tag/v${$root.version}`)">v{{ $root.version }}</p>
+				<p class="pl-2 ma-0 text-caption" style="padding-bottom: 7px; cursor: pointer;" @click="window.open(`https://github.com/Paradigm-Dev/paradigm/releases/tag/v${$root.version}`)">v{{ $root.version }}</p>
 				<div class="grey darken-4">
 					<v-divider></v-divider>
 					<v-tooltip top open-delay="1000">

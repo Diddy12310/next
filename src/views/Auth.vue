@@ -115,7 +115,8 @@ export default {
     this.$refs.username_field.$el.children[0].focus()
   },
   destroyed() {
-    if (this.$root.url) this.$root.router = this.$root.url[1]
+    if (this.$root.url[1] !== '') this.$root.router = this.$root.url[1]
+    else this.$root.router = 'home'
   },
   methods: {
     signIn() {

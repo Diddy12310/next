@@ -579,6 +579,8 @@
                 hide-no-data
                 label="Username"
                 clearable
+                item-text="username"
+                item-color="color"
               ></v-autocomplete>
             </v-col>
             <v-col class="mt-4 text-center" sm="2"><v-btn color="blue lighten-1" icon @click="ban()" :disabled="!ban_username"><v-icon>mdi-cancel</v-icon></v-btn></v-col>
