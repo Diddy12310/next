@@ -183,7 +183,8 @@
               <v-list-item-title>
                 <v-row>
                   <v-col sm="8">{{ song.title }}</v-col>
-                  <v-col sm="4" class="grey--text">{{ song.length }}</v-col>
+                  <v-col sm="2" class="grey--text">{{ song.length }}</v-col>
+                  <v-col sm="2" class="py-2 text-right" v-if="song.lyrics"><v-icon class="grey--text text--darken-1" style="padding-top: 1px;">mdi-closed-caption</v-icon></v-col>
                 </v-row>
               </v-list-item-title>
             </v-list-item>
@@ -353,10 +354,12 @@ export default {
         title: song.title,
         genre: this.current.genre,
         album: this.current.title,
+        lyrics: song.lyrics,
         open: true,
         file: song.file,
         playing: true
       }
+      console.log(this.current)
       this.$root.music = music
     }
   }

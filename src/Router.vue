@@ -1,5 +1,5 @@
 <template>
-  <div class="router">
+  <div class="router" :style="{ marginBottom: $root.music ? '80px' : '0px' }">
     <v-fade-transition hide-on-leave group v-if="$root.user ? !$root.user.banned : true">
       <home key="home" v-if="$root.router === 'home'" />
       <auth key="auth" v-else-if="$root.router === 'auth'" />
@@ -14,6 +14,7 @@
       <people key="people" v-else-if="$root.router === 'people'" />
       <broadcast key="broadcast" v-else-if="$root.router === 'broadcast'" />
       <transmission key="transmission" v-else-if="$root.router === 'transmission'" />
+      <developer key="developer" v-else-if="$root.router === 'developer'" />
       <privacy key="privacy" v-else-if="$root.router === 'privacy'" />
       <error key="error" v-else-if="$root.router === 'error'" />
     </v-fade-transition>
@@ -34,6 +35,7 @@ import Patriot from '@/views/Patriot.vue'
 import People from '@/views/People.vue'
 import Broadcast from '@/views/Broadcast.vue'
 import Transmission from '@/views/Transmission.vue'
+import Developer from '@/views/Developer.vue'
 import Privacy from '@/views/Privacy.vue'
 import ErrorPg from '@/views/Error.vue'
 
@@ -53,12 +55,9 @@ export default {
     'people': People,
     'broadcast': Broadcast,
     'transmission': Transmission,
+    'developer': Developer,
     'privacy': Privacy,
     'error': ErrorPg
   }
 }
 </script>
-
-<style scoped>
-
-</style>

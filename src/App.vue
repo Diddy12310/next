@@ -6,7 +6,7 @@
 				<img :class="{ 'true': $root.user, 'false': $root.user.banned }" @click="$root.user ? $root.router = 'home' : $root.router = 'auth'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" class="logo">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-btn text icon v-if="$root.music.playing" class="mr-2"><v-icon>mdi-music-note</v-icon></v-btn>
+			<v-btn text icon v-if="$root.music.playing" class="mr-2" readonly><v-icon>mdi-music-note</v-icon></v-btn>
 			<p class="clock text-right font-weight-light hidden-xs-only">{{ clock.date }}<br>{{ clock.time }}</p>
 		</v-app-bar>
 
@@ -67,11 +67,15 @@
 						<v-list-item-icon><v-icon :color="link.disabled ? 'grey' : 'white'">{{ link.icon }}</v-icon></v-list-item-icon>
 						<v-list-item-title>{{ link.content }}</v-list-item-title>
 					</v-list-item>
+					<v-list-item value="developer" v-if="$root.user.rights.developer">
+						<v-list-item-icon><v-icon>mdi-code-tags</v-icon></v-list-item-icon>
+						<v-list-item-title>Developer</v-list-item-title>
+					</v-list-item>
 				</v-list-item-group>
 			</v-list>
 
 			<template v-slot:append>
-				<p class="pl-2 ma-0 text-caption" style="padding-bottom: 7px; cursor: pointer;" @click="window.open(`https://github.com/Paradigm-Dev/paradigm/releases/tag/v${$root.version}`)">v{{ $root.version }}</p>
+				<p class="pl-2 ma-0 text-caption" style="padding-bottom: 5px; cursor: pointer;" @click="window.open(`https://github.com/Paradigm-Dev/paradigm/releases/tag/v${$root.version}`)">v{{ $root.version }}</p>
 				<div class="grey darken-4">
 					<v-divider></v-divider>
 					<v-tooltip top open-delay="1000">
@@ -153,7 +157,7 @@
 
 		<v-slide-y-reverse-transition>
 			<v-footer app style="z-index: 1001;" class="pa-0" v-show="$root.music.open" v-if="$root.music.playing">
-				<music-player style="width: 100vw;" :autoPlay="true" :file="$root.music.file" />
+				<music-player style="width: 100vw; filter: none;" :autoPlay="true" :file="$root.music.file" />
 			</v-footer>
 		</v-slide-y-reverse-transition>
 

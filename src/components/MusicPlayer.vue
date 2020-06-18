@@ -1,9 +1,11 @@
 <template>
-  <v-card tile>
+  <v-card tile color="transparent">
+		<!-- <div :style="{ backgroundImage: `url('${$root.music.cover}')`, filter: `blur(10px)`, backgroundPosition: 'center', backgroundSize: 'cover', height: '80px', width: '100vw', position: 'absolute', bottom: '0px' }"></div> -->
+
     <v-slider ref="slider" @click.native="setPosition()" v-on:change="setPosition()" v-model="percentage"></v-slider>
 
     <v-layout fill-height wrap align-center>
-      <v-flex sm7 xs12>
+      <v-flex sm3 xs12>
         <div :class="{ 'd-flex': true, 'align-center': true, 'text-center mt-2': $vuetify.breakpoint.xsOnly }">
           <img style="height: 80px; width: 80px;" class="hidden-xs-only" :src="$root.music.cover">
           <div :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }" style="width: 100%;">
@@ -13,9 +15,15 @@
         </div>
       </v-flex>
 
-      <v-spacer></v-spacer>
+      <v-flex sm5 xs12>
+        <div class="align-center">
+          <v-scroll-y-reverse-transition group mode="in-out" hide-on-leave>
+            <p class="text-h6 text-center my-0" v-if="lyrics" :key="lyricTime">{{ $root.music.lyrics[lyricTime] }}</p>
+          </v-scroll-y-reverse-transition>
+        </div>
+      </v-flex>
 
-      <v-flex sm2 :class="{ 'text-right': $vuetify.breakpoint.smAndUp, 'text-center': $vuetify.breakpoint.xsOnly }">
+      <v-flex sm1 :class="{ 'text-right': $vuetify.breakpoint.smAndUp, 'text-center': $vuetify.breakpoint.xsOnly }">
         <span>{{ currentTime }}</span><span class="font-weight-light"> / {{ duration }}</span>
       </v-flex>
 
@@ -36,6 +44,9 @@
         </v-btn>
         <v-btn v-if="$root.user.rights.asteroid" text icon class="primary--text" @click.native="download()">
           <v-icon>mdi-download</v-icon>
+        </v-btn>
+        <v-btn text icon class="primary--text" :input-value="lyrics" @click.native="lyrics = !lyrics" v-if="$root.music.lyrics">
+          <v-icon>mdi-closed-caption</v-icon>
         </v-btn>
         <v-btn text icon class="primary--text" @click.native="clearSession()">
           <v-icon>mdi-notification-clear-all</v-icon>
@@ -62,9 +73,11 @@ export default {
       paused: false,
       percentage: 0,
       currentTime: '00:00',
+      lyricTime: '0',
     	audio: undefined,
       totalDuration: 0,
-      repeat: false
+      repeat: false,
+      lyrics: false
     }
   },
   props: {
@@ -133,6 +146,7 @@ export default {
           this.audio.play()
           this.paused = false
           this.playing = true
+          if (this.$root.music.lyrics) this.lyrics = true
           this.refreshTitle()
         }
         this.loaded = true
@@ -145,6 +159,10 @@ export default {
     _handlePlayingUI(e) {
       this.percentage = this.audio.currentTime / this.audio.duration * 100
       this.currentTime = formatTime(this.audio.currentTime)
+      if (this.$root.music.lyrics) {
+        if (this.$root.music.lyrics[Math.round(this.audio.currentTime)]) this.lyricTime = Math.round(this.audio.currentTime)
+      }
+      console.log(Math.round(this.audio.currentTime))
       this.refreshTitle()
 		},
 		_handlePlayPause(e) {
@@ -162,6 +180,7 @@ export default {
         this.stop()
         this.refreshTitle()
       }
+      this.lyricTime = 0
     },
 		init() {
 			this.audio.addEventListener('timeupdate', this._handlePlayingUI)
