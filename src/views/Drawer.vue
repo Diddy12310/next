@@ -45,7 +45,7 @@
       </v-data-table>
     </v-container>
 
-    <v-dialog v-model="rename.open" max-width="300" @click:outside="rename = { open: false }">
+    <v-dialog v-model="rename.open" max-width="350" @click:outside="rename = { open: false }">
       <v-card style="text-align: center">
         <v-card-title>Rename File</v-card-title>
         <v-card-text>

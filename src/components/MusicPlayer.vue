@@ -1,11 +1,11 @@
 <template>
-  <v-card tile color="transparent">
+  <v-card tile color="transparent" @keypress.space="playing ? pause() : play()">
 		<!-- <div :style="{ backgroundImage: `url('${$root.music.cover}')`, filter: `blur(10px)`, backgroundPosition: 'center', backgroundSize: 'cover', height: '80px', width: '100vw', position: 'absolute', bottom: '0px' }"></div> -->
 
     <v-slider ref="slider" @click.native="setPosition()" v-on:change="setPosition()" v-model="percentage"></v-slider>
 
     <v-layout fill-height wrap align-center>
-      <v-flex sm3 xs12>
+      <v-flex sm4 xs12>
         <div :class="{ 'd-flex': true, 'align-center': true, 'text-center mt-2': $vuetify.breakpoint.xsOnly }">
           <img style="height: 80px; width: 80px;" class="hidden-xs-only" :src="$root.music.cover">
           <div :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }" style="width: 100%;">
@@ -15,20 +15,21 @@
         </div>
       </v-flex>
 
-      <v-flex sm5 xs12>
+      <v-flex sm4 xs12>
         <div class="align-center">
           <v-scroll-y-reverse-transition group mode="in-out" hide-on-leave>
-            <p class="text-h6 text-center my-0" v-if="lyrics" :key="lyricTime">{{ $root.music.lyrics[lyricTime] }}</p>
+            <p class="text-h6 text-center my-0" v-if="lyrics && $root.music.lyrics" :key="lyricTime">{{ $root.music.lyrics[lyricTime] }}</p>
           </v-scroll-y-reverse-transition>
         </div>
       </v-flex>
 
+      <!-- <v-flex @click="styledTime = !styledTime" sm1 :class="{ 'text-right': $vuetify.breakpoint.smAndUp, 'text-center': $vuetify.breakpoint.xsOnly }"> -->
       <v-flex sm1 :class="{ 'text-right': $vuetify.breakpoint.smAndUp, 'text-center': $vuetify.breakpoint.xsOnly }">
         <span>{{ currentTime }}</span><span class="font-weight-light"> / {{ duration }}</span>
       </v-flex>
 
       <v-flex sm3 xs12 text-right :class="{ 'text-center': $vuetify.breakpoint.xsOnly, 'pr-3': $vuetify.breakpoint.smAndUp }">
-        <v-btn text icon class="primary--text" :loading="!loaded" @click.native="loaded ? playing ? pause() : play() : reload()">
+        <v-btn x-large text icon class="primary--text" :loading="!loaded" @click.native="loaded ? playing ? pause() : play() : reload()">
           <v-icon v-if="playing === false || paused === true">mdi-play</v-icon>
           <v-icon v-else>mdi-pause</v-icon>
         </v-btn>

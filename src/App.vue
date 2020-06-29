@@ -67,8 +67,8 @@
 						<v-list-item-icon><v-icon :color="link.disabled ? 'grey' : 'white'">{{ link.icon }}</v-icon></v-list-item-icon>
 						<v-list-item-title>{{ link.content }}</v-list-item-title>
 					</v-list-item>
-					<v-list-item value="developer" v-if="$root.user.rights.developer">
-						<v-list-item-icon><v-icon>mdi-code-tags</v-icon></v-list-item-icon>
+					<v-list-item value="developer" disabled v-if="$root.user.rights.developer">
+						<v-list-item-icon><v-icon class="grey--text">mdi-code-tags</v-icon></v-list-item-icon>
 						<v-list-item-title>Developer</v-list-item-title>
 					</v-list-item>
 				</v-list-item-group>
@@ -373,7 +373,7 @@ html { overflow: hidden !important; }
 	text-align: center;
 }
 
-input {
+input, textarea {
 	outline: none;
 	color: white;
 }

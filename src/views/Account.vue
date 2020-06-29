@@ -223,7 +223,7 @@
       </v-container>
     </div>
 
-    <v-dialog v-model="uploader" max-width="300">
+    <v-dialog v-model="uploader" max-width="350">
       <v-card>
         <v-card-title>Profile Picture</v-card-title>
         <v-card-text>
@@ -242,7 +242,6 @@
           bottom
           color="deep-purple accent-4"
         ></v-progress-linear>
-
       </v-card>
     </v-dialog>
 

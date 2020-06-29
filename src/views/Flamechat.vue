@@ -406,7 +406,7 @@
       </v-container> -->
     </main>
 
-    <v-dialog v-model="edit.open" max-width="300" @click:outside="edit = { open: false }">
+    <v-dialog v-model="edit.open" max-width="350" @click:outside="edit = { open: false }">
       <v-card style="text-align: center">
         <v-card-title>Edit Chat</v-card-title>
         <v-card-text>
