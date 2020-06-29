@@ -145,7 +145,7 @@ export default {
               username: this.new_user.username.toLowerCase(),
               password: this.new_user.password,
               bio: this.new_user.bio,
-              color: this.new_user.color.hex,
+              color: this.new_user.color,
               rights: {
                 admin: false,
                 author: false,
@@ -157,7 +157,7 @@ export default {
             }).then(response => {
               let formData = new FormData()
               formData.append('files[0]', this.new_user.pic)
-              this.$http.post(`https://www.theparadigmdev.com/api/users/${this.new_user.username}/pic`,
+              this.$http.post(`https://www.theparadigmdev.com/api/users/${response.data._id}/pic`,
                 formData, {
                   headers: {
                     'Content-Type': 'multipart/form-data'
