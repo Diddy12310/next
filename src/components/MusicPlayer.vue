@@ -7,7 +7,7 @@
     <v-layout fill-height wrap align-center>
       <v-flex sm4 xs12>
         <div :class="{ 'd-flex': true, 'align-center': true, 'text-center mt-2': $vuetify.breakpoint.xsOnly }">
-          <img style="height: 80px; width: 80px;" class="hidden-xs-only" :src="$root.music.cover">
+          <img style="height: 80px !important; width: 80px !important;" class="hidden-xs-only" :src="$root.music.cover">
           <div :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }" style="width: 100%;">
             <h3 class="text-h5 mb-0">{{ $root.music.title }}</h3>
             <h4 class="text-body-1 font-weight-regular grey--text">{{ $root.music.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music.album }}</h4>

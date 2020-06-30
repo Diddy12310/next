@@ -164,19 +164,15 @@
           </v-card-title>
         </v-img>
 
-
         <v-card-text class="mt-6" v-if="current.type != 'music'">{{ current.summary }}</v-card-text>
-
-        <v-card-text class="mt-6" v-else>
-          <!-- <p class="text-right"> -->
-          <v-card-actions class="pt-0">
+        <v-card-text v-else>
+          <v-card-actions class="mt-2">
             <v-spacer></v-spacer>
             <v-rating color="yellow darken-2" background-color="grey darken-3" @input="updateUserMusic()" v-model="current.rating"></v-rating>
             <v-btn color="pink lighten-1" icon @click="current.favorite = !current.favorite, updateUserMusic()"><v-icon>{{ current.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon></v-btn>
             <v-btn icon color="blue accent-1" class="mr-1" disabled><v-icon>mdi-shuffle</v-icon></v-btn>
             <v-btn text color="blue accent-1" disabled><v-icon left>mdi-play</v-icon>Play</v-btn>
           </v-card-actions>
-          <!-- </p> -->
           <v-list nav>
             <v-list-item @click="playSong(song)" v-for="(song, index) in music_songs" :key="index">
               <v-list-item-icon>{{ song.track }}</v-list-item-icon>
@@ -195,7 +191,6 @@
           <v-spacer></v-spacer>
           <v-rating color="yellow darken-2" background-color="grey darken-3" @input="updateUserBook()" v-model="current.rating"></v-rating>
           <v-btn color="pink lighten-1" icon @click="current.favorite = !current.favorite, updateUserBook()"><v-icon>{{ current.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon></v-btn>
-          <!-- <v-btn color="blue" icon @click="downloadBook()"><v-icon>mdi-download</v-icon></v-btn> -->
           <v-btn text color="blue accent-1" @click="readBook()">Read</v-btn>
         </v-card-actions>
 
@@ -203,11 +198,96 @@
           <v-spacer></v-spacer>
           <v-rating color="yellow darken-2" background-color="grey darken-3" @input="updateUserMovie()" v-model="current.rating"></v-rating>
           <v-btn color="pink lighten-1" icon @click="current.favorite = !current.favorite, updateUserMovie()"><v-icon>{{ current.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon></v-btn>
-          <!-- <v-btn color="blue" icon @click="downloadBook()"><v-icon>mdi-download</v-icon></v-btn> -->
           <v-btn text color="blue accent-1" @click="watchMovie()">Watch</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!-- Upload dialog -->
+    <v-dialog width="600" style="z-index: 99991;" v-model="add_dialog">
+      <v-card>
+        <v-img :src="upload.cover" style="height: 90vh;" v-if="tab != 2">
+          <v-card-title @click.self="add_dialog_uploader = true" class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
+            <div style="width: 100%;">
+              <h3 class="text-h5 mb-0"><input v-model="upload.title" type="text" placeholder="Title"></h3>
+              <div class="d-flex">
+                <h4 v-if="tab == 0" class="text-body-2 grey--text"><input v-model="upload.author" type="text" placeholder="Author"></h4>
+                <h4 v-if="tab == 1" class="text-body-2 grey--text"><input v-model="upload.genre" type="text" placeholder="Genre"></h4>
+                <v-spacer></v-spacer>
+                <h4 class="text-body-2 red--text font-weight-medium" v-if="!upload.file">UNAVAILABLE</h4>
+              </div>
+            </div>
+          </v-card-title>
+        </v-img>
+
+        <v-img :src="upload.cover" v-if="tab == 2">
+          <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
+            <div style="width: 100%;">
+              <h3 class="text-h5 mb-0">{{ upload.title }}</h3>
+              <div class="d-flex">
+                <h4 class="text-body-2 grey--text">{{ upload.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ upload.genre }}</h4>
+                <v-spacer></v-spacer>
+                <h4 class="text-body-2 red--text font-weight-medium" v-if="!upload.file">UNAVAILABLE</h4>
+              </div>
+            </div>
+          </v-card-title>
+        </v-img>
+
+        <v-card-text class="mt-6 pb-0" v-if="current.type != 'music'">
+          <textarea v-model="upload.summary" placeholder="Summary" style="width: 100%;" rows="5"></textarea>
+          <v-file-input v-model="upload.file" label="File..."></v-file-input>
+        </v-card-text>
+
+        <v-card-text class="mt-6" v-else>
+          <v-card-actions class="pt-0">
+            <v-spacer></v-spacer>
+            <v-rating color="yellow darken-2" background-color="grey darken-3" @input="updateUserMusic()" v-model="current.rating"></v-rating>
+            <v-btn color="pink lighten-1" icon @click="current.favorite = !current.favorite, updateUserMusic()"><v-icon>{{ current.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon></v-btn>
+            <v-btn icon color="blue accent-1" class="mr-1" disabled><v-icon>mdi-shuffle</v-icon></v-btn>
+            <v-btn text color="blue accent-1" disabled><v-icon left>mdi-play</v-icon>Play</v-btn>
+          </v-card-actions>
+          <v-list nav>
+            <v-list-item @click="playSong(song)" v-for="(song, index) in music_songs" :key="index">
+              <v-list-item-icon>{{ song.track }}</v-list-item-icon>
+              <v-list-item-title>
+                <v-row>
+                  <v-col sm="8">{{ song.title }}</v-col>
+                  <v-col sm="2" class="grey--text">{{ song.length }}</v-col>
+                  <v-col sm="2" class="py-2 text-right" v-if="song.lyrics"><v-icon class="grey--text text--darken-1" style="padding-top: 1px;">mdi-closed-caption</v-icon></v-col>
+                </v-row>
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn text color="grey darken-1">Cancel</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn text color="blue accent-1" @click="save()" :disabled="false">Upload</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="add_dialog_uploader" max-width="350">
+			<v-card>
+				<v-card-title class="title text-center font-weight-medium text-uppercase">Upload Image</v-card-title>
+				<v-card-text><v-file-input accept="image/*" prepend-icon="" id="file" ref="file" v-model="upload.cover_file" multiple label="Upload..."></v-file-input></v-card-text>
+				<v-card-actions>
+					<v-btn @click="add_dialog_uploader = false; file = null" color="grey" text>Cancel</v-btn>
+					<v-spacer></v-spacer>
+					<v-btn @click="displayImg()" color="white" text>Upload</v-btn>
+				</v-card-actions>
+        <v-progress-linear
+          :active="upload_file_loading"
+          :indeterminate="true"
+          absolute
+          bottom
+          color="deep-purple accent-4"
+        ></v-progress-linear>
+			</v-card>
+		</v-dialog>
+
+    <v-btn fab fixed bottom right @click="add_dialog = true" v-if="tab < 3"><v-icon>mdi-plus</v-icon></v-btn>
   </div>
 </template>
 
@@ -221,7 +301,20 @@ export default {
       music: [],
       search: '',
       tab: 0,
-      current: {}
+      current: {},
+      add_dialog: false,
+      add_dialog_uploader: false,
+      upload_file_loading: false,
+      upload: {
+        title: 'test book',
+        author: 'test author',
+        genre: '',
+        file: null,
+        cover: '',
+        cover_file: null,
+        summary: 'test book by test author',
+        type: null
+      }
     }
   },
   computed: {
@@ -361,6 +454,37 @@ export default {
       }
       console.log(this.current)
       this.$root.music = music
+    },
+
+    // Uploading
+    displayImg() {
+      this.upload.cover = URL.createObjectURL(this.upload.cover_file[0])
+      this.add_dialog_uploader = false
+    },
+    save() {
+      // switch (this.tab) {
+      //   case 0: this.upload.type = 'book'
+      //   case 1: this.upload.type = 'movie'
+      //   case 2: this.upload.type = 'music'
+      // }
+      if (this.tab == 0) this.upload.type = 'book'
+      if (this.tab == 1) this.upload.type = 'movie'
+      this.$http.post(`https://www.theparadigmdev.com/api/media/create/data`, this.upload).then(response => {
+        console.log(response)
+        let formData = new FormData()
+        formData.append('cover', this.upload.cover_file[0])
+        formData.append('file', this.upload.file)
+        // for (var i = 0; i < this.upload.file.length; i++ ) {
+        //   let file = this.new_pic[i]
+        //   formData.append('files[' + i + ']', file)
+        // }
+        this.$http.post(`https://www.theparadigmdev.com/api/media/create/${response.data._id}/files/${this.upload.type}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+      }).catch(error => console.error(error))
+      console.log(this.upload)
     }
   }
 }
