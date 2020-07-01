@@ -4,7 +4,7 @@
       <v-toolbar-title style="font-family: Roboto;">Terminal</v-toolbar-title>
     </v-toolbar>
 
-    <div v-chat-scroll id="output" style="height: calc(100vh - 160px) !important; overflow: auto; padding: 0px 16px;">
+    <div v-chat-scroll id="output" style="padding: 0px 16px;" :style="{ height: `calc(100vh - ${$root.music.open ? '240px' : '160px'})`, overflowY: 'auto' }">
       <p style="font-family: Roboto Mono;" class="pb-0 pt-0 mt-0" v-for="(item, index) in history" :key="index" v-html="item"></p>
     </div>
 
@@ -60,7 +60,7 @@ export default {
           this.ban(this.output[1])
           break
         default:
-          this.$log(`command ${this.output[0]} does not exist!`)
+          this.$error(`command ${this.output[0]} not found`)
           this.input = ''
       }
       this.input = ''
@@ -75,7 +75,6 @@ export default {
       this.$log(`set config.${query} to ${input}`)
     },
     user(username, key, value) {
-      console.log(username, key, value)
       switch (key) {
         case 'ban':
           socket.emit('ban', { username: username, value: this.parseBool(value) })
@@ -83,20 +82,23 @@ export default {
           break
         case 'view':
           this.$http.get(`https://www.theparadigmdev.com/api/terminal/user/${username}/view`).then(response => {
-            this.history.push(`
-            <p class="grey--text">
-              &nbsp;&nbsp;&nbsp;&nbsp;# <span style="color: ${response.data.color};">${ response.data.username }</span><br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# ${ response.data._id }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# ${ response.data.bio }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# ---------------------------------------<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# moonrocks:        ${ response.data.moonrocks }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# rights.admin:     ${ response.data.rights.admin }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# rights.author:    ${ response.data.rights.author }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# rights.asteroid:  ${ response.data.rights.asteroid }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# banned:           ${ response.data.banned }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# strikes:          ${ response.data.strikes }<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;# logged in:        ${ response.data.in }<br>
-            </p>`)
+            if (response.data.error) this.$error(response.data.error)
+            else {
+              this.history.push(`<p class="grey--text">
+                &nbsp;&nbsp;&nbsp;&nbsp;# <span style="color: ${response.data.color};">${ response.data.username }</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# ${ response.data._id }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# ${ response.data.bio }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# ---------------------------------------<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# moonrocks:        ${ response.data.moonrocks }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# rights.admin:     ${ response.data.rights.admin }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# rights.author:    ${ response.data.rights.author }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# rights.asteroid:  ${ response.data.rights.asteroid }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# rights.developer:  ${ response.data.rights.developer }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# banned:           ${ response.data.banned }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# strikes:          ${ response.data.strikes }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# logged in:        ${ response.data.in }<br>
+              </p>`)
+            }
           })
           break
         case 'rights.admin':
@@ -110,6 +112,10 @@ export default {
         case 'rights.asteroid':
           socket.emit('rights.asteroid', { username, value: this.parseBool(value) })
           this.$log(`user ${username}.rights.asteroid set to ${value}`)
+          break
+        case 'rights.developer':
+          socket.emit('rights.developer', { username, value: this.parseBool(value) })
+          this.$log(`user ${username}.rights.developer set to ${value}`)
           break
         case 'strike':
           this.$http.get(`https://www.theparadigmdev.com/api/terminal/user/${username}/strike`)
@@ -132,11 +138,14 @@ export default {
           socket.emit('moonrocks', { username, value: parseInt(value, 10) })
           this.$log(`user ${username}.moonrocks incremented by ${value}`)
           break
+        default:
+          this.$error(`command ${key} not found`)
       }
     },
     list(query) {
       this.$http.get(`https://www.theparadigmdev.com/api/terminal/list/${query}`).then(response => {
-        this.$log(response.data.toString())
+        if (response.data.error) this.$error(response.data.error)
+        else this.$log(response.data.toString())
       })
     },
     ban(ip) {
@@ -145,6 +154,9 @@ export default {
     },
     $log(input) {
       this.history.push(`<p class="ml-8 grey--text"># ${input}</p>`)
+    },
+    $error(input) {
+      this.history.push(`<p class="ml-8 red--text">! ${input}</p>`)
     }
   },
   async created() {
