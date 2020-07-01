@@ -163,7 +163,7 @@ export default {
       if (this.$root.music.lyrics) {
         if (this.$root.music.lyrics[Math.round(this.audio.currentTime)]) this.lyricTime = Math.round(this.audio.currentTime)
       }
-      console.log(Math.round(this.audio.currentTime))
+      // console.log(Math.round(this.audio.currentTime))
       this.refreshTitle()
 		},
 		_handlePlayPause(e) {
@@ -197,7 +197,7 @@ export default {
       this.refreshTitle()
     },
     refreshTitle() {
-      if (this.$root.music.playing) document.title = `Paradigm - ${this.$root.music.title} by ${this.$root.music.artist}`
+      if (this.$root.music.playing) document.title = `${this.$root.music.title} by ${this.$root.music.artist} - Paradigm`
       else document.title = 'Paradigm'
     }
 	},
@@ -216,7 +216,7 @@ export default {
   },
   computed: {
     duration() {
-      return this.audio ? formatTime(this.totalDuration) : ''
+      return this.audio ? formatTime(this.totalDuration) : '--:--'
     },
   }
 }

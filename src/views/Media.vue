@@ -14,7 +14,7 @@
       <v-tab>Live</v-tab>
     </v-tabs>
 
-    <div class="scroll-container">
+    <div :style="{ height: `calc(100vh - ${$root.music.open ? '240px' : '160px'})`, overflowY: 'auto' }">
       <v-tabs-items v-model="tab" style="background: none;">
         <!-- Books -->
         <v-tab-item>
@@ -221,50 +221,58 @@
         </v-img>
 
         <v-img :src="upload.cover" v-if="tab == 2">
-          <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
-            <div style="width: 100%;">
-              <h3 class="text-h5 mb-0">{{ upload.title }}</h3>
-              <div class="d-flex">
-                <h4 class="text-body-2 grey--text">{{ upload.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ upload.genre }}</h4>
-                <v-spacer></v-spacer>
-                <h4 class="text-body-2 red--text font-weight-medium" v-if="!upload.file">UNAVAILABLE</h4>
+          <v-responsive :aspect-ratio="1/1">          
+            <!-- <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
+              <div style="width: 100%;">
+                <h3 class="text-h5 mb-0"><input type="text" placeholder="Title" v-model="upload.title"></h3>
+                <div class="d-flex">
+                  <h4 class="text-body-2 grey--text"><input style="width: 150px;" type="text" placeholder="Artist" v-model="upload.artist">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;<input style="width: 150px;" type="text" placeholder="Genre" v-model="upload.genre"></h4>
+                  <v-spacer></v-spacer>
+                  <h4 class="text-body-2 red--text font-weight-medium" v-if="!upload.file">UNAVAILABLE</h4>
+                </div>
               </div>
-            </div>
-          </v-card-title>
+            </v-card-title> -->
+
+            <h1 class="text-h3 centralize font-weight-light pa-12" style="width: 100%;">Uploading music is not available yet.</h1>
+
+          </v-responsive>
         </v-img>
 
-        <v-card-text class="mt-6 pb-0" v-if="current.type != 'music'">
+        <v-card-text class="mt-6 pb-0" v-if="tab != 2">
           <textarea v-model="upload.summary" placeholder="Summary" style="width: 100%;" rows="5"></textarea>
           <v-file-input v-model="upload.file" label="File..."></v-file-input>
         </v-card-text>
 
-        <v-card-text class="mt-6" v-else>
-          <v-card-actions class="pt-0">
-            <v-spacer></v-spacer>
-            <v-rating color="yellow darken-2" background-color="grey darken-3" @input="updateUserMusic()" v-model="current.rating"></v-rating>
-            <v-btn color="pink lighten-1" icon @click="current.favorite = !current.favorite, updateUserMusic()"><v-icon>{{ current.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon></v-btn>
-            <v-btn icon color="blue accent-1" class="mr-1" disabled><v-icon>mdi-shuffle</v-icon></v-btn>
-            <v-btn text color="blue accent-1" disabled><v-icon left>mdi-play</v-icon>Play</v-btn>
-          </v-card-actions>
-          <v-list nav>
-            <v-list-item @click="playSong(song)" v-for="(song, index) in music_songs" :key="index">
-              <v-list-item-icon>{{ song.track }}</v-list-item-icon>
-              <v-list-item-title>
-                <v-row>
-                  <v-col sm="8">{{ song.title }}</v-col>
-                  <v-col sm="2" class="grey--text">{{ song.length }}</v-col>
-                  <v-col sm="2" class="py-2 text-right" v-if="song.lyrics"><v-icon class="grey--text text--darken-1" style="padding-top: 1px;">mdi-closed-caption</v-icon></v-col>
+        <!-- <v-card-text class="mt-6" v-else>
+          <v-expansion-panels flat hover>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <v-row no-gutters>
+                  <v-col sm="2"><input type="text" v-model="new_song.track" placeholder="Track"></v-col>
+                  <v-col sm="8"><input type="text" v-model="new_song.title" placeholder="Title"></v-col>
+                  <v-col sm="2" class="grey--text"><input type="text" v-model="new_song.length" placeholder="Length" style="width: 100%;"></v-col>
                 </v-row>
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-card-text>
+              </v-expansion-panel-header>
 
-        <v-card-actions>
+              <v-expansion-panel-content>
+                <v-file-input label="File" accept="audio/*" prepend-icon="mdi-music-note-plus"></v-file-input>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-card-text> -->
+
+        <v-card-actions v-if="tab != 2">
           <v-btn text color="grey darken-1">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="blue accent-1" @click="save()" :disabled="false">Upload</v-btn>
         </v-card-actions>
+        <v-progress-linear
+          :active="add_dialog_loading"
+          :indeterminate="true"
+          absolute
+          bottom
+          color="deep-purple accent-4"
+        ></v-progress-linear>
       </v-card>
     </v-dialog>
 
@@ -305,15 +313,24 @@ export default {
       add_dialog: false,
       add_dialog_uploader: false,
       upload_file_loading: false,
+      add_dialog_loading: false,
       upload: {
-        title: 'test book',
-        author: 'test author',
+        title: '',
+        author: '',
         genre: '',
         file: null,
         cover: '',
         cover_file: null,
-        summary: 'test book by test author',
-        type: null
+        summary: '',
+        type: null,
+        songs: []
+      },
+      new_song: {
+        track: '',
+        title: '',
+        length: '',
+        lyrics: [],
+        files: []
       }
     }
   },
@@ -452,7 +469,6 @@ export default {
         file: song.file,
         playing: true
       }
-      console.log(this.current)
       this.$root.music = music
     },
 
@@ -462,6 +478,7 @@ export default {
       this.add_dialog_uploader = false
     },
     save() {
+      this.add_dialog_loading = true
       // switch (this.tab) {
       //   case 0: this.upload.type = 'book'
       //   case 1: this.upload.type = 'movie'
@@ -482,9 +499,22 @@ export default {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
+        }).then(response => {
+          this.add_dialog = false
+          this.add_dialog_loading = false
+          this.upload = {
+            title: '',
+            author: '',
+            genre: '',
+            file: null,
+            cover: '',
+            cover_file: null,
+            summary: '',
+            type: null,
+            songs: []
+          }
         })
       }).catch(error => console.error(error))
-      console.log(this.upload)
     }
   }
 }
