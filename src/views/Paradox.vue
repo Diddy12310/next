@@ -6,7 +6,7 @@
 			<v-text-field style="max-width: 500px;" v-model="search" label="Search..." color="white" class="mt-7"></v-text-field>
 		</v-toolbar>
 
-		<div style="overflow: auto; height: calc(100vh - 112px);">
+		<div :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
 			<v-container>
 				<p class="text-center font-italic grey--text mt-12" v-if="filteredNews.length <= 0">No articles.</p>
 

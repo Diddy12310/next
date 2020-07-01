@@ -1,6 +1,6 @@
 <template>
   <div class="privacy text-center">
-    <v-container fluid class="text-center pt-0">
+    <v-container fluid class="text-center py-0">
       <v-row>
         <v-col sm="12" class="light-blue darken-3 py-12 elevation-5" style="z-index: 5;">
           <h1 class="text-h2 font-weight-thin white--text">Privacy</h1>
@@ -8,7 +8,7 @@
       </v-row>
     </v-container>
 
-    <div class="scrollable-shell px-4">
+    <div class="px-4" :style="{ height: `calc(100vh - ${$root.music.open ? '300px' : '220px'})`, overflowY: 'auto' }">
       <h1 class="text-h3 font-weight-light text-uppercase pt-12">This is a private platform</h1>
       <p class="text-center py-6">
         No personal information about you or any other users will be collected, analyzed, interpreted,<br>
@@ -41,8 +41,5 @@ export default {
 </script>
 
 <style scoped>
-.scrollable-shell {
-  height: calc(100vh - 220px);
-  overflow-y: auto;
-}
+
 </style>

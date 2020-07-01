@@ -365,7 +365,7 @@ html { overflow: hidden !important; }
 ::-webkit-scrollbar-corner { background: rgb(33, 33, 33); }
 
 .centralize {
-  margin: 0;
+  /* margin: 0; */
   position: absolute;
   top: 50%;
   left: 50%;

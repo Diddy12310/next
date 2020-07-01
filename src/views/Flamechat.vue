@@ -79,7 +79,7 @@
       </v-toolbar>
       <!-- <v-btn @click="createChatroom()">create</v-btn> -->
 
-      <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp && current_status == 'approved'">
+      <v-list :style="{ height: `calc(100vh - ${$root.music.open ? '278px' : '198px'})`, overflowY: 'auto' }" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp && current_status == 'approved'">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -126,7 +126,7 @@
         </v-fade-transition>
       </v-list>
 
-      <v-list class="messages" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly && current_status == 'approved'">
+      <v-list :style="{ height: `calc(100vh - ${$root.music.open ? '278px' : '198px'})`, overflowY: 'auto' }" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly && current_status == 'approved'">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -225,7 +225,7 @@
         </v-list>
       </v-navigation-drawer>
 
-      <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp && current_dm">
+      <v-list :style="{ height: `calc(100vh - ${$root.music.open ? '278px' : '198px'})`, overflowY: 'auto' }" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp && current_dm">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -269,7 +269,7 @@
         </v-fade-transition>
       </v-list>
 
-      <v-list class="messages" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly">
+      <v-list :style="{ height: `calc(100vh - ${$root.music.open ? '278px' : '198px'})`, overflowY: 'auto' }" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -995,11 +995,6 @@ export default {
 </script>
 
 <style scoped>
-.messages {
-  height: calc(100vh - 198px);
-  overflow-y: auto;
-}
-
 main {
   margin-left: 74px;
 }

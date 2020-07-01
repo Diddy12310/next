@@ -4,7 +4,7 @@
       <v-toolbar-title>Account</v-toolbar-title>
     </v-toolbar>
 
-    <div style="height: calc(100vh - 112px); overflow: auto;">
+    <div :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
       <v-container>
         <div class="text-center my-12">
           <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img :src="user.pic"></v-img></v-avatar><br>

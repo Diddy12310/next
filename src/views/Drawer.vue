@@ -7,7 +7,7 @@
       <v-btn :disabled="!files" @click="uploadFile()" icon><v-icon>mdi-upload</v-icon></v-btn>
       <v-btn icon @click="getFileList()"><v-icon>mdi-refresh</v-icon></v-btn>
     </v-toolbar>
-    <v-container style="height: calc(100vh - 112px); overflow: auto;">
+    <v-container :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
       <v-data-table no-data-text="No files found" :headers="headers" :items="filelist" :items-per-page="10" class="elevation-1" dense v-if="$vuetify.breakpoint.xsOnly">
         <template v-slot:item.action="{ item }">
           <v-icon small class="light-blue--text mr-2" @click="downloadFile(item._id)">mdi-download</v-icon>

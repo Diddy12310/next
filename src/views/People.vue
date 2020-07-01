@@ -6,7 +6,7 @@
       <v-text-field style="max-width: 500px;" color="white" label="Search..." class="mt-7" v-model="search"></v-text-field>
     </v-toolbar>
 
-    <v-container style="height: calc(100vh - 112px); overflow: auto;">
+    <v-container :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
       <v-fade-transition group hide-on-leave>
         <v-row key="list" v-if="!$root.profile">
           <v-col sm="6" md="4" cols="12" v-for="(user, index) in filtered_people" :key="index" class="text-center">

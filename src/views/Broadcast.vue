@@ -4,7 +4,7 @@
       <v-toolbar-title>Broadcast</v-toolbar-title>
     </v-toolbar>
 
-    <div style="height: calc(100vh - 112px); overflow: auto;">
+    <div :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
       <v-fade-transition group>
         <v-card class="mx-auto mt-6" color="indigo darken-3" max-width="500" key="new">
           <v-card-text class="text-h5">
