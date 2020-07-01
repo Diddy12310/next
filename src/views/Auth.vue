@@ -10,10 +10,10 @@
       <v-card-text>
         <v-text-field @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
         <v-text-field :disabled="!user_auth_info.exists && !user_auth_info.in" v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
-        <p class="text-center">By logging in, you agree to the <a style="text-decoration: none;" href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
-        <p v-if="$root.config.reset" class="text-center">Can't remember your password? Oh well.</p>
-        <p v-if="$root.config.migrate" class="text-center">Have an old v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
-        <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
+        <p class="grey--text text-center">By logging in, you agree to the <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
+        <p v-if="$root.config.reset" class="grey--text text-center">Can't remember your password? Oh well.</p>
+        <p v-if="$root.config.sign_up" class="grey--text text-center">If you had an old Paradigm v0.1.x account, you have to <a @click.prevent="method = 'up'">create a new one</a>. Please <a href="mailtio:paradigmdevelop@gmail.com">contact support</a> to transfer your data to your new account.</p>
+        <p v-if="$root.config.sign_up" class="grey--text text-center">Don't have an account? <a @click.prevent="method = 'up'">Sign up</a>.</p>
       </v-card-text>
 
       <v-card-actions>
@@ -22,30 +22,12 @@
       </v-card-actions>
     </v-card>
 
-    <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'migrate'">
-      <v-card-title class="text-h4 font-weight-light">Migrate</v-card-title>
-
-      <v-card-text>
-        <v-text-field @keyup="checkIfUserExistsMigrate" v-model="username" label="Username"></v-text-field>
-        <v-text-field :disabled="!user_auth_info.exists" v-model="password" label="Password" type="password"></v-text-field>
-        <v-checkbox label="I understand that this action is irreversible and may lead to data loss" v-model="migrate_confirm" class="mb-5"></v-checkbox>
-        <p class="text-center mb-8 font-italic"><b>Note:</b> Your username and password will remain the same.</p>
-        <p class="text-center">By migrating your account, you agree to the <a style="text-decoration: none;" href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
-        <p class="text-center">Already migrated or created a Paradigm account? <a @click="method = 'in'">Sign in</a>.</p>
-        <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
-      </v-card-text>
-
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn @click="migrateAccount()" text color="blue accent-1" :disabled="!username || !password || !migrate_confirm">Migrate</v-btn>
-      </v-card-actions>
-    </v-card>
-
     <v-card width="500" class="mx-auto elevation-12" :style="{ margin: $vuetify.breakpoint.smAndUp ? '100px 0px 100px 0px' : '0px' }" v-if="method == 'up'">
       <v-card-title class="text-h4 font-weight-light">Sign up</v-card-title>
 
       <v-card-text>
         <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden">
+          <span class="grey--text">If you had an old Paradigm v0.1.x account, you have to create a new one. Please <a href="mailtio:paradigmdevelop@gmail.com">contact support</a> to transfer your data to your new account.</span>
           <v-text-field autocomplete="off" type="text" name="username" v-model="new_user.username" label="Username"></v-text-field>
           <span class="grey--text">This will be used to sign into your account. All other users on the platform will be able to see it, choose wisely.</span>
           <v-text-field autocomplete="off" type="password" name="password" v-model="new_user.password" label="Password"></v-text-field>
@@ -63,8 +45,7 @@
 
         <v-divider class="my-8"></v-divider>
 
-        <p v-if="$root.config.migrate" class="text-center">Have an old Paradigm v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
-        <p class="text-center">Already have an account? <a @click="method = 'in'">Sign in</a>.</p>
+        <p class="grey--text text-center">Already have an account? <a @click.self.prevent="method = 'in'">Sign in</a>.</p>
       </v-card-text>
 
       <v-card-actions>
@@ -107,7 +88,6 @@ export default {
       new_user: {
         color: '#FF0000'
       },
-      migrate_confirm: false,
       window
     }
   },
@@ -178,31 +158,11 @@ export default {
         } else this.$notify('Read and accept the terms', 'error', 'mdi-account-plus', false, 3000)
       } else this.$notify('Passwords do not match', 'error', 'mdi-account-plus', false, 3000)
     },
-    migrateAccount() {
-      this.$http.post('https://www.theparadigmdev.com/api/users/migrate', {
-        username: this.username,
-        password: this.password
-      }).then(response => {
-        this.$root.user = response.data
-        this.$root.router = 'home'
-        document.title = 'Paradigm'
-      }).catch(error => {
-        console.error(error)
-      })
-    },
     checkIfUserExists() {
       if (this.username.length < 1) this.username_exists = false
       else {
         this.$http.get(`https://www.theparadigmdev.com/api/users/check/${this.username.toLowerCase()}`).then(response => {
           this.user_auth_info = response.data
-        })
-      }
-    },
-    checkIfUserExistsMigrate() {
-      if (this.username.length < 1) this.username_exists = false
-      else { 
-        this.$http.get(`https://www.theparadigmdev.com/api/users/migrate/check/${this.username.toLowerCase()}`).then(response => {
-          this.user_auth_info.exists = response.data.exists
         })
       }
     },
