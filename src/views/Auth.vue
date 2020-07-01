@@ -5,7 +5,7 @@
     </v-card>
 
     <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'in'">
-      <v-card-title class="display-1 font-weight-light">Sign in</v-card-title>
+      <v-card-title class="text-h4 font-weight-light">Sign in</v-card-title>
 
       <v-card-text>
         <v-text-field @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
@@ -23,7 +23,7 @@
     </v-card>
 
     <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'migrate'">
-      <v-card-title class="display-1 font-weight-light">Migrate</v-card-title>
+      <v-card-title class="text-h4 font-weight-light">Migrate</v-card-title>
 
       <v-card-text>
         <v-text-field @keyup="checkIfUserExistsMigrate" v-model="username" label="Username"></v-text-field>
@@ -31,7 +31,7 @@
         <v-checkbox label="I understand that this action is irreversible and may lead to data loss" v-model="migrate_confirm" class="mb-5"></v-checkbox>
         <p class="text-center mb-8 font-italic"><b>Note:</b> Your username and password will remain the same.</p>
         <p class="text-center">By migrating your account, you agree to the <a style="text-decoration: none;" href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
-        <p class="text-center">Already migrated or created your Paradigm account? <a @click="method = 'in'">Sign in</a>.</p>
+        <p class="text-center">Already migrated or created a Paradigm account? <a @click="method = 'in'">Sign in</a>.</p>
         <p v-if="$root.config.sign_up" class="text-center">Don't have an account? <a @click="method = 'up'">Sign up</a>.</p>
       </v-card-text>
 
@@ -42,7 +42,7 @@
     </v-card>
 
     <v-card width="500" class="mx-auto elevation-12" :style="{ margin: $vuetify.breakpoint.smAndUp ? '100px 0px 100px 0px' : '0px' }" v-if="method == 'up'">
-      <v-card-title class="display-1 font-weight-light">Sign up</v-card-title>
+      <v-card-title class="text-h4 font-weight-light">Sign up</v-card-title>
 
       <v-card-text>
         <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden">
@@ -60,17 +60,7 @@
           <v-checkbox label="I have read and accept the Terms and Conditions." v-model="new_user.terms" class="mb-4"></v-checkbox>
           <span class="grey--text">Please read and accept the <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>. Confirm that you are over the age of 13. If you are under 18, parental permission is required. <a href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Read more</a></span>
         </div>
-        <!-- <v-window v-model="step" style="height: 310px;">
-          <v-window-item :value="6">
-            <span class="caption grey--text text--darken-1">
-            </span>
-          </v-window-item>
 
-          <v-window-item :value="7">
-            <h1 class="display-1 my-4 font-weight-light text-center">Welcome to Paradigm!</h1>
-          </v-window-item>
-        </v-window> -->
-        
         <v-divider class="my-8"></v-divider>
 
         <p v-if="$root.config.migrate" class="text-center">Have an old Paradigm v1.x account? <a @click="method = 'migrate'">Migrate</a>.</p>
@@ -114,13 +104,19 @@ export default {
       },
       method: 'in',
       step: 1,
-      new_user: {},
+      new_user: {
+        color: '#FF0000'
+      },
       migrate_confirm: false,
       window
     }
   },
   mounted() {
     this.$refs.username_field.$el.children[0].focus()
+  },
+  destroyed() {
+    if (this.$root.url[1] !== '') this.$root.router = this.$root.url[1]
+    else this.$root.router = 'home'
   },
   methods: {
     signIn() {
@@ -149,7 +145,7 @@ export default {
               username: this.new_user.username.toLowerCase(),
               password: this.new_user.password,
               bio: this.new_user.bio,
-              color: this.new_user.color.hex,
+              color: this.new_user.color,
               rights: {
                 admin: false,
                 author: false,
@@ -161,7 +157,7 @@ export default {
             }).then(response => {
               let formData = new FormData()
               formData.append('files[0]', this.new_user.pic)
-              this.$http.post(`https://www.theparadigmdev.com/api/users/${this.new_user.username}/pic`,
+              this.$http.post(`https://www.theparadigmdev.com/api/users/${response.data._id}/pic`,
                 formData, {
                   headers: {
                     'Content-Type': 'multipart/form-data'

@@ -79,7 +79,7 @@
       </v-toolbar>
       <!-- <v-btn @click="createChatroom()">create</v-btn> -->
 
-      <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp && current_status == 'approved'">
+      <v-list :style="{ height: `calc(100vh - ${$root.music.open ? '278px' : '198px'})`, overflowY: 'auto' }" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp && current_status == 'approved'">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -126,7 +126,7 @@
         </v-fade-transition>
       </v-list>
 
-      <v-list class="messages" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly && current_status == 'approved'">
+      <v-list :style="{ height: `calc(100vh - ${$root.music.open ? '278px' : '198px'})`, overflowY: 'auto' }" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly && current_status == 'approved'">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -184,7 +184,7 @@
       </v-list>
 
       <v-fade-transition leave-absolute v-if="current_status == 'approved'">
-        <span class="ml-4 mb-n1 grey--text font-italic body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
+        <span class="ml-4 mb-n1 grey--text font-italic text-body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
       </v-fade-transition>
       <v-layout justify-center align-center text-center px-4 v-if="current_status == 'approved'">
         <v-flex xs10>
@@ -197,31 +197,35 @@
       </v-layout>
 
       <div v-if="current_status == 'requested'" class="text-center">
-        <h1 class="display-1 mt-12">You have requested to join this chatroom</h1>
+        <h1 class="text-h4 mt-12">You have requested to join this chatroom</h1>
         <v-btn @click="rejectRequest($root.user._id)" class="mt-6" color="blue lighten-1" text><v-icon left>mdi-undo-variant</v-icon>Retract</v-btn>
       </div>
     </main>
 
-    <main v-else-if="current_id === 'user_dm'" class="fill-height" style="margin-left: 330px;">
+    <main v-else-if="current_id === 'user_dm'" class="fill-height" style="margin-left: 148px;">
       <v-toolbar dense color="deep-orange">
         <v-toolbar-title>Flamechat: Direct Messages</v-toolbar-title>
       </v-toolbar>
 
-      <v-navigation-drawer absolute style="left: +74px;">
+      <v-navigation-drawer mini-variant permanent absolute style="width: 74px; left: +74px;">
         <v-list nav rounded class="fill-height">
           <v-list-item-group v-model="current_dm">
             <p class="text-center grey--text font-italic mt-12" v-if="$root.user.people.approved.length < 1">You have no friends.</p>
-            <v-list-item @click="changeDM(current, friend)" v-for="(friend, index) in $root.user.people.approved" :key="index" :value="friend.dm">
-              <v-badge style="position: relative; left: -15px;" bordered bottom dot offset-x="25" offset-y="17" color="green" :value="friend.in">
-                <v-list-item-avatar><v-img :src="friend.pic"></v-img></v-list-item-avatar>
-              </v-badge>
-              <v-list-item-title style="position: relative; left: -15px;" class="font-weight-medium" :style="{ color: friend.color }">{{ friend.username }}</v-list-item-title>
-            </v-list-item>
+            <v-tooltip right v-for="(friend, index) in approved_friends" :key="index">
+              <template v-slot:activator="{ on }">
+                <v-list-item v-on="on" @click="changeDM(current, friend)" :value="friend.dm">
+                  <v-badge style="position: relative; left: -15px;" bordered bottom dot offset-x="25" offset-y="17" color="green" :value="friend.in">
+                    <v-list-item-avatar><v-img :src="friend.pic"></v-img></v-list-item-avatar>
+                  </v-badge>
+                </v-list-item>
+              </template>
+              <span :style="{ color: friend.color }">{{ friend.username }}</span>
+            </v-tooltip>
           </v-list-item-group>
         </v-list>
       </v-navigation-drawer>
 
-      <v-list class="messages" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp && current_dm">
+      <v-list :style="{ height: `calc(100vh - ${$root.music.open ? '278px' : '198px'})`, overflowY: 'auto' }" v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.smAndUp && current_dm">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -265,7 +269,7 @@
         </v-fade-transition>
       </v-list>
 
-      <v-list class="messages" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly">
+      <v-list :style="{ height: `calc(100vh - ${$root.music.open ? '278px' : '198px'})`, overflowY: 'auto' }" three-line v-chat-scroll="{ always: false, smooth: true }" v-if="$vuetify.breakpoint.xsOnly">
         <v-fade-transition group>
           <v-list-item class="d-none" :key="-1"></v-list-item>
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
@@ -320,7 +324,7 @@
       </v-list>
 
       <v-fade-transition leave-absolute v-if="current_dm">
-        <span class="ml-4 mb-n1 grey--text font-italic body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
+        <span class="ml-4 mb-n1 grey--text font-italic text-body-2" v-if="typers.length > 0"><span v-for="(user, index) in typers" :key="index" :style="{ color: user.color }">{{ user.user }}<span v-if="typers.length - 1 != index">, </span> </span> is typing...</span>
       </v-fade-transition>
       <v-layout justify-center align-center text-center px-4 v-if="current_dm">
         <v-flex xs10>
@@ -337,8 +341,8 @@
       <v-container fluid class="text-center pt-0 mb-4">
         <v-row>
           <v-col sm="12" class="deep-orange py-12 elevation-5">
-            <h1 class="display-3 font-weight-thin white--text hidden-sm-and-down">Welcome to Flamechat!</h1>
-            <h1 class="display-2 font-weight-thin white--text hidden-md-and-up">Welcome to Flamechat!</h1>
+            <h1 class="text-h2 font-weight-thin white--text hidden-sm-and-down">Welcome to Flamechat!</h1>
+            <h1 class="text-h3 font-weight-thin white--text hidden-md-and-up">Welcome to Flamechat!</h1>
           </v-col>
           <v-col sm="12">
             <p class="title font-weight-regular px-6 pt-6">Select a chatroom from the left.</p>
@@ -347,13 +351,13 @@
         </v-row>
       </v-container>
       <v-divider width="500" class="mx-auto"></v-divider>
-      <p class="mt-8 px-4">Direct messages and friends are coming soon.</p>
+      <p class="mt-8 px-4">Direct messages are accessible under the Home button.</p>
       <!-- <p class="mt-8 px-4">Here are some pre-made chatrooms. Their ID is below the summary. Type that ID in the Add field above the home icon.</p>
       <v-container fluid>
         <v-row>
           <v-col lg="6" xs="12" cols="12">
             <div class="mt-6">
-              <h3 class="display-1">General</h3>
+              <h3 class="text-h4">General</h3>
               <p class="mt-4 mb-1">General, miscellaneous chit-chat.</p>
               <p class="font-weight-thin">general</p>
             </div>
@@ -362,7 +366,7 @@
 
           <v-col lg="6" xs="12">
             <div class="mt-6">
-              <h3 class="display-1">Dev</h3>
+              <h3 class="text-h4">Dev</h3>
               <p class="mt-4 mb-1">This chatroom is for discussing upcoming features, software, and tools from Paradigm.</p>
               <p class="font-weight-thin">dev</p>
             </div>
@@ -373,7 +377,7 @@
         <v-row>
           <v-col lg="6" xs="12" cols="12">
             <div class="mt-6">
-              <h3 class="display-1">News</h3>
+              <h3 class="text-h4">News</h3>
               <p class="mt-4 mb-1">Keep yourself up to date with the latest happenings around the world.</p>
               <p class="font-weight-thin">news</p>
             </div>
@@ -382,7 +386,7 @@
 
           <v-col lg="6" xs="12">
             <div class="mt-6">
-              <h3 class="display-1">Politics</h3>
+              <h3 class="text-h4">Politics</h3>
               <p class="mt-4 mb-1">Discuss politics in a civilized manner here. Challenge your political opposites.</p>
               <p class="font-weight-thin">politics</p>
             </div>
@@ -393,7 +397,7 @@
         <v-row>
           <v-col xs="12">
             <div class="mt-6">
-              <h3 class="display-1">Tech</h3>
+              <h3 class="text-h4">Tech</h3>
               <p class="mt-4 mb-1">Talk about new developments in the world of technology.</p>
               <p class="font-weight-thin">tech</p>
             </div>
@@ -402,7 +406,7 @@
       </v-container> -->
     </main>
 
-    <v-dialog v-model="edit.open" max-width="300" @click:outside="edit = { open: false }">
+    <v-dialog v-model="edit.open" max-width="350" @click:outside="edit = { open: false }">
       <v-card style="text-align: center">
         <v-card-title>Edit Chat</v-card-title>
         <v-card-text>
@@ -419,7 +423,7 @@
     <v-dialog v-model="buy_chatroom.popup" max-width="450" style="z-index: 1001;">
 			<v-card>
 				<v-card-title>
-					<h3 class="headline mb-0">Buy a Chatroom</h3>
+					<h3 class="text-h5 mb-0">Buy a Chatroom</h3>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="buy_chatroom.popup = false" class="dialog-close-btn">
 						<v-icon>mdi-close</v-icon>
@@ -486,6 +490,13 @@
 					<v-spacer></v-spacer>
 					<v-btn @click="uploadFileAndSend()" color="white" text>Yes</v-btn>
 				</v-card-actions>
+        <v-progress-linear
+          :active="upload_file_loading"
+          :indeterminate="true"
+          absolute
+          bottom
+          color="deep-purple accent-4"
+        ></v-progress-linear>
 			</v-card>
 		</v-dialog>
 
@@ -568,6 +579,8 @@
                 hide-no-data
                 label="Username"
                 clearable
+                item-text="username"
+                item-color="color"
               ></v-autocomplete>
             </v-col>
             <v-col class="mt-4 text-center" sm="2"><v-btn color="blue lighten-1" icon @click="ban()" :disabled="!ban_username"><v-icon>mdi-cancel</v-icon></v-btn></v-col>
@@ -599,7 +612,7 @@ export default {
       buy_chatroom: {
         popup: false,
         name: '',
-        theme: ''
+        theme: '#FF0000'
       },
       edit: { open: false },
       chatroom_menu: { open: false },
@@ -614,13 +627,23 @@ export default {
       file: null,
       window,
       search: '',
-      people: []
+      people: [],
+      upload_file_loading: false
     }
   },
   computed: {
 		buy_chatroom_id() {
 			return Math.random().toString(36).substring(7)
-		}
+    },
+    approved_friends() {
+      var friends = []
+      this.$root.user.people.approved.forEach(async person => {
+        const index = this.people.findIndex(p => { return p._id == person._id })
+        person.in = this.people[index].in
+        friends.push(person)
+      })
+      return friends
+    }
 	},
   methods: {
     async changeChatroom(from, to) {
@@ -720,7 +743,7 @@ export default {
         theme: this.buy_chatroom.theme
       }).then(response => {
         this.$root.socket.emit('new_chatroom')
-        this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/moonrocks/-50`)
+        this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/moonrocks/-50`)
         this.$root.user.chatrooms.push(response.data)
         this.changeChatroom(false, response.data.id)
         this.buy_chatroom = {
@@ -753,7 +776,7 @@ export default {
           user_id: this.$root.user._id,
           content: this.new_message,
           pic: this.$root.user.pic,
-          timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+          timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
           edits: 0,
           type: 'message'
         })
@@ -798,7 +821,7 @@ export default {
             username: this.$root.user.username,
             user_id: this.$root.user._id,
             pic: this.$root.user.pic,
-            timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+            timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             type: 'left'
           })
           this.current_id = 'user_home'
@@ -844,7 +867,7 @@ export default {
             username: response.data.username,
             user_id: response.data._id,
             pic: response.data.pic,
-            timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+            timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             type: 'left'
           })
           socket.emit('people', this.current_id)
@@ -858,7 +881,7 @@ export default {
           username: response.data.username,
           user_id: response.data._id,
           pic: response.data.pic,
-          timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+          timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
           type: 'join'
         })
         socket.emit('people', this.current_id)
@@ -877,6 +900,7 @@ export default {
       this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current_id}/purge`).then(() => { socket.emit('purge'); this.purge_confirm = false }).catch(error => console.error(error))
     },
     uploadFileAndSend() {
+      this.upload_file_loading = true
       let formData = new FormData()
       formData.append('file', this.file[0])
       if (this.current_dm) {
@@ -892,11 +916,12 @@ export default {
             username: this.$root.user.username,
             user_id: this.$root.user._id,
             pic: this.$root.user.pic,
-            timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+            timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             content: this.file[0].name,
-            url: `https://www.theparadigmdev.com/flamechat/dm/${this.current_dm}/${this.file[0].name}`,
+            url: `https://www.theparadigmdev.com/relay/flamechat/dm/${this.current_dm}/${this.file[0].name}`,
             type: 'file'
           })
+          this.upload_file_loading = false
           this.file = null
           this.uploader = false
         })
@@ -917,9 +942,9 @@ export default {
             username: this.$root.user.username,
             user_id: this.$root.user._id,
             pic: this.$root.user.pic,
-            timestamp: moment().format('MM/DD/YYYY [at] H:MM a'),
+            timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             content: this.file[0].name,
-            url: `https://www.theparadigmdev.com/flamechat/chatroom/${this.current_id}/${this.file[0].name}`,
+            url: `https://www.theparadigmdev.com/relay/flamechat/chatroom/${this.current_id}/${this.file[0].name}`,
             type: 'file'
           })
           this.file = null
@@ -932,7 +957,7 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
     // setInterval(() => {
     //   if (!this.current_id.includes('user_')){
     //     this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${this.current_id}/inspect/${this.current.__v}`).then(response => {
@@ -941,6 +966,26 @@ export default {
     //   }
     // }, 1000)
     this.$http.get('https://www.theparadigmdev.com/api/users/shortlist').then(response => this.people = response.data)
+
+    if (this.$root.url[1] == 'flamechat') {
+      if (this.$root.url[2] != 'dm') {
+        await this.$root.user.chatrooms.forEach(async chatroom => {
+          if (this.$root.url[2] == chatroom.id) {
+            await this.changeChatroom(this.current, chatroom)
+            this.current_id = this.$root.url[2]
+          }
+        })
+      } else {
+        await this.$root.user.people.approved.forEach(async person => {
+          if (this.$root.url[3] == person.username) {
+            await this.changeDM(this.current, person)
+            this.current_dm = person.dm
+            this.current_id = 'user_dm'
+            this.current_dm_person = person.username
+          }
+        })
+      }
+    }
   },
   beforeDestroy() {
     this.current = false
@@ -950,11 +995,6 @@ export default {
 </script>
 
 <style scoped>
-.messages {
-  height: calc(100vh - 198px);
-  overflow-y: auto;
-}
-
 main {
   margin-left: 74px;
 }

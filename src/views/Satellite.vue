@@ -26,7 +26,7 @@
 			</v-menu>
     </v-toolbar>
 
-		<iframe id="satellite-embed" crossorigin="anonymous" :src="input"></iframe>
+		<iframe id="satellite-embed" :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})` }" crossorigin="anonymous" :src="input"></iframe>
 	</div>
 </template>
 
@@ -51,7 +51,6 @@ export default {
 
 <style scoped>
 iframe {
-	height: calc(100vh - 120px);
 	width: 100%;
 	border: 0px;
 }

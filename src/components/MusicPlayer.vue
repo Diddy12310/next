@@ -1,26 +1,35 @@
 <template>
-  <v-card tile>
+  <v-card tile color="transparent" @keypress.space="playing ? pause() : play()">
+		<!-- <div :style="{ backgroundImage: `url('${$root.music.cover}')`, filter: `blur(10px)`, backgroundPosition: 'center', backgroundSize: 'cover', height: '80px', width: '100vw', position: 'absolute', bottom: '0px' }"></div> -->
+
     <v-slider ref="slider" @click.native="setPosition()" v-on:change="setPosition()" v-model="percentage"></v-slider>
 
     <v-layout fill-height wrap align-center>
-      <v-flex sm7 xs12>
+      <v-flex sm4 xs12>
         <div :class="{ 'd-flex': true, 'align-center': true, 'text-center mt-2': $vuetify.breakpoint.xsOnly }">
-          <img style="height: 80px; width: 80px;" class="hidden-xs-only" :src="$root.music.cover">
+          <img style="height: 80px !important; width: 80px !important;" class="hidden-xs-only" :src="$root.music.cover">
           <div :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }" style="width: 100%;">
-            <h3 class="headline mb-0 pt-1">{{ $root.music.title }}</h3>
-            <h4 class="subtitle-1 grey--text">{{ $root.music.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music.album }}</h4>
+            <h3 class="text-h5 mb-0">{{ $root.music.title }}</h3>
+            <h4 class="text-body-1 font-weight-regular grey--text">{{ $root.music.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music.album }}</h4>
           </div>
         </div>
       </v-flex>
 
-      <v-spacer></v-spacer>
+      <v-flex sm4 xs12>
+        <div class="align-center">
+          <v-scroll-y-reverse-transition group mode="in-out" hide-on-leave>
+            <p class="text-h6 text-center my-0" v-if="lyrics && $root.music.lyrics" :key="lyricTime">{{ $root.music.lyrics[lyricTime] }}</p>
+          </v-scroll-y-reverse-transition>
+        </div>
+      </v-flex>
 
-      <v-flex sm2 :class="{ 'text-right': $vuetify.breakpoint.smAndUp, 'text-center': $vuetify.breakpoint.xsOnly }">
+      <!-- <v-flex @click="styledTime = !styledTime" sm1 :class="{ 'text-right': $vuetify.breakpoint.smAndUp, 'text-center': $vuetify.breakpoint.xsOnly }"> -->
+      <v-flex sm1 :class="{ 'text-right': $vuetify.breakpoint.smAndUp, 'text-center': $vuetify.breakpoint.xsOnly }">
         <span>{{ currentTime }}</span><span class="font-weight-light"> / {{ duration }}</span>
       </v-flex>
 
       <v-flex sm3 xs12 text-right :class="{ 'text-center': $vuetify.breakpoint.xsOnly, 'pr-3': $vuetify.breakpoint.smAndUp }">
-        <v-btn text icon class="primary--text" :loading="!loaded" @click.native="loaded ? playing ? pause() : play() : reload()">
+        <v-btn x-large text icon class="primary--text" :loading="!loaded" @click.native="loaded ? playing ? pause() : play() : reload()">
           <v-icon v-if="playing === false || paused === true">mdi-play</v-icon>
           <v-icon v-else>mdi-pause</v-icon>
         </v-btn>
@@ -34,8 +43,11 @@
         <v-btn text icon class="primary--text" v-model="repeat" @click.native="repeat = !repeat">
           <v-icon>mdi-repeat</v-icon>
         </v-btn>
-        <v-btn text icon class="primary--text" @click.native="download()">
+        <v-btn v-if="$root.user.rights.asteroid" text icon class="primary--text" @click.native="download()">
           <v-icon>mdi-download</v-icon>
+        </v-btn>
+        <v-btn text icon class="primary--text" :input-value="lyrics" @click.native="lyrics = !lyrics" v-if="$root.music.lyrics">
+          <v-icon>mdi-closed-caption</v-icon>
         </v-btn>
         <v-btn text icon class="primary--text" @click.native="clearSession()">
           <v-icon>mdi-notification-clear-all</v-icon>
@@ -62,9 +74,11 @@ export default {
       paused: false,
       percentage: 0,
       currentTime: '00:00',
+      lyricTime: '0',
     	audio: undefined,
       totalDuration: 0,
-      repeat: false
+      repeat: false,
+      lyrics: false
     }
   },
   props: {
@@ -133,6 +147,7 @@ export default {
           this.audio.play()
           this.paused = false
           this.playing = true
+          if (this.$root.music.lyrics) this.lyrics = true
           this.refreshTitle()
         }
         this.loaded = true
@@ -145,6 +160,10 @@ export default {
     _handlePlayingUI(e) {
       this.percentage = this.audio.currentTime / this.audio.duration * 100
       this.currentTime = formatTime(this.audio.currentTime)
+      if (this.$root.music.lyrics) {
+        if (this.$root.music.lyrics[Math.round(this.audio.currentTime)]) this.lyricTime = Math.round(this.audio.currentTime)
+      }
+      // console.log(Math.round(this.audio.currentTime))
       this.refreshTitle()
 		},
 		_handlePlayPause(e) {
@@ -162,6 +181,7 @@ export default {
         this.stop()
         this.refreshTitle()
       }
+      this.lyricTime = 0
     },
 		init() {
 			this.audio.addEventListener('timeupdate', this._handlePlayingUI)
@@ -177,7 +197,7 @@ export default {
       this.refreshTitle()
     },
     refreshTitle() {
-      if (this.$root.music.playing) document.title = `Paradigm - ${this.$root.music.title} by ${this.$root.music.artist}`
+      if (this.$root.music.playing) document.title = `${this.$root.music.title} by ${this.$root.music.artist} - Paradigm`
       else document.title = 'Paradigm'
     }
 	},
@@ -196,7 +216,7 @@ export default {
   },
   computed: {
     duration() {
-      return this.audio ? formatTime(this.totalDuration) : ''
+      return this.audio ? formatTime(this.totalDuration) : '--:--'
     },
   }
 }

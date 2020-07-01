@@ -4,11 +4,11 @@
       <v-toolbar-title>Account</v-toolbar-title>
     </v-toolbar>
 
-    <div style="height: calc(100vh - 112px); overflow: auto;">
+    <div :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
       <v-container>
         <div class="text-center my-12">
           <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img :src="user.pic"></v-img></v-avatar><br>
-          <input type="text" @input="change = true" class="display-2 font-weight-medium mt-8" style="text-align: center; width: 100%;" :style="{ color: user.color }" v-model="user.username">
+          <input type="text" @input="change = true" class="text-h3 font-weight-medium mt-8" style="text-align: center; width: 100%;" :style="{ color: user.color }" v-model="user.username">
           <p class="grey--text text--darken-1 font-weight-light">{{ user._id }}</p>
           <div class="text-center mt-3" style="width: 250px; margin: auto;">
             <img height="50" width="50" src="@/assets/moonrocks.png">
@@ -22,7 +22,7 @@
                 <p>Settings</p>
                 <v-text-field @input="change = true" v-model="user.bio" label="Bio" :counter="75"></v-text-field>
                 <p>Color</p>
-                <v-color-picker @input="change = true" v-model="user.color" class="elevation-0"></v-color-picker>
+                <v-color-picker mode="hexa" hide-mode-switch @input="change = true" v-model="user.color" class="elevation-0"></v-color-picker>
               </v-card-text>
             </v-card>
           </v-col>
@@ -223,7 +223,7 @@
       </v-container>
     </div>
 
-    <v-dialog v-model="uploader" max-width="300">
+    <v-dialog v-model="uploader" max-width="350">
       <v-card>
         <v-card-title>Profile Picture</v-card-title>
         <v-card-text>
@@ -235,6 +235,13 @@
           <v-btn text color="blue accent-1" @click="uploadNewPic()">Upload</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
+        <v-progress-linear
+          :active="upload_file_loading"
+          :indeterminate="true"
+          absolute
+          bottom
+          color="deep-purple accent-4"
+        ></v-progress-linear>
       </v-card>
     </v-dialog>
 
@@ -270,7 +277,8 @@ export default {
       delete_dialog: false,
       delete_verify: false,
       console,
-      people_tab: 0
+      people_tab: 0,
+      upload_file_loading: false
     }
   },
   methods: {
@@ -310,12 +318,13 @@ export default {
       }).catch(error => console.error(error))
     },
     uploadNewPic() {
+      this.upload_file_loading = true
       let formData = new FormData()
       for (var i = 0; i < this.new_pic.length; i++ ) {
         let file = this.new_pic[i]
         formData.append('files[' + i + ']', file)
       }
-      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/pic`,
+      this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/pic`,
         formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -325,6 +334,7 @@ export default {
         this.$root.user = response.data
         this.user = response.data
         this.new_pic = null
+        this.upload_file_loading = false
         this.uploader = false
       })
       .catch(error => {
@@ -333,7 +343,7 @@ export default {
       })
     },
     deleteAccount() {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user.username}/delete`).then(response => {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/delete`).then(response => {
         this.$root.user = false
         this.$root.router = 'auth'
       }).catch(error => console.error(error))

@@ -88,7 +88,8 @@ new Vue({
       socket,
       profile: false,
       ip: '',
-      transmission: false
+      transmission: false,
+      url: false
     }
   },
   render: h => h(App)

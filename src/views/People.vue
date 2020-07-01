@@ -6,7 +6,7 @@
       <v-text-field style="max-width: 500px;" color="white" label="Search..." class="mt-7" v-model="search"></v-text-field>
     </v-toolbar>
 
-    <v-container style="height: calc(100vh - 112px); overflow: auto;">
+    <v-container :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
       <v-fade-transition group hide-on-leave>
         <v-row key="list" v-if="!$root.profile">
           <v-col sm="6" md="4" cols="12" v-for="(user, index) in filtered_people" :key="index" class="text-center">
@@ -14,7 +14,7 @@
               <v-badge bordered bottom offset-x="30" offset-y="30" color="green" :value="user.in">
                 <v-avatar size="150px"><img style="border-radius: 150px;" :src="user.pic"></v-avatar>
               </v-badge>
-              <h1 class="mt-6 display-1 font-weight-medium" :style="{ color: user.color }">{{ user.username }}</h1>
+              <h1 class="mt-6 text-h4 font-weight-medium" :style="{ color: user.color }">{{ user.username }}</h1>
               <p class="mt-1 grey--text">{{ user.bio }}</p>
             </v-card>
           </v-col>
@@ -27,7 +27,7 @@
               <v-badge bordered bottom offset-x="30" offset-y="30" color="green" :value="$root.profile.in">
                 <v-avatar size="150px"><img style="border-radius: 150px;" :src="$root.profile.pic"></v-avatar>
               </v-badge>
-              <h1 class="mt-6 display-1 font-weight-medium" :style="{ color: $root.profile.color }">{{ $root.profile.username }}</h1>
+              <h1 class="mt-6 text-h4 font-weight-medium" :style="{ color: $root.profile.color }">{{ $root.profile.username }}</h1>
               <p class="grey--text">{{ $root.profile.bio }}</p>
               <v-btn v-if="is_sent" block text disabled class="mb-2"><v-icon left>mdi-account-plus</v-icon>Friend Request Pending...</v-btn>
               <v-btn v-else-if="is_approved" @click="removeFriend()" block text class="mb-2" color="blue"><v-icon left>mdi-account-minus</v-icon>Remove Friend...</v-btn>
@@ -40,7 +40,7 @@
           <v-col xs="12" md="8" cols="12">
             <p class="grey--text text-center">Broadcasts</p>
             <v-card class="mx-auto my-6" color="indigo darken-3" max-width="400" v-for="(post, index) in $root.profile.posts" :key="index">
-              <v-card-text class="headline" v-html="post.content"></v-card-text>
+              <v-card-text class="text-h5" v-html="post.content"></v-card-text>
 
               <v-card-actions>
                 <v-row no-gutters align="center" justify="end">
@@ -57,7 +57,7 @@
                     </v-list-item>
                   </v-col>
 
-                  <v-col class="text-right">
+                  <v-col class="text-right" v-if="profile_index">
                     <v-btn @click="$root.user.people.approved[profile_index].liked_posts.includes(post._id) ? unLikePost(post._id, index) : likePost(post._id, index)" :input-value="$root.user.people.approved[profile_index].liked_posts.includes(post._id)" class="mr-1" icon>
                       <v-icon>{{ $root.user.people.approved[profile_index].liked_posts.includes(post._id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
                     </v-btn>
@@ -138,10 +138,17 @@ export default {
       return is
     }
   },
-  created() {
-    this.$http.get('https://www.theparadigmdev.com/api/users/list').then(response => {
+  async created() {
+    await this.$http.get('https://www.theparadigmdev.com/api/users/list').then(response => {
       this.people = response.data
     })
+    if (this.$root.url[1] == 'people') {
+      this.people.forEach(person => {
+        if (this.$root.url[2] == person.username) {
+          this.$root.profile = person
+        }
+      })
+    }
   },
   destroyed() {
     this.$root.profile = false

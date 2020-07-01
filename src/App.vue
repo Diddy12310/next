@@ -6,7 +6,7 @@
 				<img :class="{ 'true': $root.user, 'false': $root.user.banned }" @click="$root.user ? $root.router = 'home' : $root.router = 'auth'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" class="logo">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-btn text icon v-if="$root.music.playing" class="mr-2"><v-icon>mdi-music-note</v-icon></v-btn>
+			<v-btn text icon v-if="$root.music.playing" class="mr-2" readonly><v-icon>mdi-music-note</v-icon></v-btn>
 			<p class="clock text-right font-weight-light hidden-xs-only">{{ clock.date }}<br>{{ clock.time }}</p>
 		</v-app-bar>
 
@@ -16,7 +16,7 @@
 					<v-list shaped>
 						<v-tooltip bottom open-delay="1000">
 							<template v-slot:activator="{ on }">
-								<v-list-item @click="$root.router = 'account'" :input-value="$root.router == 'account'" value="account" v-on="on" two-line v-ripple="{ class: `${$root.user.color}--text` }" class="my-n2" style="cursor: pointer;">
+								<v-list-item @click="$root.router = 'account'" :input-value="$root.router == 'account'" value="account" v-on="on" two-line v-ripple class="my-n2" style="cursor: pointer;">
 									<v-list-item-avatar class="my-0">
 										<img :src="$root.user.pic">
 									</v-list-item-avatar>
@@ -67,11 +67,15 @@
 						<v-list-item-icon><v-icon :color="link.disabled ? 'grey' : 'white'">{{ link.icon }}</v-icon></v-list-item-icon>
 						<v-list-item-title>{{ link.content }}</v-list-item-title>
 					</v-list-item>
+					<v-list-item value="developer" disabled v-if="$root.user.rights.developer">
+						<v-list-item-icon><v-icon class="grey--text">mdi-code-tags</v-icon></v-list-item-icon>
+						<v-list-item-title>Developer</v-list-item-title>
+					</v-list-item>
 				</v-list-item-group>
 			</v-list>
 
 			<template v-slot:append>
-				<p class="pl-2 ma-0 caption" style="padding-bottom: 5px; cursor: pointer;" @click="window.open(`https://github.com/Paradigm-Dev/paradigm/releases/tag/v${$root.version}`)">v{{ $root.version }}</p>
+				<p class="pl-2 ma-0 text-caption" style="padding-bottom: 5px; cursor: pointer;" @click="window.open(`https://github.com/Paradigm-Dev/paradigm/releases/tag/v${$root.version}`)">v{{ $root.version }}</p>
 				<div class="grey darken-4">
 					<v-divider></v-divider>
 					<v-tooltip top open-delay="1000">
@@ -137,23 +141,23 @@
 
 		<v-snackbar v-model="$root.alert.open" :color="$root.alert.type" :timeout="$root.alert.timeout">
 			<v-icon left>{{ $root.alert.icon }}</v-icon>
-			<p class="ma-0 text-left" v-html="$root.alert.text"></p>
+			<span class="ma-0 text-left" v-html="$root.alert.text"></span>
 			<v-btn v-if="$root.alert.btn" icon @click="$root.alert.open = false">
 				<v-icon>mdi-close</v-icon>
 			</v-btn>
 		</v-snackbar>
 
-		<v-content>
+		<v-main>
 			<router v-if="!$root.config.shutdown" />
 			<div v-else>
-				<h1 class="display-2 font-weight-thin text-uppercase text-center px-12 deep-purple--text text--lighten-1" style="margin-top: 100px;">A Connection Could not be Established</h1>
+				<h1 class="text-h3 font-weight-thin text-uppercase text-center px-12 deep-purple--text text--lighten-1" style="margin-top: 100px;">A Connection Could not be Established</h1>
 				<p class="text-center pt-6 title font-weight-light grey--text">Try refreshing your page.</p>
 			</div>
-		</v-content>
+		</v-main>
 
 		<v-slide-y-reverse-transition>
 			<v-footer app style="z-index: 1001;" class="pa-0" v-show="$root.music.open" v-if="$root.music.playing">
-				<music-player style="width: 100vw;" :autoPlay="true" :file="$root.music.file" />
+				<music-player style="width: 100vw; filter: none;" :autoPlay="true" :file="$root.music.file" />
 			</v-footer>
 		</v-slide-y-reverse-transition>
 
@@ -314,6 +318,8 @@ export default {
 				this.$notify('Could not reconnect to server', 'error', 'mdi-alert-circle', false, 3000)
 			})
 		})
+		this.$root.url = window.location.pathname.split('/')
+		window.history.replaceState(null, 'Paradigm', '/')
   }
 }
 </script>
@@ -359,12 +365,17 @@ html { overflow: hidden !important; }
 ::-webkit-scrollbar-corner { background: rgb(33, 33, 33); }
 
 .centralize {
-  margin: 0;
+  /* margin: 0; */
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 	text-align: center;
+}
+
+input, textarea {
+	outline: none;
+	color: white;
 }
 
 /* html body div#app.v-application.v-application--is-ltr.theme--dark div.v-dialog__content.v-dialog__content--active, html body div#app.v-application.v-application--is-ltr.theme--dark div.v-overlay.v-overlay--active.theme--dark {
