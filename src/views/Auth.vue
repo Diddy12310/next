@@ -80,7 +80,7 @@
 				<v-card-title class="title text-center font-weight-medium text-uppercase">Error</v-card-title>
 				<v-card-text>This user is logged in on another client. If you continue, that client's connection will be closed.</v-card-text>
 				<v-card-actions>
-					<v-btn text color="grey" @click="username = '', user_auth_info.in = false, user_auth_info.exists = false">Cancel</v-btn>
+					<v-btn text color="grey darken-1" @click="username = '', user_auth_info.in = false, user_auth_info.exists = false">Cancel</v-btn>
 					<v-spacer></v-spacer>
 					<v-btn text color="white" @click="closeDupClient()">Confirm</v-btn>
 				</v-card-actions>

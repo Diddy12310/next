@@ -462,7 +462,7 @@
 				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
 				<v-card-text>Are you sure you want to delete this chatroom? A refund will not be issued.</v-card-text>
 				<v-card-actions>
-					<v-btn @click="delete_verify_popup = false" color="grey" text>Cancel</v-btn>
+					<v-btn @click="delete_verify_popup = false" color="grey darken-1" text>Cancel</v-btn>
 					<v-spacer></v-spacer>
 					<v-btn @click="deleteChatroom()" color="white" text>Yes</v-btn>
 				</v-card-actions>
@@ -474,7 +474,7 @@
 				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
 				<v-card-text>Are you sure you want to purge this chatroom? All messages will be deleted.</v-card-text>
 				<v-card-actions>
-					<v-btn @click="purge_confirm = false" color="grey" text>Cancel</v-btn>
+					<v-btn @click="purge_confirm = false" color="grey darken-2" text>Cancel</v-btn>
 					<v-spacer></v-spacer>
 					<v-btn @click="purgeChatroom()" color="white" text>Yes</v-btn>
 				</v-card-actions>
@@ -486,9 +486,9 @@
 				<v-card-title class="title text-center font-weight-medium text-uppercase">Upload File</v-card-title>
 				<v-card-text><v-file-input prepend-icon="" id="file" ref="file" v-model="file" multiple label="Upload..."></v-file-input></v-card-text>
 				<v-card-actions>
-					<v-btn @click="uploader = false; file = null" color="grey" text>Cancel</v-btn>
+					<v-btn @click="uploader = false; file = null" color="grey darken-1" text>Cancel</v-btn>
 					<v-spacer></v-spacer>
-					<v-btn @click="uploadFileAndSend()" color="white" text>Yes</v-btn>
+					<v-btn @click="uploadFileAndSend()" color="blue accent-1" text>Upload</v-btn>
 				</v-card-actions>
         <v-progress-linear
           :active="upload_file_loading"

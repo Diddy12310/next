@@ -231,9 +231,9 @@
           <p class="text-center mb-0">This will take effect the next time you log in.</p>
         </v-card-text>
         <v-card-actions>
+          <v-btn text color="grey darken-1" @click="new_pic = undefined; uploader = false">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="blue accent-1" @click="uploadNewPic()">Upload</v-btn>
-          <v-spacer></v-spacer>
         </v-card-actions>
         <v-progress-linear
           :active="upload_file_loading"
@@ -253,7 +253,7 @@
           <p class="text-center mb-0"></p>
         </v-card-text>
         <v-card-actions>
-          <v-btn text color="grey" @click="delete_dialog = false">Cancel</v-btn>
+          <v-btn text color="grey darken-1" @click="delete_dialog = false">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-btn :disabled="!delete_verify" text color="white" @click="deleteAccount()">Delete</v-btn>
         </v-card-actions>

@@ -233,14 +233,14 @@
               </div>
             </v-card-title> -->
 
-            <h1 class="text-h3 centralize font-weight-light pa-12" style="width: 100%;">Uploading music is not available yet.</h1>
+            <h1 :class="{ 'text-h3': $vuetify.breakpoint.smAndUp, 'text-h4': $vuetify.breakpoint.xsOnly }" class="centralize font-weight-light pa-12" style="width: 100%;">Uploading music is not available yet.</h1>
 
           </v-responsive>
         </v-img>
 
         <v-card-text class="mt-6 pb-0" v-if="tab != 2">
           <textarea v-model="upload.summary" placeholder="Summary" style="width: 100%;" rows="5"></textarea>
-          <v-file-input v-model="upload.file" label="File..."></v-file-input>
+          <v-file-input v-model="upload.file" label="Upload..."></v-file-input>
         </v-card-text>
 
         <!-- <v-card-text class="mt-6" v-else>
@@ -262,7 +262,7 @@
         </v-card-text> -->
 
         <v-card-actions v-if="tab != 2">
-          <v-btn text color="grey darken-1">Cancel</v-btn>
+          <v-btn text color="grey darken-1" @click="cancelUpload()">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="blue accent-1" @click="save()" :disabled="false">Upload</v-btn>
         </v-card-actions>
@@ -281,9 +281,9 @@
 				<v-card-title class="title text-center font-weight-medium text-uppercase">Upload Image</v-card-title>
 				<v-card-text><v-file-input accept="image/*" prepend-icon="" id="file" ref="file" v-model="upload.cover_file" multiple label="Upload..."></v-file-input></v-card-text>
 				<v-card-actions>
-					<v-btn @click="add_dialog_uploader = false; file = null" color="grey" text>Cancel</v-btn>
+					<v-btn @click="add_dialog_uploader = false; file = null" color="grey darken-1" text>Cancel</v-btn>
 					<v-spacer></v-spacer>
-					<v-btn @click="displayImg()" color="white" text>Upload</v-btn>
+					<v-btn @click="displayImg()" color="blue accent-1" text>Upload</v-btn>
 				</v-card-actions>
         <v-progress-linear
           :active="upload_file_loading"
@@ -515,6 +515,21 @@ export default {
           }
         })
       }).catch(error => console.error(error))
+    },
+    cancelUpload() {
+      this.add_dialog = false
+      this.add_dialog_loading = false
+      this.upload = {
+        title: '',
+        author: '',
+        genre: '',
+        file: null,
+        cover: '',
+        cover_file: null,
+        summary: '',
+        type: null,
+        songs: []
+      }
     }
   }
 }

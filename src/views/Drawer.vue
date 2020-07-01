@@ -3,7 +3,7 @@
     <v-toolbar dense color="teal darken-3">
       <v-toolbar-title>Drawer</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-file-input style="max-width: 500px;" color="white" prepend-icon="mdi-" class="mt-7" id="file" ref="file" v-model="files" multiple label="Upload"></v-file-input>
+      <v-file-input style="max-width: 500px;" color="white" prepend-icon="mdi-" class="mt-7" id="file" ref="file" v-model="files" multiple label="Upload..."></v-file-input>
       <v-btn :disabled="!files" @click="uploadFile()" icon><v-icon>mdi-upload</v-icon></v-btn>
       <v-btn icon @click="getFileList()"><v-icon>mdi-refresh</v-icon></v-btn>
     </v-toolbar>
