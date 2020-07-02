@@ -1,7 +1,6 @@
 [<img src="https://www.theparadigmdev.com/relay/img/paradigm.png" alt="Logo" width="150" height="150"></img>](https://www.theparadigmdev.com/)
 # Plans for Invite Code and Beta Testing System
 
-### Distribution process
 The three core members of the Paradigm development team will each receive five invite codes to give to their closest friends, whom they trust the most. The codes will be released soon after Paradigm leaves alpha These trusted friends will be the first beta testers for Paradigm. They will receive 500 Moonrocks as a reward. The beta testers' activities on the site will be closely monitored until the first full version is released. At which point, they will no longer be closely monitored. Their privacy rights will be restored as if they were a regular user. More invite codes may be released at a later date.
 
 ### Pre-request process
