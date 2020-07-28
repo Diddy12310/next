@@ -12,7 +12,7 @@
         <v-text-field :disabled="!user_auth_info.exists && !user_auth_info.in" v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
         <p class="grey--text text-center">By logging in, you agree to the <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
         <p v-if="$root.config.reset" class="grey--text text-center">Can't remember your password? Oh well.</p>
-        <p v-if="$root.config.sign_up" class="grey--text text-center">If you had an old Paradigm v0.1.x account, you have to <a @click.prevent="method = 'up'">create a new one</a>. Please <a href="mailtio:paradigmdevelop@gmail.com">contact support</a> to transfer your data to your new account.</p>
+        <p v-if="$root.config.sign_up" class="grey--text text-center">If you had an old Paradigm v0.1.x account, you have to <a @click.prevent="method = 'up'">create a new one</a>.</p>
         <p v-if="$root.config.sign_up" class="grey--text text-center">Don't have an account? <a @click.prevent="method = 'up'">Sign up</a>.</p>
       </v-card-text>
 
@@ -26,8 +26,14 @@
       <v-card-title class="text-h4 font-weight-light">Sign up</v-card-title>
 
       <v-card-text>
-        <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden">
-          <span class="grey--text">If you had an old Paradigm v0.1.x account, you have to create a new one. Please <a href="mailtio:paradigmdevelop@gmail.com">contact support</a> to transfer your data to your new account.</span>
+        <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden" v-if="!invite_code_verified" class="text-center">
+          <input v-model="invite_code" type="text" placeholder="Invite Code" class="text-center text-h3 font-weight-light my-6" style="width: 100%; font-family: 'Roboto-Mono';">
+          <span class="grey--text text-left">Enter the invite code you received from the nominating core team member. Please note it is case sensitive.</span><br>
+          <v-btn :disabled="invite_code.length != 9" class="ma-auto mt-6" color="blue accent-1" text @click="verifyInviteCode()">Verify</v-btn>
+        </div>
+
+        <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden" v-if="invite_code_verified">
+          <span class="grey--text">If you had an old Paradigm v0.1.x account, you have to create a new one.</span>
           <v-text-field autocomplete="off" type="text" name="username" v-model="new_user.username" label="Username"></v-text-field>
           <span class="grey--text">This will be used to sign into your account. All other users on the platform will be able to see it, choose wisely.</span>
           <v-text-field autocomplete="off" type="password" name="password" v-model="new_user.password" label="Password"></v-text-field>
@@ -56,7 +62,7 @@
       </v-card-actions>
     </v-card>
 
-    <v-dialog v-model="user_auth_info.in" max-width="350">
+    <v-dialog v-model="user_auth_info.in" v-if="authenticated" max-width="350">
 			<v-card color="red">
 				<v-card-title class="title text-center font-weight-medium text-uppercase">Error</v-card-title>
 				<v-card-text>This user is logged in on another client. If you continue, that client's connection will be closed.</v-card-text>
@@ -88,7 +94,10 @@ export default {
       new_user: {
         color: '#FF0000'
       },
-      window
+      window,
+      invite_code: '',
+      invite_code_verified: false,
+      authenticated: false
     }
   },
   mounted() {
@@ -105,12 +114,15 @@ export default {
         password: this.password
       }).then(response => {
         if (!response.data.msg) {
-          this.$root.user = response.data
-          this.$root.router = 'home'
-          this.$root.socket.emit('login', response.data)
-          var cookie = this.$getCookie('buggy_dialog')
-          if (!cookie) this.$root.view.buggy_dialog = true
-          document.title = 'Paradigm'
+          this.authenticated = true
+          if (!this.user_auth_info.in) {
+            this.$root.user = response.data
+            this.$root.router = 'home'
+            this.$root.socket.emit('login', response.data)
+            var cookie = this.$getCookie('buggy_dialog')
+            if (!cookie) this.$root.view.buggy_dialog = true
+            document.title = 'Paradigm'
+          }
         } else {
           this.$notify(response.data.msg, 'error', 'mdi-alert-circle', false, 3000)
         }
@@ -131,9 +143,11 @@ export default {
                 author: false,
                 asteroid: false,
                 patriot: false,
-                developer: false
+                developer: false,
+                apollo: true
               },
-              moonrocks: 0
+              moonrocks: 0,
+              code: this.invite_code
             }).then(response => {
               let formData = new FormData()
               formData.append('files[0]', this.new_user.pic)
@@ -169,11 +183,21 @@ export default {
     closeDupClient() {
       this.$root.socket.emit('kick', this.username.toLowerCase())
       this.user_auth_info.in = false
+      this.signIn()
+    },
+    verifyInviteCode() {
+      this.$http.put(`https://www.theparadigmdev.com/api/apollo`, { code: this.invite_code }).then(response => {
+        if (response.data.used === true || response.data.used === null) this.$notify('Invite code is invalid', 'error', 'mdi-exclamation', false, 3000)
+        else this.invite_code_verified = true
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-
+input:not(::placeholder) {
+  font-family: 'Roboto Mono';
+  letter-spacing: 10px;
+}
 </style>

@@ -7,7 +7,7 @@
     <div :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
       <v-container>
         <div class="text-center my-12">
-          <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img :src="user.pic"></v-img></v-avatar><br>
+          <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img loading="lazy" :src="user.pic"></v-img></v-avatar><br>
           <input type="text" @input="change = true" class="text-h3 font-weight-medium mt-8" style="text-align: center; width: 100%;" :style="{ color: user.color }" v-model="user.username">
           <p class="grey--text text--darken-1 font-weight-light">{{ user._id }}</p>
           <div class="text-center mt-3" style="width: 250px; margin: auto;">
@@ -22,7 +22,7 @@
                 <p>Settings</p>
                 <v-text-field @input="change = true" v-model="user.bio" label="Bio" :counter="75"></v-text-field>
                 <p>Color</p>
-                <v-color-picker mode="hexa" hide-mode-switch @input="change = true" v-model="user.color" class="elevation-0"></v-color-picker>
+                <v-color-picker mode="hexa" hide-mode-switch @input="change = true" v-model="user.color" class="elevation-0" style="width: 100%;"></v-color-picker>
               </v-card-text>
             </v-card>
           </v-col>
@@ -55,6 +55,10 @@
                         <td>Developer</td>
                         <td>{{ user.rights.developer }}</td>
                       </tr>
+                      <tr>
+                        <td>Apollo</td>
+                        <td>{{ user.rights.apollo }}</td>
+                      </tr>
                     </tbody>
                   </template>
                 </v-simple-table>
@@ -84,7 +88,7 @@
                     </v-list-item>
 
                     <v-list-item v-for="(person, index) in user.people.approved" :key="index">
-                      <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+                      <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
                           <v-list-item-content>
@@ -107,7 +111,7 @@
                     </v-list-item>
 
                     <v-list-item v-for="(person, index) in user.people.requests" :key="index">
-                      <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+                      <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
                       <v-row>
                         <v-col sm="8" class="py-0">
                           <v-list-item-content>
@@ -131,7 +135,7 @@
                     </v-list-item>
 
                     <v-list-item v-for="(person, index) in user.people.sent" :key="index">
-                      <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+                      <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
                           <v-list-item-content>
@@ -154,7 +158,7 @@
                     </v-list-item>
 
                     <v-list-item v-for="(person, index) in user.people.blocked" :key="index">
-                      <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+                      <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
                           <v-list-item-content>
@@ -212,6 +216,61 @@
           </v-col>
           <v-col sm="6">
             <v-card class="fill-height">
+              <v-card-text>
+                <p>Apollo Program</p>
+                <div class="text-center">
+                  <p>You are currently <span class="text-h6 font-weight-medium" :class="{ 'red--text': !user.rights.apollo, 'green--text': user.rights.apollo }">{{ user.rights.apollo ? 'ENROLLED' : 'NOT ENROLLED' }}</span> in the Apollo Beta Testing Program.</p>
+                  <v-btn disabled class="mb-8" :color="user.rights.apollo ? 'red' : 'green'" @click="user.rights.apollo ? apollo_unenroll_dialog = true : apollo_enroll_dialog = true">{{ user.rights.apollo ? 'Unenroll' : 'Enroll' }}</v-btn>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col sm="6" v-if="$root.user.rights.developer">
+            <v-card class="fill-height">
+              <v-card-text>
+                <v-row>
+                  <v-col class="py-0" sm="10">
+                    <p>Your Apollo Codes</p>
+                  </v-col>
+                  <v-col class="py-0" sm="2">
+                    <p class="text-right">{{ $root.user.apollo_codes.created }} / {{ $root.user.apollo_codes.quota }}</p>
+                  </v-col>
+                </v-row>
+
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">Name</th>
+                        <th class="text-left">Code</th>
+                        <th class="text-left">Profile</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(code) in apollo_codes" :key="code.code">
+                        <td>{{ code.name }}</td>
+                        <td>{{ code.code }}</td>
+                        <td v-ripple style="cursor: pointer;" @click="viewProfile(code.uid)">{{ code.username }}</td>
+                      </tr>
+                      <tr v-if="$root.user.apollo_codes.quota - $root.user.apollo_codes.created > 0">
+                        <td colspan="3"><input @keypress.enter="createCode()" style="width: 100%;" type="text" placeholder="Name" v-model="new_code_name"></td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+
+                <div class="text-center mt-4" v-if="user.rights.admin">
+                  <p v-if="$root.user.apollo_codes.quota - $root.user.apollo_codes.created > 0" class="mb-0">Since you are a core team member, you can create {{ $root.user.apollo_codes.quota - $root.user.apollo_codes.created }} code{{ $root.user.apollo_codes.quota - $root.user.apollo_codes.created == 1 ? ' for someone' : 's for people' }} to use to join the Apollo Beta Testing Program.</p>
+                  <p class="mb-0" v-else>You have 0 codes remaining.</p>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col sm="6">
+            <v-card class="fill-height">
               <v-card-text class="text-center">
                 <p class="text-left">Danger Zone</p>
                 <v-btn style="margin: 95px 0px 95px 0px;" color="red" @click="delete_dialog = true">Delete Account</v-btn>
@@ -225,7 +284,7 @@
 
     <v-dialog v-model="uploader" max-width="350">
       <v-card>
-        <v-card-title>Profile Picture</v-card-title>
+				<v-card-title class="title text-center font-weight-medium text-uppercase">Profile Picture</v-card-title>
         <v-card-text>
           <v-file-input prepend-icon="" id="file" ref="file" v-model="new_pic" multiple label="Upload..."></v-file-input>
           <p class="text-center mb-0">This will take effect the next time you log in.</p>
@@ -247,7 +306,7 @@
 
     <v-dialog v-model="delete_dialog" max-width="350">
       <v-card color="red" class="text-center">
-				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
+				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm Delete</v-card-title>
         <v-card-text>
           <v-checkbox label="By checking this box, you acknowledge that deleting your account is irreversible. Your drawer files will be deleted. Your data will be deleted." color="white" v-model="delete_verify"></v-checkbox>
           <p class="text-center mb-0"></p>
@@ -256,6 +315,22 @@
           <v-btn text color="grey darken-1" @click="delete_dialog = false">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-btn :disabled="!delete_verify" text color="white" @click="deleteAccount()">Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="apollo_unenroll_dialog" max-width="350">
+      <v-card color="red">
+				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm Unenroll</v-card-title>
+        <v-card-text>
+          By unerolling your account from the Apollo Beta Testing Program, you will lose all exclusive features and rights until you receive another invite code.
+          Your personal information that you submitted when you started testing will be deleted at midnight, tonight.
+          Thank you for testing our upcoming features.
+        </v-card-text>
+        <v-card-actions>
+          <v-btn text color="grey darken-1" @click="apollo_unenroll_dialog = false">Cancel</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn text color="white" @click="apolloUnenroll()">Unenroll</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -278,7 +353,11 @@ export default {
       delete_verify: false,
       console,
       people_tab: 0,
-      upload_file_loading: false
+      upload_file_loading: false,
+      apollo_unenroll_dialog: false,
+      apollo_enroll_dialog: false,
+      apollo_codes: [],
+      new_code_name: ''
     }
   },
   methods: {
@@ -342,6 +421,12 @@ export default {
         this.new_pic = null
       })
     },
+    createCode() {
+      this.$http.post(`https://www.theparadigmdev.com/api/apollo/${this.$root.user._id}`, { name: this.new_code_name }).then(response => {
+        this.new_code_name = ''
+        this.apollo_codes = response.data
+      })
+    },
     deleteAccount() {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/delete`).then(response => {
         this.$root.user = false
@@ -362,10 +447,25 @@ export default {
     },
     unblockPerson(person) {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/unblock/${person}`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
+    },
+    viewProfile(uid) {
+      if (uid != this.$root.user._id && uid != '') {
+        this.$http.get(`https://www.theparadigmdev.com/api/users/${uid}/info`).then(response => {
+          if (!response.data.error) {
+            this.$root.profile = response.data
+            this.$root.router = 'people'
+          } else this.$notify(response.data.error, 'error', 'mdi-alert-circle', false, 3000)
+        })
+      }
     }
   },
   created() {
     this.fixData()
+    if (this.$root.user.rights.developer) {
+      this.$http.get(`https://www.theparadigmdev.com/api/apollo/${this.$root.user._id}/list`).then(response => {
+        this.apollo_codes = response.data
+      })
+    }
   },
   // beforeMount() {
   //   this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people`).then(response => {
