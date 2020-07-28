@@ -1,8 +1,8 @@
 <template>
 	<div class="index">
 		<div class="home">
-			<img src="@/assets/plogo.png" alt="" style="position: relative; text-align: center; margin: auto; margin-top: 30vh; height: 150px; width: 150px;">
-			<h2 class="text-h2 font-weight-thin text-uppercase">Paradigm</h2>
+			<!-- <img src="@/assets/plogo.png" alt="" style="position: relative; text-align: center; margin: auto; margin-top: 30vh; height: 150px; width: 150px;">
+			<h2 class="text-h2 font-weight-thin text-uppercase">Paradigm</h2> -->
 		</div>
 	</div>
 </template>

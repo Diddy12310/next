@@ -5,7 +5,14 @@ module.exports = {
     "vuetify"
   ],
   devServer: {
-    https: true
+    https: true,
+    proxy: {
+      '/': {
+        target: 'https://localhost:8080',
+        ws: true,
+        changeOrigin: true
+      }
+    }
   },
   outputDir: path.join(__dirname, '/../relay/paradigm')
 }

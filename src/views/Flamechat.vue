@@ -85,7 +85,7 @@
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
             <v-row v-if="message.type === 'message'">
               <v-col sm="1" cols="12" class="text-right py-0">
-                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
@@ -106,7 +106,7 @@
 
             <v-row v-if="message.type === 'file'">
               <v-col sm="1" cols="12" class="text-right py-0">
-                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
@@ -133,7 +133,7 @@
             <v-container fluid v-if="message.type === 'message'" class="py-0">
               <v-row no-gutters align="end">
                 <v-col sm="6">
-                  <v-list-item-avatar class="ma-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
@@ -159,7 +159,7 @@
             <v-container fluid v-if="message.type === 'file'">
               <v-row no-gutters align="end">
                 <v-col sm="6">
-                  <v-list-item-avatar class="ma-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
@@ -215,7 +215,7 @@
               <template v-slot:activator="{ on }">
                 <v-list-item v-on="on" @click="changeDM(current, friend)" :value="friend.dm">
                   <v-badge style="position: relative; left: -15px;" bordered bottom dot offset-x="25" offset-y="17" color="green" :value="friend.in">
-                    <v-list-item-avatar><v-img :src="friend.pic"></v-img></v-list-item-avatar>
+                    <v-list-item-avatar><v-img loading="lazy" :src="friend.pic"></v-img></v-list-item-avatar>
                   </v-badge>
                 </v-list-item>
               </template>
@@ -231,7 +231,7 @@
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
             <v-row v-if="message.type === 'message'">
               <v-col sm="1" cols="12" class="text-right py-0">
-                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
@@ -249,7 +249,7 @@
 
             <v-row v-if="message.type === 'file'">
               <v-col sm="1" cols="12" class="text-right py-0">
-                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
@@ -276,7 +276,7 @@
             <v-container fluid v-if="message.type === 'message'">
               <v-row no-gutters align="end">
                 <v-col sm="6">
-                  <v-list-item-avatar class="ma-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
@@ -299,7 +299,7 @@
             <v-container fluid v-if="message.type === 'file'">
               <v-row no-gutters align="end">
                 <v-col sm="6">
-                  <v-list-item-avatar class="ma-0"><v-img :src="message.pic"></v-img></v-list-item-avatar>
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
@@ -430,7 +430,6 @@
 					</v-btn>
 				</v-card-title>
 				<v-card-text>
-					<p>Chatroom ID: <span class="font-weight-light">{{ buy_chatroom_id }}</span></p>
 					<v-text-field v-model="buy_chatroom.name" label="Chatroom Name"></v-text-field>
           <p>Chatroom Color</p>
           <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3 elevation-0" v-model="buy_chatroom.theme"></v-color-picker>
@@ -511,7 +510,7 @@
             </v-list-item>
 
             <v-list-item v-for="(person, index) in current.people.approved" :key="index">
-              <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+              <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
               <v-row>
                 <v-col sm="8" class="py-0">
                   <v-list-item-content>
@@ -533,7 +532,7 @@
             </v-list-item>
 
             <v-list-item v-for="(person, index) in current.people.requested" :key="index">
-              <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+              <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
               <v-row>
                 <v-col sm="8" class="py-0">
                   <v-list-item-content>
@@ -556,7 +555,7 @@
             </v-list-item>
 
             <v-list-item v-for="(person, index) in current.people.banned" :key="index">
-              <v-list-item-avatar><v-img :src="person.pic"></v-img></v-list-item-avatar>
+              <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
               <v-row>
                 <v-col sm="8" class="py-0">
                   <v-list-item-content>
@@ -632,9 +631,6 @@ export default {
     }
   },
   computed: {
-		buy_chatroom_id() {
-			return Math.random().toString(36).substring(7)
-    },
     approved_friends() {
       var friends = []
       this.$root.user.people.approved.forEach(async person => {
@@ -737,7 +733,6 @@ export default {
     buyChatroom() {
       this.$http.post('https://www.theparadigmdev.com/api/flamechat/chatroom/new', {
         icon: 'mdi-forum',
-        id: this.buy_chatroom_id,
         name: this.buy_chatroom.name,
         owner: this.$root.user._id,
         theme: this.buy_chatroom.theme
@@ -751,11 +746,6 @@ export default {
           name: '',
           theme: ''
         }
-      }).catch(error => console.error(error))
-    },
-    getChatroom(id) {
-      this.$http.get(`https://www.theparadigmdev.com/api/flamechat/chatroom/${id}`).then(response => {
-        if (response.data.__v != this.current.__v) this.current = response.data
       }).catch(error => console.error(error))
     },
     addChatroom() {
@@ -958,13 +948,6 @@ export default {
     }
   },
   async mounted() {
-    // setInterval(() => {
-    //   if (!this.current_id.includes('user_')){
-    //     this.$http.get(`https://www.theparadigmdev.com/flamechat/chatroom/${this.current_id}/inspect/${this.current.__v}`).then(response => {
-    //       if (response.data.result == true) this.getChatroom()
-    //     })
-    //   }
-    // }, 1000)
     this.$http.get('https://www.theparadigmdev.com/api/users/shortlist').then(response => this.people = response.data)
 
     if (this.$root.url[1] == 'flamechat') {

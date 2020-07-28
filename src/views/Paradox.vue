@@ -12,7 +12,7 @@
 
 				<v-card v-for="item in filteredNews" :key="item.id" class="news-home" @click="setNews(item)">
 					<div v-if="item.live">
-						<v-img :src="item.cover"></v-img>
+						<v-img :src="item.cover" loading="lazy"></v-img>
 
 						<v-card-title primary-title>
 							<div>
@@ -27,7 +27,7 @@
 
 		<v-dialog v-model="dialog" max-width="800" v-if="current">
 			<v-card>
-				<v-img :src="current.cover"></v-img>
+				<v-img :src="current.cover" loading="lazy"></v-img>
 				<v-card-title primary-title>
 					<div>
 						<h3 class="text-h5 mb-0">{{ current.title }}</h3>
@@ -65,7 +65,7 @@
 					<v-switch v-model="new_news.live" label="Published"></v-switch>
 					<v-text-field label="Cover URL" v-model="new_news.cover"></v-text-field>
 					<p class="grey--text font-weight-light" v-if="new_news.cover">Does the story's cover display correctly?</p>
-					<v-img max-width="200" :src="new_news.cover" v-if="new_news.cover"></v-img>
+					<v-img max-width="200" loading="lazy" :src="new_news.cover" v-if="new_news.cover"></v-img>
 				</v-card-text>
 				<v-divider></v-divider>
 				<v-card-actions>
