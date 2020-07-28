@@ -22,7 +22,7 @@
             <v-row>
               <v-col v-for="(book, index) in filteredBooks" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="book" ripple :disabled="!book.live" @click="openBook(book._id)">
-                  <v-img max-height="400" :src="book.cover">
+                  <v-img max-height="400" loading="lazy" :src="book.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
                         <h3 class="text-h5 mb-0">{{ book.title }}</h3>
@@ -46,7 +46,7 @@
             <v-row>
               <v-col v-for="(movie, index) in filteredMovies" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="movie" ripple :disabled="!movie.live" @click="openMovie(movie._id)">
-                  <v-img max-height="400" :src="movie.cover">
+                  <v-img max-height="400" loading="lazy" :src="movie.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
                         <h3 class="text-h5 mb-0">{{ movie.title }}</h3>
@@ -70,7 +70,7 @@
             <v-row>
               <v-col v-for="(item, index) in filteredMusic" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
                 <v-card class="music" ripple :disabled="!item.live" @click="openMusic(item._id)">
-                  <v-img :src="item.cover">
+                  <v-img :src="item.cover" loading="lazy">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
                         <h3 class="text-h5 mb-0">{{ item.title }}</h3>
@@ -134,7 +134,7 @@
 
     <v-dialog width="600" style="z-index: 99991;" v-model="current.open" @click:outside="current = {}">
       <v-card>
-        <v-img :src="current.cover" style="height: 90vh;" v-if="current.type != 'music'">
+        <v-img :src="current.cover" loading="lazy" style="height: 90vh;" v-if="current.type != 'music'">
           <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
             <div style="width: 100%;">
               <h3 class="text-h5 mb-0">{{ current.title }}</h3>
@@ -149,7 +149,7 @@
           </v-card-title>
         </v-img>
 
-        <v-img :src="current.cover" v-if="current.type == 'music'">
+        <v-img :src="current.cover" v-if="current.type == 'music'" loading="lazy">
           <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
             <div style="width: 100%;">
               <h3 class="text-h5 mb-0">{{ current.title }}</h3>
@@ -206,7 +206,7 @@
     <!-- Upload dialog -->
     <v-dialog width="600" style="z-index: 99991;" v-model="add_dialog">
       <v-card>
-        <v-img :src="upload.cover" style="height: 90vh;" v-if="tab != 2">
+        <v-img :src="upload.cover" style="height: 90vh;" v-if="tab != 2" loading="lazy">
           <v-card-title @click.self="add_dialog_uploader = true" class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
             <div style="width: 100%;">
               <h3 class="text-h5 mb-0"><input v-model="upload.title" type="text" placeholder="Title"></h3>
@@ -220,7 +220,7 @@
           </v-card-title>
         </v-img>
 
-        <v-img :src="upload.cover" v-if="tab == 2">
+        <v-img :src="upload.cover" v-if="tab == 2" loading="lazy">
           <v-responsive :aspect-ratio="1/1">          
             <!-- <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
               <div style="width: 100%;">

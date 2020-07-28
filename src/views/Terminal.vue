@@ -56,7 +56,7 @@ export default {
         case 'me':
           this.$log(JSON.stringify(this.$root.user))
           break
-        case 'ban':
+        case 'ipban':
           this.ban(this.output[1])
           break
         default:
@@ -77,7 +77,7 @@ export default {
     user(username, key, value) {
       switch (key) {
         case 'ban':
-          socket.emit('ban', { username: username, value: this.parseBool(value) })
+          socket.emit('ban', { username, value: this.parseBool(value) })
           this.$log(`user ${username}.banned set to ${value}`)
           break
         case 'view':
@@ -93,7 +93,7 @@ export default {
                 &nbsp;&nbsp;&nbsp;&nbsp;# rights.admin:     ${ response.data.rights.admin }<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;# rights.author:    ${ response.data.rights.author }<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;# rights.asteroid:  ${ response.data.rights.asteroid }<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# rights.developer:  ${ response.data.rights.developer }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;# rights.developer: ${ response.data.rights.developer }<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;# banned:           ${ response.data.banned }<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;# strikes:          ${ response.data.strikes }<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;# logged in:        ${ response.data.in }<br>
@@ -134,7 +134,7 @@ export default {
           this.$http.get(`https://www.theparadigmdev.com/api/terminal/user/${username}/delete`)
           this.$log(`user ${username} deleted`)
           break
-        case 'mrocks':
+        case 'rocks':
           socket.emit('moonrocks', { username, value: parseInt(value, 10) })
           this.$log(`user ${username}.moonrocks incremented by ${value}`)
           break

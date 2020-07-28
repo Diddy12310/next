@@ -3,12 +3,12 @@
     <v-toolbar dense color="teal darken-3">
       <v-toolbar-title>Drawer</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-file-input style="max-width: 500px;" color="white" prepend-icon="mdi-" class="mt-7" id="file" ref="file" v-model="files" multiple label="Upload..."></v-file-input>
-      <v-btn :disabled="!files" @click="uploadFile()" icon><v-icon>mdi-upload</v-icon></v-btn>
-      <v-btn icon @click="getFileList()"><v-icon>mdi-refresh</v-icon></v-btn>
+      <v-file-input :disabled="uploading" style="max-width: 500px;" color="white" prepend-icon="mdi-" class="mt-7" id="file" ref="file" v-model="files" multiple label="Upload..."></v-file-input>
+      <v-btn :disabled="!files || uploading" @click="uploadFile()" icon><v-icon>mdi-upload</v-icon></v-btn>
+      <v-progress-linear :background-opacity="0" :active="uploading" :value="uploadPercentage" absolute bottom color="teal"></v-progress-linear>
     </v-toolbar>
     <v-container :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
-      <v-data-table no-data-text="No files found" :headers="headers" :items="filelist" :items-per-page="10" class="elevation-1" dense v-if="$vuetify.breakpoint.xsOnly">
+      <v-data-table no-data-text="No files found" :headers="headers" :items="$root.user.files" :items-per-page="10" class="elevation-1" dense v-if="$vuetify.breakpoint.xsOnly">
         <template v-slot:item.action="{ item }">
           <v-icon small class="light-blue--text mr-2" @click="downloadFile(item._id)">mdi-download</v-icon>
           <v-icon small class="red--text mr-2" @click="deleteFile(item._id)">mdi-delete</v-icon>
@@ -26,7 +26,7 @@
         </template>
       </v-data-table>
 
-      <v-data-table no-data-text="No files found" :headers="headers" :items="filelist" :items-per-page="10" class="elevation-1" v-else>
+      <v-data-table no-data-text="No files found" :headers="headers" :items="$root.user.files" :items-per-page="10" class="elevation-1" v-else>
         <template v-slot:item.action="{ item }">
           <v-icon small class="light-blue--text mr-2" @click="downloadFile(item._id)">mdi-download</v-icon>
           <v-icon small class="red--text mr-2" @click="deleteFile(item._id)">mdi-delete</v-icon>
@@ -68,41 +68,40 @@ export default {
         { text: 'Uploaded', value: 'date', width: 200 },
         { text: 'Actions', value: 'action', sortable: false, width: 125 }
       ],
-      filelist: [],
       files: null,
       rename: { open: false },
-      link: ''
+      link: '',
+      uploadPercentage: 0,
+      uploading: false
     }
   },
   methods: {
-    getFileList() {
-      this.filelist = []
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/drawer/list`).then(response => {
-        this.filelist = response.data
-      }).catch(error => {
-        console.error('File list: failed')
-      }).finally(() => {})
-    },
     uploadFile() {
+      this.uploading = true
       let formData = new FormData()
       for (var i = 0; i < this.files.length; i++ ) {
         let file = this.files[i]
-        formData.append('files[' + i + ']', file)
+        formData.append(i, file)
       }
       this.$http.post(`https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/upload`,
         formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
-          }
+          },
+          onUploadProgress: progressEvent => {
+            this.uploadPercentage = parseInt(Math.round((progressEvent.loaded / progressEvent.total) * 100))
+          },
+          timeout: 0
         }
-      ).then(() => {
+      ).then(response => {
+        this.$root.user = response.data
         this.files = null
-        this.getFileList()
+        this.uploading = false
       })
       .catch(error => {
         console.log('Upload: failed', error)
         this.files = null
-        this.getFileList()
+        this.uploading = false
       })
     },
     downloadFile(id) {
@@ -110,7 +109,7 @@ export default {
     },
     deleteFile(id) {
       this.$http.delete(`https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/delete/${id}`).then(response => {
-        this.getFileList()
+        this.$root.user = response.data
       }).catch(error => {
         this.getFileList()
         console.error('Delete: error', error)
@@ -125,15 +124,12 @@ export default {
         name: this.rename.name
       }).then(response => {
         this.rename = { open: false }
-        this.getFileList()
+        this.$root.user = response.data
       })
     },
     getLink(id) {
       this.link = `https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/download/${id}`
     }
-  },
-  created() {
-    this.getFileList()
   }
 }
 </script>

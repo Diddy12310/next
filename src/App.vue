@@ -378,6 +378,8 @@ input, textarea {
 	color: white;
 }
 
+a { text-decoration: none; }
+
 /* html body div#app.v-application.v-application--is-ltr.theme--dark div.v-dialog__content.v-dialog__content--active, html body div#app.v-application.v-application--is-ltr.theme--dark div.v-overlay.v-overlay--active.theme--dark {
 	z-index: 10000 !important;
 } */

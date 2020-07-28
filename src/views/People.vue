@@ -12,7 +12,7 @@
           <v-col sm="6" md="4" cols="12" v-for="(user, index) in filtered_people" :key="index" class="text-center">
             <v-card @click="$root.profile = user" class="pa-4 fill-height">
               <v-badge bordered bottom offset-x="30" offset-y="30" color="green" :value="user.in">
-                <v-avatar size="150px"><img style="border-radius: 150px;" :src="user.pic"></v-avatar>
+                <v-avatar size="150px"><img loading="lazy" style="border-radius: 150px;" :src="user.pic"></v-avatar>
               </v-badge>
               <h1 class="mt-6 text-h4 font-weight-medium" :style="{ color: user.color }">{{ user.username }}</h1>
               <p class="mt-1 grey--text">{{ user.bio }}</p>
@@ -25,7 +25,7 @@
             <v-btn class="mt-n2 mb-2" color="grey" text @click="$root.profile = false"><v-icon left>mdi-chevron-left</v-icon>Back</v-btn><br>
             <div class="text-center">
               <v-badge bordered bottom offset-x="30" offset-y="30" color="green" :value="$root.profile.in">
-                <v-avatar size="150px"><img style="border-radius: 150px;" :src="$root.profile.pic"></v-avatar>
+                <v-avatar size="150px"><img loading="lazy" style="border-radius: 150px;" :src="$root.profile.pic"></v-avatar>
               </v-badge>
               <h1 class="mt-6 text-h4 font-weight-medium" :style="{ color: $root.profile.color }">{{ $root.profile.username }}</h1>
               <p class="grey--text">{{ $root.profile.bio }}</p>
@@ -47,7 +47,7 @@
                   <v-col>
                     <v-list-item class="grow">
                       <v-list-item-avatar color="grey darken-3">
-                        <v-img class="elevation-6" :src="$root.profile.pic"></v-img>
+                        <v-img class="elevation-6" loading="lazy" :src="$root.profile.pic"></v-img>
                       </v-list-item-avatar>
 
                       <v-list-item-content>

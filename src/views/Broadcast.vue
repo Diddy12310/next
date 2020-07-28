@@ -26,7 +26,7 @@
               <v-col>
                 <v-list-item class="grow">
                   <v-list-item-avatar color="grey darken-3">
-                    <v-img class="elevation-6" :src="$root.user.pic"></v-img>
+                    <v-img class="elevation-6" loading="lazy" :src="$root.user.pic"></v-img>
                   </v-list-item-avatar>
 
                   <v-list-item-content>
