@@ -111,9 +111,21 @@ export default {
         })
         if (person._id != this.$root.user._id && !this.$root.user.people.blocked_by.includes(person._id) && !blocked) people.push(person)
       })
-      return people.filter(person => {
+      var filteredPeople = people.filter(person => {
 				return person.username.toLowerCase().includes(this.search.toLowerCase()) || person.bio.toLowerCase().includes(this.search.toLowerCase()) || person.bio.toLowerCase().includes(this.search.toLowerCase())
-			})
+      })
+      
+      var sorted = filteredPeople.sort((a, b) => {
+        var nameA = a.username
+        var nameB = b.username
+        if (nameA < nameB)
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0
+      })
+
+      return sorted
     },
     is_approved() {
       var is = false
