@@ -92,7 +92,7 @@ export default {
       method: 'in',
       step: 1,
       new_user: {
-        color: this.randomHex
+        color: ''
       },
       window,
       invite_code: '',
@@ -100,19 +100,16 @@ export default {
       authenticated: false
     }
   },
-  computed: {
-    randomHex() {
-      let response = ''
-      const characters = '0123456789ABCDEF'
-      let charactersLength = characters.length
-      for (let i = 0; i < 6; i++) {
-        response += characters.charAt(Math.floor(Math.random() * charactersLength))
-      }
-      return `#${response}`
-    }
-  },
   mounted() {
     this.$refs.username_field.$el.children[0].focus()
+    
+    let randomHex = ''
+    const characters = '0123456789ABCDEF'
+    let charactersLength = characters.length
+    for (let i = 0; i < 6; i++) {
+      randomHex += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    this.new_user.color = `#${randomHex}`
   },
   destroyed() {
     if (this.$root.url[1] !== '') this.$root.router = this.$root.url[1]
