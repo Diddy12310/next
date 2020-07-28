@@ -2,7 +2,7 @@
   <div class="flamechat">
     <v-navigation-drawer style="width: 74px;" permanent mini-variant absolute>
       <v-list rounded>
-        <v-text-field class="mt-0" @keypress.enter="addChatroom()" v-model="add_chatroom_id" label="Add..."></v-text-field>
+        <v-text-field hide-details="auto" class="mt-0" @keypress.enter="addChatroom()" v-model="add_chatroom_id" label="Add..."></v-text-field>
         <v-list-item-group mandatory v-model="current_id">
           <v-tooltip right>
             <template v-slot:activator="{ on }">
@@ -188,7 +188,7 @@
       </v-fade-transition>
       <v-layout justify-center align-center text-center px-4 v-if="current_status == 'approved'">
         <v-flex xs10>
-          <v-text-field :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" @keypress="startTyping()" @keypress.enter="sendChat()" v-model="new_message" :label="`Message ${current.name}...`"></v-text-field>
+          <v-text-field hide-details="auto" :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" @keypress="startTyping()" @keypress.enter="sendChat()" v-model="new_message" :label="`Message ${current.name}...`"></v-text-field>
         </v-flex>
         <v-flex xs2>
           <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" text icon @click="sendChat()"><v-icon>mdi-send</v-icon></v-btn>
@@ -328,7 +328,7 @@
       </v-fade-transition>
       <v-layout justify-center align-center text-center px-4 v-if="current_dm">
         <v-flex xs10>
-          <v-text-field :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" @keypress="startTyping()" @keypress.enter="sendChat()" v-model="new_message" :label="`Message ${current_dm_person}...`"></v-text-field>
+          <v-text-field hide-details="auto" :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" @keypress="startTyping()" @keypress.enter="sendChat()" v-model="new_message" :label="`Message ${current_dm_person}...`"></v-text-field>
         </v-flex>
         <v-flex xs2>
           <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" text icon @click="sendChat()"><v-icon>mdi-send</v-icon></v-btn>
@@ -410,7 +410,7 @@
       <v-card style="text-align: center">
         <v-card-title>Edit Chat</v-card-title>
         <v-card-text>
-          <v-text-field @keypress.enter="editChatSave()" v-model="edit.content" label="Message content"></v-text-field>
+          <v-text-field hide-details="auto" @keypress.enter="editChatSave()" v-model="edit.content" label="Message content"></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-btn text color="red" @click="deleteChat(edit), edit.open = false">Delete</v-btn>
@@ -430,7 +430,7 @@
 					</v-btn>
 				</v-card-title>
 				<v-card-text>
-					<v-text-field v-model="buy_chatroom.name" label="Chatroom Name"></v-text-field>
+					<v-text-field hide-details="auto" class="mb-4" v-model="buy_chatroom.name" label="Chatroom Name"></v-text-field>
           <p>Chatroom Color</p>
           <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3 elevation-0" v-model="buy_chatroom.theme"></v-color-picker>
           <p>Icon selection is not ready yet.</p>

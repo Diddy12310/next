@@ -20,7 +20,7 @@
             <v-card class="fill-height">
               <v-card-text>
                 <p>Settings</p>
-                <v-text-field @input="change = true" v-model="user.bio" label="Bio" :counter="75"></v-text-field>
+                <v-text-field hide-details="auto" @input="change = true" v-model="user.bio" label="Bio" :counter="75"></v-text-field>
                 <p>Color</p>
                 <v-color-picker mode="hexa" hide-mode-switch @input="change = true" v-model="user.color" class="elevation-0" style="width: 100%;"></v-color-picker>
               </v-card-text>
@@ -202,10 +202,10 @@
           <v-col sm="6">
             <v-card class="fill-height">
               <v-card-text>
-                <p>Change Password</p>
-                <v-text-field style="min-width: 320px;" type="password" label="Current Password" v-model="reset.current"></v-text-field>
-                <v-text-field type="password" label="New Password" v-model="reset.new"></v-text-field>
-                <v-text-field @keypress.enter="changePassword()" type="password" label="Verify New Password" v-model="reset.verify"></v-text-field>
+                <p class="mb-4">Change Password</p>
+                <v-text-field hide-details="auto" class="mb-4" style="min-width: 320px;" type="password" label="Current Password" v-model="reset.current"></v-text-field>
+                <v-text-field hide-details="auto" class="mb-4" type="password" label="New Password" v-model="reset.new"></v-text-field>
+                <v-text-field hide-details="auto" @keypress.enter="changePassword()" type="password" label="Verify New Password" v-model="reset.verify"></v-text-field>
               </v-card-text>
 
               <v-card-actions>

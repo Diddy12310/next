@@ -29,7 +29,7 @@
         direct message, Transmission call, username, biography, or profile picture.
       </p>
 
-      <p class="grey--text">Please read our <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a> for more information.</p>
+      <p class="grey--text">Please read our <a @click="$root.view.terms = true">Terms and Conditions</a> for more information.</p>
     </div>
   </div>
 </template>

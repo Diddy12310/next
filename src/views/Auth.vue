@@ -8,9 +8,9 @@
       <v-card-title class="text-h4 font-weight-light">Sign in</v-card-title>
 
       <v-card-text>
-        <v-text-field @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
-        <v-text-field :disabled="!user_auth_info.exists && !user_auth_info.in" v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
-        <p class="grey--text text-center">By logging in, you agree to the <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
+        <v-text-field hide-details="auto" class="mb-4" @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
+        <v-text-field hide-details="auto" :disabled="!user_auth_info.exists && !user_auth_info.in" v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
+        <p class="grey--text text-center mt-4">By logging in, you agree to the <a @click="$root.view.terms = true">Terms and Conditions</a>.</p>
         <p v-if="$root.config.reset" class="grey--text text-center">Can't remember your password? Oh well.</p>
         <p v-if="$root.config.sign_up" class="grey--text text-center">If you had an old Paradigm v0.1.x account, you have to <a @click.prevent="method = 'up'">create a new one</a>.</p>
         <p v-if="$root.config.sign_up" class="grey--text text-center">Don't have an account? <a @click.prevent="method = 'up'">Sign up</a>.</p>
@@ -33,20 +33,20 @@
         </div>
 
         <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden" v-if="invite_code_verified">
-          <span class="grey--text">If you had an old Paradigm v0.1.x account, you have to create a new one.</span>
-          <v-text-field autocomplete="off" type="text" name="username" v-model="new_user.username" label="Username"></v-text-field>
+          <span class="grey--text mb-4">If you had an old Paradigm v0.1.x account, you have to create a new one.</span>
+          <v-text-field hide-details="auto" class="mb-4" autocomplete="off" type="text" name="username" v-model="new_user.username" label="Username"></v-text-field>
           <span class="grey--text">This will be used to sign into your account. All other users on the platform will be able to see it, choose wisely.</span>
-          <v-text-field autocomplete="off" type="password" name="password" v-model="new_user.password" label="Password"></v-text-field>
-          <v-text-field autocomplete="off" type="password" name="password" v-model="new_user.password_confirm" label="Confirm Password"></v-text-field>
+          <v-text-field hide-details="auto" class="mb-4" autocomplete="off" type="password" name="password" v-model="new_user.password" label="Password"></v-text-field>
+          <v-text-field hide-details="auto" class="mb-4" autocomplete="off" type="password" name="password" v-model="new_user.password_confirm" label="Confirm Password"></v-text-field>
           <span class="grey--text">Choose a memorable, yet secure password. Remember it! If you forget it, there is no way to recover your account.</span>
           <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3" flat style="margin: auto;" v-model="new_user.color"></v-color-picker>
           <span class="grey--text">Your color should represent yourself. Anywhere your username is displayed, so is your color.</span>
-          <v-text-field :count="50" autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Biography"></v-text-field>
+          <v-text-field hide-details="auto" class="mb-4" :count="50" autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Biography"></v-text-field>
           <span class="grey--text">A short and sweet summary of yourself.</span>
           <v-file-input prepend-icon="" id="file" ref="file" v-model="new_user.pic" label="Profile Picture"></v-file-input>
           <span class="grey--text">A visual representation of yourself.</span>
           <v-checkbox label="I have read and accept the Terms and Conditions." v-model="new_user.terms" class="mb-4"></v-checkbox>
-          <span class="grey--text">Please read and accept the <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>. Confirm that you are over the age of 13. If you are under 18, parental permission is required. <a href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Read more</a></span>
+          <span class="grey--text">Please read and accept the <a @click="$root.view.terms = true">Terms and Conditions</a>. Confirm that you are over the age of 13. If you are under 18, parental permission is required. <a target="_blank" href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Learn more</a>.</span>
         </div>
 
         <v-divider class="my-8"></v-divider>
@@ -69,7 +69,7 @@
 				<v-card-actions>
 					<v-btn text color="grey darken-1" @click="username = '', user_auth_info.in = false, user_auth_info.exists = false">Cancel</v-btn>
 					<v-spacer></v-spacer>
-					<v-btn text color="white" @click="closeDupClient()">Confirm</v-btn>
+					<v-btn text color="white" @click="closeDupClient()">Continue</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -92,12 +92,23 @@ export default {
       method: 'in',
       step: 1,
       new_user: {
-        color: '#FF0000'
+        color: this.randomHex
       },
       window,
       invite_code: '',
       invite_code_verified: false,
       authenticated: false
+    }
+  },
+  computed: {
+    randomHex() {
+      let response = ''
+      const characters = '0123456789ABCDEF'
+      let charactersLength = characters.length
+      for (let i = 0; i < 6; i++) {
+        response += characters.charAt(Math.floor(Math.random() * charactersLength))
+      }
+      return `#${response}`
     }
   },
   mounted() {

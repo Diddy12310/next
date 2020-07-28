@@ -3,7 +3,7 @@
     <v-toolbar dense color="teal darken-3">
       <v-toolbar-title>Drawer</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-file-input :disabled="uploading" style="max-width: 500px;" color="white" prepend-icon="mdi-" class="mt-7" id="file" ref="file" v-model="files" multiple label="Upload..."></v-file-input>
+      <v-file-input :disabled="uploading" style="max-width: 500px;" color="white" prepend-icon="mdi-" class="mt-9" id="file" ref="file" v-model="files" multiple label="Upload..."></v-file-input>
       <v-btn :disabled="!files || uploading" @click="uploadFile()" icon><v-icon>mdi-upload</v-icon></v-btn>
       <v-progress-linear :background-opacity="0" :active="uploading" :value="uploadPercentage" absolute bottom color="teal"></v-progress-linear>
     </v-toolbar>
@@ -49,7 +49,7 @@
       <v-card style="text-align: center">
         <v-card-title>Rename File</v-card-title>
         <v-card-text>
-          <v-text-field @keypress.enter="renameFile(rename._id)" v-model="rename.name" label="File name"></v-text-field>
+          <v-text-field hide-details="auto" class="mb-1" @keypress.enter="renameFile(rename._id)" v-model="rename.name" label="File name"></v-text-field>
         </v-card-text>
       </v-card>
     </v-dialog>

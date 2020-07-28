@@ -222,7 +222,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .v-slider--horizontal {
   min-height: 0px !important;
   margin: 0px !important;

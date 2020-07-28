@@ -3,7 +3,7 @@
     <v-toolbar dense color="cyan darken-2">
       <v-toolbar-title>Media</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-text-field style="max-width: 500px;" color="white" v-model="search" label="Search..." class="mt-7"></v-text-field>
+      <v-text-field hide-details="auto" style="max-width: 500px;" color="white" v-model="search" label="Search..." class="mt-3"></v-text-field>
     </v-toolbar>
     <v-tabs v-model="tab" centered background-color="cyan darken-2" color="white">
       <v-tab>Books</v-tab>
