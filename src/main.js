@@ -58,6 +58,10 @@ Vue.mixin({
       this.$root.profile = false
       this.$root.music = {}
       this.$root.transmission = false
+    },
+    $go(path) {
+      if (path[1] != '') this.$root.router = path[1]
+      this.$root.url = path
     }
   }
 })

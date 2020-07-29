@@ -218,7 +218,7 @@ export default {
     }
   },
   methods: {
-    signOut( 		) {
+    signOut() {
 			if (this.$root.user) {
 				this.$http.get(`https://www.theparadigmdev.com/api/users/signout`).then(() => {
 					this.$root.socket.emit('logout', this.$root.user)
@@ -310,7 +310,7 @@ export default {
 				this.$notify('Could not reconnect to server', 'error', 'mdi-alert-circle', false, 3000)
 			})
 		})
-		this.$root.url = window.location.pathname.split('/')
+		this.$go(window.location.pathname.split('/'))
 		window.history.replaceState(null, 'Paradigm', '/')
   }
 }
