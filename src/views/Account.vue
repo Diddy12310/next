@@ -80,14 +80,14 @@
                 <v-tab>Blocked</v-tab>
               </v-tabs>
 
-              <v-tabs-items v-model="people_tab">
+              <v-tabs-items v-model="people_tab" style="max-height: 498px; overflow-y: auto;">
                 <v-tab-item>
                   <v-list>
                     <v-list-item v-if="user.people.approved.length <= 0">
                       <v-list-item-title class="text-center grey--text font-italic">You have no friends.</v-list-item-title>
                     </v-list-item>
 
-                    <v-list-item v-for="(person, index) in user.people.approved" :key="index">
+                    <v-list-item v-for="(person, index) in user.people.approved" :key="index" @click.self="$go(['', 'people', person.username])">
                       <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
@@ -110,7 +110,7 @@
                       <v-list-item-title class="text-center grey--text font-italic">You have no friend requests.</v-list-item-title>
                     </v-list-item>
 
-                    <v-list-item v-for="(person, index) in user.people.requests" :key="index">
+                    <v-list-item v-for="(person, index) in user.people.requests" :key="index" @click.self="$go(['', 'people', person.username])">
                       <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
                       <v-row>
                         <v-col sm="8" class="py-0">
@@ -134,7 +134,7 @@
                       <v-list-item-title class="text-center grey--text font-italic">You haven't sent any friend requests.</v-list-item-title>
                     </v-list-item>
 
-                    <v-list-item v-for="(person, index) in user.people.sent" :key="index">
+                    <v-list-item v-for="(person, index) in user.people.sent" :key="index" @click.self="$go(['', 'people', person.username])">
                       <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
@@ -178,19 +178,26 @@
           </v-col>
           <v-col sm="6">
             <v-card class="fill-height">
-              <v-card-text>
-                <p>Chatrooms</p>
-                <v-list max-height="390" style="overflow: auto;">
+              <v-card-text class="pa-0">
+                <p class="ma-0 pt-4 pb-2 pl-4">Chatrooms</p>
+                <v-list style="max-height: 454px; overflow-y: auto;">
                   <v-list-item v-if="user.chatrooms.length <= 0">
                     <v-list-item-title class="text-center">You aren't in any chatrooms.</v-list-item-title>
                   </v-list-item>
 
-                  <v-list-item v-for="(chatroom, index) in user.chatrooms" :key="index">
-                    <v-list-item-icon><v-icon>{{ chatroom.icon }}</v-icon></v-list-item-icon>
-                    <v-list-item-content>
-                      <v-list-item-title>{{ chatroom.name }}</v-list-item-title>
-                      <v-list-item-subtitle>{{ chatroom.id }}</v-list-item-subtitle>
-                    </v-list-item-content>
+                  <v-list-item v-for="(chatroom, index) in user.chatrooms" :key="index" @click.self="$go(['', 'flamechat', chatroom.id])">
+                    <v-list-item-icon class="mt-5 ml-3 mr-6"><v-icon>{{ chatroom.icon }}</v-icon></v-list-item-icon>
+                    <v-row>
+                      <v-col sm="10" class="py-0">
+                        <v-list-item-content>
+                          <v-list-item-title class="font-weight-medium">{{ chatroom.name }}</v-list-item-title>
+                          <v-list-item-subtitle>{{ chatroom.id }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-col>
+                      <v-col sm="2" align-self="center" class="text-right py-0">
+                        <v-btn icon color="red" @click="deleteChatroom(chatroom.id)"><v-icon>mdi-close</v-icon></v-btn>
+                      </v-col>
+                    </v-row>
                   </v-list-item>
                 </v-list>
               </v-card-text>
@@ -447,6 +454,9 @@ export default {
     },
     unblockPerson(person) {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/unblock/${person}`).then(response => { this.$root.user.people = response.data; this.fixData(); }).catch(error => console.error(error))
+    },
+    deleteChatroom(chatroom) {
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/chatroom/${chatroom}/leave`).then(response => { this.$root.user = response.data; this.fixData(); }).catch(error => console.error(error))
     },
     viewProfile(uid) {
       if (uid != this.$root.user._id && uid != '') {
