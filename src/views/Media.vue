@@ -21,7 +21,7 @@
           <v-container fluid>
             <v-row>
               <v-col v-for="(book, index) in filteredBooks" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
-                <v-card class="book" ripple :disabled="!book.live" @click="openBook(book._id)">
+                <v-card class="book" ripple :disabled="!book.live" @click="openBook(index)">
                   <v-img max-height="400" loading="lazy" :src="book.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
@@ -45,7 +45,7 @@
           <v-container fluid>
             <v-row>
               <v-col v-for="(movie, index) in filteredMovies" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
-                <v-card class="movie" ripple :disabled="!movie.live" @click="openMovie(movie._id)">
+                <v-card class="movie" ripple :disabled="!movie.live" @click="openMovie(index)">
                   <v-img max-height="400" loading="lazy" :src="movie.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
@@ -69,7 +69,7 @@
           <v-container fluid>
             <v-row>
               <v-col v-for="(item, index) in filteredMusic" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
-                <v-card class="music" ripple :disabled="!item.live" @click="openMusic(item._id)">
+                <v-card class="music" ripple :disabled="!item.live" @click="openMusic(index)">
                   <v-img :src="item.cover" loading="lazy">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
@@ -438,12 +438,10 @@ export default {
   },
   methods: {
     // Books
-    openBook(book) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/books/${book}/get`).then(response => {
-        this.current = response.data
-        this.current.type = 'book'
-        this.current.open = true
-      }).catch(error => console.error(error))
+    openBook(index) {
+      this.current = this.$root.user.books[index]
+      this.current.type = 'book'
+      this.current.open = true
     },
     updateUserBook() {
       this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/books/${this.current._id}/update`, {
@@ -458,12 +456,10 @@ export default {
     },
 
     // Movies
-    openMovie(movie) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/movies/${movie}/get`).then(response => {
-        this.current = response.data
-        this.current.type = 'movie'
-        this.current.open = true
-      }).catch(error => console.error(error))
+    openMovie(index) {
+      this.current = this.$root.user.movies[index]
+      this.current.type = 'movie'
+      this.current.open = true
     },
     updateUserMovie() {
       this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/movies/${this.current._id}/update`, {
@@ -478,12 +474,10 @@ export default {
     },
 
     // Music
-    openMusic(id) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/music/${id}/get`).then(response => {
-        this.current = response.data
-        this.current.type = 'music'
-        this.current.open = true
-      }).catch(error => console.error(error))
+    openMusic(index) {
+      this.current = this.$root.user.music[index]
+      this.current.type = 'music'
+      this.current.open = true
     },
     updateUserMusic() {
       this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/music/${this.current._id}/update`, {
