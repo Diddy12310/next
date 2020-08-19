@@ -3,15 +3,15 @@
     <v-toolbar dense color="cyan darken-2">
       <v-toolbar-title>Media</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-text-field style="max-width: 500px;" color="white" v-model="search" label="Search..." class="mt-7"></v-text-field>
+      <v-text-field hide-details="auto" style="max-width: 500px;" color="white" v-model="search" label="Search..." class="mt-3"></v-text-field>
     </v-toolbar>
     <v-tabs v-model="tab" centered background-color="cyan darken-2" color="white">
       <v-tab>Books</v-tab>
       <v-tab>Movies</v-tab>
       <v-tab>Music</v-tab>
-      <v-tab>Podcasts</v-tab>
+      <!-- <v-tab>Podcasts</v-tab>
       <v-tab>Shows</v-tab>
-      <v-tab>Live</v-tab>
+      <v-tab>Live</v-tab> -->
     </v-tabs>
 
     <div :style="{ height: `calc(100vh - ${$root.music.open ? '240px' : '160px'})`, overflowY: 'auto' }">
@@ -21,7 +21,7 @@
           <v-container fluid>
             <v-row>
               <v-col v-for="(book, index) in filteredBooks" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
-                <v-card class="book" ripple :disabled="!book.live" @click="openBook(book._id)">
+                <v-card class="book" ripple :disabled="!book.live" @click="openBook(index)">
                   <v-img max-height="400" loading="lazy" :src="book.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
@@ -45,7 +45,7 @@
           <v-container fluid>
             <v-row>
               <v-col v-for="(movie, index) in filteredMovies" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
-                <v-card class="movie" ripple :disabled="!movie.live" @click="openMovie(movie._id)">
+                <v-card class="movie" ripple :disabled="!movie.live" @click="openMovie(index)">
                   <v-img max-height="400" loading="lazy" :src="movie.cover">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
@@ -69,7 +69,7 @@
           <v-container fluid>
             <v-row>
               <v-col v-for="(item, index) in filteredMusic" :key="index" xs="12" sm="6" md="4" lg="3" xl="2">
-                <v-card class="music" ripple :disabled="!item.live" @click="openMusic(item._id)">
+                <v-card class="music" ripple :disabled="!item.live" @click="openMusic(index)">
                   <v-img :src="item.cover" loading="lazy">
                     <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
                       <div style="width: 100%;">
@@ -341,23 +341,59 @@ export default {
       }
     },
     filteredBooks() {
-      return this.books.filter(book => {
+      var books = this.books.filter(book => {
 				return book.title.toLowerCase().includes(this.search.toLowerCase()) || book.author.toLowerCase().includes(this.search.toLowerCase())
-			})
+      })
+      
+      var sorted = books.sort((a, b) => {
+        var nameA = a.title.toLowerCase()
+        var nameB = b.title.toLowerCase()
+        if (nameA < nameB)
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0
+      })
+
+      return sorted
     },
     filteredMovies() {
-      return this.movies.filter(movie => {
+      var movies = this.movies.filter(movie => {
 				return movie.title.toLowerCase().includes(this.search.toLowerCase()) || movie.genre.toLowerCase().includes(this.search.toLowerCase())
-			})
+      })
+      
+      var sorted = movies.sort((a, b) => {
+        var nameA = a.title.toLowerCase()
+        var nameB = b.title.toLowerCase()
+        if (nameA < nameB)
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0
+      })
+
+      return sorted
     },
     filteredMusic() {
-      return this.music.filter(item => {
+      var music = this.music.filter(item => {
         var isSong = false
         item.songs.forEach(song => {
           if (song.title.toLowerCase().includes(this.search.toLowerCase())) isSong = true
         })
 				return item.title.toLowerCase().includes(this.search.toLowerCase()) || item.artist.toLowerCase().includes(this.search.toLowerCase()) || item.genre.toLowerCase().includes(this.search.toLowerCase()) || isSong
-			})
+      })
+      
+      var sorted = music.sort((a, b) => {
+        var nameA = a.title.toLowerCase()
+        var nameB = b.title.toLowerCase()
+        if (nameA < nameB)
+          return -1
+        if (nameA > nameB)
+          return 1
+        return 0
+      })
+
+      return sorted
     }
   },
   async created() {
@@ -402,12 +438,10 @@ export default {
   },
   methods: {
     // Books
-    openBook(book) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/books/${book}/get`).then(response => {
-        this.current = response.data
-        this.current.type = 'book'
-        this.current.open = true
-      }).catch(error => console.error(error))
+    openBook(index) {
+      this.current = this.$root.user.books[index]
+      this.current.type = 'book'
+      this.current.open = true
     },
     updateUserBook() {
       this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/books/${this.current._id}/update`, {
@@ -422,12 +456,10 @@ export default {
     },
 
     // Movies
-    openMovie(movie) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/movies/${movie}/get`).then(response => {
-        this.current = response.data
-        this.current.type = 'movie'
-        this.current.open = true
-      }).catch(error => console.error(error))
+    openMovie(index) {
+      this.current = this.$root.user.movies[index]
+      this.current.type = 'movie'
+      this.current.open = true
     },
     updateUserMovie() {
       this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/movies/${this.current._id}/update`, {
@@ -442,12 +474,10 @@ export default {
     },
 
     // Music
-    openMusic(id) {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/music/${id}/get`).then(response => {
-        this.current = response.data
-        this.current.type = 'music'
-        this.current.open = true
-      }).catch(error => console.error(error))
+    openMusic(index) {
+      this.current = this.$root.user.music[index]
+      this.current.type = 'music'
+      this.current.open = true
     },
     updateUserMusic() {
       this.$http.post(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/music/${this.current._id}/update`, {

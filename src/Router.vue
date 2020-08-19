@@ -13,6 +13,7 @@
       <patriot key="patriot" v-else-if="$root.router === 'patriot'" />
       <people key="people" v-else-if="$root.router === 'people'" />
       <broadcast key="broadcast" v-else-if="$root.router === 'broadcast'" />
+      <downloads key="downloads" v-else-if="$root.router === 'downloads'" />
       <transmission key="transmission" v-else-if="$root.router === 'transmission'" />
       <developer key="developer" v-else-if="$root.router === 'developer'" />
       <privacy key="privacy" v-else-if="$root.router === 'privacy'" />
@@ -34,6 +35,7 @@ import Terminal from '@/views/Terminal.vue'
 import Patriot from '@/views/Patriot.vue'
 import People from '@/views/People.vue'
 import Broadcast from '@/views/Broadcast.vue'
+import Downloads from '@/views/Downloads.vue'
 import Transmission from '@/views/Transmission.vue'
 import Developer from '@/views/Developer.vue'
 import Privacy from '@/views/Privacy.vue'
@@ -54,6 +56,7 @@ export default {
     'patriot': Patriot,
     'people': People,
     'broadcast': Broadcast,
+    'downloads': Downloads,
     'transmission': Transmission,
     'developer': Developer,
     'privacy': Privacy,

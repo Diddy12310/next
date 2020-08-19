@@ -181,7 +181,7 @@ This privacy policy applies to all information collected through our website (su
 **Please read this privacy policy carefully as it will help you make informed decisions about sharing your personal information with us.**
 
 ## Information Collection
-### Information Sutomatically Collected
+### Information Automatically Collected
 
 Zero information is saved about you, your device, or your network when you visit our Site.
 

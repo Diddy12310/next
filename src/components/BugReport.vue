@@ -1,0 +1,55 @@
+<template>
+  <div class="bug">
+    <v-dialog v-if="$root.user" v-model="$root.view.bug_report" max-width="500" @click:outside="$root.view.bug_report = false; new_bug = {}">
+      <v-card>
+        <v-card-title>Report a Bug</v-card-title>
+
+        <v-card-text>
+          <v-text-field hide-details="auto" class="mb-4" label="Title" v-model="new_bug.title"></v-text-field>
+          <v-select hide-details class="mb-4" :items="bug_categories" label="Category" v-model="new_bug.category"></v-select>
+          <v-autocomplete hide-details class="mb-4" :items="bug_locations" label="Location" v-model="new_bug.location"></v-autocomplete>
+          <v-slider hide-details class="mb-4" label="Priority" v-model="new_bug.priority" thumb-label max="5"></v-slider>
+          <v-textarea hide-details class="mb-4 pt-0 mt-0" label="Description" v-model="new_bug.description"></v-textarea>
+
+          <div>
+            <img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium green--text">+ 15</span>
+            <p>If this bug exists, you will be awarded 15 Moonrocks.</p>
+            <p>New Balance: <span class="font-weight-light">{{ $root.user.moonrocks + 15 }} Moonrocks</span></p>
+          </div>
+        </v-card-text>
+
+         <v-card-actions>
+          <v-btn text color="grey" @click="$root.view.bug_report = false; new_bug = {}">Cancel</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn text color="blue accent-1" @click="submit()">Submit</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'BugReport',
+  data() {
+    return {
+      new_bug: {},
+      bug_categories: ['Feature', 'UI', 'Unexpected response'],
+      bug_locations: ['Toolbar', 'Navigation drawer', 'Footer', 'Home', 'Flamechat', 'The Paradox', 'Satellite', 'Drawer', 'Media', 'Terms and Conditions', 'Relay', 'Account', 'People', 'Broadcast', 'Terminal', 'Support', 'Report a Bug']
+    }
+  },
+  methods: {
+    submit() {
+      this.new_bug.username = this.$root.user.username
+      this.$http.post(`https://www.theparadigmdev.com/api/bugs/${this.$root.user._id}`, this.new_bug).then(response => {
+        this.$root.view.bug_report = false
+        this.new_bug = {}
+      })
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

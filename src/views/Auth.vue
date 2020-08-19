@@ -8,9 +8,9 @@
       <v-card-title class="text-h4 font-weight-light">Sign in</v-card-title>
 
       <v-card-text>
-        <v-text-field @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
-        <v-text-field :disabled="!user_auth_info.exists && !user_auth_info.in" v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
-        <p class="grey--text text-center">By logging in, you agree to the <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>.</p>
+        <v-text-field hide-details="auto" class="mb-4" @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
+        <v-text-field hide-details="auto" :disabled="!user_auth_info.exists && !user_auth_info.in" v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
+        <p class="grey--text text-center mt-4">By logging in, you agree to the <a @click="$root.view.terms = true">Terms and Conditions</a>.</p>
         <p v-if="$root.config.reset" class="grey--text text-center">Can't remember your password? Oh well.</p>
         <p v-if="$root.config.sign_up" class="grey--text text-center">If you had an old Paradigm v0.1.x account, you have to <a @click.prevent="method = 'up'">create a new one</a>.</p>
         <p v-if="$root.config.sign_up" class="grey--text text-center">Don't have an account? <a @click.prevent="method = 'up'">Sign up</a>.</p>
@@ -33,20 +33,21 @@
         </div>
 
         <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden" v-if="invite_code_verified">
-          <span class="grey--text">If you had an old Paradigm v0.1.x account, you have to create a new one.</span>
-          <v-text-field autocomplete="off" type="text" name="username" v-model="new_user.username" label="Username"></v-text-field>
+          <span class="grey--text mb-4">If you had an old Paradigm v0.1.x account, you have to create a new one.</span>
+          <v-text-field hide-details="auto" class="mb-4" autocomplete="off" type="text" name="username" v-model="new_user.username" label="Username"></v-text-field>
           <span class="grey--text">This will be used to sign into your account. All other users on the platform will be able to see it, choose wisely.</span>
-          <v-text-field autocomplete="off" type="password" name="password" v-model="new_user.password" label="Password"></v-text-field>
-          <v-text-field autocomplete="off" type="password" name="password" v-model="new_user.password_confirm" label="Confirm Password"></v-text-field>
+          <v-text-field hide-details="auto" class="mb-4" autocomplete="off" type="password" name="password" v-model="new_user.password" label="Password"></v-text-field>
+          <v-text-field hide-details="auto" class="mb-4" autocomplete="off" type="password" name="password" v-model="new_user.password_confirm" label="Confirm Password"></v-text-field>
           <span class="grey--text">Choose a memorable, yet secure password. Remember it! If you forget it, there is no way to recover your account.</span>
           <v-color-picker mode="hexa" hide-mode-switch class="mt-3 mb-3" flat style="margin: auto;" v-model="new_user.color"></v-color-picker>
           <span class="grey--text">Your color should represent yourself. Anywhere your username is displayed, so is your color.</span>
-          <v-text-field :count="50" autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Biography"></v-text-field>
+          <v-text-field hide-details="auto" class="mb-4" :count="50" autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Biography"></v-text-field>
           <span class="grey--text">A short and sweet summary of yourself.</span>
-          <v-file-input prepend-icon="" id="file" ref="file" v-model="new_user.pic" label="Profile Picture"></v-file-input>
+          <v-file-input prepend-icon="" id="file" ref="file" v-model="new_user.pic" label="Profile Picture" :disabled="use_default"></v-file-input>
           <span class="grey--text">A visual representation of yourself.</span>
-          <v-checkbox label="I have read and accept the Terms and Conditions." v-model="new_user.terms" class="mb-4"></v-checkbox>
-          <span class="grey--text">Please read and accept the <a href="https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md">Terms and Conditions</a>. Confirm that you are over the age of 13. If you are under 18, parental permission is required. <a href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Read more</a></span>
+          <v-checkbox v-model="use_default" label="Use default profile picture"></v-checkbox>
+          <v-checkbox hide-details="auto" label="I have read and accept the Terms and Conditions." v-model="new_user.terms" class="mb-4"></v-checkbox>
+          <span class="grey--text">Please read and accept the <a @click="$root.view.terms = true">Terms and Conditions</a>. Confirm that you are over the age of 13. If you are under 18, parental permission is required. <a target="_blank" href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Learn more</a>.</span>
         </div>
 
         <v-divider class="my-8"></v-divider>
@@ -57,7 +58,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="signUp()" text color="blue accent-1"
-          :disabled="!new_user.username || new_user.password != new_user.password_confirm || !new_user.color || !new_user.bio || !new_user.pic || !new_user.terms"
+          :disabled="!new_user.username || new_user.password != new_user.password_confirm || !new_user.color || !new_user.bio || !(new_user.pic || use_default) || !new_user.terms"
         >Sign up</v-btn>
       </v-card-actions>
     </v-card>
@@ -69,7 +70,7 @@
 				<v-card-actions>
 					<v-btn text color="grey darken-1" @click="username = '', user_auth_info.in = false, user_auth_info.exists = false">Cancel</v-btn>
 					<v-spacer></v-spacer>
-					<v-btn text color="white" @click="closeDupClient()">Confirm</v-btn>
+					<v-btn text color="white" @click="closeDupClient()">Continue</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -92,16 +93,25 @@ export default {
       method: 'in',
       step: 1,
       new_user: {
-        color: '#FF0000'
+        color: ''
       },
       window,
       invite_code: '',
       invite_code_verified: false,
-      authenticated: false
+      authenticated: false,
+      use_default: false
     }
   },
   mounted() {
     this.$refs.username_field.$el.children[0].focus()
+    
+    let randomHex = ''
+    const characters = '0123456789ABCDEF'
+    let charactersLength = characters.length
+    for (let i = 0; i < 6; i++) {
+      randomHex += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    this.new_user.color = `#${randomHex}`
   },
   destroyed() {
     if (this.$root.url[1] !== '') this.$root.router = this.$root.url[1]
@@ -117,6 +127,20 @@ export default {
           this.authenticated = true
           if (!this.user_auth_info.in) {
             this.$root.user = response.data
+            this.$root.links = [
+              { icon: 'mdi-home', content: 'Home', path: 'home', disabled: false, rights: true },
+              { icon: 'mdi-message', content: 'Flamechat', path: 'flamechat', disabled: false, rights: true },
+              { icon: 'mdi-web', content: 'Satellite', path: 'satellite', disabled: false, rights: true },
+              { icon: 'mdi-newspaper', content: 'The Paradox', path: 'paradox', disabled: false, rights: true },
+              { icon: 'mdi-folder-multiple', content: 'Drawer', path: 'drawer', disabled: false, rights: true },
+              { icon: 'mdi-play', content: 'Media', path: 'media', disabled: false, rights: true },
+              { icon: 'mdi-account-group', content: 'People', path: 'people', disabled: false, rights: true },
+              { icon: 'mdi-satellite-uplink', content: 'Broadcast', path: 'broadcast', disabled: false, rights: true },
+              { icon: 'mdi-download', content: 'Downloads', path: 'downloads', disabled: false, rights: true },
+              { icon: 'mdi-code-tags', content: 'Developer', path: 'developer', disabled: false, rights: this.$root.user.rights.developer },
+              { icon: 'mdi-video-wireless', content: 'Transmission', path: 'transmission', disabled: true, rights: true },
+              // { icon: 'mdi-pencil', content: 'Write', path: 'write', disabled: true }
+            ]
             this.$root.router = 'home'
             this.$root.socket.emit('login', response.data)
             var cookie = this.$getCookie('buggy_dialog')
@@ -149,22 +173,28 @@ export default {
               moonrocks: 0,
               code: this.invite_code
             }).then(response => {
-              let formData = new FormData()
-              formData.append('files[0]', this.new_user.pic)
-              this.$http.post(`https://www.theparadigmdev.com/api/users/${response.data._id}/pic`,
-                formData, {
-                  headers: {
-                    'Content-Type': 'multipart/form-data'
+              if (!this.use_default) {
+                let formData = new FormData()
+                formData.append('files[0]', this.new_user.pic)
+                this.$http.post(`https://www.theparadigmdev.com/api/users/${response.data._id}/pic`,
+                  formData, {
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }
                   }
-                }
-              ).then(response => {
-                this.$root.user = response.data
-                this.$root.router = 'home'
-                document.title = 'Paradigm'
-              })
-              .catch(error => {
-                console.log('Upload: failed', error)
-              })
+                ).then(response => {
+                  this.$root.user = response.data
+                  this.$root.router = 'home'
+                  document.title = 'Paradigm'
+                })
+                .catch(error => {
+                  console.log('Upload: failed', error)
+                })
+              } else {
+                  this.$root.user = response.data
+                  this.$root.router = 'home'
+                  document.title = 'Paradigm'
+              }
             }).catch(error => {
               console.log(error)
             })

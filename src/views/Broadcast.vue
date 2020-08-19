@@ -2,13 +2,15 @@
   <div class="broadcast">
     <v-toolbar dense color="indigo darken-3" style="z-index: 1;">
       <v-toolbar-title>Broadcast</v-toolbar-title>
+      <v-spacer></v-spacer>
+			<v-text-field hide-details="auto" style="max-width: 500px;" color="white" class="mt-4" label="Search..." v-model="search"></v-text-field>
     </v-toolbar>
 
     <div :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
       <v-fade-transition group>
         <v-card class="mx-auto mt-6" color="indigo darken-3" max-width="500" key="new">
           <v-card-text class="text-h5">
-            <v-textarea @keypress.shift.enter.exact.prevent="post()" label="Content..." v-model="content"></v-textarea>
+            <v-textarea class="pb-0" hide-details @keypress.shift.enter.exact.prevent="post()" label="Content..." v-model="content"></v-textarea>
           </v-card-text>
 
           <v-card-actions>
@@ -18,7 +20,7 @@
           </v-card-actions>
         </v-card>
 
-        <v-card class="mx-auto my-6" color="indigo darken-3" max-width="500" v-for="(post, index) in $root.user.posts" :key="index">
+        <v-card class="mx-auto my-6" color="indigo darken-3" max-width="500" v-for="(post, index) in filteredPosts" :key="index">
           <v-card-text class="text-h5" v-html="post.content"></v-card-text>
 
           <v-card-actions>
@@ -61,7 +63,15 @@ export default {
   name: 'Broadcast',
   data() {
     return {
-      content: ''
+      content: '',
+      search: ''
+    }
+  },
+  computed: {
+    filteredPosts() {
+      return this.$root.user.posts.filter(item => {
+				return item.content.toLowerCase().includes(this.search.toLowerCase())
+      })
     }
   },
   methods: {

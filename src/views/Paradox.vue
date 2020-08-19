@@ -3,7 +3,7 @@
 		<v-toolbar dense color="blue darken-2">
 			<v-toolbar-title>The Paradox</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<v-text-field style="max-width: 500px;" v-model="search" label="Search..." color="white" class="mt-7"></v-text-field>
+			<v-text-field hide-details="auto" style="max-width: 500px;" v-model="search" label="Search..." color="white" class="mt-4"></v-text-field>
 		</v-toolbar>
 
 		<div :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
@@ -60,10 +60,10 @@
 					</v-btn>
 				</v-card-title>
 				<v-card-text>
-					<v-text-field label="Title" v-model="new_news.title"></v-text-field>
+					<v-text-field hide-details="auto" label="Title" v-model="new_news.title"></v-text-field>
 					<v-textarea label="Content" v-model="new_news.content"></v-textarea>
 					<v-switch v-model="new_news.live" label="Published"></v-switch>
-					<v-text-field label="Cover URL" v-model="new_news.cover"></v-text-field>
+					<v-text-field hide-details="auto" label="Cover URL" v-model="new_news.cover"></v-text-field>
 					<p class="grey--text font-weight-light" v-if="new_news.cover">Does the story's cover display correctly?</p>
 					<v-img max-width="200" loading="lazy" :src="new_news.cover" v-if="new_news.cover"></v-img>
 				</v-card-text>

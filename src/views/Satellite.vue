@@ -3,7 +3,7 @@
 		<v-toolbar dense color="blue-grey darken-2">
 			<v-toolbar-title>Satellite</v-toolbar-title>
       <v-spacer></v-spacer>
-			<v-text-field style="max-width: 500px;" color="white" class="mt-7" label="Address..." v-model="input"></v-text-field>
+			<v-text-field hide-details="auto" style="max-width: 500px;" color="white" class="mt-4" label="Address..." v-model="input"></v-text-field>
 			<v-menu offset-y v-model="quick_links">
 				<template v-slot:activator="{ on: menu }">
 					<v-tooltip bottom>

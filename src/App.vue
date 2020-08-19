@@ -18,7 +18,10 @@
 							<template v-slot:activator="{ on }">
 								<v-list-item @click="$root.router = 'account'" :input-value="$root.router == 'account'" value="account" v-on="on" two-line v-ripple class="my-n2" style="cursor: pointer;">
 									<v-list-item-avatar class="my-0">
-										<img :src="$root.user.pic">
+										<object style="height: 40px;" :data="$root.user.pic" type="image/png">
+											<img src="./assets/default.png">
+										</object>
+										<img :src="$root.user.pic ? $root.user.pic : './assets/default.png'">
 									</v-list-item-avatar>
 									<v-list-item-content>
 										<v-list-item-title class="font-weight-medium" :style="{ 'color': $root.user.color }">{{ $root.user.username }}</v-list-item-title>
@@ -48,7 +51,7 @@
 				</v-card-actions>
 			</template>
 
-			<v-list dense nav>
+			<v-list dense nav v-if="$root.user">
 				<v-list-item-group mandatory v-model="$root.router">
 					<v-list-item value="account" class="d-none">
 						<v-list-item-title>Account</v-list-item-title>
@@ -63,14 +66,14 @@
 						<v-list-item-title>Patriot</v-list-item-title>
 					</v-list-item>
 
-					<v-list-item :disabled="link.disabled" v-if="$root.config.router[link.path]" :value="link.path" v-for="link in links" :key="link.path">
+					<v-list-item :disabled="link.disabled" v-if="$root.config.router[link.path] && link.rights" :value="link.path" v-for="link in $root.links" :key="link.path">
 						<v-list-item-icon><v-icon :color="link.disabled ? 'grey' : 'white'">{{ link.icon }}</v-icon></v-list-item-icon>
 						<v-list-item-title>{{ link.content }}</v-list-item-title>
 					</v-list-item>
-					<v-list-item value="developer" disabled v-if="$root.user.rights.developer">
-						<v-list-item-icon><v-icon class="grey--text">mdi-code-tags</v-icon></v-list-item-icon>
+					<!-- <v-list-item value="developer" v-if="$root.user.rights.developer">
+						<v-list-item-icon><v-icon>mdi-code-tags</v-icon></v-list-item-icon>
 						<v-list-item-title>Developer</v-list-item-title>
-					</v-list-item>
+					</v-list-item> -->
 				</v-list-item-group>
 			</v-list>
 
@@ -80,7 +83,7 @@
 					<v-divider></v-divider>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" target="_blank" class="ma-2" icon color="#7289DA" href="https://discord.gg/cA9dpRM">
+							<v-btn small v-on="on" target="_blank" class="ma-2" icon color="#7289DA" href="https://discord.gg/rhX2t9A">
 								<v-icon>mdi-discord</v-icon>
 							</v-btn>
 						</template>
@@ -102,25 +105,25 @@
 						</template>
 						<span>Support</span>
 					</v-tooltip>
-					<v-tooltip top open-delay="1000">
+					<!-- <v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn small v-on="on" class="my-2 mr-2" icon color="lime" @click="window.open('https://github.com/Paradigm-Dev/paradigm/issues/new')">
 								<v-icon>mdi-bug</v-icon>
 							</v-btn>
 						</template>
-						<span>Report a bug</span>
-					</v-tooltip>
-					<!-- <v-tooltip top open-delay="1000">
-						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="light-blue darken-3" @click="$root.view.terms = true">
-								<v-icon>mdi-feather</v-icon>
-							</v-btn>
-						</template>
-						<span>Terms of Service</span>
+						<span>Report a Bug</span>
 					</v-tooltip> -->
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="light-blue darken-3" @click="window.open('https://github.com/Paradigm-Dev/paradigm/blob/master/TERMS.md')">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="lime" @click="$root.view.bug_report = true">
+								<v-icon>mdi-bug</v-icon>
+							</v-btn>
+						</template>
+						<span>Report a Bug</span>
+					</v-tooltip>
+					<v-tooltip top open-delay="1000">
+						<template v-slot:activator="{ on }">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="light-blue darken-3" @click="$root.view.terms = true">
 								<v-icon>mdi-feather</v-icon>
 							</v-btn>
 						</template>
@@ -169,7 +172,7 @@
 			</v-card>
 		</v-dialog>
 
-		<v-dialog v-model="$root.view.buggy_dialog" max-width="350">
+		<v-dialog v-model="$root.view.buggy_dialog" max-width="350" style="z-index: 1000;">
 			<v-card color="orange">
 				<v-card-title class="title text-center font-weight-medium text-uppercase">Warning</v-card-title>
 				<v-card-text>This is experimental software. By continuing, you acknowledge the risk involved. If you have any questions or concerns, please contact support.</v-card-text>
@@ -180,7 +183,9 @@
 			</v-card>
 		</v-dialog>
 
-		<v-bottom-sheet v-if="$root.transmission" v-model="$root.view.transmission" persistent>
+		<bug-report style="z-index: 1000;"></bug-report>
+
+		<v-bottom-sheet v-if="$root.transmission" v-model="$root.view.transmission" persistent style="z-index: 1002;">
       <v-sheet class="text-center" height="200px">
         <v-btn class="my-6 mx-3" color="success" @click="acceptTransmissionCall()"><v-icon left>mdi-check</v-icon>Accept</v-btn>
         <v-btn class="my-6 mx-3" color="error" @click="$root.view.transmission = false"><v-icon left>mdi-close</v-icon>Decline</v-btn>
@@ -193,6 +198,7 @@
 <script>
 import Router from '@/Router'
 import MusicPlayer from '@/components/MusicPlayer.vue'
+import BugReport from '@/components/BugReport.vue'
 import Terms from '@/components/Terms.vue'
 import moment from 'moment'
 import io from 'socket.io-client'
@@ -202,22 +208,11 @@ export default {
   components: {
     'router': Router,
     'music-player': MusicPlayer,
+    'bug-report': BugReport,
     'terms': Terms
   },
   data() {
     return {
-      links: [
-        { icon: 'mdi-home', content: 'Home', path: 'home', disabled: false },
-        { icon: 'mdi-message', content: 'Flamechat', path: 'flamechat', disabled: false },
-        { icon: 'mdi-web', content: 'Satellite', path: 'satellite', disabled: false },
-        { icon: 'mdi-newspaper', content: 'The Paradox', path: 'paradox', disabled: false },
-        { icon: 'mdi-folder-multiple', content: 'Drawer', path: 'drawer', disabled: false },
-        { icon: 'mdi-play', content: 'Media', path: 'media', disabled: false },
-        { icon: 'mdi-account-group', content: 'People', path: 'people', disabled: false },
-        { icon: 'mdi-satellite-uplink', content: 'Broadcast', path: 'broadcast', disabled: false },
-        { icon: 'mdi-video-wireless', content: 'Transmission', path: 'transmission', disabled: true },
-        { icon: 'mdi-pencil', content: 'Write', path: 'write', disabled: true }
-      ],
       clock: {
         date: '',
         time: ''
@@ -226,7 +221,7 @@ export default {
     }
   },
   methods: {
-    signOut( 		) {
+    signOut() {
 			if (this.$root.user) {
 				this.$http.get(`https://www.theparadigmdev.com/api/users/signout`).then(() => {
 					this.$root.socket.emit('logout', this.$root.user)
@@ -318,7 +313,7 @@ export default {
 				this.$notify('Could not reconnect to server', 'error', 'mdi-alert-circle', false, 3000)
 			})
 		})
-		this.$root.url = window.location.pathname.split('/')
+		this.$go(window.location.pathname.split('/'))
 		window.history.replaceState(null, 'Paradigm', '/')
   }
 }
@@ -343,15 +338,6 @@ html { overflow: hidden !important; }
   transform: translate(-50%, -50%);
 }
 
-/* * {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-} */
-
 .clock { margin: 0px !important; }
 
 /* Scrollbar */
@@ -365,7 +351,6 @@ html { overflow: hidden !important; }
 ::-webkit-scrollbar-corner { background: rgb(33, 33, 33); }
 
 .centralize {
-  /* margin: 0; */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -378,9 +363,10 @@ input, textarea {
 	color: white;
 }
 
-a { text-decoration: none; }
+.moonrock-count {
+  position: relative;
+  bottom: 45px;
+}
 
-/* html body div#app.v-application.v-application--is-ltr.theme--dark div.v-dialog__content.v-dialog__content--active, html body div#app.v-application.v-application--is-ltr.theme--dark div.v-overlay.v-overlay--active.theme--dark {
-	z-index: 10000 !important;
-} */
+a { text-decoration: none; }
 </style>

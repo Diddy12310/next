@@ -58,6 +58,10 @@ Vue.mixin({
       this.$root.profile = false
       this.$root.music = {}
       this.$root.transmission = false
+    },
+    $go(path) {
+      if (path[1] != '') this.$root.router = path[1]
+      this.$root.url = path
     }
   }
 })
@@ -68,6 +72,7 @@ new Vue({
     return {
       user: null,
       config: {},
+      links: [],
       version,
       router: 'auth',
       drawer: true,
@@ -83,7 +88,8 @@ new Vue({
         terms: false,
         buggy_dialog: false,
         quote: false,
-        transmission: false
+        transmission: false,
+        bug_report: false
       },
       socket,
       profile: false,
