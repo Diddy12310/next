@@ -43,9 +43,10 @@
           <span class="grey--text">Your color should represent yourself. Anywhere your username is displayed, so is your color.</span>
           <v-text-field hide-details="auto" class="mb-4" :count="50" autocomplete="off" type="text" name="bio" v-model="new_user.bio" label="Biography"></v-text-field>
           <span class="grey--text">A short and sweet summary of yourself.</span>
-          <v-file-input prepend-icon="" id="file" ref="file" v-model="new_user.pic" label="Profile Picture"></v-file-input>
+          <v-file-input prepend-icon="" id="file" ref="file" v-model="new_user.pic" label="Profile Picture" :disabled="use_default"></v-file-input>
           <span class="grey--text">A visual representation of yourself.</span>
-          <v-checkbox label="I have read and accept the Terms and Conditions." v-model="new_user.terms" class="mb-4"></v-checkbox>
+          <v-checkbox v-model="use_default" label="Use default profile picture"></v-checkbox>
+          <v-checkbox hide-details="auto" label="I have read and accept the Terms and Conditions." v-model="new_user.terms" class="mb-4"></v-checkbox>
           <span class="grey--text">Please read and accept the <a @click="$root.view.terms = true">Terms and Conditions</a>. Confirm that you are over the age of 13. If you are under 18, parental permission is required. <a target="_blank" href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Learn more</a>.</span>
         </div>
 
@@ -57,7 +58,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="signUp()" text color="blue accent-1"
-          :disabled="!new_user.username || new_user.password != new_user.password_confirm || !new_user.color || !new_user.bio || !new_user.pic || !new_user.terms"
+          :disabled="!new_user.username || new_user.password != new_user.password_confirm || !new_user.color || !new_user.bio || !(new_user.pic || use_default) || !new_user.terms"
         >Sign up</v-btn>
       </v-card-actions>
     </v-card>
@@ -97,7 +98,8 @@ export default {
       window,
       invite_code: '',
       invite_code_verified: false,
-      authenticated: false
+      authenticated: false,
+      use_default: false
     }
   },
   mounted() {
@@ -125,6 +127,20 @@ export default {
           this.authenticated = true
           if (!this.user_auth_info.in) {
             this.$root.user = response.data
+            this.$root.links = [
+              { icon: 'mdi-home', content: 'Home', path: 'home', disabled: false, rights: true },
+              { icon: 'mdi-message', content: 'Flamechat', path: 'flamechat', disabled: false, rights: true },
+              { icon: 'mdi-web', content: 'Satellite', path: 'satellite', disabled: false, rights: true },
+              { icon: 'mdi-newspaper', content: 'The Paradox', path: 'paradox', disabled: false, rights: true },
+              { icon: 'mdi-folder-multiple', content: 'Drawer', path: 'drawer', disabled: false, rights: true },
+              { icon: 'mdi-play', content: 'Media', path: 'media', disabled: false, rights: true },
+              { icon: 'mdi-account-group', content: 'People', path: 'people', disabled: false, rights: true },
+              { icon: 'mdi-satellite-uplink', content: 'Broadcast', path: 'broadcast', disabled: false, rights: true },
+              { icon: 'mdi-download', content: 'Downloads', path: 'downloads', disabled: false, rights: true },
+              { icon: 'mdi-code-tags', content: 'Developer', path: 'developer', disabled: false, rights: this.$root.user.rights.developer },
+              { icon: 'mdi-video-wireless', content: 'Transmission', path: 'transmission', disabled: true, rights: true },
+              // { icon: 'mdi-pencil', content: 'Write', path: 'write', disabled: true }
+            ]
             this.$root.router = 'home'
             this.$root.socket.emit('login', response.data)
             var cookie = this.$getCookie('buggy_dialog')
@@ -157,22 +173,28 @@ export default {
               moonrocks: 0,
               code: this.invite_code
             }).then(response => {
-              let formData = new FormData()
-              formData.append('files[0]', this.new_user.pic)
-              this.$http.post(`https://www.theparadigmdev.com/api/users/${response.data._id}/pic`,
-                formData, {
-                  headers: {
-                    'Content-Type': 'multipart/form-data'
+              if (!this.use_default) {
+                let formData = new FormData()
+                formData.append('files[0]', this.new_user.pic)
+                this.$http.post(`https://www.theparadigmdev.com/api/users/${response.data._id}/pic`,
+                  formData, {
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }
                   }
-                }
-              ).then(response => {
-                this.$root.user = response.data
-                this.$root.router = 'home'
-                document.title = 'Paradigm'
-              })
-              .catch(error => {
-                console.log('Upload: failed', error)
-              })
+                ).then(response => {
+                  this.$root.user = response.data
+                  this.$root.router = 'home'
+                  document.title = 'Paradigm'
+                })
+                .catch(error => {
+                  console.log('Upload: failed', error)
+                })
+              } else {
+                  this.$root.user = response.data
+                  this.$root.router = 'home'
+                  document.title = 'Paradigm'
+              }
             }).catch(error => {
               console.log(error)
             })
