@@ -72,6 +72,7 @@ new Vue({
     return {
       user: null,
       config: {},
+      links: [],
       version,
       router: 'auth',
       drawer: true,
@@ -87,7 +88,8 @@ new Vue({
         terms: false,
         buggy_dialog: false,
         quote: false,
-        transmission: false
+        transmission: false,
+        bug_report: false
       },
       socket,
       profile: false,
