@@ -111,7 +111,6 @@ export default {
       this.$http.delete(`https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/delete/${id}`).then(response => {
         this.$root.user = response.data
       }).catch(error => {
-        this.getFileList()
         console.error('Delete: error', error)
       })
     },
