@@ -985,9 +985,4 @@ main {
 .v-sheet:not(.v-card):not(.v-toolbar):not(.chatroom-menu):not(.v-select-list) {
   background: none !important;
 }
-
-.moonrock-count {
-  position: relative;
-  bottom: 45px;
-}
 </style>

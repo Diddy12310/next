@@ -243,7 +243,7 @@
                     <p>Your Apollo Codes</p>
                   </v-col>
                   <v-col class="py-0" sm="2">
-                    <p class="text-right">{{ $root.user.apollo_codes.created }} / {{ $root.user.apollo_codes.quota }}</p>
+                    <p class="text-right"><span class="font-weight-black">{{ $root.user.apollo_codes.created }}</span> / {{ $root.user.apollo_codes.quota }}</p>
                   </v-col>
                 </v-row>
 
