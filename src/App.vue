@@ -151,8 +151,8 @@
 		</v-main>
 
 		<v-slide-y-reverse-transition>
-			<v-footer app style="z-index: 1001;" class="pa-0" v-show="$root.music.open" v-if="$root.music.playing">
-				<music-player style="width: 100vw; filter: none;" :autoPlay="true" :file="$root.music.file" />
+			<v-footer app style="z-index: 1001;" class="pa-0" v-if="$root.view.music && $root.music[0]">
+				<music-player style="width: 100vw; filter: none;" :ended="_handleNextSong" />
 			</v-footer>
 		</v-slide-y-reverse-transition>
 
@@ -246,6 +246,10 @@ export default {
 		acceptTransmissionCall() {
 			this.$root.view.transmission = false
 			this.$root.router = 'transmission'
+		},
+		_handleNextSong() {
+			this.$root.music.shift()
+			if (!this.$root.music[0]) this.$root.view.music = false
 		}
   },
   created() {

@@ -170,8 +170,8 @@
             <v-spacer></v-spacer>
             <v-rating color="yellow darken-2" background-color="grey darken-3" @input="updateUserMusic()" v-model="current.rating"></v-rating>
             <v-btn color="pink lighten-1" icon @click="current.favorite = !current.favorite, updateUserMusic()"><v-icon>{{ current.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon></v-btn>
-            <v-btn icon color="blue accent-1" class="mr-1" disabled><v-icon>mdi-shuffle</v-icon></v-btn>
-            <v-btn text color="blue accent-1" disabled><v-icon left>mdi-play</v-icon>Play</v-btn>
+            <v-btn icon color="blue accent-1" class="mr-1" @click="playShuffle()"><v-icon>mdi-shuffle</v-icon></v-btn>
+            <v-btn text color="blue accent-1" @click="playAlbum()"><v-icon left>mdi-play</v-icon>Play</v-btn>
           </v-card-actions>
           <v-list nav>
             <v-list-item @click="playSong(song)" v-for="(song, index) in music_songs" :key="index">
@@ -204,8 +204,8 @@
     </v-dialog>
 
     <!-- Upload dialog -->
-    <v-dialog width="600" style="z-index: 99991;" v-model="add_dialog">
-      <v-card>
+    <v-dialog width="600" style="z-index: 99991;" v-model="add_dialog" @click:outside="cancelUpload()">
+      <v-card style="x-overflow: hidden;">
         <v-img :src="upload.cover" style="height: 90vh;" v-if="tab != 2" loading="lazy">
           <v-card-title @click.self="add_dialog_uploader = true" class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
             <div style="width: 100%;">
@@ -213,28 +213,25 @@
               <div class="d-flex">
                 <h4 v-if="tab == 0" class="text-body-2 grey--text"><input v-model="upload.author" type="text" placeholder="Author"></h4>
                 <h4 v-if="tab == 1" class="text-body-2 grey--text"><input v-model="upload.genre" type="text" placeholder="Genre"></h4>
-                <v-spacer></v-spacer>
-                <h4 class="text-body-2 red--text font-weight-medium" v-if="!upload.file">UNAVAILABLE</h4>
               </div>
             </div>
           </v-card-title>
+
+          <h1 v-if="!upload.cover" @click="add_dialog_uploader = true" class="text-h3 centralize"><v-icon class="grey--text" style="font-size: inherit;">mdi-image-plus</v-icon></h1>
         </v-img>
 
         <v-img :src="upload.cover" v-if="tab == 2" loading="lazy">
           <v-responsive :aspect-ratio="1/1">          
-            <!-- <v-card-title class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
+            <v-card-title @click.self="add_dialog_uploader = true" class="align-end fill-height" style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);">
               <div style="width: 100%;">
                 <h3 class="text-h5 mb-0"><input type="text" placeholder="Title" v-model="upload.title"></h3>
                 <div class="d-flex">
                   <h4 class="text-body-2 grey--text"><input style="width: 150px;" type="text" placeholder="Artist" v-model="upload.artist">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;<input style="width: 150px;" type="text" placeholder="Genre" v-model="upload.genre"></h4>
-                  <v-spacer></v-spacer>
-                  <h4 class="text-body-2 red--text font-weight-medium" v-if="!upload.file">UNAVAILABLE</h4>
                 </div>
               </div>
-            </v-card-title> -->
+            </v-card-title>
 
-            <h1 :class="{ 'text-h3': $vuetify.breakpoint.smAndUp, 'text-h4': $vuetify.breakpoint.xsOnly }" class="centralize font-weight-light pa-12" style="width: 100%;">Uploading music is not available yet.</h1>
-
+            <h1 v-if="!upload.cover" @click="add_dialog_uploader = true" class="text-h3 centralize"><v-icon class="grey--text" style="font-size: inherit;">mdi-image-plus</v-icon></h1>
           </v-responsive>
         </v-img>
 
@@ -243,25 +240,57 @@
           <v-file-input v-model="upload.file" label="Upload..."></v-file-input>
         </v-card-text>
 
-        <!-- <v-card-text class="mt-6" v-else>
+        <v-card-text class="mt-4 pb-0" v-else>
+          <v-btn text color="blue accent-1" class="mb-3" @click="upload.songs.push({ title: '', length: '', track: upload.songs.length + 1, lyrics: {}, upload: null })"><v-icon left>mdi-plus</v-icon>Song</v-btn>
           <v-expansion-panels flat hover>
-            <v-expansion-panel>
+            <v-expansion-panel v-for="(song, index) in upload.songs" :key="index">
               <v-expansion-panel-header>
                 <v-row no-gutters>
-                  <v-col sm="2"><input type="text" v-model="new_song.track" placeholder="Track"></v-col>
-                  <v-col sm="8"><input type="text" v-model="new_song.title" placeholder="Title"></v-col>
-                  <v-col sm="2" class="grey--text"><input type="text" v-model="new_song.length" placeholder="Length" style="width: 100%;"></v-col>
+                  <v-col sm="2"><input type="text" v-model="song.track" placeholder="Track"></v-col>
+                  <v-col sm="8"><input type="text" v-model="song.title" placeholder="Title"></v-col>
+                  <v-col sm="2" class="grey--text"><input type="text" v-model="song.length" placeholder="Length" style="width: 100%;"></v-col>
                 </v-row>
               </v-expansion-panel-header>
 
-              <v-expansion-panel-content>
-                <v-file-input label="File" accept="audio/*" prepend-icon="mdi-music-note-plus"></v-file-input>
+              <v-expansion-panel-content class="pb-0">
+                <v-row>
+                  <v-col sm="6" class="pl-0 pb-0">
+                    <p class="my-2">Audio</p>
+                    <audio :id="`audio-${index}`" style="max-width: 256px;" v-if="song.upload" :src="URL.createObjectURL(song.upload)" controls></audio>
+                    <v-file-input v-model="song.upload" label="File" accept="audio/*" prepend-icon="mdi-music-note-plus"></v-file-input>
+                  </v-col>
+
+                  <v-col sm="6" class="pr-0 pb-0">
+                    <v-row>
+                      <v-col sm="10" class="pa-0"><p class="my-2">Lyrics</p></v-col>
+                      <v-col sm="2" class="pa-0">
+                        <v-btn :disabled="!song.upload" icon @click="addLyricKeyframe(index)"><v-icon>mdi-clock-check</v-icon></v-btn>
+                      </v-col>
+                    </v-row>
+                    <v-simple-table v-if="song.upload" style="max-height: 300px; overflow-y: auto;">
+                      <template v-slot:default>
+                        <thead>
+                          <tr>
+                            <th class="text-left"><v-icon>mdi-clock</v-icon></th>
+                            <th class="text-left">Content</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="(lyric, timestamp) in song.lyrics" :key="timestamp">
+                            <td>{{ timestamp }}</td>
+                            <td><input type="text" v-model="song.lyrics[timestamp]" placeholder="Lyric" style="width: 100%;"></td>
+                          </tr>
+                        </tbody>
+                      </template>
+                    </v-simple-table>
+                  </v-col>
+                </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
-        </v-card-text> -->
+        </v-card-text>
 
-        <v-card-actions v-if="tab != 2">
+        <v-card-actions>
           <v-btn text color="grey darken-1" @click="cancelUpload()">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="blue accent-1" @click="save()" :disabled="false">Upload</v-btn>
@@ -331,7 +360,9 @@ export default {
         length: '',
         lyrics: [],
         files: []
-      }
+      },
+      URL,
+      Object
     }
   },
   computed: {
@@ -439,7 +470,10 @@ export default {
   methods: {
     // Books
     openBook(index) {
-      this.current = this.$root.user.books[index]
+      this.current = this.filteredBooks[index]
+      const savedIndex = this.$root.user.books.findIndex(book => this.current._id === book.book_id)
+      if (savedIndex > -1) this.current.favorite = this.$root.user.books[savedIndex].favorite
+      if (savedIndex > -1) this.current.rating = this.$root.user.books[savedIndex].rating
       this.current.type = 'book'
       this.current.open = true
     },
@@ -457,7 +491,10 @@ export default {
 
     // Movies
     openMovie(index) {
-      this.current = this.$root.user.movies[index]
+      this.current = this.filteredMovies[index]
+      const savedIndex = this.$root.user.movies.findIndex(movie => this.current._id === movie.movie_id)
+      if (savedIndex > -1) this.current.favorite = this.$root.user.movies[savedIndex].favorite
+      if (savedIndex > -1) this.current.rating = this.$root.user.movies[savedIndex].rating
       this.current.type = 'movie'
       this.current.open = true
     },
@@ -475,7 +512,10 @@ export default {
 
     // Music
     openMusic(index) {
-      this.current = this.$root.user.music[index]
+      this.current = this.filteredMusic[index]
+      const savedIndex = this.$root.user.music.findIndex(music => this.current._id === music.music_id)
+      if (savedIndex > -1) this.current.favorite = this.$root.user.music[savedIndex].favorite
+      if (savedIndex > -1) this.current.rating = this.$root.user.music[savedIndex].rating
       this.current.type = 'music'
       this.current.open = true
     },
@@ -488,24 +528,90 @@ export default {
       }).catch(error => console.error(error))
     },
     playSong(song) {
-      var music = {
+      this.$root.music = [{
         artist: this.current.artist,
         cover: this.current.cover,
-        title: song.title,
+        song_title: song.title,
         genre: this.current.genre,
-        album: this.current.title,
+        album_title: this.current.title,
         lyrics: song.lyrics,
-        open: true,
         file: song.file,
-        playing: true
+        track: song.track
+      }]
+      this.$root.view.music = true
+    },
+    playAlbum() {
+      let list = []
+      this.current.songs.forEach(song => {
+        list.push({
+          artist: this.current.artist,
+          cover: this.current.cover,
+          song_title: song.title,
+          genre: this.current.genre,
+          album_title: this.current.title,
+          lyrics: song.lyrics,
+          file: song.file,
+          track: song.track
+        })
+      })
+
+      this.$root.music = list
+      this.$root.view.music = true
+    },
+    playShuffle() {
+      let new_array = []
+      let new_temp_array = JSON.parse(JSON.stringify(this.current.songs))
+      new_temp_array.forEach(song => {
+        new_array.push({
+          artist: this.current.artist,
+          cover: this.current.cover,
+          song_title: song.title,
+          genre: this.current.genre,
+          album_title: this.current.title,
+          lyrics: song.lyrics,
+          file: song.file,
+          track: song.track
+        })
+      })
+      this.$root.view.music = true
+
+      function shuffle(array) {
+        var currentIndex = array.length, temporaryValue, randomIndex
+
+        while (0 !== currentIndex) {
+
+          randomIndex = Math.floor(Math.random() * currentIndex)
+          currentIndex -= 1
+
+          temporaryValue = array[currentIndex]
+          array[currentIndex] = array[randomIndex]
+          array[randomIndex] = temporaryValue
+        }
+
+        return array
       }
-      this.$root.music = music
+
+      shuffle(new_array)
+      
+      this.$root.music = new_array
+      this.$root.view.music = true
     },
 
     // Uploading
     displayImg() {
       this.upload.cover = URL.createObjectURL(this.upload.cover_file[0])
       this.add_dialog_uploader = false
+    },
+    addLyricKeyframe(index) {
+      const audio = document.querySelector(`#audio-${index}`)
+      this.upload.songs[index].lyrics[Math.round(audio.currentTime)] = ''
+      const oldTimeStamp = audio.currentTime
+      this.$forceUpdate()
+      this.$nextTick(() => {
+        audio.currentTime = oldTimeStamp
+        audio.play()
+      console.log(audio.currentTime)
+      })
     },
     save() {
       this.add_dialog_loading = true
@@ -516,15 +622,17 @@ export default {
       // }
       if (this.tab == 0) this.upload.type = 'book'
       if (this.tab == 1) this.upload.type = 'movie'
+      if (this.tab == 2) this.upload.type = 'music'
       this.$http.post(`https://www.theparadigmdev.com/api/media/create/data`, this.upload).then(response => {
         console.log(response)
         let formData = new FormData()
         formData.append('cover', this.upload.cover_file[0])
-        formData.append('file', this.upload.file)
-        // for (var i = 0; i < this.upload.file.length; i++ ) {
-        //   let file = this.new_pic[i]
-        //   formData.append('files[' + i + ']', file)
-        // }
+        if (this.upload.type != 'music') formData.append('file', this.upload.file)
+        else {
+          this.upload.songs.forEach((song, index) => {
+            formData.append(song.track, song.upload)
+          })
+        }
         this.$http.post(`https://www.theparadigmdev.com/api/media/create/${response.data._id}/files/${this.upload.type}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
