@@ -4,7 +4,7 @@
       <v-toolbar-title style="font-family: Roboto;">Terminal</v-toolbar-title>
     </v-toolbar>
 
-    <div v-chat-scroll id="output" style="padding: 0px 16px;" :style="{ height: `calc(100vh - ${$root.music.open ? '240px' : '160px'})`, overflowY: 'auto' }">
+    <div v-chat-scroll id="output" class="px-4 pt-3" :style="{ height: `calc(100vh - ${$root.music.open ? '240px' : '160px'})`, overflowY: 'auto' }">
       <p style="font-family: Roboto Mono;" class="pb-0 pt-0 mt-0" v-for="(item, index) in history" :key="index" v-html="item"></p>
     </div>
 
