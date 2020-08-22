@@ -122,6 +122,24 @@
                 </v-fade-transition>
               </v-col>
             </v-row>
+
+            <v-row v-if="message.type === 'image' || message.type == 'video'">
+              <v-col sm="1" cols="12" class="text-right py-0">
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+              </v-col>
+              <v-col sm="10" cols="12" class="py-0">
+                <v-list-item-content class="pt-2">
+                  <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span></v-list-item-subtitle>
+                  <img v-if="message.type === 'image'" style="max-width: 250px;" :src="message.url">
+                  <video v-if="message.type === 'video'" style="max-width: 250px;" controls :src="message.url"></video>
+                </v-list-item-content>
+              </v-col>
+              <v-col sm="1" cols="12" class="py-0">
+                <v-fade-transition group>
+                  <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner== $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                </v-fade-transition>
+              </v-col>
+            </v-row>
           </v-list-item>
         </v-fade-transition>
       </v-list>
@@ -179,6 +197,29 @@
                 </v-col>
               </v-row>
             </v-container>
+
+            <v-container fluid v-if="message.type === 'image' || message.type === 'video'">
+              <v-row no-gutters align="end">
+                <v-col sm="6">
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                </v-col>
+                <v-col sm="6" class="text-right">
+                  <v-fade-transition group>
+                    <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                  </v-fade-transition>
+                </v-col>
+              </v-row>
+
+              <v-row no-gutters>
+                <v-col sm="12">
+                  <v-list-item-content>
+                    <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span></v-list-item-subtitle>
+                    <img v-if="message.type == 'image'" :src="message.url">
+                    <video v-if="message.type == 'video'" controls :src="message.url"></video>
+                  </v-list-item-content>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-list-item>
         </v-fade-transition>
       </v-list>
@@ -191,7 +232,7 @@
           <v-text-field hide-details="auto" :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" @keypress="startTyping()" @keypress.enter="sendChat()" v-model="new_message" :label="`Message ${current.name}...`"></v-text-field>
         </v-flex>
         <v-flex xs2>
-          <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" text icon @click="sendChat()"><v-icon>mdi-send</v-icon></v-btn>
+          <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" text icon @click="sendChat()" :disabled="new_message == ''"><v-icon>mdi-send</v-icon></v-btn>
           <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" text icon @click="uploader = true"><v-icon>mdi-paperclip</v-icon></v-btn>
         </v-flex>
       </v-layout>
@@ -265,6 +306,24 @@
                 </v-fade-transition>
               </v-col>
             </v-row>
+
+            <v-row v-if="message.type === 'image' || message.type == 'video'">
+              <v-col sm="1" cols="12" class="text-right py-0">
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+              </v-col>
+              <v-col sm="10" cols="12" class="py-0">
+                <v-list-item-content class="pt-2">
+                  <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span></v-list-item-subtitle>
+                  <img v-if="message.type === 'image'" style="max-width: 250px;" :src="message.url">
+                  <video v-if="message.type === 'video'" style="max-width: 250px;" controls :src="message.url"></video>
+                </v-list-item-content>
+              </v-col>
+              <v-col sm="1" cols="12" class="py-0">
+                <v-fade-transition group>
+                  <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner== $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                </v-fade-transition>
+              </v-col>
+            </v-row>
           </v-list-item>
         </v-fade-transition>
       </v-list>
@@ -319,6 +378,29 @@
                 </v-col>
               </v-row>
             </v-container>
+
+            <v-container fluid v-if="message.type === 'image' || message.type === 'video'">
+              <v-row no-gutters align="end">
+                <v-col sm="6">
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                </v-col>
+                <v-col sm="6" class="text-right">
+                  <v-fade-transition group>
+                    <v-btn key="delete" v-if="current_message == message ? message.user_id == $root.user._id ? true : current.owner == $root.user._id ? true : $root.user.rights.admin ? true : false : false" small icon color="grey darken-3" @click="deleteChat(message)"><v-icon>mdi-delete</v-icon></v-btn>
+                  </v-fade-transition>
+                </v-col>
+              </v-row>
+
+              <v-row no-gutters>
+                <v-col sm="12">
+                  <v-list-item-content>
+                    <v-list-item-subtitle><span class="pr-2" :style="{ color: message.color }">{{ message.username }}</span>•<span class="px-2">{{ message.timestamp }}</span></v-list-item-subtitle>
+                    <img v-if="message.type == 'image'" :src="message.url">
+                    <video v-if="message.type == 'video'" controls :src="message.url"></video>
+                  </v-list-item-content>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-list-item>
         </v-fade-transition>
       </v-list>
@@ -331,7 +413,7 @@
           <v-text-field hide-details="auto" :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" @keypress="startTyping()" @keypress.enter="sendChat()" v-model="new_message" :label="`Message ${current_dm_person}...`"></v-text-field>
         </v-flex>
         <v-flex xs2>
-          <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" text icon @click="sendChat()"><v-icon>mdi-send</v-icon></v-btn>
+          <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" :disabled="new_message == ''" text icon @click="sendChat()"><v-icon>mdi-send</v-icon></v-btn>
           <v-btn :style="{ marginTop: typers.length > 0 ? '0px' : '24px' }" text icon @click="uploader = true"><v-icon>mdi-paperclip</v-icon></v-btn>
         </v-flex>
       </v-layout>
@@ -408,7 +490,7 @@
 
     <v-dialog v-model="edit.open" max-width="350" @click:outside="edit = { open: false }">
       <v-card style="text-align: center">
-        <v-card-title>Edit Chat</v-card-title>
+        <v-card-title class="text-h5 font-weight-medium">EDIT CHAT</v-card-title>
         <v-card-text>
           <v-text-field hide-details="auto" @keypress.enter="editChatSave()" v-model="edit.content" label="Message content"></v-text-field>
         </v-card-text>
@@ -423,12 +505,13 @@
     <v-dialog v-model="buy_chatroom.popup" max-width="450" style="z-index: 1001;">
 			<v-card>
 				<v-card-title>
-					<h3 class="text-h5 mb-0">Buy a Chatroom</h3>
+          <v-card-title class="text-h5 font-weight-medium ma-0 pa-0">BUY A CHATROOM</v-card-title>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="buy_chatroom.popup = false" class="dialog-close-btn">
 						<v-icon>mdi-close</v-icon>
 					</v-btn>
 				</v-card-title>
+        
 				<v-card-text>
 					<v-text-field hide-details="auto" class="mb-4" v-model="buy_chatroom.name" label="Chatroom Name"></v-text-field>
           <p>Chatroom Color</p>
@@ -437,28 +520,29 @@
 					<div v-if="$root.user.moonrocks > 50">
 						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
 						<p class="green--text">You have enough moonrocks to purchase a chatroom.</p>
-						<p>New Balance: <span class="font-weight-light">{{ $root.user.moonrocks - 50 }} Moonrocks</span></p>
+						<p class="mb-0">New Balance: <span class="font-weight-light">{{ $root.user.moonrocks - 50 }} Moonrocks</span></p>
 					</div>
 					<div v-if="$root.user.moonrocks == 50">
 						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
-						<p class="orange--text">You have just enough moonrocks to purchase a chatroom.</p>
+						<p class="orange--text mb-0">You have just enough moonrocks to purchase a chatroom.</p>
 					</div>
 					<div v-if="$root.user.moonrocks < 50">
 						<img src="@/assets/moonrocks.png" alt="Moonrocks" class="moonrock-img"><span class="moonrock-count font-weight-medium red--text">- 50</span>
-						<p class="red--text">You do <b>not</b> have enough moonrocks to purchase a chatroom.</p>
+						<p class="red--text mb-0">You do <b>not</b> have enough moonrocks to purchase a chatroom.</p>
 					</div>
 				</v-card-text>
-				<v-divider></v-divider>
+
 				<v-card-actions>
-					<v-btn @click="buyChatroom()" color="warning" text>Buy</v-btn>
-					<v-btn @click="buy_chatroom.popup = false" text color="blue accent-1">Cancel</v-btn>
+					<v-btn @click="buy_chatroom = { popup: false }" text color="grey darken-1">Cancel</v-btn>
+          <v-spacer></v-spacer>
+					<v-btn @click="buyChatroom()" color="blue accent-1" text>Buy</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
 
     <v-dialog v-model="delete_verify_popup" max-width="350">
 			<v-card color="orange">
-				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
+        <v-card-title class="text-h5 font-weight-medium">CONFIRM</v-card-title>
 				<v-card-text>Are you sure you want to delete this chatroom? A refund will not be issued.</v-card-text>
 				<v-card-actions>
 					<v-btn @click="delete_verify_popup = false" color="grey darken-1" text>Cancel</v-btn>
@@ -470,7 +554,7 @@
 
     <v-dialog v-model="purge_confirm" max-width="350">
 			<v-card color="orange">
-				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
+        <v-card-title class="text-h5 font-weight-medium">CONFIRM</v-card-title>
 				<v-card-text>Are you sure you want to purge this chatroom? All messages will be deleted.</v-card-text>
 				<v-card-actions>
 					<v-btn @click="purge_confirm = false" color="grey darken-2" text>Cancel</v-btn>
@@ -482,7 +566,7 @@
 
     <v-dialog v-model="uploader" max-width="350">
 			<v-card>
-				<v-card-title class="title text-center font-weight-medium text-uppercase">Upload File</v-card-title>
+        <v-card-title class="text-h5 font-weight-medium">UPLOAD FILE</v-card-title>
 				<v-card-text><v-file-input prepend-icon="" id="file" ref="file" v-model="file" multiple label="Upload..."></v-file-input></v-card-text>
 				<v-card-actions>
 					<v-btn @click="uploader = false; file = null" color="grey darken-1" text>Cancel</v-btn>
@@ -501,7 +585,7 @@
 
     <v-dialog v-if="current && !current_dm" v-model="people_dialog" style="z-index: 1000;" max-width="500">
       <v-card>
-        <v-card-title>People</v-card-title>
+        <v-card-title class="text-h5 font-weight-medium">PEOPLE</v-card-title>
         <v-card-text>
           Approved
           <v-list>
@@ -901,7 +985,7 @@ export default {
             }
           }
         ).then(response => {
-          socket.emit('send', {
+          let data = {
             color: this.$root.user.color,
             username: this.$root.user.username,
             user_id: this.$root.user._id,
@@ -909,8 +993,12 @@ export default {
             timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             content: this.file[0].name,
             url: `https://www.theparadigmdev.com/relay/flamechat/dm/${this.current_dm}/${this.file[0].name}`,
-            type: 'file'
-          })
+            type: ''
+          }
+          if (this.file[0].type.includes('image')) data.type = 'image'
+          else if (this.file[0].type.includes('video')) data.type = 'video'
+          else data.file_type[0] = 'file'
+          socket.emit('send', data)
           this.upload_file_loading = false
           this.file = null
           this.uploader = false
