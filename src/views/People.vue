@@ -13,7 +13,7 @@
             <v-col sm="6" md="4" cols="12" v-for="(user, index) in filtered_people" :key="index" class="text-center">
               <v-card @click="$root.profile = user" class="pa-4 fill-height">
                 <v-badge bordered bottom offset-x="30" offset-y="30" color="green" :value="user.in">
-                  <v-avatar size="150px"><img loading="lazy" style="border-radius: 150px;" :src="user.pic"></v-avatar>
+                  <v-avatar size="150px"><img loading="lazy" style="border-radius: 150px;" :src="`https://www.theparadigmdev.com/relay/profile-pics/${user._id}.jpg`"></v-avatar>
                 </v-badge>
                 <h1 class="mt-6 text-h4 font-weight-medium" :style="{ color: user.color }">{{ user.username }}</h1>
                 <p class="mt-1 grey--text">{{ user.bio }}</p>
@@ -26,7 +26,7 @@
               <v-btn class="mt-n2 mb-2" color="grey" text @click="$root.profile = false"><v-icon left>mdi-chevron-left</v-icon>Back</v-btn><br>
               <div class="text-center">
                 <v-badge bordered bottom offset-x="30" offset-y="30" color="green" :value="$root.profile.in">
-                  <v-avatar size="150px"><img loading="lazy" style="border-radius: 150px;" :src="$root.profile.pic"></v-avatar>
+                  <v-avatar size="150px"><img loading="lazy" style="border-radius: 150px;" :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.profile._id}.jpg`"></v-avatar>
                 </v-badge>
                 <h1 class="mt-6 text-h4 font-weight-medium" :style="{ color: $root.profile.color }">{{ $root.profile.username }}</h1>
                 <p class="grey--text">{{ $root.profile.bio }}</p>
@@ -41,6 +41,9 @@
             <v-col xs="12" md="8" cols="12">
               <p class="grey--text text-center">Broadcasts</p>
               <v-card class="mx-auto my-6" color="indigo darken-3" max-width="400" v-for="(post, index) in $root.profile.posts" :key="index">
+                <v-img :src="`https://www.theparadigmdev.com/relay/broadcast/${$root.user._id}/${post.file_path}`" v-if="post.file_type == 'image'"></v-img>
+                <video :src="`https://www.theparadigmdev.com/relay/broadcast/${$root.user._id}/${post.file_path}`" v-if="post.file_type == 'video'" controls style="max-width: 500px;"></video>
+
                 <v-card-text class="text-h5" v-html="post.content"></v-card-text>
 
                 <v-card-actions>
@@ -48,7 +51,7 @@
                     <v-col>
                       <v-list-item class="grow">
                         <v-list-item-avatar color="grey darken-3">
-                          <v-img class="elevation-6" loading="lazy" :src="$root.profile.pic"></v-img>
+                          <v-img class="elevation-6" loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.profile._id}.jpg`"></v-img>
                         </v-list-item-avatar>
 
                         <v-list-item-content>
@@ -58,7 +61,8 @@
                       </v-list-item>
                     </v-col>
 
-                    <v-col class="text-right" v-if="profile_index">
+                    <v-col class="text-right" v-if="profile_index && $root.user.people.approved[profile_index]._id == $root.profile._id">
+                      <v-btn v-if="post.file_path && post.file_type == 'file'" icon @click="window.open(`https://www.theparadigmdev.com/relay/broadcast/${$root.user._id}/${post.file_path}`)"><v-icon>mdi-download</v-icon></v-btn>
                       <v-btn @click="$root.user.people.approved[profile_index].liked_posts.includes(post._id) ? unLikePost(post._id, index) : likePost(post._id, index)" :input-value="$root.user.people.approved[profile_index].liked_posts.includes(post._id)" class="mr-1" icon>
                         <v-icon>{{ $root.user.people.approved[profile_index].liked_posts.includes(post._id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
                       </v-btn>
@@ -78,12 +82,12 @@
 
     <v-dialog max-width="350" v-model="block_confirmer">
       <v-card color="orange">
-				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm</v-card-title>
+        <v-card-title class="text-h5 font-weight-medium">CONFIRM</v-card-title>
         <v-card-text>
           If you block {{ $root.profile.username }}, you won't see any of their Broadcasts nor be able to DM them. But, you will still see their posts in a chatroom.
         </v-card-text>
         <v-card-actions>
-          <v-btn text color="grey darken-1">Cancel</v-btn>
+          <v-btn text color="grey darken-1" @click="block_confirmer = false">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-btn text @click="blockPerson()">Confirm</v-btn>
         </v-card-actions>
@@ -141,6 +145,7 @@ export default {
       var is = false
       this.$root.user.people.sent.forEach(person => {
         if (this.$root.profile._id === person._id) is = true
+        this.profile_index = null
       })
       return is
     },
@@ -148,6 +153,7 @@ export default {
       var is = false
       this.$root.user.people.blocked.forEach(person => {
         if (this.$root.profile._id === person._id) is = true
+        this.profile_index = null
       })
       return is
     }
@@ -172,7 +178,11 @@ export default {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/send/${this.$root.profile._id}`)
     },
     removeFriend() {
-      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${this.$root.profile._id}`).then(response => this.$root.user.people = response.data).catch(error => console.error(error))
+      this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${this.$root.profile._id}`).then(response => {
+        this.$root.user = response.data.user
+        this.$root.profile = response.data.profile
+        this.profile_index = null
+      }).catch(error => console.error(error))
     },
     blockPerson() {
       this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/block/${this.$root.profile._id}`).then(response => { this.$root.user.people = response.data; this.$root.profile = false; this.block_confirmer = false; }).catch(error => console.error(error))
@@ -181,14 +191,12 @@ export default {
       this.$http.get(`https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/like/${this.$root.profile._id}/${id}`).then(response => {
         this.$root.profile = response.data.profile
         this.$root.user = response.data.user
-        this.$root.profile.posts[index].likes++
       }).catch(error => console.error(error))
     },
     unLikePost(id, index) {
       this.$http.get(`https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/unlike/${this.$root.profile._id}/${id}`).then(response => {
         this.$root.profile = response.data.profile
         this.$root.user = response.data.user
-        this.$root.profile.posts[index].likes--
       }).catch(error => console.error(error))
     }
   }
