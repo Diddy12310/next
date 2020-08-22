@@ -138,6 +138,14 @@ export default {
           socket.emit('moonrocks', { username, value: parseInt(value, 10) })
           this.$log(`user ${username}.moonrocks incremented by ${value}`)
           break
+        case 'rename':
+          this.$http.post('https://www.theparadigmdev.com/api/users/update', {
+            old: username.toLowerCase(),
+            username: value.toLowerCase()
+          }).then(response => {
+            this.$log(`user ${username} username changed to ${value}`)
+          }).catch(error => console.error(error))
+          break
         default:
           this.$error(`command ${key} not found`)
       }
@@ -146,7 +154,7 @@ export default {
       this.$http.get(`https://www.theparadigmdev.com/api/terminal/list/${query}`).then(response => {
         if (response.data.error) this.$error(response.data.error)
         else this.$log(response.data.toString())
-      })
+      }).catch(error =>  this.$error(`query ${query} does not exist`))
     },
     ban(ip) {
       socket.emit('ip', ip)
