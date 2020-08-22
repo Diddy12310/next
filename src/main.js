@@ -89,7 +89,8 @@ new Vue({
         buggy_dialog: false,
         quote: false,
         transmission: false,
-        bug_report: false
+        bug_report: false,
+        support: false
       },
       socket,
       profile: false,

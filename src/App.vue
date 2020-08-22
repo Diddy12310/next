@@ -18,7 +18,7 @@
 							<template v-slot:activator="{ on }">
 								<v-list-item @click="$root.router = 'account'" :input-value="$root.router == 'account'" value="account" v-on="on" two-line v-ripple class="my-n2" style="cursor: pointer;">
 									<v-list-item-avatar class="my-0">
-										<object style="height: 40px;" :data="$root.user.pic" type="image/png">
+										<object style="height: 40px;" :data="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg`" type="image/png">
 											<img src="./assets/default.png">
 										</object>
 										<img :src="$root.user.pic ? $root.user.pic : './assets/default.png'">
@@ -99,20 +99,12 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="red" @click="window.open('mailto:paradigmdevelop@gmail.com')">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="red" @click="$root.view.support = true">
 								<v-icon>mdi-lifebuoy</v-icon>
 							</v-btn>
 						</template>
 						<span>Support</span>
 					</v-tooltip>
-					<!-- <v-tooltip top open-delay="1000">
-						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="lime" @click="window.open('https://github.com/Paradigm-Dev/paradigm/issues/new')">
-								<v-icon>mdi-bug</v-icon>
-							</v-btn>
-						</template>
-						<span>Report a Bug</span>
-					</v-tooltip> -->
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn small v-on="on" class="my-2 mr-2" icon color="lime" @click="$root.view.bug_report = true">
@@ -184,6 +176,7 @@
 		</v-dialog>
 
 		<bug-report style="z-index: 1000;"></bug-report>
+		<support style="z-index: 1000;"></support>
 
 		<v-bottom-sheet v-if="$root.transmission" v-model="$root.view.transmission" persistent style="z-index: 1002;">
       <v-sheet class="text-center" height="200px">
@@ -198,6 +191,7 @@
 <script>
 import Router from '@/Router'
 import MusicPlayer from '@/components/MusicPlayer.vue'
+import Support from '@/components/Support.vue'
 import BugReport from '@/components/BugReport.vue'
 import Terms from '@/components/Terms.vue'
 import moment from 'moment'
@@ -209,6 +203,7 @@ export default {
     'router': Router,
     'music-player': MusicPlayer,
     'bug-report': BugReport,
+    'support': Support,
     'terms': Terms
   },
   data() {
