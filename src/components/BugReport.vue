@@ -41,6 +41,7 @@ export default {
   methods: {
     submit() {
       this.new_bug.username = this.$root.user.username
+      this.new_bug.uid = this.$root.user._id
       this.$http.post(`https://www.theparadigmdev.com/api/bugs/${this.$root.user._id}`, this.new_bug).then(response => {
         this.$root.view.bug_report = false
         this.new_bug = {}

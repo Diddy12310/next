@@ -324,7 +324,7 @@
 			</v-card>
 		</v-dialog>
 
-    <v-btn fab fixed bottom right @click="add_dialog = true" v-if="tab < 3"><v-icon>mdi-plus</v-icon></v-btn>
+    <v-btn color="deep-purple" fab fixed bottom right @click="add_dialog = true" v-if="tab < 3"><v-icon>mdi-plus</v-icon></v-btn>
   </div>
 </template>
 

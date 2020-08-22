@@ -277,7 +277,7 @@
             </v-card>
           </v-col>
           <v-col sm="6">
-            <v-card class="fill-height">
+            <v-card class="fill-height" style="border: #F44336 2px solid;">
               <v-card-text class="text-center">
                 <p class="text-left">Danger Zone</p>
                 <v-btn style="margin: 95px 0px 95px 0px;" color="red" @click="delete_dialog = true">Delete Account</v-btn>

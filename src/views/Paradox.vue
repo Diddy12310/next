@@ -8,7 +8,8 @@
 
 		<div :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
 			<v-container>
-				<p class="text-center font-italic grey--text mt-12" v-if="filteredNews.length <= 0">No articles.</p>
+				<p class="text-center font-italic grey--text mt-12" v-if="filteredNews.length <= 0">No articles have been published yet.</p>
+				<p class="text-center font-italic grey--text" v-if="filteredNews.length <= 0 && $root.user.rights.author">Why don't you create one? Click the plus button.</p>
 
 				<v-card v-for="item in filteredNews" :key="item.id" class="news-home" @click="setNews(item)">
 					<div v-if="item.live">
