@@ -66,10 +66,10 @@
                       <v-btn @click="$root.user.people.approved[profile_index].liked_posts.includes(post._id) ? unLikePost(post._id, index) : likePost(post._id, index)" :input-value="$root.user.people.approved[profile_index].liked_posts.includes(post._id)" class="mr-1" icon>
                         <v-icon>{{ $root.user.people.approved[profile_index].liked_posts.includes(post._id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
                       </v-btn>
-                      <span class="subheading mr-2">{{ post.likes }}</span>
-                      <span class="mr-1">·</span>
+                      <span class="subheading mr-6">{{ post.likes }}</span>
+                      <!-- <span class="mr-1">·</span>
                       <v-btn class="mr-1" icon disabled><v-icon>mdi-share-variant</v-icon></v-btn>
-                      <span class="subheading mr-6 grey--text">{{ post.reposts }}</span>
+                      <span class="subheading mr-6 grey--text">{{ post.reposts }}</span> -->
                     </v-col>
                   </v-row>
                 </v-card-actions>

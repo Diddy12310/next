@@ -54,10 +54,10 @@
                 <v-btn icon @click="edit = post; edit.open = true"><v-icon>mdi-pencil</v-icon></v-btn>
                 <v-btn icon class="mr-2" @click="remove(post._id)"><v-icon>mdi-delete</v-icon></v-btn>
                 <v-icon class="mr-1">mdi-heart</v-icon>
-                <span class="subheading mr-2">{{ post.likes }}</span>
-                <span class="mr-1">·</span>
+                <span class="subheading mr-6">{{ post.likes }}</span>
+                <!-- <span class="mr-1">·</span>
                 <v-icon class="mr-1 grey--text">mdi-share-variant</v-icon>
-                <span class="subheading mr-6 grey--text">{{ post.reposts }}</span>
+                <span class="subheading mr-6 grey--text">{{ post.reposts }}</span> -->
               </v-col>
             </v-row>
           </v-card-actions>
