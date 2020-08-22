@@ -278,7 +278,7 @@
 
     <v-dialog v-model="add_dialog_uploader" max-width="350">
 			<v-card>
-				<v-card-title class="title text-center font-weight-medium text-uppercase">Upload Image</v-card-title>
+        <v-card-title class="text-h5 font-weight-medium">UPLOAD IMAGE</v-card-title>
 				<v-card-text><v-file-input accept="image/*" prepend-icon="" id="file" ref="file" v-model="upload.cover_file" multiple label="Upload..."></v-file-input></v-card-text>
 				<v-card-actions>
 					<v-btn @click="add_dialog_uploader = false; file = null" color="grey darken-1" text>Cancel</v-btn>

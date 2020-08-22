@@ -53,7 +53,7 @@
 		<v-dialog v-model="new_news.open" max-width="500">
 			<v-card>
 				<v-card-title>
-					<h3 class="text-h5 mb-0">Write a Story</h3>
+        <v-card-title class="text-h5 font-weight-medium ma-0 pa-0">NEW STORY</v-card-title>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="new_news.open = false" class="dialog-close-btn">
 						<v-icon>mdi-close</v-icon>
@@ -67,8 +67,8 @@
 					<p class="grey--text font-weight-light" v-if="new_news.cover">Does the story's cover display correctly?</p>
 					<v-img max-width="200" loading="lazy" :src="new_news.cover" v-if="new_news.cover"></v-img>
 				</v-card-text>
-				<v-divider></v-divider>
 				<v-card-actions>
+					<v-spacer></v-spacer>
 					<v-btn :disabled="!new_news.title || !new_news.content || !new_news.cover" text color="blue accent-1" @click="addNews()">Submit</v-btn>
 				</v-card-actions>
 			</v-card>

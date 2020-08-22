@@ -2,7 +2,7 @@
   <div class="bug">
     <v-dialog v-if="$root.user" v-model="$root.view.bug_report" max-width="500" @click:outside="$root.view.bug_report = false; new_bug = {}">
       <v-card>
-        <v-card-title>Report a Bug</v-card-title>
+      <v-card-title class="text-h5 font-weight-medium">REPORT A BUG</v-card-title>
 
         <v-card-text>
           <v-text-field hide-details="auto" class="mb-4" label="Title" v-model="new_bug.title"></v-text-field>

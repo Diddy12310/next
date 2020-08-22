@@ -291,7 +291,7 @@
 
     <v-dialog v-model="uploader" max-width="350">
       <v-card>
-				<v-card-title class="title text-center font-weight-medium text-uppercase">Profile Picture</v-card-title>
+      <v-card-title class="text-h6 font-weight-medium">PROFILE PICTURE</v-card-title>
         <v-card-text>
           <v-file-input prepend-icon="" id="file" ref="file" v-model="new_pic" multiple label="Upload..."></v-file-input>
           <p class="text-center mb-0">This will take effect the next time you log in.</p>
@@ -312,8 +312,8 @@
     </v-dialog>
 
     <v-dialog v-model="delete_dialog" max-width="350">
-      <v-card color="red" class="text-center">
-				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm Delete</v-card-title>
+      <v-card color="red">
+      <v-card-title class="text-h6 font-weight-medium">CONFIRM</v-card-title>
         <v-card-text>
           <v-checkbox label="By checking this box, you acknowledge that deleting your account is irreversible. Your drawer files will be deleted. Your data will be deleted." color="white" v-model="delete_verify"></v-checkbox>
           <p class="text-center mb-0"></p>
@@ -328,7 +328,7 @@
 
     <v-dialog v-model="apollo_unenroll_dialog" max-width="350">
       <v-card color="red">
-				<v-card-title class="title text-center font-weight-medium text-uppercase">Confirm Unenroll</v-card-title>
+        <v-card-title class="text-h6 font-weight-medium">CONFIRM</v-card-title>
         <v-card-text>
           By unerolling your account from the Apollo Beta Testing Program, you will lose all exclusive features and rights until you receive another invite code.
           Your personal information that you submitted when you started testing will be deleted at midnight, tonight.

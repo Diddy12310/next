@@ -5,7 +5,7 @@
     </v-card>
 
     <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'in'">
-      <v-card-title class="text-h4 font-weight-light">Sign in</v-card-title>
+      <v-card-title class="text-h5 font-weight-medium">SIGN IN</v-card-title>
 
       <v-card-text>
         <v-text-field hide-details="auto" class="mb-4" @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
@@ -23,7 +23,7 @@
     </v-card>
 
     <v-card width="500" class="mx-auto elevation-12" :style="{ margin: $vuetify.breakpoint.smAndUp ? '100px 0px 100px 0px' : '0px' }" v-if="method == 'up'">
-      <v-card-title class="text-h4 font-weight-light">Sign up</v-card-title>
+      <v-card-title class="text-h5 font-weight-medium">SIGN UP</v-card-title>
 
       <v-card-text>
         <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden" v-if="!invite_code_verified" class="text-center">
