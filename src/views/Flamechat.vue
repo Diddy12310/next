@@ -995,9 +995,9 @@ export default {
             url: `https://www.theparadigmdev.com/relay/flamechat/dm/${this.current_dm}/${this.file[0].name}`,
             type: ''
           }
-          if (this.file[0].type.includes('image')) data.type = 'image'
-          else if (this.file[0].type.includes('video')) data.type = 'video'
-          else data.file_type[0] = 'file'
+          if (this.file.type.includes('image')) data.type = 'image'
+          else if (this.file.type.includes('video')) data.type = 'video'
+          else data.type = 'file'
           socket.emit('send', data)
           this.upload_file_loading = false
           this.file = null
@@ -1015,7 +1015,7 @@ export default {
             }
           }
         ).then(response => {
-          socket.emit('send', {
+          let data = {
             color: this.$root.user.color,
             username: this.$root.user.username,
             user_id: this.$root.user._id,
@@ -1023,8 +1023,13 @@ export default {
             timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             content: this.file[0].name,
             url: `https://www.theparadigmdev.com/relay/flamechat/chatroom/${this.current_id}/${this.file[0].name}`,
-            type: 'file'
-          })
+            type: ''
+          }
+          if (this.file[0].type.includes('image')) data.type = 'image'
+          else if (this.file[0].type.includes('video')) data.type = 'video'
+          else data.type = 'file'
+          socket.emit('send', data)
+          this.upload_file_loading = false
           this.file = null
           this.uploader = false
         })
