@@ -5,15 +5,14 @@
     </v-card>
 
     <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'in'">
-      <v-card-title class="text-h4 font-weight-light">Sign in</v-card-title>
+      <v-card-title class="text-h4 font-weight-medium">SIGN IN</v-card-title>
 
       <v-card-text>
         <v-text-field hide-details="auto" class="mb-4" @keyup="checkIfUserExists()" v-model="username" label="Username" ref="username_field"></v-text-field>
         <v-text-field hide-details="auto" :disabled="!user_auth_info.exists && !user_auth_info.in" v-model="password" label="Password" type="password" @keypress.enter="signIn()"></v-text-field>
-        <p class="grey--text text-center mt-4">By logging in, you agree to the <a @click="$root.view.terms = true">Terms and Conditions</a>.</p>
-        <p v-if="$root.config.reset" class="grey--text text-center">Can't remember your password? Oh well.</p>
-        <p v-if="$root.config.sign_up" class="grey--text text-center">If you had an old Paradigm v0.1.x account, you have to <a @click.prevent="method = 'up'">create a new one</a>.</p>
-        <p v-if="$root.config.sign_up" class="grey--text text-center">Don't have an account? <a @click.prevent="method = 'up'">Sign up</a>.</p>
+        <p class="grey--text text-center mt-4 mb-2">By logging in, you agree to the <a @click="$root.view.terms = true">Terms and Conditions</a>.</p>
+        <p v-if="$root.config.reset" class="grey--text text-center mb-2">Can't remember your password? <a @click="method = 'recover'">Enter account recovery</a>.</p>
+        <p v-if="$root.config.sign_up" class="grey--text text-center mb-2">Don't have an account? <a @click.prevent="method = 'up'">Sign up</a>.</p>
       </v-card-text>
 
       <v-card-actions>
@@ -23,7 +22,7 @@
     </v-card>
 
     <v-card width="500" class="mx-auto elevation-12" :style="{ margin: $vuetify.breakpoint.smAndUp ? '100px 0px 100px 0px' : '0px' }" v-if="method == 'up'">
-      <v-card-title class="text-h4 font-weight-light">Sign up</v-card-title>
+      <v-card-title class="text-h4 font-weight-medium">SIGN UP</v-card-title>
 
       <v-card-text>
         <div :style="{ maxHeight: '50vh' }" style="overflow-y: auto; overflow-x: hidden" v-if="!invite_code_verified" class="text-center">
@@ -60,6 +59,19 @@
         <v-btn @click="signUp()" text color="blue accent-1"
           :disabled="!new_user.username || new_user.password != new_user.password_confirm || !new_user.color || !new_user.bio || !(new_user.pic || use_default) || !new_user.terms"
         >Sign up</v-btn>
+      </v-card-actions>
+    </v-card>
+
+    <v-card width="500" class="mx-auto elevation-12" style="margin-top: 100px;" v-if="method == 'recover'">
+      <v-card-title class="text-h4 font-weight-medium">ACCOUNT RECOVERY</v-card-title>
+
+      <v-card-text>
+        <p class="text-center mt-6 mb-5">Automated account recovery has yet to be developed.<br>Please <a href="mailto:paradigmdevelop@gmail.com">contact support</a> to recover your account.</p>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-btn @click="method = 'in'" text color="blue accent-1"><v-icon left>mdi-chevron-left</v-icon>Go back</v-btn>
+        <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
 

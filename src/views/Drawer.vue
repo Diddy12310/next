@@ -47,7 +47,7 @@
 
     <v-dialog v-model="rename.open" max-width="350" @click:outside="rename = { open: false }">
       <v-card style="text-align: center">
-        <v-card-title>Rename File</v-card-title>
+        <v-card-title class="text-h5 font-weight-medium">RENAME</v-card-title>
         <v-card-text>
           <v-text-field hide-details="auto" class="mb-1" @keypress.enter="renameFile(rename._id)" v-model="rename.name" label="File name"></v-text-field>
         </v-card-text>

@@ -8,7 +8,8 @@
 
 		<div :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
 			<v-container>
-				<p class="text-center font-italic grey--text mt-12" v-if="filteredNews.length <= 0">No articles.</p>
+				<p class="text-center font-italic grey--text mt-12" v-if="filteredNews.length <= 0">No articles have been published yet.</p>
+				<p class="text-center font-italic grey--text" v-if="filteredNews.length <= 0 && $root.user.rights.author">Why don't you create one? Click the plus button.</p>
 
 				<v-card v-for="item in filteredNews" :key="item.id" class="news-home" @click="setNews(item)">
 					<div v-if="item.live">
@@ -53,7 +54,7 @@
 		<v-dialog v-model="new_news.open" max-width="500">
 			<v-card>
 				<v-card-title>
-					<h3 class="text-h5 mb-0">Write a Story</h3>
+        <v-card-title class="text-h5 font-weight-medium ma-0 pa-0">NEW STORY</v-card-title>
 					<v-spacer></v-spacer>
 					<v-btn icon @click="new_news.open = false" class="dialog-close-btn">
 						<v-icon>mdi-close</v-icon>
@@ -67,8 +68,8 @@
 					<p class="grey--text font-weight-light" v-if="new_news.cover">Does the story's cover display correctly?</p>
 					<v-img max-width="200" loading="lazy" :src="new_news.cover" v-if="new_news.cover"></v-img>
 				</v-card-text>
-				<v-divider></v-divider>
 				<v-card-actions>
+					<v-spacer></v-spacer>
 					<v-btn :disabled="!new_news.title || !new_news.content || !new_news.cover" text color="blue accent-1" @click="addNews()">Submit</v-btn>
 				</v-card-actions>
 			</v-card>

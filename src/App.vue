@@ -18,7 +18,7 @@
 							<template v-slot:activator="{ on }">
 								<v-list-item @click="$root.router = 'account'" :input-value="$root.router == 'account'" value="account" v-on="on" two-line v-ripple class="my-n2" style="cursor: pointer;">
 									<v-list-item-avatar class="my-0">
-										<object style="height: 40px;" :data="$root.user.pic" type="image/png">
+										<object style="height: 40px;" :data="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg`" type="image/png">
 											<img src="./assets/default.png">
 										</object>
 										<img :src="$root.user.pic ? $root.user.pic : './assets/default.png'">
@@ -99,20 +99,12 @@
 					</v-tooltip>
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="red" @click="window.open('mailto:paradigmdevelop@gmail.com')">
+							<v-btn small v-on="on" class="my-2 mr-2" icon color="red" @click="$root.view.support = true">
 								<v-icon>mdi-lifebuoy</v-icon>
 							</v-btn>
 						</template>
 						<span>Support</span>
 					</v-tooltip>
-					<!-- <v-tooltip top open-delay="1000">
-						<template v-slot:activator="{ on }">
-							<v-btn small v-on="on" class="my-2 mr-2" icon color="lime" @click="window.open('https://github.com/Paradigm-Dev/paradigm/issues/new')">
-								<v-icon>mdi-bug</v-icon>
-							</v-btn>
-						</template>
-						<span>Report a Bug</span>
-					</v-tooltip> -->
 					<v-tooltip top open-delay="1000">
 						<template v-slot:activator="{ on }">
 							<v-btn small v-on="on" class="my-2 mr-2" icon color="lime" @click="$root.view.bug_report = true">
@@ -159,8 +151,8 @@
 		</v-main>
 
 		<v-slide-y-reverse-transition>
-			<v-footer app style="z-index: 1001;" class="pa-0" v-show="$root.music.open" v-if="$root.music.playing">
-				<music-player style="width: 100vw; filter: none;" :autoPlay="true" :file="$root.music.file" />
+			<v-footer app style="z-index: 1001;" class="pa-0" v-if="$root.view.music && $root.music[0]">
+				<music-player style="width: 100vw; filter: none;" :ended="_handleNextSong" />
 			</v-footer>
 		</v-slide-y-reverse-transition>
 
@@ -174,7 +166,7 @@
 
 		<v-dialog v-model="$root.view.buggy_dialog" max-width="350" style="z-index: 1000;">
 			<v-card color="orange">
-				<v-card-title class="title text-center font-weight-medium text-uppercase">Warning</v-card-title>
+				<v-card-title class="text-h5 text-center font-weight-medium text-uppercase">Warning</v-card-title>
 				<v-card-text>This is experimental software. By continuing, you acknowledge the risk involved. If you have any questions or concerns, please contact support.</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
@@ -184,6 +176,7 @@
 		</v-dialog>
 
 		<bug-report style="z-index: 1000;"></bug-report>
+		<support style="z-index: 1000;"></support>
 
 		<v-bottom-sheet v-if="$root.transmission" v-model="$root.view.transmission" persistent style="z-index: 1002;">
       <v-sheet class="text-center" height="200px">
@@ -198,6 +191,7 @@
 <script>
 import Router from '@/Router'
 import MusicPlayer from '@/components/MusicPlayer.vue'
+import Support from '@/components/Support.vue'
 import BugReport from '@/components/BugReport.vue'
 import Terms from '@/components/Terms.vue'
 import moment from 'moment'
@@ -209,6 +203,7 @@ export default {
     'router': Router,
     'music-player': MusicPlayer,
     'bug-report': BugReport,
+    'support': Support,
     'terms': Terms
   },
   data() {
@@ -251,6 +246,10 @@ export default {
 		acceptTransmissionCall() {
 			this.$root.view.transmission = false
 			this.$root.router = 'transmission'
+		},
+		_handleNextSong() {
+			this.$root.music.shift()
+			if (!this.$root.music[0]) this.$root.view.music = false
 		}
   },
   created() {

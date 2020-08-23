@@ -1,16 +1,16 @@
 <template>
-  <v-card tile color="transparent" @keypress.space="playing ? pause() : play()">
+  <v-card tile color="transparent" @keypress.space="playing ? pause() : play()" v-if="$root.music[0]">
 		<!-- <div :style="{ backgroundImage: `url('${$root.music.cover}')`, filter: `blur(10px)`, backgroundPosition: 'center', backgroundSize: 'cover', height: '80px', width: '100vw', position: 'absolute', bottom: '0px' }"></div> -->
 
-    <v-slider ref="slider" @click.native="setPosition()" v-on:change="setPosition()" v-model="percentage"></v-slider>
+    <v-slider fluid :height="2" class="pa-0 ma-0" style="width: 100vw;" dense hide-details ref="slider" @click.native="setPosition()" v-on:change="setPosition()" v-model="percentage"></v-slider>
 
     <v-layout fill-height wrap align-center>
       <v-flex sm4 xs12>
         <div :class="{ 'd-flex': true, 'align-center': true, 'text-center mt-2': $vuetify.breakpoint.xsOnly }">
-          <img style="height: 80px !important; width: 80px !important;" class="hidden-xs-only" :src="$root.music.cover">
+          <img style="height: 80px !important; width: 80px !important;" class="hidden-xs-only" :src="$root.music[0].cover">
           <div :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }" style="width: 100%;">
-            <h3 class="text-h5 mb-0">{{ $root.music.title }}</h3>
-            <h4 class="text-body-1 font-weight-regular grey--text">{{ $root.music.artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music.album }}</h4>
+            <h3 class="text-h5 mb-0">{{ $root.music[0].song_title }}</h3>
+            <h4 class="text-body-1 font-weight-regular grey--text">{{ $root.music[0].artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{ $root.music[0].album_title }}</h4>
           </div>
         </div>
       </v-flex>
@@ -18,7 +18,7 @@
       <v-flex sm4 xs12>
         <div class="align-center">
           <v-scroll-y-reverse-transition group mode="in-out" hide-on-leave>
-            <p class="text-h6 text-center my-0" v-if="lyrics && $root.music.lyrics" :key="lyricTime">{{ $root.music.lyrics[lyricTime] }}</p>
+            <p class="text-h6 text-center my-0" v-if="lyrics && $root.music[0].lyrics" :key="lyricTime">{{ $root.music[0].lyrics[lyricTime] }}</p>
           </v-scroll-y-reverse-transition>
         </div>
       </v-flex>
@@ -46,7 +46,7 @@
         <v-btn v-if="$root.user.rights.asteroid" text icon class="primary--text" @click.native="download()">
           <v-icon>mdi-download</v-icon>
         </v-btn>
-        <v-btn text icon class="primary--text" :input-value="lyrics" @click.native="lyrics = !lyrics" v-if="$root.music.lyrics">
+        <v-btn text icon class="primary--text" :input-value="lyrics" @click.native="lyrics = !lyrics" v-if="$root.music[0].lyrics">
           <v-icon>mdi-closed-caption</v-icon>
         </v-btn>
         <v-btn text icon class="primary--text" @click.native="clearSession()">
@@ -55,7 +55,7 @@
       </v-flex>
     </v-layout>
 
-    <audio id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="file"></audio>
+    <audio id="player" ref="player" v-on:ended="ended" v-on:canplay="canPlay" :src="$root.music[0].file"></audio>
   </v-card>
 </template>
 
@@ -143,13 +143,10 @@ export default {
     },
     _handleLoaded() {
       if (this.audio.readyState >= 2) {
-        if (this.autoPlay) {
-          this.audio.play()
-          this.paused = false
-          this.playing = true
-          if (this.$root.music.lyrics) this.lyrics = true
-          this.refreshTitle()
-        }
+        this.audio.play()
+        this.paused = false
+        this.playing = true
+        if (this.$root.music[0].lyrics) this.lyrics = true
         this.loaded = true
         this.totalDuration = parseInt(this.audio.duration)
         this.refreshTitle()
@@ -160,8 +157,8 @@ export default {
     _handlePlayingUI(e) {
       this.percentage = this.audio.currentTime / this.audio.duration * 100
       this.currentTime = formatTime(this.audio.currentTime)
-      if (this.$root.music.lyrics) {
-        if (this.$root.music.lyrics[Math.round(this.audio.currentTime)]) this.lyricTime = Math.round(this.audio.currentTime)
+      if (this.$root.music[0].lyrics) {
+        if (this.$root.music[0].lyrics[Math.round(this.audio.currentTime)]) this.lyricTime = Math.round(this.audio.currentTime)
       }
       // console.log(Math.round(this.audio.currentTime))
       this.refreshTitle()
@@ -192,12 +189,13 @@ export default {
       this.refreshTitle()
     },
     clearSession() {
-      this.$root.music = {}
+      this.$root.view.music = false
+      this.$root.music = []
       this.stop()
       this.refreshTitle()
     },
     refreshTitle() {
-      if (this.$root.music.playing) document.title = `${this.$root.music.title} by ${this.$root.music.artist} - Paradigm`
+      if (this.$root.music[0].playing) document.title = `${this.$root.music[0].title} by ${this.$root.music[0].artist} - Paradigm`
       else document.title = 'Paradigm'
     }
 	},
@@ -223,16 +221,8 @@ export default {
 </script>
 
 <style scoped>
-.v-slider--horizontal {
-  min-height: 0px !important;
+/* .v-slider {
+  padding: 0px !important;
   margin: 0px !important;
-}
-
-.v-input__slot {
-  margin: 0px !important;
-}
-
-.v-messages {
-  display: none;
-}
+} */
 </style>

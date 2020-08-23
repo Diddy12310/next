@@ -83,13 +83,15 @@ new Vue({
         timeout: 3000,
         icon: ''
       },
-      music: {},
+      music: [],
       view: {
         terms: false,
         buggy_dialog: false,
         quote: false,
         transmission: false,
-        bug_report: false
+        bug_report: false,
+        support: false,
+        music: false
       },
       socket,
       profile: false,
