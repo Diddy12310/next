@@ -1,16 +1,18 @@
 <template>
-  <v-app style="overflow: auto;">
+  <v-app style="overflow: hidden;">
 		<v-app-bar app style="background: linear-gradient(135deg, #1A237E 0%, #6A1B9A 100%); z-index: 100;" v-if="$root.user">
-			<v-app-bar-nav-icon v-if="!$root.user.banned" @click="$root.drawer = !$root.drawer"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon v-if="!$root.user.banned" @click="$root.view.drawer = !$root.view.drawer"><v-icon>mdi-menu</v-icon></v-app-bar-nav-icon>
 			<v-toolbar-title>
 				<img :class="{ 'true': $root.user, 'false': $root.user.banned }" @click="$root.user ? $root.router = 'home' : $root.router = 'auth'" style="height: 45px; cursor: pointer;" src="./assets/paradigmlogo.png" class="logo">
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-btn text icon v-if="$root.music.playing" class="mr-2" readonly><v-icon>mdi-music-note</v-icon></v-btn>
-			<p class="clock text-right font-weight-light hidden-xs-only">{{ clock.date }}<br>{{ clock.time }}</p>
+			<img v-if="$root.view.weather" @click="$root.view.weather = false" src="./assets/weather/DAY_partly-cloudy.png" height="48" class="pr-3">
+			<p v-if="$root.view.weather" @click="$root.view.weather = false" style="line-height: 1.2;" class="clock hidden-xs-only"><span class="font-weight-bold" style="font-size: 25px;">69°</span><br><span style="font-size: 15px;">Partly Cloudy</span></p>
+			<p v-else @click="$root.view.weather = true" class="clock text-right font-weight-light hidden-xs-only">{{ clock.date }}<br>{{ clock.time }}</p>
 		</v-app-bar>
 
-		<v-navigation-drawer v-if="$root.user && !$root.user.banned && !$root.config.shutdown" app v-model="$root.drawer" style="z-index: 1000;">
+		<v-navigation-drawer v-if="$root.user && !$root.user.banned && !$root.config.shutdown" app v-model="$root.view.drawer" style="z-index: 1000;">
 			<template v-slot:prepend>
 				<v-card-actions class="grey darken-4 elevation-4 ma-0 pa-0">
 					<v-list shaped>
@@ -21,7 +23,7 @@
 										<object style="height: 40px;" :data="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg`" type="image/png">
 											<img src="./assets/default.png">
 										</object>
-										<img :src="$root.user.pic ? $root.user.pic : './assets/default.png'">
+										<img :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg` ? `https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg` : './assets/default.png'">
 									</v-list-item-avatar>
 									<v-list-item-content>
 										<v-list-item-title class="font-weight-medium" :style="{ 'color': $root.user.color }">{{ $root.user.username }}</v-list-item-title>
