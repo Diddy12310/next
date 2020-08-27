@@ -150,7 +150,7 @@ export default {
               { icon: 'mdi-satellite-uplink', content: 'Broadcast', path: 'broadcast', disabled: false, rights: true },
               { icon: 'mdi-download', content: 'Downloads', path: 'downloads', disabled: false, rights: true },
               { icon: 'mdi-code-tags', content: 'Developer', path: 'developer', disabled: false, rights: this.$root.user.rights.developer },
-              { icon: 'mdi-video-wireless', content: 'Transmission', path: 'transmission', disabled: true, rights: true },
+              { icon: 'mdi-video-wireless', content: 'Transmission', path: 'transmission', disabled: false, rights: true },
               // { icon: 'mdi-pencil', content: 'Write', path: 'write', disabled: true }
             ]
             this.$root.router = 'home'

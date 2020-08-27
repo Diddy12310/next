@@ -75,7 +75,6 @@ new Vue({
       links: [],
       version,
       router: 'auth',
-      drawer: true,
       alert: {
         open: false,
         text: '',
@@ -85,13 +84,15 @@ new Vue({
       },
       music: [],
       view: {
+        drawer: true,
         terms: false,
         buggy_dialog: false,
         quote: false,
         transmission: false,
         bug_report: false,
         support: false,
-        music: false
+        music: false,
+        weather: false
       },
       socket,
       profile: false,
