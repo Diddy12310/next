@@ -7,7 +7,7 @@
     <div :style="{ height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`, overflowY: 'auto' }">
       <v-container>
         <div class="text-center my-12">
-          <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img loading="lazy" :src="user.pic"></v-img></v-avatar><br>
+          <v-avatar style="cursor: pointer;" v-ripple @click="uploader = true" height="175" width="175"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg`"></v-img></v-avatar><br>
           <input type="text" @input="change = true" class="text-h3 font-weight-medium mt-8" style="text-align: center; width: 100%;" :style="{ color: user.color }" v-model="user.username">
           <p class="grey--text text--darken-1 font-weight-light">{{ user._id }}</p>
           <div class="text-center mt-3" style="width: 250px; margin: auto;">

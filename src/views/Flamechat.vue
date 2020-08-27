@@ -85,7 +85,7 @@
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
             <v-row v-if="message.type === 'message'">
               <v-col sm="1" cols="12" class="text-right py-0">
-                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
@@ -106,7 +106,7 @@
 
             <v-row v-if="message.type === 'file'">
               <v-col sm="1" cols="12" class="text-right py-0">
-                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
@@ -125,7 +125,7 @@
 
             <v-row v-if="message.type === 'image' || message.type == 'video'">
               <v-col sm="1" cols="12" class="text-right py-0">
-                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${$message.user_id}.jpg`"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content class="pt-2">
@@ -151,7 +151,7 @@
             <v-container fluid v-if="message.type === 'message'" class="py-0">
               <v-row no-gutters align="end">
                 <v-col sm="6">
-                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
@@ -177,7 +177,7 @@
             <v-container fluid v-if="message.type === 'file'">
               <v-row no-gutters align="end">
                 <v-col sm="6">
-                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
@@ -201,7 +201,7 @@
             <v-container fluid v-if="message.type === 'image' || message.type === 'video'">
               <v-row no-gutters align="end">
                 <v-col sm="6">
-                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
@@ -256,7 +256,7 @@
               <template v-slot:activator="{ on }">
                 <v-list-item v-on="on" @click="changeDM(current, friend)" :value="friend.dm">
                   <v-badge style="position: relative; left: -15px;" bordered bottom dot offset-x="25" offset-y="17" color="green" :value="friend.in">
-                    <v-list-item-avatar><v-img loading="lazy" :src="friend.pic"></v-img></v-list-item-avatar>
+                    <v-list-item-avatar><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.jpg`"></v-img></v-list-item-avatar>
                   </v-badge>
                 </v-list-item>
               </template>
@@ -272,7 +272,7 @@
           <v-list-item @mouseover="current_message = message" @mouseleave="current_message = false" @dblclick="deleteChat(message._id)" v-for="(message, index) in current.messages" :key="index">
             <v-row v-if="message.type === 'message'">
               <v-col sm="1" cols="12" class="text-right py-0">
-                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
@@ -290,7 +290,7 @@
 
             <v-row v-if="message.type === 'file'">
               <v-col sm="1" cols="12" class="text-right py-0">
-                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
@@ -309,7 +309,7 @@
 
             <v-row v-if="message.type === 'image' || message.type == 'video'">
               <v-col sm="1" cols="12" class="text-right py-0">
-                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                <v-list-item-avatar @click="viewProfile(message.user_id)" class="mr-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content class="pt-2">
@@ -335,7 +335,7 @@
             <v-container fluid v-if="message.type === 'message'">
               <v-row no-gutters align="end">
                 <v-col sm="6">
-                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
@@ -358,7 +358,7 @@
             <v-container fluid v-if="message.type === 'file'">
               <v-row no-gutters align="end">
                 <v-col sm="6">
-                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
@@ -382,7 +382,7 @@
             <v-container fluid v-if="message.type === 'image' || message.type === 'video'">
               <v-row no-gutters align="end">
                 <v-col sm="6">
-                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="message.pic"></v-img></v-list-item-avatar>
+                  <v-list-item-avatar class="ma-0"><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
                 </v-col>
                 <v-col sm="6" class="text-right">
                   <v-fade-transition group>
@@ -594,7 +594,7 @@
             </v-list-item>
 
             <v-list-item v-for="(person, index) in current.people.approved" :key="index">
-              <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
+              <v-list-item-avatar><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
               <v-row>
                 <v-col sm="8" class="py-0">
                   <v-list-item-content>
@@ -616,7 +616,7 @@
             </v-list-item>
 
             <v-list-item v-for="(person, index) in current.people.requested" :key="index">
-              <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
+              <v-list-item-avatar><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
               <v-row>
                 <v-col sm="8" class="py-0">
                   <v-list-item-content>
@@ -639,7 +639,7 @@
             </v-list-item>
 
             <v-list-item v-for="(person, index) in current.people.banned" :key="index">
-              <v-list-item-avatar><v-img loading="lazy" :src="person.pic"></v-img></v-list-item-avatar>
+              <v-list-item-avatar><v-img loading="lazy" :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"></v-img></v-list-item-avatar>
               <v-row>
                 <v-col sm="8" class="py-0">
                   <v-list-item-content>
@@ -849,7 +849,6 @@ export default {
           username: this.$root.user.username,
           user_id: this.$root.user._id,
           content: this.new_message,
-          pic: this.$root.user.pic,
           timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
           edits: 0,
           type: 'message'
@@ -894,7 +893,6 @@ export default {
             color: this.$root.user.color,
             username: this.$root.user.username,
             user_id: this.$root.user._id,
-            pic: this.$root.user.pic,
             timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             type: 'left'
           })
@@ -940,7 +938,6 @@ export default {
             color: response.data.color,
             username: response.data.username,
             user_id: response.data._id,
-            pic: response.data.pic,
             timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             type: 'left'
           })
@@ -954,7 +951,6 @@ export default {
           color: response.data.color,
           username: response.data.username,
           user_id: response.data._id,
-          pic: response.data.pic,
           timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
           type: 'join'
         })
@@ -989,7 +985,6 @@ export default {
             color: this.$root.user.color,
             username: this.$root.user.username,
             user_id: this.$root.user._id,
-            pic: this.$root.user.pic,
             timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             content: this.file[0].name,
             url: `https://www.theparadigmdev.com/relay/flamechat/dm/${this.current_dm}/${this.file[0].name}`,
@@ -1019,7 +1014,6 @@ export default {
             color: this.$root.user.color,
             username: this.$root.user.username,
             user_id: this.$root.user._id,
-            pic: this.$root.user.pic,
             timestamp: moment().format('MM/DD/YYYY [at] h:mm a'),
             content: this.file[0].name,
             url: `https://www.theparadigmdev.com/relay/flamechat/chatroom/${this.current_id}/${this.file[0].name}`,
