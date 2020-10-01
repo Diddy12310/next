@@ -2,10 +2,10 @@ import Vue from "vue";
 import App from "./App.vue";
 import "./registerServiceWorker";
 import vuetify from "./plugins/vuetify";
-import "./assets/tailwind.css";
 import axios from "axios";
 import VueChatScroll from "vue-chat-scroll";
 import io from "socket.io-client";
+import "./assets/style.css";
 
 let socket = io.connect("https://www.theparadigmdev.com");
 
@@ -21,7 +21,7 @@ Vue.mixin({
         text,
         icon,
       };
-      setTimeout(() => this.$root.notification = false, timeout);
+      setTimeout(() => (this.$root.notification = false), timeout);
     },
     $noFunc() {
       this.$root.notification = {
@@ -29,7 +29,7 @@ Vue.mixin({
         text: "Function not available",
         icon: "mdi-alert",
       };
-      setTimeout(() => this.$root.notification = false, 2000);
+      setTimeout(() => (this.$root.notification = false), 2000);
     },
     $lock() {
       this.$root.user = false;

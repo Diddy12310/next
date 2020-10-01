@@ -1,0 +1,9 @@
+@media (min-width: 1280px) {
+  .xl\:max-w-screen-xl {
+    max-width: 1280px;
+  }
+}
+
+.hover\:bg-deep-blue-800:hover {
+  background-color: #1c3973;
+}

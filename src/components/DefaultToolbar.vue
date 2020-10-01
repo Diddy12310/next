@@ -12,7 +12,8 @@
             contain
             src="../assets/logo.png"
             width="40"
-            class="rounded-full m-2"
+            style="border-radius: 9999px;"
+            class="ma-2"
           />
         </v-btn>
         <v-btn icon text v-else disabled>
@@ -20,12 +21,13 @@
             contain
             src="../assets/logo.png"
             width="40"
-            class="rounded-full m-2"
+            style="border-radius: 9999px;"
+            class="ma-2"
           />
         </v-btn>
       </div>
 
-      <div class="flex" v-else key="notification">
+      <div class="d-flex" v-else key="notification">
         <v-icon :class="{ [`${$root.notification.class}`]: true }">{{
           $root.notification.icon
         }}</v-icon>
@@ -41,11 +43,12 @@
     <v-spacer></v-spacer>
 
     <div
-      class="centralize flex place-items-center justify-items-center"
+      class="centralize d-flex justify-center "
       v-if="$root.user.password.includes('$2a$')"
     >
       <v-btn
-        class="w-40 mx-2"
+        style="width: 10rem;"
+        class="mx-2"
         :color="$root.config.apps[app].color"
         v-for="(app, index) in $root.user.pinned_apps"
         :key="index"
@@ -56,7 +59,7 @@
     </div>
 
     <p
-      class="centralize font-weight-light text-xl"
+      class="centralize font-weight-light text-h6"
       v-if="!$root.user.password.includes('$2a$')"
     >
       Complete Account Creation

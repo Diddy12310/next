@@ -118,8 +118,7 @@
             <v-btn
               icon
               large
-              class="absolute"
-              style="right: 20px;"
+              style="right: 20px; position: absolute;"
               v-bind="attrs"
               v-on="on"
             >
@@ -132,9 +131,14 @@
                 v-for="(item, index) in $root.nav"
                 :key="index"
                 :value="item.content"
+                :disabled="item.disabled"
+                v-show="item.rights"
               >
                 <v-list-item-icon
-                  ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
+                  ><v-icon
+                    :class="{ 'grey--text text--darken-1': item.disabled }"
+                    >{{ item.icon }}</v-icon
+                  ></v-list-item-icon
                 >
                 <v-list-item-title>{{ item.content }}</v-list-item-title>
               </v-list-item>
@@ -203,6 +207,20 @@ export default {
     };
   },
   methods: {
+    signOut() {
+      if (this.$root.user) {
+        this.$http
+          .get(`https://www.theparadigmdev.com/api/users/signout`)
+          .then(() => {
+            this.$root.socket.emit("logout", this.$root.user);
+            this.$root.user = false;
+            this.$root.router = "Landing";
+            this.$root.profile = false;
+            this.$root.music = false;
+            this.$root.transmission = false;
+          });
+      }
+    },
     setPosition() {
       this.audio.currentTime = parseInt(
         (this.audio.duration / 100) * this.percentage

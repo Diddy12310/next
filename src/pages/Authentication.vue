@@ -1,12 +1,15 @@
 <template>
-  <div style="background-color: #0F1E3C;" class="h-screen">
-    <div class="max-w-md mx-auto py-20">
-      <img class="h-32 mx-auto" src="../assets/logo.png" />
+  <div style="background-color: #0F1E3C; height: 100vh;">
+    <div
+      style="max-width: 28rem; padding-top: 10rem;"
+      class="mx-auto text-center"
+    >
+      <img style="height: 8rem; margin: auto;" src="../assets/logo.png" />
 
       <v-card
-        class="w-full mt-10"
+        class="mt-10"
         color="#333333"
-        style="border: none !important;"
+        style="width: 100%; border: none !important;"
       >
         <v-card-title>
           <h1 class="text-h4 grey--text text--lighten-1">

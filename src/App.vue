@@ -1,13 +1,14 @@
 <template>
-  <v-app>
+  <v-app style="background-color: #0F1E3C;">
     <DefaultToolbar style="z-index: 100;" v-if="$root.user && !$root.music" />
     <MusicToolbar style="z-index: 100;" v-if="$root.user && $root.music" />
 
-    <v-main class="h-full">
+    <v-main style="height: 100%;">
       <v-fade-transition group hide-on-leave>
         <div
           v-if="!$root.config"
-          class="mx-auto max-w-xs text-center mt-48"
+          style="max-width: 20rem; margin-top: 12rem;"
+          class="mx-auto text-center"
           key="loading"
         >
           <v-progress-circular
@@ -15,11 +16,11 @@
             size="75"
             color="#1C3973"
           ></v-progress-circular>
-          <p class="text-gray-700 mt-4 text-2xl">Loading...</p>
+          <p style="color: #1C3973" class="mt-5 text-h5">Loading...</p>
         </div>
         <Router
           key="router"
-          class="h-full"
+          style="height: 100%; background-color: #131313;"
           v-else-if="$root.config && !$root.config.shutdown"
         />
         <div v-else-if="$root.config && $root.config.shutdown" key="shutdown">
@@ -130,6 +131,7 @@ button,
 input,
 textarea {
   outline: none !important;
+  color: white;
 }
 
 .moonrock-count {

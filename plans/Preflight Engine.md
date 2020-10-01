@@ -6,7 +6,9 @@ The Preflight engine will check the user's data model to make sure it is fully u
 
 ### Pre-request process
 
-Once they agree to beta test, the core member who requested for them to beta test, they must pass a rigorous test. The following are the critera used to determine who is eligible to beta test:
+Once authenticated, the user will be prompted to a halfway UI. It has parts of the Landing UI and parts of the Default UI. Part of this is already implemented in the Sign Up UI.
+
+<img src="https://www.theparadigmdev.com/relay/plans/preflight/sign-up.png" alt="Logo" width="150" height="150"></img>
 
 1. The user must have a strong, yet basic, understanding of the interworkings of the Internet.
 2. The user must understand and acknowledge the importance of security, privacy, and anonymity on the Internet.
