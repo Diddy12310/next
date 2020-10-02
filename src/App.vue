@@ -4,7 +4,6 @@
     <MusicToolbar style="z-index: 100;" v-if="$root.user && $root.music" />
 
     <v-main>
-      <!-- <v-fade-transition group hide-on-leave style="width: 100vw;"> -->
       <div
         v-if="!$root.config"
         style="max-width: 20rem; margin-top: 12rem;"
@@ -34,7 +33,6 @@
           Try refreshing your page.
         </p>
       </div>
-      <!-- </v-fade-transition> -->
     </v-main>
   </v-app>
 </template>
