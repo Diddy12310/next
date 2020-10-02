@@ -1,5 +1,5 @@
 <template>
-  <div class="flamechat">
+  <div class="flamechat" style="background-color: #131313;">
     <v-navigation-drawer style="width: 74px;" permanent mini-variant absolute>
       <v-list rounded>
         <v-text-field
@@ -693,7 +693,7 @@
     <main
       v-if="current_id === 'user_dm'"
       class="fill-height"
-      style="margin-left: 148px;"
+      style="margin-left: 148px; height: 100%;"
     >
       <v-toolbar dense color="deep-orange">
         <v-toolbar-title>Flamechat: Direct Messages</v-toolbar-title>
@@ -1212,7 +1212,11 @@
     </main>
 
     <!-- Home -->
-    <main v-if="current_id === 'user_home'" class="text-center">
+    <main
+      v-if="current_id === 'user_home'"
+      class="text-center"
+      style="overflow: hidden;"
+    >
       <v-row>
         <v-col sm="12" class="deep-orange py-12 elevation-5">
           <h1 class="text-h2 font-weight-thin white--text hidden-sm-and-down">

@@ -1,6 +1,9 @@
 <template>
-  <div style="height: calc(100vh - 64px);" class="bg-img">
-    <div style="padding-top: 10rem; max-width: 72rem;" class="mx-auto">
+  <div style="height: 100vh; overflow-y: auto;" class="bg-img">
+    <div
+      style="padding: 15vh 2rem 2rem 2rem; max-width: 72rem;"
+      class="mx-auto"
+    >
       <h6 class="grey--text text--darken-1 overline">
         January 1st, 2021 by Aidan Liddy
       </h6>
@@ -34,6 +37,7 @@
     <button
       style="position: absolute; bottom: 0px; right: 0px;"
       class="d-flex align-center mt-12 mb-6 mr-6 mx-auto"
+      v-if="$vuetify.breakpoint.smAndUp"
     >
       <div
         @click="$root.router = 'Drawer'"

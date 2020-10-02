@@ -1,20 +1,19 @@
 <template>
   <v-app-bar app color="#0F1E3C" class="pa-0">
     <v-row class="fill-height align-center pa-0 mt-n2 ml-n4" no-gutters>
-      <v-col sm="4" class="pa-0">
+      <v-col cols="2" sm="1" md="4" class="pa-0">
         <div
           :class="{
-            'd-flex': true,
+            'd-flex': $vuetify.breakpoint.smAndUp,
             'align-center': true,
-            'text-center mt-2': $vuetify.breakpoint.xsOnly,
           }"
         >
           <img
-            style="height: 64px !important; width: 64px !important;"
-            class="hidden-xs-only"
+            :style="{ height: $vuetify.breakpoint.smAndDown ? '56px' : '64px' }"
             :src="$root.music[0].cover"
           />
           <div
+            v-if="$vuetify.breakpoint.smAndUp"
             :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }"
             style="width: 100%;"
           >
@@ -35,7 +34,7 @@
         </div>
       </v-col>
 
-      <v-col sm="4">
+      <v-col sm="4" v-if="$vuetify.breakpoint.smAndUp">
         <div class="align-center">
           <v-scroll-y-reverse-transition group mode="in-out" hide-on-leave>
             <p
@@ -49,12 +48,18 @@
         </div>
       </v-col>
 
-      <v-col sm="1" class="content-center">
+      <v-col sm="1" class="content-center" v-if="$vuetify.breakpoint.smAndUp">
         <span>{{ currentTime }}</span>
         <span class="font-weight-light"> / {{ duration }}</span>
       </v-col>
 
-      <v-col sm="3" class="w-full">
+      <v-col
+        cols="10"
+        sm="11"
+        md="3"
+        class="w-full"
+        :class="{ centralize: $vuetify.breakpoint.xsOnly }"
+      >
         <v-btn
           large
           text
@@ -84,7 +89,7 @@
           <v-icon>mdi-repeat</v-icon>
         </v-btn>
         <v-btn
-          v-if="$root.user.rights.asteroid"
+          v-if="$root.user.rights.asteroid && $vuetify.breakpoint.smAndUp"
           text
           large
           icon
@@ -118,7 +123,10 @@
             <v-btn
               icon
               large
-              style="right: 20px; position: absolute;"
+              :style="{
+                right: $vuetify.breakpoint.smAndUp ? '20px' : '-10.5px',
+              }"
+              style="position: absolute;"
               v-bind="attrs"
               v-on="on"
             >
@@ -163,6 +171,7 @@
       <v-slider
         fluid
         :height="2"
+        :class="{ 'mt-n3': $vuetify.breakpoint.xsOnly }"
         class="pa-0 my-0 ml-n2 mr-2 relative bottom-0 w-full"
         style="width: 100vw;"
         dense

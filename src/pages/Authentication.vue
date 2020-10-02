@@ -1,5 +1,7 @@
 <template>
-  <div style="background-color: #0F1E3C; height: 100vh;">
+  <div
+    style="background-color: #0F1E3C; height: 100vh; width: 100vw; overflow-x: hidden;"
+  >
     <div
       style="max-width: 28rem; padding-top: 10rem;"
       class="mx-auto text-center"
@@ -7,13 +9,22 @@
       <img style="height: 8rem; margin: auto;" src="../assets/logo.png" />
 
       <v-card
-        class="mt-10"
+        style="border: none !important;"
+        class="ma-3 mt-10"
         color="#333333"
-        style="width: 100%; border: none !important;"
       >
-        <v-card-title>
-          <h1 class="text-h4 grey--text text--lighten-1">
+        <v-card-title class="d-block text-left">
+          <h1
+            class="text-h4 grey--text text--lighten-1"
+            v-if="$vuetify.breakpoint.smAndUp"
+          >
             Sign in to your account
+          </h1>
+          <h1
+            class="text-h4 grey--text text--lighten-1"
+            v-if="$vuetify.breakpoint.xsOnly"
+          >
+            Sign in
           </h1>
           <p
             class="text--grey text--darken-4 font-weight-light ma-0 subtitle-2"

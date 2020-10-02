@@ -44,7 +44,7 @@
 
     <div
       class="centralize d-flex justify-center "
-      v-if="$root.user.password.includes('$2a$')"
+      v-if="$root.user.password.includes('$2a$') && $vuetify.breakpoint.mdAndUp"
     >
       <v-btn
         style="width: 10rem;"
@@ -59,7 +59,11 @@
     </div>
 
     <p
-      class="centralize font-weight-light text-h6"
+      :class="{
+        centralize: $vuetify.breakpoint.smAndUp,
+        'text-right': $vuetify.breakpoint.xsOnly,
+      }"
+      class="font-weight-light text-h6 mb-0"
       v-if="!$root.user.password.includes('$2a$')"
     >
       Complete Account Creation

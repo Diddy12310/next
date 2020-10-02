@@ -4,7 +4,7 @@
       height: `calc(100vh - 64px)`,
       overflowY: 'auto',
     }"
-    class="p-4"
+    class="pa-4"
   >
     <div class="text-center" v-if="!invite_code_verified">
       <input

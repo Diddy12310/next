@@ -12,7 +12,7 @@
       }"
     >
       <v-row>
-        <v-col sm="6">
+        <v-col sm="12" md="6">
           <p>
             If you need assistance with Paradigm or have any questions, email
             <a href="mailto:paradigmdevelop@gmail.com"
@@ -35,7 +35,7 @@
           </p>
         </v-col>
 
-        <v-col sm="6">
+        <v-col sm="12" md="6">
           <v-card max-width="500" class="mx-auto">
             <v-card-title class="text-h5 font-weight-medium"
               >REPORT A BUG</v-card-title

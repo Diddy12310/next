@@ -1,13 +1,17 @@
 <template>
-  <div class="h-full">
-    <v-slide-x-reverse-transition group hide-on-leave class="h-full">
+  <div>
+    <v-slide-x-reverse-transition group hide-on-leave>
       <Landing v-if="$root.router == 'Landing'" key="Landing" />
       <Authentication
         v-if="$root.router == 'Authentication'"
         key="Authentication"
       />
       <Home v-if="$root.router == 'Home'" key="Home" />
-      <Flamechat v-if="$root.router == 'Flamechat'" key="Flamechat" />
+      <Flamechat
+        v-if="$root.router == 'Flamechat'"
+        key="Flamechat"
+        style="background-color: #131313; height: 100vh;"
+      />
       <Media v-if="$root.router == 'Media'" key="Media" />
       <Satellite v-if="$root.router == 'Satellite'" key="Satellite" />
       <Paradox v-if="$root.router == 'The Paradox'" key="Paradox" />

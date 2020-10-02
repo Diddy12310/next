@@ -3,38 +3,38 @@
     <DefaultToolbar style="z-index: 100;" v-if="$root.user && !$root.music" />
     <MusicToolbar style="z-index: 100;" v-if="$root.user && $root.music" />
 
-    <v-main style="height: 100%;">
-      <v-fade-transition group hide-on-leave>
-        <div
-          v-if="!$root.config"
-          style="max-width: 20rem; margin-top: 12rem;"
-          class="mx-auto text-center"
-          key="loading"
+    <v-main>
+      <!-- <v-fade-transition group hide-on-leave style="width: 100vw;"> -->
+      <div
+        v-if="!$root.config"
+        style="max-width: 20rem; margin-top: 12rem;"
+        class="mx-auto text-center"
+        key="loading"
+      >
+        <v-progress-circular
+          indeterminate
+          size="75"
+          color="#1C3973"
+        ></v-progress-circular>
+        <p style="color: #1C3973" class="mt-5 text-h5">Loading...</p>
+      </div>
+      <Router
+        key="router"
+        style="background-color: #131313;"
+        v-else-if="$root.config && !$root.config.shutdown"
+      />
+      <div v-else-if="$root.config && $root.config.shutdown" key="shutdown">
+        <h1
+          class="text-h3 font-weight-light text-uppercase text-center px-12 deep-purple--text text--lighten-1"
+          style="margin-top: 100px;"
         >
-          <v-progress-circular
-            indeterminate
-            size="75"
-            color="#1C3973"
-          ></v-progress-circular>
-          <p style="color: #1C3973" class="mt-5 text-h5">Loading...</p>
-        </div>
-        <Router
-          key="router"
-          style="height: 100%; background-color: #131313;"
-          v-else-if="$root.config && !$root.config.shutdown"
-        />
-        <div v-else-if="$root.config && $root.config.shutdown" key="shutdown">
-          <h1
-            class="text-h3 font-weight-light text-uppercase text-center px-12 deep-purple--text text--lighten-1"
-            style="margin-top: 100px;"
-          >
-            A Connection Could not be Established
-          </h1>
-          <p class="text-center pt-6 title font-weight-light grey--text">
-            Try refreshing your page.
-          </p>
-        </div>
-      </v-fade-transition>
+          A Connection Could not be Established
+        </h1>
+        <p class="text-center pt-6 title font-weight-light grey--text">
+          Try refreshing your page.
+        </p>
+      </div>
+      <!-- </v-fade-transition> -->
     </v-main>
   </v-app>
 </template>
