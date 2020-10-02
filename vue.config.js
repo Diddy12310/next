@@ -1,11 +1,6 @@
-const path = require('path')
-
 module.exports = {
-  "transpileDependencies": [
-    "vuetify"
-  ],
+  transpileDependencies: ["vuetify"],
   devServer: {
-    https: true
+    https: true,
   },
-  outputDir: path.join(__dirname, '/../relay/paradigm')
-}
+};
