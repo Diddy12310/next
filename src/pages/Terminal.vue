@@ -9,7 +9,9 @@
       id="output"
       class="px-4 pt-3"
       :style="{
-        height: `calc(100vh - ${$root.music.open ? '240px' : '160px'})`,
+        height: $vuetify.breakpoint.smAndDown
+          ? 'calc(100vh - 144px)'
+          : 'calc(100vh - 152px)',
         overflowY: 'auto',
       }"
     >

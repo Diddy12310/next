@@ -12,7 +12,7 @@
       }"
     >
       <v-row>
-        <v-col sm="12" md="6">
+        <v-col sm="12" md="6" class="py-12">
           <p>
             If you need assistance with Paradigm or have any questions, email
             <a href="mailto:paradigmdevelop@gmail.com"
@@ -77,7 +77,7 @@
                 v-model="new_bug.description"
               ></v-textarea>
 
-              <div>
+              <div class="text-left">
                 <img
                   src="@/assets/moonrocks.png"
                   alt="Moonrocks"

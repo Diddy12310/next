@@ -42,7 +42,7 @@
       <div
         @click="$root.router = 'Drawer'"
         style="border-radius: 9999px;"
-        class="blue darken-4 hover:bg-blue-800 py-1 pl-5 pr-2 white--text d-flex flex-shrink align-center font-weight-light"
+        class="teal darken-4 hover:bg-blue-800 py-1 pl-5 pr-2 white--text d-flex flex-shrink align-center font-weight-light"
         v-ripple
       >
         Drawer is a secure cloud file storage service

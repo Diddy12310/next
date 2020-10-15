@@ -28,8 +28,15 @@
           </h1>
           <p
             class="text--grey text--darken-4 font-weight-light ma-0 subtitle-2"
+            v-if="$root.config.auth.sign_up"
           >
-            Or <a class="text--grey text--darken-4"> create an account</a>
+            Or
+            <a
+              class="text--grey text--darken-4"
+              @click="$root.router = 'SignUp'"
+            >
+              create an account</a
+            >
           </p></v-card-title
         >
 
@@ -64,7 +71,18 @@
             class="ma-auto subtitle-2 text-center font-weight-light text--grey text--darken-4"
           >
             Forgot your credentials?
-            <a class="text--grey text--darken-4"> Enter account recovery</a>
+            <a
+              class="text--grey text--darken-4"
+              @click="
+                $root.user = {
+                  password: 'PREFLIGHT',
+                  preflight: { in_recovery: true },
+                };
+                $root.router = 'Recovery';
+              "
+            >
+              Enter account recovery</a
+            >
           </p>
         </v-card-actions>
       </v-card>

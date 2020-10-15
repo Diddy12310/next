@@ -125,11 +125,11 @@ export default {
   text-align: center;
 }
 
-button,
 input,
 textarea {
   outline: none !important;
   color: white;
+  width: 100%;
 }
 
 .moonrock-count {

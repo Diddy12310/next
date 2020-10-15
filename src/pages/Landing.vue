@@ -94,16 +94,16 @@
             </v-row>
           </v-col>
 
-          <v-col sm="12" md="4">
+          <v-col sm="12" md="4" v-if="$root.config.auth.sign_up">
             <v-card
               color="#333333"
               class="ma-3"
               :class="{ 'mx-auto': $vuetify.breakpoint.smAndDown }"
-              style="border: none !important; max-width: 25rem;"
+              style="outline: none; max-width: 25rem;"
             >
-              <v-card-title class="text-h4 grey--text text--lighten-1"
-                >Sign up</v-card-title
-              >
+              <v-card-title class="text-h4 grey--text text--lighten-1">
+                Sign up
+              </v-card-title>
 
               <v-card-text>
                 <v-text-field
