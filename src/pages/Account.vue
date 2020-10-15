@@ -84,38 +84,47 @@
                     </template>
                   </draggable>
                 </v-list> -->
-                <div class="flex">
+                <div class="d-flex">
                   <draggable
                     :list="user.pinned_apps"
                     @change="change = true"
                     group="apps"
-                    class="w-1/2 text-center"
+                    style="width: 50%;"
+                    class="text-center"
+                    draggable=".item"
                   >
-                    <p>Apps Already Pinned</p>
-                    <template v-for="app in user.pinned_apps">
-                      <v-btn
-                        :key="app"
-                        class="mx-2 w-1/2 cursor-move"
-                        :color="$root.config.apps[app].color"
-                        >{{ app }}</v-btn
-                      >
-                    </template>
+                    <div slot="header">
+                      <p>Apps Already Pinned</p>
+                    </div>
+                    <v-btn
+                      v-for="app in user.pinned_apps"
+                      :key="$root.config.apps[app].path"
+                      style="width: 50%"
+                      class="mx-2 cursor-move item"
+                      :color="$root.config.apps[app].color"
+                      >{{ app }}</v-btn
+                    >
                   </draggable>
                   <draggable
                     :list="apps_remaining"
                     group="apps"
                     @change="change = true"
-                    class="w-1/2 text-center"
+                    style="width: 50%;"
+                    class="text-center"
+                    draggable=".item"
                   >
-                    <p>Apps Remaining</p>
-                    <template v-for="app in apps_remaining">
-                      <v-btn
-                        :key="app"
-                        class="mx-2 w-1/2 cursor-move"
-                        :color="$root.config.apps[app].color"
-                        >{{ app }}</v-btn
-                      >
-                    </template>
+                    <div slot="header">
+                      <p>Apps Remaining</p>
+                    </div>
+
+                    <v-btn
+                      v-for="app2 in apps_remaining"
+                      :key="$root.config.apps[app2].path"
+                      style="width: 50%;"
+                      class="mx-2 cursor-move item"
+                      :color="$root.config.apps[app2].color"
+                      >{{ app2 }}</v-btn
+                    >
                   </draggable>
                 </div>
               </v-card-text>
@@ -788,6 +797,7 @@ export default {
           bio: this.user.bio,
           color: this.user.color,
           pinned_apps: this.user.pinned_apps,
+          chatrooms: this.user.chatrooms,
         })
         .then((response) => {
           this.$root.user = response.data;
@@ -946,6 +956,8 @@ export default {
           this.apollo_codes = response.data;
         });
     }
+
+    let apps = [];
     for (app in this.$root.config.apps) {
       if (
         !this.user.pinned_apps.includes(app) &&
@@ -954,8 +966,9 @@ export default {
         app != "Terms" &&
         app != "Support"
       )
-        this.apps_remaining.push(app);
+        apps.push(app);
     }
+    this.apps_remaining = JSON.parse(JSON.stringify(apps));
   },
   // beforeMount() {
   //   this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people`).then(response => {
