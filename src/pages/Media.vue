@@ -53,11 +53,15 @@
                   @click="openBook(index)"
                 >
                   <v-img max-height="400" loading="lazy" :src="book.cover">
-                    <v-card-title
-                      class="align-end fill-height"
+                    <!-- <v-card-title
+                      
                       style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);"
+                    > -->
+                    <div
+                      style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px); width: 100%;"
+                      class="align-baseline fill-height pa-4"
                     >
-                      <div style="width: 100%;">
+                      <div style="position: absolute; bottom: 16px;">
                         <h3 class="text-h5 mb-0">{{ book.title }}</h3>
                         <div class="d-flex">
                           <h4 class="text-body-2 grey--text">
@@ -72,7 +76,8 @@
                           </h4>
                         </div>
                       </div>
-                    </v-card-title>
+                    </div>
+                    <!-- </v-card-title> -->
                   </v-img>
                 </v-card>
               </v-col>
@@ -100,26 +105,28 @@
                   @click="openMovie(index)"
                 >
                   <v-img max-height="400" loading="lazy" :src="movie.cover">
-                    <v-card-title
-                      class="align-end fill-height"
-                      style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);"
+                    <div
+                      style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px); width: 100%;"
+                      class="align-baseline fill-height pa-4"
                     >
-                      <div style="width: 100%;">
-                        <h3 class="text-h5 mb-0">{{ movie.title }}</h3>
-                        <div class="d-flex">
-                          <h4 class="text-body-2 grey--text">
-                            {{ movie.genre }}
-                          </h4>
-                          <v-spacer></v-spacer>
-                          <h4
-                            class="text-body-2 red--text font-weight-medium"
-                            v-if="!movie.live"
-                          >
-                            UNAVAILABLE
-                          </h4>
+                      <div style="position: absolute; bottom: 16px;">
+                        <div style="width: 100%;">
+                          <h3 class="text-h5 mb-0">{{ movie.title }}</h3>
+                          <div class="d-flex">
+                            <h4 class="text-body-2 grey--text">
+                              {{ movie.genre }}
+                            </h4>
+                            <v-spacer></v-spacer>
+                            <h4
+                              class="text-body-2 red--text font-weight-medium"
+                              v-if="!movie.live"
+                            >
+                              UNAVAILABLE
+                            </h4>
+                          </div>
                         </div>
                       </div>
-                    </v-card-title>
+                    </div>
                   </v-img>
                 </v-card>
               </v-col>
@@ -147,26 +154,28 @@
                   @click="openMusic(index)"
                 >
                   <v-img :src="item.cover" loading="lazy">
-                    <v-card-title
-                      class="align-end fill-height"
-                      style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);"
+                    <div
+                      style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px); width: 100%;"
+                      class="align-baseline fill-height pa-4"
                     >
-                      <div style="width: 100%;">
-                        <h3 class="text-h5 mb-0">{{ item.title }}</h3>
-                        <div class="d-flex">
-                          <h4 class="text-body-2 grey--text">
-                            {{ item.artist }}
-                          </h4>
-                          <v-spacer></v-spacer>
-                          <h4
-                            class="text-body-2 red--text font-weight-medium"
-                            v-if="!item.live"
-                          >
-                            UNAVAILABLE
-                          </h4>
+                      <div style="position: absolute; bottom: 16px;">
+                        <div style="width: 100%;">
+                          <h3 class="text-h5 mb-0">{{ item.title }}</h3>
+                          <div class="d-flex">
+                            <h4 class="text-body-2 grey--text">
+                              {{ item.artist }}
+                            </h4>
+                            <v-spacer></v-spacer>
+                            <h4
+                              class="text-body-2 red--text font-weight-medium"
+                              v-if="!item.live"
+                            >
+                              UNAVAILABLE
+                            </h4>
+                          </div>
                         </div>
                       </div>
-                    </v-card-title>
+                    </div>
                   </v-img>
                 </v-card>
               </v-col>
