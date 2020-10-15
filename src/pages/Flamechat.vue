@@ -49,17 +49,17 @@
           </v-tooltip>
           <v-divider></v-divider>
           <draggable
-            v-model="$root.user.chatrooms"
+            :list="$root.user.chatrooms"
             @change="saveChatroomOrder()"
+            draggable=".item"
           >
-            <template v-for="(chatroom, index) in $root.user.chatrooms">
-              <v-tooltip right :key="index">
+            <template v-for="chatroom in $root.user.chatrooms">
+              <v-tooltip right :key="chatroom.id">
                 <template v-slot:activator="{ on }">
                   <v-list-item
-                    class="my-2"
+                    class="my-2 item"
                     :v-ripple="true"
                     v-on="on"
-                    :key="index"
                     :value="chatroom.id"
                     @contextmenu.prevent="showChatroomMenu($event, chatroom.id)"
                     @click="changeChatroom(current, chatroom)"
@@ -1235,7 +1235,7 @@
           >
         </v-col>
       </v-row>
-      <v-divider width="500" class="mx-auto"></v-divider>
+      <v-divider width="500" class="mx-auto mt-7"></v-divider>
       <p class="mt-8 px-4">
         Direct messages are accessible under the Home button.
       </p>
@@ -2142,13 +2142,13 @@ export default {
     },
     saveChatroomOrder() {
       this.$http
-        .post(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/chatroomOrder`,
-          this.$root.user.chatrooms
-        )
+        .post("https://www.theparadigmdev.com/api/users/update", {
+          chatrooms: this.$root.user.chatrooms,
+        })
         .then((response) => {
           this.$root.user = response.data;
-        });
+        })
+        .catch((error) => console.error(error));
     },
   },
   async mounted() {
