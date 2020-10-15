@@ -1,12 +1,15 @@
 <template>
   <v-app-bar app color="#0F1E3C">
-    <v-fade-transition group hide-on-leave>
+    <v-slide-x-transition group>
       <div class="d-flex align-center" key="logo" v-if="!$root.notification">
         <v-btn
           icon
           text
           @click="$root.router = 'Home'"
-          v-if="$root.user.password.includes('$2a$')"
+          v-if="
+            !$root.user.preflight.in_recovery &&
+              $root.user.password.includes('$2a$')
+          "
         >
           <v-img
             contain
@@ -38,13 +41,17 @@
           {{ $root.notification.text }}
         </p>
       </div>
-    </v-fade-transition>
+    </v-slide-x-transition>
 
     <v-spacer></v-spacer>
 
     <div
       class="centralize d-flex justify-center "
-      v-if="$root.user.password.includes('$2a$') && $vuetify.breakpoint.mdAndUp"
+      v-if="
+        !$root.user.preflight.in_recovery &&
+          $root.user.password.includes('$2a$') &&
+          $vuetify.breakpoint.mdAndUp
+      "
     >
       <v-btn
         style="width: 10rem;"
@@ -64,9 +71,22 @@
         'text-right': $vuetify.breakpoint.xsOnly,
       }"
       class="font-weight-light text-h6 mb-0"
-      v-if="!$root.user.password.includes('$2a$')"
+      v-if="
+        !$root.user.password.includes('$2a$') &&
+          !$root.user.preflight.in_recovery
+      "
     >
       Complete Account Creation
+    </p>
+    <p
+      :class="{
+        centralize: $vuetify.breakpoint.smAndUp,
+        'text-right': $vuetify.breakpoint.xsOnly,
+      }"
+      class="font-weight-light text-h6 mb-0"
+      v-if="$root.user.preflight.in_recovery"
+    >
+      Account Recovery
     </p>
 
     <v-spacer></v-spacer>
