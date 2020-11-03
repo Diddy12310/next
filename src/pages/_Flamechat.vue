@@ -1,6 +1,6 @@
 <template>
-  <div class="flamechat" style="background-color: #131313;">
-    <v-navigation-drawer style="width: 74px;" permanent mini-variant absolute>
+  <div class="flamechat" style="background-color: #131313">
+    <v-navigation-drawer style="width: 74px" permanent mini-variant absolute>
       <v-list rounded>
         <v-text-field
           hide-details="auto"
@@ -116,14 +116,14 @@
         <v-divider
           v-if="
             $root.user._id == chatroom_menu.owner ||
-              $root.user.rights.admin == true
+            $root.user.rights.admin == true
           "
         ></v-divider>
         <v-list-item
           @click="delete_verify_popup = true"
           v-if="
             $root.user._id == chatroom_menu.owner ||
-              $root.user.rights.admin == true
+            $root.user.rights.admin == true
           "
         >
           <v-list-item-icon
@@ -145,7 +145,7 @@
           icon
           v-if="
             $root.user._id == chatroom_menu.owner ||
-              $root.user.rights.admin == true
+            $root.user.rights.admin == true
           "
           @click="people_dialog = true"
           ><v-icon>mdi-account-multiple</v-icon></v-btn
@@ -154,7 +154,7 @@
           icon
           v-if="
             $root.user._id == chatroom_menu.owner ||
-              $root.user.rights.admin == true
+            $root.user.rights.admin == true
           "
           @click="purge_confirm = true"
           ><v-icon>mdi-notification-clear-all</v-icon></v-btn
@@ -188,16 +188,14 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="
-                      `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                    "
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
                   <p
-                    style="word-wrap: break-word; max-width: 100%;"
+                    style="word-wrap: break-word; max-width: 100%"
                     v-html="message.content"
                   ></p>
                   <v-list-item-subtitle
@@ -282,9 +280,7 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="
-                      `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                    "
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
@@ -338,9 +334,7 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="
-                      `https://www.theparadigmdev.com/relay/profile-pics/${$message.user_id}.jpg`
-                    "
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${$message.user_id}.jpg`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
@@ -356,12 +350,12 @@
                   >
                   <img
                     v-if="message.type === 'image'"
-                    style="max-width: 250px;"
+                    style="max-width: 250px"
                     :src="message.url"
                   />
                   <video
                     v-if="message.type === 'video'"
-                    style="max-width: 250px;"
+                    style="max-width: 250px"
                     controls
                     :src="message.url"
                   ></video>
@@ -419,9 +413,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="
-                        `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                      "
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -513,9 +505,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="
-                        `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                      "
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -572,9 +562,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="
-                        `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                      "
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -693,7 +681,7 @@
     <main
       v-if="current_id === 'user_dm'"
       class="fill-height"
-      style="margin-left: 148px; height: 100%;"
+      style="margin-left: 148px; height: 100%"
     >
       <v-toolbar dense color="deep-orange">
         <v-toolbar-title>Flamechat: Direct Messages</v-toolbar-title>
@@ -703,7 +691,7 @@
         mini-variant
         permanent
         absolute
-        style="width: 74px; left: +74px;"
+        style="width: 74px; left: +74px"
       >
         <v-list nav rounded class="fill-height">
           <v-list-item-group v-model="current_dm">
@@ -725,7 +713,7 @@
                   :value="friend.dm"
                 >
                   <v-badge
-                    style="position: relative; left: -15px;"
+                    style="position: relative; left: -15px"
                     bordered
                     bottom
                     dot
@@ -737,9 +725,7 @@
                     <v-list-item-avatar
                       ><v-img
                         loading="lazy"
-                        :src="
-                          `https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.jpg`
-                        "
+                        :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.jpg`"
                       ></v-img
                     ></v-list-item-avatar>
                   </v-badge>
@@ -777,16 +763,14 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="
-                      `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                    "
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
               <v-col sm="10" cols="12" class="py-0">
                 <v-list-item-content>
                   <p
-                    style="word-wrap: break-word; max-width: 100%;"
+                    style="word-wrap: break-word; max-width: 100%"
                     v-html="message.content"
                   ></p>
                   <v-list-item-subtitle
@@ -846,9 +830,7 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="
-                      `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                    "
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
@@ -902,9 +884,7 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="
-                      `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                    "
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
@@ -920,12 +900,12 @@
                   >
                   <img
                     v-if="message.type === 'image'"
-                    style="max-width: 250px;"
+                    style="max-width: 250px"
                     :src="message.url"
                   />
                   <video
                     v-if="message.type === 'video'"
-                    style="max-width: 250px;"
+                    style="max-width: 250px"
                     controls
                     :src="message.url"
                   ></video>
@@ -983,9 +963,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="
-                        `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                      "
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -1052,9 +1030,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="
-                        `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                      "
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -1111,9 +1087,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="
-                        `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                      "
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -1215,7 +1189,7 @@
     <main
       v-if="current_id === 'user_home'"
       class="text-center"
-      style="overflow: hidden;"
+      style="overflow: hidden"
     >
       <v-row>
         <v-col sm="12" class="deep-orange py-12 elevation-5">
@@ -1323,7 +1297,7 @@
     <v-dialog
       v-model="buy_chatroom.popup"
       max-width="450"
-      style="z-index: 1001;"
+      style="z-index: 1001"
     >
       <v-card>
         <v-card-title>
@@ -1489,7 +1463,7 @@
     <v-dialog
       v-if="current && !current_dm"
       v-model="people_dialog"
-      style="z-index: 1000;"
+      style="z-index: 1000"
       max-width="500"
     >
       <v-card>
@@ -1510,9 +1484,7 @@
               <v-list-item-avatar
                 ><v-img
                   loading="lazy"
-                  :src="
-                    `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                  "
+                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                 ></v-img
               ></v-list-item-avatar>
               <v-row>
@@ -1552,9 +1524,7 @@
               <v-list-item-avatar
                 ><v-img
                   loading="lazy"
-                  :src="
-                    `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                  "
+                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                 ></v-img
               ></v-list-item-avatar>
               <v-row>
@@ -1597,9 +1567,7 @@
               <v-list-item-avatar
                 ><v-img
                   loading="lazy"
-                  :src="
-                    `https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`
-                  "
+                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
                 ></v-img
               ></v-list-item-avatar>
               <v-row>
