@@ -20,11 +20,15 @@
             <div
               v-if="$vuetify.breakpoint.lgAndUp"
               :class="{ 'ml-3': $vuetify.breakpoint.lgAndUp }"
-              style="width: 100%;"
+              style="width: 100%"
             >
               <h3
                 class="text-h5 mb-0 leading-none"
-                style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
+                style="
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  overflow: hidden;
+                "
               >
                 {{ $root.music[0].song_title }}
               </h3>
@@ -125,7 +129,7 @@
         </v-btn>
         <v-menu
           offset-y
-          style="background-color: #1E1E1E;"
+          style="background-color: #1e1e1e"
           :close-on-content-click="false"
         >
           <template v-slot:activator="{ on, attrs }">
@@ -142,7 +146,7 @@
               <v-list-item-avatar
                 tile
                 class="my-0"
-                style="height: 64px; width: 78.35px;"
+                style="height: 64px; width: 78.35px"
                 ><v-img tile :src="song.cover"></v-img
               ></v-list-item-avatar>
               <v-list-item-title>
@@ -184,7 +188,7 @@
               :style="{
                 right: $vuetify.breakpoint.lgAndUp ? '20px' : '-10.5px',
               }"
-              style="position: absolute;"
+              style="position: absolute"
               v-bind="attrs"
               v-on="on"
             >
@@ -193,6 +197,28 @@
           </template>
           <v-list dense>
             <v-list-item-group v-model="$root.router" mandatory>
+              <v-list-item value="Account">
+                <v-list-item-avatar
+                  ><v-img
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg`"
+                /></v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title
+                    style="font-size: 1rem !important"
+                    :style="{ color: $root.user.color }"
+                    >{{ $root.user.username }}</v-list-item-title
+                  >
+                  <v-list-item-subtitle style="font-weight-light"
+                    >Account</v-list-item-subtitle
+                  >
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-btn @click="signOut()" color="grey" icon
+                    ><v-icon>mdi-logout-variant</v-icon></v-btn
+                  >
+                </v-list-item-action>
+              </v-list-item>
+              <v-divider></v-divider>
               <v-list-item
                 v-for="(item, index) in $root.nav"
                 :key="index"
@@ -208,20 +234,7 @@
                 >
                 <v-list-item-title>{{ item.content }}</v-list-item-title>
               </v-list-item>
-              <v-divider></v-divider>
-              <v-list-item value="Account">
-                <v-list-item-icon
-                  ><v-icon>mdi-account</v-icon></v-list-item-icon
-                >
-                <v-list-item-title>Account</v-list-item-title>
-              </v-list-item>
             </v-list-item-group>
-            <v-list-item @click="signOut()">
-              <v-list-item-icon
-                ><v-icon>mdi-logout-variant</v-icon></v-list-item-icon
-              >
-              <v-list-item-title>Sign out</v-list-item-title>
-            </v-list-item>
           </v-list>
         </v-menu>
       </v-col>
@@ -231,7 +244,7 @@
         :height="2"
         :class="{ 'mt-n3': $vuetify.breakpoint.mdAndDown }"
         class="pa-0 my-0 ml-n2 mr-2 relative bottom-0 w-full"
-        style="width: 100vw;"
+        style="width: 100vw"
         dense
         hide-details
         ref="slider"

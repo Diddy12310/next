@@ -1,15 +1,20 @@
 <template>
   <div
-    style="background-color: #0F1E3C; height: 100vh; width: 100vw; overflow-x: hidden;"
+    style="
+      background-color: #0f1e3c;
+      height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+    "
   >
     <div
-      style="max-width: 28rem; padding-top: 10rem;"
+      style="max-width: 28rem; padding-top: 10rem"
       class="mx-auto text-center"
     >
-      <img style="height: 8rem; margin: auto;" src="../assets/logo.png" />
+      <img style="height: 8rem; margin: auto" src="../assets/logo.png" />
 
       <v-card
-        style="border: none !important;"
+        style="border: none !important"
         class="ma-3 mt-10"
         color="#333333"
       >
@@ -104,6 +109,7 @@
             color="grey darken-1"
             @click="
               (username = ''),
+                (password = ''),
                 (user_auth_info.in = false),
                 (user_auth_info.exists = false)
             "
@@ -236,7 +242,9 @@ export default {
                 },
               ];
               this.$root.user = response.data;
-              this.$root.router = "Home";
+              response.data.preflight
+                ? (this.$root.router = "Preflight")
+                : (this.$root.router = "Home");
               this.$root.socket.emit("login", response.data);
             }
           }
