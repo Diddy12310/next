@@ -12,7 +12,7 @@
         type="text"
         placeholder="Invite Code"
         class="text-center text-h3 font-weight-light mb-6 mt-12"
-        style="width: 100%; font-family: 'Roboto-Mono';"
+        style="width: 100%; font-family: 'Roboto-Mono'"
       />
       <span class="grey--text text-left"
         >Enter the invite code you received from the nominating core team
@@ -28,7 +28,7 @@
       >
     </div>
 
-    <div style="max-width: 500px;" class="mx-auto" v-else>
+    <div style="max-width: 500px" class="mx-auto" v-else>
       <v-text-field
         hide-details
         v-model="$root.username"
@@ -45,7 +45,7 @@
         hide-mode-switch
         class="mt-3 mb-3"
         flat
-        style="margin: auto;"
+        style="margin: auto"
         v-model="new_user.color"
       ></v-color-picker>
       <span class="grey--text"

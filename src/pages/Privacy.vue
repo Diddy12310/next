@@ -4,7 +4,7 @@
       <v-col
         sm="12"
         class="light-blue darken-3 py-12 elevation-5"
-        style="z-index: 5;"
+        style="z-index: 5"
       >
         <h1 class="text-h2 font-weight-thin white--text">Privacy</h1>
       </v-col>

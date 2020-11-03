@@ -6,7 +6,7 @@
     }"
     class="pa-4"
   >
-    <div style="max-width: 500px;" class="mx-auto">
+    <div style="max-width: 500px" class="mx-auto">
       <v-text-field
         hide-details
         v-model="recovery.username"

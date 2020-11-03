@@ -5,7 +5,7 @@
       <v-spacer></v-spacer>
       <v-text-field
         hide-details="auto"
-        style="max-width: 500px;"
+        style="max-width: 500px"
         color="white"
         v-model="search"
         label="Search..."
@@ -32,7 +32,7 @@
         overflowY: 'auto',
       }"
     >
-      <v-tabs-items v-model="tab" style="background: none;">
+      <v-tabs-items v-model="tab" style="background: none">
         <!-- Books -->
         <v-tab-item>
           <v-container fluid>
@@ -58,10 +58,17 @@
                       style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);"
                     > -->
                     <div
-                      style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px); width: 100%;"
+                      style="
+                        background-image: linear-gradient(
+                          to top,
+                          rgba(0, 0, 0, 0.8) 0%,
+                          transparent 250px
+                        );
+                        width: 100%;
+                      "
                       class="align-baseline fill-height pa-4"
                     >
-                      <div style="position: absolute; bottom: 16px;">
+                      <div style="position: absolute; bottom: 16px">
                         <h3 class="text-h5 mb-0">{{ book.title }}</h3>
                         <div class="d-flex">
                           <h4 class="text-body-2 grey--text">
@@ -106,11 +113,18 @@
                 >
                   <v-img max-height="400" loading="lazy" :src="movie.cover">
                     <div
-                      style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px); width: 100%;"
+                      style="
+                        background-image: linear-gradient(
+                          to top,
+                          rgba(0, 0, 0, 0.8) 0%,
+                          transparent 250px
+                        );
+                        width: 100%;
+                      "
                       class="align-baseline fill-height pa-4"
                     >
-                      <div style="position: absolute; bottom: 16px;">
-                        <div style="width: 100%;">
+                      <div style="position: absolute; bottom: 16px">
+                        <div style="width: 100%">
                           <h3 class="text-h5 mb-0">{{ movie.title }}</h3>
                           <div class="d-flex">
                             <h4 class="text-body-2 grey--text">
@@ -155,11 +169,18 @@
                 >
                   <v-img :src="item.cover" loading="lazy">
                     <div
-                      style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px); width: 100%;"
+                      style="
+                        background-image: linear-gradient(
+                          to top,
+                          rgba(0, 0, 0, 0.8) 0%,
+                          transparent 250px
+                        );
+                        width: 100%;
+                      "
                       class="align-baseline fill-height pa-4"
                     >
-                      <div style="position: absolute; bottom: 16px;">
-                        <div style="width: 100%;">
+                      <div style="position: absolute; bottom: 16px">
+                        <div style="width: 100%">
                           <h3 class="text-h5 mb-0">{{ item.title }}</h3>
                           <div class="d-flex">
                             <h4 class="text-body-2 grey--text">
@@ -247,7 +268,7 @@
 
     <v-dialog
       width="600"
-      style="z-index: 99991;"
+      style="z-index: 99991"
       v-model="current.open"
       @click:outside="current = {}"
     >
@@ -255,14 +276,20 @@
         <v-img
           :src="current.cover"
           loading="lazy"
-          style="height: 90vh;"
+          style="height: 90vh"
           v-if="current.type != 'music'"
         >
           <v-card-title
             class="align-end fill-height"
-            style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);"
+            style="
+              background-image: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 0.8) 0%,
+                transparent 250px
+              );
+            "
           >
-            <div style="width: 100%;">
+            <div style="width: 100%">
               <h3 class="text-h5 mb-0">{{ current.title }}</h3>
               <div class="d-flex">
                 <h4
@@ -302,9 +329,15 @@
         >
           <v-card-title
             class="align-end fill-height"
-            style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);"
+            style="
+              background-image: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 0.8) 0%,
+                transparent 250px
+              );
+            "
           >
-            <div style="width: 100%;">
+            <div style="width: 100%">
               <h3 class="text-h5 mb-0">{{ current.title }}</h3>
               <div class="d-flex">
                 <h4
@@ -384,7 +417,7 @@
                   <v-col sm="2" class="py-2 text-right" v-if="song.lyrics"
                     ><v-icon
                       class="grey--text text--darken-1"
-                      style="padding-top: 1px;"
+                      style="padding-top: 1px"
                       >mdi-closed-caption</v-icon
                     ></v-col
                   >
@@ -437,23 +470,29 @@
     <!-- Upload dialog -->
     <v-dialog
       width="600"
-      style="z-index: 99991;"
+      style="z-index: 99991"
       v-model="add_dialog"
       @click:outside="cancelUpload()"
     >
-      <v-card style="x-overflow: hidden;">
+      <v-card style="x-overflow: hidden">
         <v-img
           :src="upload.cover"
-          style="height: 90vh;"
+          style="height: 90vh"
           v-if="tab != 2"
           loading="lazy"
         >
           <v-card-title
             @click.self="add_dialog_uploader = true"
             class="align-end fill-height"
-            style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);"
+            style="
+              background-image: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 0.8) 0%,
+                transparent 250px
+              );
+            "
           >
-            <div style="width: 100%;">
+            <div style="width: 100%">
               <h3 class="text-h5 mb-0">
                 <input v-model="upload.title" type="text" placeholder="Title" />
               </h3>
@@ -481,7 +520,7 @@
             @click="add_dialog_uploader = true"
             class="text-h3 centralize"
           >
-            <v-icon class="grey--text" style="font-size: inherit;"
+            <v-icon class="grey--text" style="font-size: inherit"
               >mdi-image-plus</v-icon
             >
           </h1>
@@ -492,9 +531,15 @@
             <v-card-title
               @click.self="add_dialog_uploader = true"
               class="align-end fill-height"
-              style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);"
+              style="
+                background-image: linear-gradient(
+                  to top,
+                  rgba(0, 0, 0, 0.8) 0%,
+                  transparent 250px
+                );
+              "
             >
-              <div style="width: 100%;">
+              <div style="width: 100%">
                 <h3 class="text-h5 mb-0">
                   <input
                     type="text"
@@ -505,12 +550,12 @@
                 <div class="d-flex">
                   <h4 class="text-body-2 grey--text">
                     <input
-                      style="width: 150px;"
+                      style="width: 150px"
                       type="text"
                       placeholder="Artist"
                       v-model="upload.artist"
                     />&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;<input
-                      style="width: 150px;"
+                      style="width: 150px"
                       type="text"
                       placeholder="Genre"
                       v-model="upload.genre"
@@ -525,7 +570,7 @@
               @click="add_dialog_uploader = true"
               class="text-h3 centralize"
             >
-              <v-icon class="grey--text" style="font-size: inherit;"
+              <v-icon class="grey--text" style="font-size: inherit"
                 >mdi-image-plus</v-icon
               >
             </h1>
@@ -536,7 +581,7 @@
           <textarea
             v-model="upload.summary"
             placeholder="Summary"
-            style="width: 100%;"
+            style="width: 100%"
             rows="5"
           ></textarea>
           <v-file-input v-model="upload.file" label="Upload..."></v-file-input>
@@ -566,17 +611,23 @@
               <v-expansion-panel-header>
                 <v-row no-gutters>
                   <v-col sm="2"
-                    ><input type="text" v-model="song.track" placeholder="Track"
+                    ><input
+                      type="text"
+                      v-model="song.track"
+                      placeholder="Track"
                   /></v-col>
                   <v-col sm="8"
-                    ><input type="text" v-model="song.title" placeholder="Title"
+                    ><input
+                      type="text"
+                      v-model="song.title"
+                      placeholder="Title"
                   /></v-col>
                   <v-col sm="2" class="grey--text"
                     ><input
                       type="text"
                       v-model="song.length"
                       placeholder="Length"
-                      style="width: 100%;"
+                      style="width: 100%"
                   /></v-col>
                 </v-row>
               </v-expansion-panel-header>
@@ -587,7 +638,7 @@
                     <p class="my-2">Audio</p>
                     <audio
                       :id="`audio-${index}`"
-                      style="max-width: 256px;"
+                      style="max-width: 256px"
                       v-if="song.upload"
                       :src="URL.createObjectURL(song.upload)"
                       controls
@@ -616,7 +667,7 @@
                     </v-row>
                     <v-simple-table
                       v-if="song.upload"
-                      style="max-height: 300px; overflow-y: auto;"
+                      style="max-height: 300px; overflow-y: auto"
                     >
                       <template v-slot:default>
                         <thead>
@@ -638,7 +689,7 @@
                                 type="text"
                                 v-model="song.lyrics[timestamp]"
                                 placeholder="Lyric"
-                                style="width: 100%;"
+                                style="width: 100%"
                               />
                             </td>
                           </tr>

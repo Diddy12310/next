@@ -23,7 +23,7 @@
       <v-tab disabled>Resources</v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tab" style="background: none;">
+    <v-tabs-items v-model="tab" style="background: none">
       <v-tab-item>
         <v-container>
           <v-simple-table>
@@ -55,7 +55,7 @@
                   <td>{{ bug.description }}</td>
                   <td
                     v-ripple
-                    style="cursor: pointer;"
+                    style="cursor: pointer"
                     @click="$go(['', 'people', bug.username])"
                   >
                     {{ bug.username }}
