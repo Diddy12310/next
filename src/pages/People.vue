@@ -45,7 +45,7 @@
                     ><img
                       loading="lazy"
                       style="border-radius: 150px"
-                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${user._id}.jpg`"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${user._id}.png`"
                   /></v-avatar>
                 </v-badge>
                 <h1
@@ -81,7 +81,7 @@
                     ><img
                       loading="lazy"
                       style="border-radius: 150px"
-                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.profile._id}.jpg`"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.profile._id}.png`"
                   /></v-avatar>
                 </v-badge>
                 <h1
@@ -162,7 +162,7 @@
                           <v-img
                             class="elevation-6"
                             loading="lazy"
-                            :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.profile._id}.jpg`"
+                            :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.profile._id}.png`"
                           ></v-img>
                         </v-list-item-avatar>
 

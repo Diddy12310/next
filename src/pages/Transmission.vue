@@ -13,7 +13,7 @@
         <v-list-item-avatar
           ><v-img
             loading="lazy"
-            :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.jpg`"
+            :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.png`"
           ></v-img
         ></v-list-item-avatar>
         <v-list-item-title :style="{ color: friend.color }">{{

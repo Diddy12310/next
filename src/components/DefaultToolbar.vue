@@ -57,7 +57,7 @@
           <v-list-item value="Account">
             <v-list-item-avatar
               ><v-img
-                :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg`"
+                :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.png`"
             /></v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title

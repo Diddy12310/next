@@ -188,7 +188,7 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
@@ -280,7 +280,7 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
@@ -334,7 +334,7 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${$message.user_id}.jpg`"
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${$message.user_id}.png`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
@@ -413,7 +413,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -505,7 +505,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -562,7 +562,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -725,7 +725,7 @@
                     <v-list-item-avatar
                       ><v-img
                         loading="lazy"
-                        :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.jpg`"
+                        :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.png`"
                       ></v-img
                     ></v-list-item-avatar>
                   </v-badge>
@@ -763,7 +763,7 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
@@ -830,7 +830,7 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
@@ -884,7 +884,7 @@
                   class="mr-0"
                   ><v-img
                     loading="lazy"
-                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                   ></v-img
                 ></v-list-item-avatar>
               </v-col>
@@ -963,7 +963,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -1030,7 +1030,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -1087,7 +1087,7 @@
                   <v-list-item-avatar class="ma-0"
                     ><v-img
                       loading="lazy"
-                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-col>
@@ -1484,7 +1484,7 @@
               <v-list-item-avatar
                 ><v-img
                   loading="lazy"
-                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                 ></v-img
               ></v-list-item-avatar>
               <v-row>
@@ -1524,7 +1524,7 @@
               <v-list-item-avatar
                 ><v-img
                   loading="lazy"
-                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                 ></v-img
               ></v-list-item-avatar>
               <v-row>
@@ -1567,7 +1567,7 @@
               <v-list-item-avatar
                 ><v-img
                   loading="lazy"
-                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                 ></v-img
               ></v-list-item-avatar>
               <v-row>

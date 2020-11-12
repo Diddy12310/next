@@ -125,7 +125,7 @@
                       :class="{ 'ma-2': drawer ? true : false }"
                       ><v-img
                         loading="lazy"
-                        :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.jpg`"
+                        :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.png`"
                       ></v-img
                     ></v-list-item-avatar>
                   </v-badge>
@@ -158,7 +158,7 @@
               >
                 <v-list-item-avatar style="align-self: start" class="mt-4">
                   <v-img
-                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                   ></v-img>
                 </v-list-item-avatar>
 
@@ -304,7 +304,7 @@
               >
                 <v-list-item-avatar style="align-self: start" class="mt-4">
                   <v-img
-                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.jpg`"
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
                   ></v-img>
                 </v-list-item-avatar>
 

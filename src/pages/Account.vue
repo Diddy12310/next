@@ -20,7 +20,7 @@
             width="175"
             ><v-img
               loading="lazy"
-              :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg`"
+              :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.png`"
             ></v-img></v-avatar
           ><br />
           <input
@@ -188,7 +188,10 @@
                       @click.self="$go(['', 'people', person.username])"
                     >
                       <v-list-item-avatar
-                        ><v-img loading="lazy" :src="person.pic"></v-img
+                        ><v-img
+                          loading="lazy"
+                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                        ></v-img
                       ></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
@@ -235,7 +238,10 @@
                       @click.self="$go(['', 'people', person.username])"
                     >
                       <v-list-item-avatar
-                        ><v-img loading="lazy" :src="person.pic"></v-img
+                        ><v-img
+                          loading="lazy"
+                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                        ></v-img
                       ></v-list-item-avatar>
                       <v-row>
                         <v-col sm="8" class="py-0">
@@ -289,7 +295,10 @@
                       @click.self="$go(['', 'people', person.username])"
                     >
                       <v-list-item-avatar
-                        ><v-img loading="lazy" :src="person.pic"></v-img
+                        ><v-img
+                          loading="lazy"
+                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                        ></v-img
                       ></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
@@ -335,7 +344,10 @@
                       :key="index"
                     >
                       <v-list-item-avatar
-                        ><v-img loading="lazy" :src="person.pic"></v-img
+                        ><v-img
+                          loading="lazy"
+                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                        ></v-img
                       ></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
