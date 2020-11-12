@@ -19,7 +19,7 @@ Vue.mixin({
       this.$root.notification = {
         class: style,
         text,
-        icon,
+        icon
       };
       setTimeout(() => (this.$root.notification = false), timeout);
     },
@@ -27,7 +27,7 @@ Vue.mixin({
       this.$root.notification = {
         class: "orange--text",
         text: "Function not available",
-        icon: "mdi-alert",
+        icon: "mdi-alert"
       };
       setTimeout(() => (this.$root.notification = false), 2000);
     },
@@ -37,8 +37,8 @@ Vue.mixin({
       this.$root.profile = false;
       this.$root.music = false;
       this.$root.transmission = false;
-    },
-  },
+    }
+  }
 });
 
 new Vue({
@@ -53,8 +53,8 @@ new Vue({
       nav: [],
       notification: false,
       config: false,
-      socket,
+      socket
     };
   },
-  render: (h) => h(App),
+  render: h => h(App)
 }).$mount("#app");

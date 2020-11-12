@@ -48,42 +48,40 @@
               background-color="transparent"
               v-model="content"
             ></v-textarea>
-            <div class="mt-4" v-show="file && file_type && !edit.open">
+            <div class="mt-4" v-for="(file, index) in files" :key="index">
               <img
-                v-show="file_type == 'image'"
+                v-if="file.type.includes('image')"
                 id="img"
                 style="max-width: 250px"
+                :src="file.uri"
               />
               <video
                 controls
-                v-show="file_type == 'video'"
+                v-else-if="file.type.includes('video')"
                 id="video"
                 style="max-width: 250px"
+                :src="file.uri"
               ></video>
-              <v-icon v-show="file_type == 'file'" style="font-size: 48px"
-                >mdi-file</v-icon
-              >
-              <v-btn
-                icon
-                color="red"
-                @click="
-                  file = null;
-                  file_type = false;
-                "
+              <v-icon v-else style="font-size: 48px">mdi-file</v-icon>
+              <v-btn icon color="red" @click="files.splice(index, 1)"
                 ><v-icon>mdi-close</v-icon></v-btn
               >
             </div>
           </v-card-text>
 
           <v-card-actions>
-            <v-btn icon @click="uploader = true" color="grey lighten-1"
+            <v-btn
+              icon
+              @click="uploader = true"
+              color="grey lighten-1"
+              :disabled="files.length > 4"
               ><v-icon>mdi-paperclip</v-icon></v-btn
             >
             <v-spacer></v-spacer>
             <v-btn
               text
               color="white"
-              :disabled="!file && content == ''"
+              :disabled="files.length < 1 && content == ''"
               @click="post()"
               >Post</v-btn
             >
@@ -97,16 +95,18 @@
           v-for="(post, index) in filteredPosts"
           :key="index"
         >
-          <v-img
-            :src="`https://www.theparadigmdev.com/relay/broadcast/${$root.user._id}/${post.file_path}`"
-            v-if="post.file_type == 'image'"
-          ></v-img>
-          <video
-            :src="`https://www.theparadigmdev.com/relay/broadcast/${$root.user._id}/${post.file_path}`"
-            v-if="post.file_type == 'video'"
-            controls
-            style="max-width: 500px"
-          ></video>
+          <div v-for="(file, i) in post.files" :key="i" v-show="!edit.open">
+            <v-img :src="file.uri" v-if="file.type.includes('image')"></v-img>
+            <video
+              :src="file.uri"
+              v-else-if="file.type.includes('video')"
+              controls
+              style="max-width: 500px"
+            ></video>
+            <v-btn v-else @click="window.open(file.uri)" text block large
+              ><v-icon left>mdi-download</v-icon>{{ file.name }}</v-btn
+            >
+          </div>
 
           <v-card-text class="text-h5" v-html="post.content"></v-card-text>
 
@@ -118,7 +118,7 @@
                     <v-img
                       class="elevation-6"
                       loading="lazy"
-                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg`"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.png`"
                     ></v-img>
                   </v-list-item-avatar>
 
@@ -137,19 +137,10 @@
 
               <v-col class="text-right">
                 <v-btn
-                  v-if="post.file_path && post.file_type == 'file'"
-                  icon
-                  @click="
-                    window.open(
-                      `https://www.theparadigmdev.com/relay/broadcast/${$root.user._id}/${post.file_path}`
-                    )
-                  "
-                  ><v-icon>mdi-download</v-icon></v-btn
-                >
-                <v-btn
                   icon
                   @click="
                     edit = post;
+                    files = edit.files;
                     edit.open = true;
                   "
                   ><v-icon>mdi-pencil</v-icon></v-btn
@@ -215,30 +206,22 @@
               ><v-icon>mdi-close</v-icon></v-btn
             >
           </div>
-          <div class="mt-4" v-if="edit.file_type && file">
+          <div class="mt-4" v-for="(file, index) in files" :key="index">
             <img
-              v-show="edit.file_type == 'image'"
+              v-if="file.type.includes('image')"
               id="img"
               style="max-width: 250px"
+              :src="file.uri"
             />
             <video
               controls
-              v-show="edit.file_type == 'video'"
+              v-else-if="file.type.includes('video')"
               id="video"
               style="max-width: 250px"
+              :src="file.uri"
             ></video>
-            <v-icon v-show="edit.file_type == 'file'" style="font-size: 48px"
-              >mdi-file</v-icon
-            >
-            <v-btn
-              v-show="!uploader"
-              icon
-              color="red"
-              @click="
-                edit.file_path = null;
-                edit.file_type = null;
-                file = null;
-              "
+            <v-icon v-else style="font-size: 48px">mdi-file</v-icon>
+            <v-btn icon color="red" @click="files.splice(index, 1)"
               ><v-icon>mdi-close</v-icon></v-btn
             >
           </div>
@@ -251,7 +234,10 @@
           <v-btn icon @click="uploader = true" color="grey lighten-1"
             ><v-icon>mdi-paperclip</v-icon></v-btn
           >
-          <v-btn text @click="updatePost()" :disabled="edit.content == ''"
+          <v-btn
+            text
+            @click="updatePost()"
+            :disabled="(edit.content == '', (files = []))"
             >Save</v-btn
           >
         </v-card-actions>
@@ -265,6 +251,7 @@
         >
         <v-card-text
           ><v-file-input
+            hide-details="auto"
             prepend-icon=""
             id="file"
             ref="file"
@@ -302,15 +289,14 @@ export default {
       content: "",
       search: "",
       uploader: false,
-      // upload_file_loading: false,
       file: null,
-      file_type: false,
       image_delete_button: false,
       window,
       edit: {
         open: false,
       },
       loading: false,
+      files: [],
     };
   },
   computed: {
@@ -355,6 +341,7 @@ export default {
         .then((response) => {
           this.$root.user.posts = response.data.posts;
           this.content = "";
+          this.files = [];
           this.loading = false;
         })
         .catch((error) => console.error(error));
@@ -408,27 +395,44 @@ export default {
         .catch((error) => console.error(error));
     },
     previewUpload() {
-      this.edit.file_type = null;
-      this.edit.file_path = null;
-      if (this.file.type.includes("image")) {
-        this.file_type = "image";
-        this.edit.file_type = "image";
-        let imgs = document.querySelectorAll("#img");
-        for (let i = 0; i < imgs.length; i++) {
-          imgs[i].src = URL.createObjectURL(this.file);
-        }
-      } else if (this.file.type.includes("video")) {
-        this.file_type = "video";
-        this.edit.file_type = "video";
-        let videos = document.querySelectorAll("#video");
-        for (let i = 0; i < imgs.length; i++) {
-          imgs[i].src = URL.createObjectURL(this.file);
-        }
-      } else {
-        this.file_type = "file";
-        this.edit.file_type = "file";
-      }
-      this.uploader = false;
+      // this.edit.file_type = null;
+      // this.edit.file_path = null;
+      // if (this.file.type.includes("image")) {
+      //   this.file_type = "image";
+      //   this.edit.file_type = "image";
+      //   let imgs = document.querySelectorAll("#img");
+      //   for (let i = 0; i < imgs.length; i++) {
+      //     imgs[i].src = URL.createObjectURL(this.file);
+      //   }
+      // } else if (this.file.type.includes("video")) {
+      //   this.file_type = "video";
+      //   this.edit.file_type = "video";
+      //   let videos = document.querySelectorAll("#video");
+      //   for (let i = 0; i < imgs.length; i++) {
+      //     imgs[i].src = URL.createObjectURL(this.file);
+      //   }
+      // } else {
+      //   this.file_type = "file";
+      //   this.edit.file_type = "file";
+      // }
+      // this.uploader = false;
+
+      var reader = new FileReader();
+      let that = this;
+      console.log(this.file);
+      reader.onloadend = function () {
+        let data = {
+          uri: reader.result,
+          name: that.file.name,
+          size: that.file.size + "B",
+          type: that.file.type,
+        };
+        that.files.push(data);
+        that.uploader = false;
+        that.file = null;
+        console.log(that);
+      };
+      reader.readAsDataURL(this.file);
     },
   },
 };
