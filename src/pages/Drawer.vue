@@ -42,6 +42,19 @@
         dense
         v-if="$vuetify.breakpoint.xsOnly"
       >
+        <template v-slot:item.icon="{ item }">
+          <v-icon v-if="item.type.includes('image')">mdi-image</v-icon>
+          <v-icon v-else-if="item.type.includes('video')">mdi-video</v-icon>
+          <v-icon v-else-if="item.type.includes('audio')"
+            >mdi-music-note</v-icon
+          >
+          <v-icon v-else-if="item.type.includes('pdf')">mdi-file-pdf</v-icon>
+          <v-icon v-else-if="item.type.includes('workshop')"
+            >mdi-file-cloud</v-icon
+          >
+          <v-icon v-else>mdi-file</v-icon>
+        </template>
+
         <template v-slot:item.action="{ item }">
           <v-icon
             small
@@ -85,6 +98,19 @@
         class="elevation-1"
         v-else
       >
+        <template v-slot:item.icon="{ item }">
+          <v-icon v-if="item.type.includes('image')">mdi-image</v-icon>
+          <v-icon v-else-if="item.type.includes('video')">mdi-video</v-icon>
+          <v-icon v-else-if="item.type.includes('audio')"
+            >mdi-music-note</v-icon
+          >
+          <v-icon v-else-if="item.type.includes('pdf')">mdi-file-pdf</v-icon>
+          <v-icon v-else-if="item.type.includes('workshop')"
+            >mdi-file-cloud</v-icon
+          >
+          <v-icon v-else>mdi-file</v-icon>
+        </template>
+
         <template v-slot:item.action="{ item }">
           <v-icon
             small
@@ -148,6 +174,7 @@ export default {
   data() {
     return {
       headers: [
+        { text: "", value: "icon", sortable: false, width: 24 },
         { text: "Name", value: "name" },
         { text: "Type", value: "type" },
         { text: "Size", value: "size" },
