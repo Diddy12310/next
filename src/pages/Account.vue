@@ -84,7 +84,7 @@
                       v-for="app in user.pinned_apps"
                       :key="$root.config.apps[app].path"
                       block
-                      class="cursor-move item"
+                      class="cursor-move item mb-2"
                       :color="$root.config.apps[app].color"
                       >{{ app }}</v-btn
                     >
@@ -105,7 +105,7 @@
                       v-for="app2 in apps_remaining"
                       :key="$root.config.apps[app2].path"
                       block
-                      class="cursor-move item"
+                      class="cursor-move item mb-2"
                       :color="$root.config.apps[app2].color"
                       >{{ app2 }}</v-btn
                     >
