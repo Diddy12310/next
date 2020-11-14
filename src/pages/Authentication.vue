@@ -205,12 +205,6 @@ export default {
                   rights: true,
                 },
                 {
-                  icon: "mdi-video-wireless",
-                  content: "Transmission",
-                  disabled: true,
-                  rights: true,
-                },
-                {
                   icon: "mdi-shield-lock",
                   content: "Privacy",
                   disabled: false,
