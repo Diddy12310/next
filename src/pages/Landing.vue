@@ -156,6 +156,7 @@ export default {
       this.$root.user = {
         username: this.username,
         password: this.password,
+        preflight: true,
       };
       this.$root.router = "SignUp";
     },

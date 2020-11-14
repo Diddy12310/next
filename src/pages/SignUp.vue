@@ -31,19 +31,29 @@
     <div style="max-width: 500px" class="mx-auto" v-else>
       <v-text-field
         hide-details
-        v-model="$root.username"
+        v-model="$root.user.username"
         label="Username"
+        class="my-4"
       ></v-text-field>
+      <span class="grey--text"
+        >Contrary to most other platforms, your username does not need to be
+        unique, but it should represent who you are.</span
+      >
       <v-text-field
         hide-details
-        v-model="$root.password"
+        v-model="$root.user.password"
         label="Password"
         type="password"
+        class="my-4"
       ></v-text-field>
+      <span class="grey--text"
+        >Your password should be as secure as possible. It is recommended to use
+        different passwords for different accounts.</span
+      >
       <v-color-picker
         mode="hexa"
         hide-mode-switch
-        class="mt-3 mb-3"
+        class="my-3"
         flat
         style="margin: auto"
         v-model="new_user.color"
@@ -54,7 +64,7 @@
       >
       <v-text-field
         hide-details="auto"
-        class="mb-4"
+        class="my-4"
         :count="50"
         autocomplete="off"
         type="text"
@@ -70,12 +80,13 @@
         v-model="new_user.pic"
         label="Profile Picture"
         :disabled="use_default"
+        class="mt-4"
       ></v-file-input>
       <span class="grey--text">A visual representation of yourself.</span>
-      <v-checkbox
+      <!-- <v-checkbox
         v-model="use_default"
         label="Use default profile picture"
-      ></v-checkbox>
+      ></v-checkbox> -->
       <v-checkbox
         hide-details="auto"
         label="I have read and accept the Terms and Conditions."
@@ -95,7 +106,7 @@
       </span>
       <v-btn
         block
-        class="mt-6 mx-auto"
+        class="my-6 mx-auto"
         color="deep-purple darken-4"
         @click="signUp()"
         >Finish</v-btn
@@ -110,7 +121,7 @@ export default {
   data() {
     return {
       invite_code: "",
-      invite_code_verified: true,
+      invite_code_verified: false,
       new_user: {
         color: "",
         username: this.$root.user.username,
@@ -168,9 +179,131 @@ export default {
                       },
                     }
                   )
-                  .then((response) => {
+                  .then(async (response) => {
+                    this.$root.nav = [
+                      {
+                        icon: "mdi-home",
+                        content: "Home",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-message",
+                        content: "Flamechat",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-web",
+                        content: "Satellite",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-newspaper",
+                        content: "The Paradox",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-folder-multiple",
+                        content: "Drawer",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-play",
+                        content: "Media",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-account-group",
+                        content: "People",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-satellite-uplink",
+                        content: "Broadcast",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-download",
+                        content: "Downloads",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-video-wireless",
+                        content: "Transmission",
+                        disabled: true,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-shield-lock",
+                        content: "Privacy",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-feather",
+                        content: "Terms",
+                        disabled: false,
+                        rights: true,
+                      },
+                      {
+                        icon: "mdi-lifebuoy",
+                        content: "Support",
+                        disabled: false,
+                        rights: true,
+                      },
+
+                      {
+                        icon: "mdi-code-tags",
+                        content: "Developer",
+                        disabled: false,
+                        rights: response.data.rights.developer,
+                      },
+                      {
+                        icon: "mdi-console-line",
+                        content: "Terminal",
+                        disabled: false,
+                        rights: response.data.rights.admin,
+                      },
+                    ];
+
                     this.$root.user = response.data;
                     this.$root.router = "Home";
+                    response.data.preflight
+                      ? (this.$root.router = "Preflight")
+                      : (this.$root.router = "Home");
+                    this.$root.socket.emit("login", response.data);
+
+                    if (
+                      (await this.$root.worker.pushManager.permissionState()) !=
+                      "granted"
+                    ) {
+                      // Register Push
+                      console.log("Registering Push...");
+                      const subscription = await this.$root.worker.pushManager.subscribe(
+                        {
+                          userVisibleOnly: true,
+                          applicationServerKey: this.$urlBase64ToUint8Array(
+                            this.$root.public_vapid_key
+                          ),
+                        }
+                      );
+                      console.log("Push Registered...");
+                      // Send Push Subscription
+                      console.log("Sending Push...");
+                      await this.$http.post(
+                        `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
+                        subscription
+                      );
+                      console.log("Push Sent...");
+                    }
                   })
                   .catch((error) => {
                     console.log("Upload: failed", error);
@@ -207,6 +340,23 @@ export default {
       //     false,
       //     3000
       //   );
+    },
+    verifyInviteCode() {
+      this.$http
+        .put(`https://www.theparadigmdev.com/api/apollo`, {
+          code: this.invite_code,
+        })
+        .then((response) => {
+          if (response.data.used === true || response.data.used === null)
+            this.$notify(
+              "Invite code is invalid",
+              "error",
+              "mdi-exclamation",
+              false,
+              3000
+            );
+          else this.invite_code_verified = true;
+        });
     },
   },
 };

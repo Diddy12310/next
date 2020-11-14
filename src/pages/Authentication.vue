@@ -228,7 +228,6 @@ export default {
                   disabled: false,
                   rights: true,
                 },
-
                 {
                   icon: "mdi-code-tags",
                   content: "Developer",
