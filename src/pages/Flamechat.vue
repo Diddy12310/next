@@ -27,7 +27,7 @@
           key="root_drawer"
         >
           <v-list>
-            <v-list-item-group v-model="current_id">
+            <v-list-item-group mandatory v-model="current_id">
               <v-list-item
                 value="home"
                 @click="
@@ -41,7 +41,7 @@
               </v-list-item>
 
               <v-list-item
-                value="dm"
+                :value="current_dm_person ? current_id : 'dm'"
                 @click="
                   current_id = 'dm';
                   current = null;
@@ -78,7 +78,9 @@
           v-if="current_id == 'home'"
         >
           <h3 class="text-h3 font-weight-light">Welcome to Flamechat!</h3>
-          <p class="mt-3">Flamechat is a lkjdsaf;lja;lsdkfj;lasdj;lj</p>
+          <p class="mt-3">
+            Flamechat is a secure and freedom-oriented chatting app.
+          </p>
           <div style="max-width: 150px; margin: auto">
             <v-btn x-large class="mt-8" block @click="buy_chatroom.open = true">
               <v-icon left>mdi-plus</v-icon>Create
