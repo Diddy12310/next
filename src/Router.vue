@@ -10,7 +10,7 @@
       <Flamechat
         v-if="$root.router == 'Flamechat'"
         key="Flamechat"
-        style="background-color: #131313; height: 100vh;"
+        style="background-color: #131313; height: 100vh"
       />
       <Media v-if="$root.router == 'Media'" key="Media" />
       <Satellite v-if="$root.router == 'Satellite'" key="Satellite" />
@@ -27,6 +27,8 @@
       <Terminal v-if="$root.router == 'Terminal'" key="Terminal" />
       <Support v-if="$root.router == 'Support'" key="Support" />
       <SignUp v-if="$root.router == 'SignUp'" key="SignUp" />
+      <Recovery v-if="$root.router == 'Recovery'" key="Recovery" />
+      <Preflight v-if="$root.router == 'Preflight'" key="Preflight" />
     </v-slide-x-reverse-transition>
   </div>
 </template>
@@ -51,6 +53,8 @@ import Terms from "./pages/Terms.vue";
 import Terminal from "./pages/Terminal.vue";
 import Support from "./pages/Support.vue";
 import SignUp from "./pages/SignUp.vue";
+import Recovery from "./pages/Recovery.vue";
+import Preflight from "./pages/preflight/Index.vue";
 
 export default {
   name: "Router",
@@ -74,6 +78,8 @@ export default {
     Terminal,
     Support,
     SignUp,
+    Recovery,
+    Preflight,
   },
 };
 </script>

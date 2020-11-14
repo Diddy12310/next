@@ -1,10 +1,10 @@
 <template>
-  <div style="background-color: #0F1E3C; height: 100vh;">
-    <header style="height: 8rem;">
-      <v-container class="d-flex align-center pa-0" style="width: 100%;">
+  <div style="background-color: #0f1e3c; height: 100vh">
+    <header style="height: 8rem">
+      <v-container class="d-flex align-center pa-0" style="width: 100%">
         <img
           src="../assets/logo.png"
-          style="height: 128px; width: 112px;"
+          style="height: 128px; width: 112px"
           class="py-4 pr-4"
         />
         <h1
@@ -25,7 +25,7 @@
     </header>
 
     <main
-      style="height: calc(100vh - 128px); overflow-y: auto; overflow-x: hidden;"
+      style="height: calc(100vh - 128px); overflow-y: auto; overflow-x: hidden"
       class="pt-12"
     >
       <v-container class="pa-0">
@@ -46,11 +46,11 @@
               <div
                 v-ripple
                 @click="window.open('https://github.com/Paradigm-Dev')"
-                style="border-radius: 99999px; background-color: #182D57;"
+                style="border-radius: 99999px; background-color: #182d57"
                 class="hover:bg-deep-blue-800 pa-1 pr-3 white--text d-flex flex-shrink align-center"
               >
                 <div
-                  style="border-radius: 99999px;"
+                  style="border-radius: 99999px"
                   class="deep-purple darken-4 px-3 mr-2 font-weight-bold uppercase"
                 >
                   WE'RE OPEN SOURCE
@@ -94,16 +94,16 @@
             </v-row>
           </v-col>
 
-          <v-col sm="12" md="4">
+          <v-col sm="12" md="4" v-if="$root.config.auth.sign_up">
             <v-card
               color="#333333"
               class="ma-3"
               :class="{ 'mx-auto': $vuetify.breakpoint.smAndDown }"
-              style="border: none !important; max-width: 25rem;"
+              style="outline: none; max-width: 25rem"
             >
-              <v-card-title class="text-h4 grey--text text--lighten-1"
-                >Sign up</v-card-title
-              >
+              <v-card-title class="text-h4 grey--text text--lighten-1">
+                Sign up
+              </v-card-title>
 
               <v-card-text>
                 <v-text-field

@@ -1,40 +1,63 @@
 <template>
   <v-app-bar app color="#0F1E3C" class="pa-0">
     <v-row class="fill-height align-center pa-0 mt-n2 ml-n4" no-gutters>
-      <v-col cols="2" sm="1" md="4" class="pa-0">
-        <div
-          :class="{
-            'd-flex': $vuetify.breakpoint.smAndUp,
-            'align-center': true,
-          }"
-        >
-          <img
-            :style="{ height: $vuetify.breakpoint.smAndDown ? '56px' : '64px' }"
-            :src="$root.music[0].cover"
-          />
+      <v-col cols="2" lg="4" class="pa-0">
+        <v-slide-x-transition group hide-on-leave leave-absolute>
           <div
-            v-if="$vuetify.breakpoint.smAndUp"
-            :class="{ 'ml-3': $vuetify.breakpoint.smAndUp }"
-            style="width: 100%;"
+            :class="{
+              'd-flex': $vuetify.breakpoint.lgAndUp,
+              'align-center': true,
+            }"
+            v-if="!$root.notification"
+            key="album"
           >
-            <h3
-              class="text-h5 mb-0 leading-none"
-              style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
+            <img
+              :style="{
+                height: $vuetify.breakpoint.smAndDown ? '56px' : '64px',
+              }"
+              :src="$root.music[0].cover"
+            />
+            <div
+              v-if="$vuetify.breakpoint.lgAndUp"
+              :class="{ 'ml-3': $vuetify.breakpoint.lgAndUp }"
+              style="width: 100%"
             >
-              {{ $root.music[0].song_title }}
-            </h3>
-            <h4
-              class="text-body-1 font-weight-regular grey--text leading-tight"
-            >
-              {{ $root.music[0].artist }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{
-                $root.music[0].album_title
-              }}
-            </h4>
+              <h3
+                class="text-h5 mb-0 leading-none"
+                style="
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  overflow: hidden;
+                "
+              >
+                {{ $root.music[0].song_title }}
+              </h3>
+              <h4
+                class="text-body-1 font-weight-regular grey--text leading-tight"
+              >
+                {{
+                  $root.music[0].artist
+                }}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{{
+                  $root.music[0].album_title
+                }}
+              </h4>
+            </div>
           </div>
-        </div>
+          <div class="d-flex" v-else key="notification">
+            <v-icon :class="{ [`${$root.notification.class}`]: true }">{{
+              $root.notification.icon
+            }}</v-icon>
+            <p
+              class="mb-0 pb-0 ml-2"
+              :class="{ [`${$root.notification.class}`]: true }"
+            >
+              {{ $root.notification.text }}
+            </p>
+          </div>
+        </v-slide-x-transition>
       </v-col>
 
-      <v-col sm="4" v-if="$vuetify.breakpoint.smAndUp">
+      <v-col sm="4" v-if="$vuetify.breakpoint.lgAndUp">
         <div class="align-center">
           <v-scroll-y-reverse-transition group mode="in-out" hide-on-leave>
             <p
@@ -48,21 +71,19 @@
         </div>
       </v-col>
 
-      <v-col sm="1" class="content-center" v-if="$vuetify.breakpoint.smAndUp">
+      <v-col sm="1" class="content-center" v-if="$vuetify.breakpoint.lgAndUp">
         <span>{{ currentTime }}</span>
         <span class="font-weight-light"> / {{ duration }}</span>
       </v-col>
 
       <v-col
         cols="10"
-        sm="11"
-        md="3"
+        lg="3"
         class="w-full"
-        :class="{ centralize: $vuetify.breakpoint.xsOnly }"
+        :class="{ centralize: $vuetify.breakpoint.mdAndDown }"
       >
         <v-btn
           large
-          text
           icon
           class="primary--text"
           :loading="!loaded"
@@ -71,15 +92,14 @@
           <v-icon v-if="playing === false || paused === true">mdi-play</v-icon>
           <v-icon v-else>mdi-pause</v-icon>
         </v-btn>
-        <v-btn text large icon class="primary--text" @click.native="stop()">
+        <v-btn large icon class="primary--text" @click.native="stop()">
           <v-icon>mdi-stop</v-icon>
         </v-btn>
-        <v-btn text large icon class="primary--text" @click.native="mute()">
+        <v-btn large icon class="primary--text" @click.native="mute()">
           <v-icon v-if="isMuted === false">mdi-volume-high</v-icon>
           <v-icon v-else>mdi-volume-off</v-icon>
         </v-btn>
         <v-btn
-          text
           large
           icon
           class="primary--text"
@@ -89,8 +109,7 @@
           <v-icon>mdi-repeat</v-icon>
         </v-btn>
         <v-btn
-          v-if="$root.user.rights.asteroid && $vuetify.breakpoint.smAndUp"
-          text
+          v-if="$root.user.rights.asteroid && $vuetify.breakpoint.lgAndUp"
           large
           icon
           class="primary--text"
@@ -99,24 +118,67 @@
           <v-icon>mdi-download</v-icon>
         </v-btn>
         <v-btn
-          text
           icon
           large
           class="primary--text"
           :input-value="lyrics"
           @click.native="lyrics = !lyrics"
-          v-if="$root.music[0].lyrics"
+          v-if="$root.music[0].lyrics && $vuetify.breakpoint.lgAndUp"
         >
           <v-icon>mdi-closed-caption</v-icon>
         </v-btn>
-        <v-btn
-          text
-          large
-          icon
-          class="primary--text"
-          @click.native="clearSession()"
+        <v-menu
+          offset-y
+          style="background-color: #1e1e1e"
+          :close-on-content-click="false"
         >
-          <v-icon>mdi-notification-clear-all</v-icon>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon large v-bind="attrs" v-on="on" class="primary--text">
+              <v-icon>mdi-playlist-music</v-icon>
+            </v-btn>
+          </template>
+          <v-list dense class="pa-0 ma-0">
+            <v-list-item
+              v-for="(song, index) in $root.music"
+              :key="index"
+              class="pl-0"
+            >
+              <v-list-item-avatar
+                tile
+                class="my-0"
+                style="height: 64px; width: 78.35px"
+                ><v-img tile :src="song.cover"></v-img
+              ></v-list-item-avatar>
+              <v-list-item-title>
+                <v-row no-gutters align="center">
+                  <v-col cols="10">{{ song.song_title }}</v-col>
+                  <v-col cols="2" class="text-right"
+                    ><v-btn
+                      icon
+                      color="red"
+                      @click="
+                        $root.music[1]
+                          ? $root.music.splice(index, 1)
+                          : clearSession()
+                      "
+                      ><v-icon>mdi-close</v-icon></v-btn
+                    ></v-col
+                  >
+                </v-row>
+              </v-list-item-title>
+            </v-list-item>
+            <!-- <v-btn
+              class="mx-auto text-center"
+              color="blue accent-1"
+              @click="clearSession()"
+              text
+              >Clear All</v-btn
+            > -->
+          </v-list>
+        </v-menu>
+
+        <v-btn large icon class="primary--text" @click.native="clearSession()">
+          <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
@@ -124,9 +186,9 @@
               icon
               large
               :style="{
-                right: $vuetify.breakpoint.smAndUp ? '20px' : '-10.5px',
+                right: $vuetify.breakpoint.lgAndUp ? '20px' : '-10.5px',
               }"
-              style="position: absolute;"
+              style="position: absolute"
               v-bind="attrs"
               v-on="on"
             >
@@ -135,6 +197,28 @@
           </template>
           <v-list dense>
             <v-list-item-group v-model="$root.router" mandatory>
+              <v-list-item value="Account">
+                <v-list-item-avatar
+                  ><v-img
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.png`"
+                /></v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title
+                    style="font-size: 1rem !important"
+                    :style="{ color: $root.user.color }"
+                    >{{ $root.user.username }}</v-list-item-title
+                  >
+                  <v-list-item-subtitle style="font-weight-light"
+                    >Account</v-list-item-subtitle
+                  >
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-btn @click="signOut()" color="grey" icon
+                    ><v-icon>mdi-logout-variant</v-icon></v-btn
+                  >
+                </v-list-item-action>
+              </v-list-item>
+              <v-divider></v-divider>
               <v-list-item
                 v-for="(item, index) in $root.nav"
                 :key="index"
@@ -150,20 +234,7 @@
                 >
                 <v-list-item-title>{{ item.content }}</v-list-item-title>
               </v-list-item>
-              <v-divider></v-divider>
-              <v-list-item value="Account">
-                <v-list-item-icon
-                  ><v-icon>mdi-account</v-icon></v-list-item-icon
-                >
-                <v-list-item-title>Account</v-list-item-title>
-              </v-list-item>
             </v-list-item-group>
-            <v-list-item @click="signOut()">
-              <v-list-item-icon
-                ><v-icon>mdi-logout-variant</v-icon></v-list-item-icon
-              >
-              <v-list-item-title>Sign out</v-list-item-title>
-            </v-list-item>
           </v-list>
         </v-menu>
       </v-col>
@@ -171,9 +242,9 @@
       <v-slider
         fluid
         :height="2"
-        :class="{ 'mt-n3': $vuetify.breakpoint.xsOnly }"
+        :class="{ 'mt-n3': $vuetify.breakpoint.mdAndDown }"
         class="pa-0 my-0 ml-n2 mr-2 relative bottom-0 w-full"
-        style="width: 100vw;"
+        style="width: 100vw"
         dense
         hide-details
         ref="slider"
@@ -188,6 +259,7 @@
       ref="player"
       @pause="paused = true"
       @play="paused = false"
+      @volumechange="_handleVolumeChange"
       :src="$root.music[0].file"
     ></audio>
   </v-app-bar>
@@ -255,9 +327,7 @@ export default {
       this.refreshTitle();
     },
     download() {
-      this.audio.pause();
-      this.refreshTitle();
-      window.open(this.file, "download");
+      window.open(this.$root.music[0].file, "download");
     },
     mute() {
       this.isMuted = !this.isMuted;
@@ -309,10 +379,13 @@ export default {
         this.refreshTitle();
       } else {
         this.$root.music.shift();
-        if (!this.$root.music[0]) this.stop();
+        if (!this.$root.music[0]) this.clearSession();
         this.refreshTitle();
       }
       this.lyricTime = 0;
+    },
+    _handleVolumeChange(e) {
+      if (e.srcElement.muted) this.muted = true;
     },
     init() {
       this.audio.addEventListener("timeupdate", this._handlePlayingUI);

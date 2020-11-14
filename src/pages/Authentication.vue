@@ -1,15 +1,20 @@
 <template>
   <div
-    style="background-color: #0F1E3C; height: 100vh; width: 100vw; overflow-x: hidden;"
+    style="
+      background-color: #0f1e3c;
+      height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+    "
   >
     <div
-      style="max-width: 28rem; padding-top: 10rem;"
+      style="max-width: 28rem; padding-top: 10rem"
       class="mx-auto text-center"
     >
-      <img style="height: 8rem; margin: auto;" src="../assets/logo.png" />
+      <img style="height: 8rem; margin: auto" src="../assets/logo.png" />
 
       <v-card
-        style="border: none !important;"
+        style="border: none !important"
         class="ma-3 mt-10"
         color="#333333"
       >
@@ -28,8 +33,15 @@
           </h1>
           <p
             class="text--grey text--darken-4 font-weight-light ma-0 subtitle-2"
+            v-if="$root.config.auth.sign_up"
           >
-            Or <a class="text--grey text--darken-4"> create an account</a>
+            Or
+            <a
+              class="text--grey text--darken-4"
+              @click="$root.router = 'SignUp'"
+            >
+              create an account</a
+            >
           </p></v-card-title
         >
 
@@ -42,13 +54,14 @@
             @keyup="checkIfUserExists()"
           ></v-text-field>
           <v-text-field
-            hide-details
+            hide-details="auto"
             label="Password"
             class="mb-6"
             type="password"
             @keypress.enter="signIn()"
             v-model="password"
             :disabled="!user_auth_info.exists && !user_auth_info.in"
+            :error-messages="$root.notification.text"
           ></v-text-field>
           <v-btn
             block
@@ -64,7 +77,18 @@
             class="ma-auto subtitle-2 text-center font-weight-light text--grey text--darken-4"
           >
             Forgot your credentials?
-            <a class="text--grey text--darken-4"> Enter account recovery</a>
+            <a
+              class="text--grey text--darken-4"
+              @click="
+                $root.user = {
+                  password: 'PREFLIGHT',
+                  preflight: { in_recovery: true },
+                };
+                $root.router = 'Recovery';
+              "
+            >
+              Enter account recovery</a
+            >
           </p>
         </v-card-actions>
       </v-card>
@@ -86,6 +110,7 @@
             color="grey darken-1"
             @click="
               (username = ''),
+                (password = ''),
                 (user_auth_info.in = false),
                 (user_auth_info.exists = false)
             "
@@ -120,7 +145,7 @@ export default {
           username: this.username.toLowerCase(),
           password: this.password,
         })
-        .then((response) => {
+        .then(async (response) => {
           if (!response.data.msg) {
             this.authenticated = true;
             if (!this.user_auth_info.in) {
@@ -218,9 +243,42 @@ export default {
                 },
               ];
               this.$root.user = response.data;
-              this.$root.router = "Home";
+              response.data.preflight
+                ? (this.$root.router = "Preflight")
+                : (this.$root.router = "Home");
               this.$root.socket.emit("login", response.data);
+
+              if (
+                (await this.$root.worker.pushManager.permissionState()) !=
+                "granted"
+              ) {
+                // Register Push
+                console.log("Registering Push...");
+                const subscription = await this.$root.worker.pushManager.subscribe(
+                  {
+                    userVisibleOnly: true,
+                    applicationServerKey: this.$urlBase64ToUint8Array(
+                      this.$root.public_vapid_key
+                    ),
+                  }
+                );
+                console.log("Push Registered...");
+                // Send Push Subscription
+                console.log("Sending Push...");
+                await this.$http.post(
+                  `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
+                  subscription
+                );
+                console.log("Push Sent...");
+              }
             }
+          } else {
+            this.$notify(
+              "Password is incorrect",
+              "red--text",
+              "mdi-lock",
+              3000
+            );
           }
         });
     },

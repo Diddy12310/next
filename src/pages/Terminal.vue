@@ -1,20 +1,22 @@
 <template>
   <div class="terminal">
     <v-toolbar color="grey darken-4" dense>
-      <v-toolbar-title style="font-family: Roboto;">Terminal</v-toolbar-title>
+      <v-toolbar-title style="font-family: Roboto">Terminal</v-toolbar-title>
     </v-toolbar>
 
     <div
       v-chat-scroll
       id="output"
-      class="px-4 pt-3"
+      class="px-4 py-3"
       :style="{
-        height: `calc(100vh - ${$root.music.open ? '240px' : '160px'})`,
+        height: $vuetify.breakpoint.smAndDown
+          ? 'calc(100vh - 144px)'
+          : 'calc(100vh - 152px)',
         overflowY: 'auto',
       }"
     >
       <p
-        style="font-family: Roboto Mono;"
+        style="font-family: Roboto Mono"
         class="pb-0 pt-0 mt-0"
         v-for="(item, index) in history"
         :key="index"
@@ -22,7 +24,7 @@
       ></p>
     </div>
 
-    <label style="display: flex; padding-left: 16px; font-family: Roboto Mono;"
+    <label style="display: flex; padding-left: 16px; font-family: Roboto Mono"
       >><input
         @keypress.enter="sendCommand()"
         placeholder="enter command"
@@ -111,20 +113,13 @@ export default {
             .then((response) => {
               if (response.data.error) this.$error(response.data.error);
               else {
-                this.history.push(`<p class="grey--text">
-                &nbsp;&nbsp;&nbsp;&nbsp;# <span style="color: ${response.data.color};">${response.data.username}</span><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# ${response.data._id}<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# ${response.data.bio}<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# ---------------------------------------<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# moonrocks:        ${response.data.moonrocks}<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# rights.admin:     ${response.data.rights.admin}<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# rights.author:    ${response.data.rights.author}<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# rights.asteroid:  ${response.data.rights.asteroid}<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# rights.developer: ${response.data.rights.developer}<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# banned:           ${response.data.banned}<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# strikes:          ${response.data.strikes}<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;# logged in:        ${response.data.in}<br>
-              </p>`);
+                this.history.push(
+                  `<pre class="ml-8 grey--text">${JSON.stringify(
+                    response.data,
+                    null,
+                    2
+                  )}</pre>`
+                );
               }
             });
           break;

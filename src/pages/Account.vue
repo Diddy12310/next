@@ -11,32 +11,30 @@
       }"
     >
       <v-container>
-        <div class="text-center my-12">
+        <div class="text-center mt-12 mb-5">
           <v-avatar
-            style="cursor: pointer;"
+            style="cursor: pointer"
             v-ripple
             @click="uploader = true"
             height="175"
             width="175"
             ><v-img
               loading="lazy"
-              :src="
-                `https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.jpg`
-              "
+              :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.png`"
             ></v-img></v-avatar
           ><br />
           <input
             type="text"
             @input="change = true"
             class="text-h3 font-weight-medium mt-8"
-            style="text-align: center; width: 100%;"
+            style="text-align: center; width: 100%"
             :style="{ color: user.color }"
             v-model="user.username"
           />
           <p class="grey--text text--darken-1 font-weight-light">
             {{ user._id }}
           </p>
-          <div class="flex mx-auto max-w-xs place-content-center align-center">
+          <div class="d-flex mx-auto align-center justify-center">
             <img height="50" width="50" src="@/assets/moonrocks.png" />
             <span>{{ user.moonrocks }}</span>
           </div>
@@ -60,7 +58,7 @@
                   @input="change = true"
                   v-model="user.color"
                   class="elevation-0"
-                  style="width: 100%;"
+                  style="width: 100%"
                 ></v-color-picker>
               </v-card-text>
             </v-card>
@@ -70,52 +68,47 @@
               <v-card-text>
                 <p>Pinned Apps</p>
 
-                <!-- <v-list dense>
-                  <draggable v-model="$root.nav" style="min-height: 10px">
-                    <template v-for="item in $root.nav">
-                      <v-list-item :key="item.content">
-                        <v-list-item-icon
-                          ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
-                        >
-                        <v-list-item-title>{{
-                          item.content
-                        }}</v-list-item-title>
-                      </v-list-item>
-                    </template>
-                  </draggable>
-                </v-list> -->
-                <div class="flex">
+                <div class="d-flex">
                   <draggable
                     :list="user.pinned_apps"
                     @change="change = true"
                     group="apps"
-                    class="w-1/2 text-center"
+                    style="width: 150px"
+                    class="text-center mx-auto"
+                    draggable=".item"
                   >
-                    <p>Apps Already Pinned</p>
-                    <template v-for="app in user.pinned_apps">
-                      <v-btn
-                        :key="app"
-                        class="mx-2 w-1/2 cursor-move"
-                        :color="$root.config.apps[app].color"
-                        >{{ app }}</v-btn
-                      >
-                    </template>
+                    <div slot="header">
+                      <p>Apps Already Pinned</p>
+                    </div>
+                    <v-btn
+                      v-for="app in user.pinned_apps"
+                      :key="$root.config.apps[app].path"
+                      block
+                      class="cursor-move item mb-2"
+                      :color="$root.config.apps[app].color"
+                      >{{ app }}</v-btn
+                    >
                   </draggable>
                   <draggable
                     :list="apps_remaining"
                     group="apps"
                     @change="change = true"
-                    class="w-1/2 text-center"
+                    style="width: 150px"
+                    class="text-center mx-auto"
+                    draggable=".item"
                   >
-                    <p>Apps Remaining</p>
-                    <template v-for="app in apps_remaining">
-                      <v-btn
-                        :key="app"
-                        class="mx-2 w-1/2 cursor-move"
-                        :color="$root.config.apps[app].color"
-                        >{{ app }}</v-btn
-                      >
-                    </template>
+                    <div slot="header">
+                      <p>Apps Remaining</p>
+                    </div>
+
+                    <v-btn
+                      v-for="app2 in apps_remaining"
+                      :key="$root.config.apps[app2].path"
+                      block
+                      class="cursor-move item mb-2"
+                      :color="$root.config.apps[app2].color"
+                      >{{ app2 }}</v-btn
+                    >
                   </draggable>
                 </div>
               </v-card-text>
@@ -178,7 +171,7 @@
 
               <v-tabs-items
                 v-model="people_tab"
-                style="max-height: 498px; overflow-y: auto;"
+                style="max-height: 498px; overflow-y: auto"
               >
                 <v-tab-item>
                   <v-list>
@@ -195,7 +188,10 @@
                       @click.self="$go(['', 'people', person.username])"
                     >
                       <v-list-item-avatar
-                        ><v-img loading="lazy" :src="person.pic"></v-img
+                        ><v-img
+                          loading="lazy"
+                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                        ></v-img
                       ></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
@@ -242,7 +238,10 @@
                       @click.self="$go(['', 'people', person.username])"
                     >
                       <v-list-item-avatar
-                        ><v-img loading="lazy" :src="person.pic"></v-img
+                        ><v-img
+                          loading="lazy"
+                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                        ></v-img
                       ></v-list-item-avatar>
                       <v-row>
                         <v-col sm="8" class="py-0">
@@ -296,7 +295,10 @@
                       @click.self="$go(['', 'people', person.username])"
                     >
                       <v-list-item-avatar
-                        ><v-img loading="lazy" :src="person.pic"></v-img
+                        ><v-img
+                          loading="lazy"
+                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                        ></v-img
                       ></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
@@ -342,7 +344,10 @@
                       :key="index"
                     >
                       <v-list-item-avatar
-                        ><v-img loading="lazy" :src="person.pic"></v-img
+                        ><v-img
+                          loading="lazy"
+                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                        ></v-img
                       ></v-list-item-avatar>
                       <v-row>
                         <v-col sm="10" class="py-0">
@@ -383,7 +388,7 @@
             <v-card class="fill-height">
               <v-card-text class="pa-0">
                 <p class="ma-0 pt-4 pb-2 pl-4">Chatrooms</p>
-                <v-list style="max-height: 454px; overflow-y: auto;">
+                <v-list style="max-height: 454px; overflow-y: auto">
                   <v-list-item v-if="user.chatrooms.length <= 0">
                     <v-list-item-title class="text-center"
                       >You aren't in any chatrooms.</v-list-item-title
@@ -431,7 +436,7 @@
                 <v-text-field
                   hide-details="auto"
                   class="mb-4"
-                  style="min-width: 320px;"
+                  style="min-width: 320px"
                   type="password"
                   label="Current Password"
                   v-model="reset.current"
@@ -457,9 +462,9 @@
                 <v-btn
                   :disabled="
                     !reset.current ||
-                      !reset.new ||
-                      !reset.verify ||
-                      reset.new !== reset.verify
+                    !reset.new ||
+                    !reset.verify ||
+                    reset.new !== reset.verify
                   "
                   text
                   color="blue accent-1"
@@ -528,7 +533,7 @@
                         <td>{{ code.code }}</td>
                         <td
                           v-ripple
-                          style="cursor: pointer;"
+                          style="cursor: pointer"
                           @click="viewProfile(code.uid)"
                         >
                           {{ code.username }}
@@ -538,13 +543,13 @@
                         v-if="
                           $root.user.apollo_codes.quota -
                             $root.user.apollo_codes.created >
-                            0
+                          0
                         "
                       >
                         <td colspan="3">
                           <input
                             @keypress.enter="createCode()"
-                            style="width: 100%;"
+                            style="width: 100%"
                             type="text"
                             placeholder="Name"
                             v-model="new_code_name"
@@ -560,14 +565,14 @@
                     v-if="
                       $root.user.apollo_codes.quota -
                         $root.user.apollo_codes.created >
-                        0
+                      0
                     "
                     class="mb-0"
                   >
                     Since you are a core team member, you can create
                     {{
                       $root.user.apollo_codes.quota -
-                        $root.user.apollo_codes.created
+                      $root.user.apollo_codes.created
                     }}
                     code{{
                       $root.user.apollo_codes.quota -
@@ -584,11 +589,11 @@
             </v-card>
           </v-col>
           <v-col sm="6">
-            <v-card class="fill-height" style="border: #F44336 2px solid;">
+            <v-card class="fill-height" style="border: #f44336 2px solid">
               <v-card-text class="text-center">
                 <p class="text-left">Danger Zone</p>
                 <v-btn
-                  style="margin: 95px 0px 95px 0px;"
+                  style="margin: 95px 0px 95px 0px"
                   color="red"
                   @click="delete_dialog = true"
                   >Delete Account</v-btn
@@ -704,7 +709,7 @@
     </v-dialog>
 
     <v-btn
-      style="z-index: 1000;"
+      style="z-index: 1000"
       large
       fab
       fixed
@@ -788,6 +793,7 @@ export default {
           bio: this.user.bio,
           color: this.user.color,
           pinned_apps: this.user.pinned_apps,
+          chatrooms: this.user.chatrooms,
         })
         .then((response) => {
           this.$root.user = response.data;
@@ -946,6 +952,8 @@ export default {
           this.apollo_codes = response.data;
         });
     }
+
+    let apps = [];
     for (app in this.$root.config.apps) {
       if (
         !this.user.pinned_apps.includes(app) &&
@@ -954,8 +962,9 @@ export default {
         app != "Terms" &&
         app != "Support"
       )
-        this.apps_remaining.push(app);
+        apps.push(app);
     }
+    this.apps_remaining = JSON.parse(JSON.stringify(apps));
   },
   // beforeMount() {
   //   this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people`).then(response => {

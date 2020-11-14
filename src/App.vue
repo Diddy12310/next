@@ -1,12 +1,22 @@
 <template>
-  <v-app style="background-color: #0F1E3C;">
-    <DefaultToolbar style="z-index: 100;" v-if="$root.user && !$root.music" />
-    <MusicToolbar style="z-index: 100;" v-if="$root.user && $root.music" />
+  <v-app style="background-color: #0f1e3c">
+    <DefaultToolbar
+      style="z-index: 100"
+      v-if="$root.user && !$root.music && !$root.user.preflight"
+    />
+    <MusicToolbar
+      style="z-index: 100"
+      v-if="$root.user && $root.music && !$root.user.preflight"
+    />
+    <PreflightToolbar
+      style="z-index: 100"
+      v-if="$root.user && $root.user.preflight"
+    />
 
     <v-main>
       <div
         v-if="!$root.config"
-        style="max-width: 20rem; margin-top: 12rem;"
+        style="max-width: 20rem; margin-top: 12rem"
         class="mx-auto text-center"
         key="loading"
       >
@@ -15,17 +25,17 @@
           size="75"
           color="#1C3973"
         ></v-progress-circular>
-        <p style="color: #1C3973" class="mt-5 text-h5">Loading...</p>
+        <p style="color: #1c3973" class="mt-5 text-h5">Loading...</p>
       </div>
       <Router
         key="router"
-        style="background-color: #131313;"
+        style="background-color: #131313"
         v-else-if="$root.config && !$root.config.shutdown"
       />
       <div v-else-if="$root.config && $root.config.shutdown" key="shutdown">
         <h1
           class="text-h3 font-weight-light text-uppercase text-center px-12 deep-purple--text text--lighten-1"
-          style="margin-top: 100px;"
+          style="margin-top: 100px"
         >
           A Connection Could not be Established
         </h1>
@@ -41,6 +51,7 @@
 import Router from "./Router.vue";
 import DefaultToolbar from "./components/DefaultToolbar.vue";
 import MusicToolbar from "./components/MusicToolbar.vue";
+import PreflightToolbar from "./components/PreflightToolbar.vue";
 import io from "socket.io-client";
 
 export default {
@@ -49,6 +60,7 @@ export default {
     Router,
     DefaultToolbar,
     MusicToolbar,
+    PreflightToolbar,
   },
   methods: {
     signOut() {
@@ -111,6 +123,9 @@ export default {
         this.$root.socket.disconnect();
         this.$root.socket = io.connect("https://www.theparadigmdev.com");
       });
+      this.$root.socket.on("disconnect", () => {
+        this.$lock();
+      });
     });
   },
 };
@@ -125,11 +140,11 @@ export default {
   text-align: center;
 }
 
-button,
 input,
 textarea {
   outline: none !important;
   color: white;
+  width: 100%;
 }
 
 .moonrock-count {

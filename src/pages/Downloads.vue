@@ -17,7 +17,7 @@
         <v-card max-width="750" class="ma-auto mt-3">
           <v-card-title class="py-2">
             <v-list-item class="pa-0">
-              <v-list-item-avatar
+              <v-list-item-avatar tile
                 ><v-img src="../assets/capture.png"></v-img
               ></v-list-item-avatar>
               <v-list-item-title class="text-h5">Capture</v-list-item-title>
@@ -54,7 +54,7 @@
         <v-card max-width="750" class="ma-auto mt-6">
           <v-card-title class="py-2">
             <v-list-item class="pa-0">
-              <v-list-item-avatar
+              <v-list-item-avatar tile
                 ><v-img src="../assets/intelligence.png"></v-img
               ></v-list-item-avatar>
               <v-list-item-title class="text-h5"

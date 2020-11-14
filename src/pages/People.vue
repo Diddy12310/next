@@ -6,7 +6,7 @@
       <v-text-field
         v-if="!$root.profile"
         hide-details="auto"
-        style="max-width: 500px;"
+        style="max-width: 500px"
         color="white"
         label="Search..."
         class="mt-4"
@@ -44,10 +44,8 @@
                   <v-avatar size="150px"
                     ><img
                       loading="lazy"
-                      style="border-radius: 150px;"
-                      :src="
-                        `https://www.theparadigmdev.com/relay/profile-pics/${user._id}.jpg`
-                      "
+                      style="border-radius: 150px"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${user._id}.png`"
                   /></v-avatar>
                 </v-badge>
                 <h1
@@ -82,10 +80,8 @@
                   <v-avatar size="150px"
                     ><img
                       loading="lazy"
-                      style="border-radius: 150px;"
-                      :src="
-                        `https://www.theparadigmdev.com/relay/profile-pics/${$root.profile._id}.jpg`
-                      "
+                      style="border-radius: 150px"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.profile._id}.png`"
                   /></v-avatar>
                 </v-badge>
                 <h1
@@ -143,18 +139,14 @@
                 :key="index"
               >
                 <v-img
-                  :src="
-                    `https://www.theparadigmdev.com/relay/broadcast/${$root.user._id}/${post.file_path}`
-                  "
+                  :src="`https://www.theparadigmdev.com/relay/broadcast/${$root.user._id}/${post.file_path}`"
                   v-if="post.file_type == 'image'"
                 ></v-img>
                 <video
-                  :src="
-                    `https://www.theparadigmdev.com/relay/broadcast/${$root.user._id}/${post.file_path}`
-                  "
+                  :src="`https://www.theparadigmdev.com/relay/broadcast/${$root.user._id}/${post.file_path}`"
                   v-if="post.file_type == 'video'"
                   controls
-                  style="max-width: 500px;"
+                  style="max-width: 500px"
                 ></video>
 
                 <v-card-text
@@ -170,9 +162,7 @@
                           <v-img
                             class="elevation-6"
                             loading="lazy"
-                            :src="
-                              `https://www.theparadigmdev.com/relay/profile-pics/${$root.profile._id}.jpg`
-                            "
+                            :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.profile._id}.png`"
                           ></v-img>
                         </v-list-item-avatar>
 
@@ -193,8 +183,8 @@
                       class="text-right"
                       v-if="
                         profile_index &&
-                          $root.user.people.approved[profile_index]._id ==
-                            $root.profile._id
+                        $root.user.people.approved[profile_index]._id ==
+                          $root.profile._id
                       "
                     >
                       <v-btn

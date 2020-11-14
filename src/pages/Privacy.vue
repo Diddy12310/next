@@ -4,7 +4,7 @@
       <v-col
         sm="12"
         class="light-blue darken-3 py-12 elevation-5"
-        style="z-index: 5;"
+        style="z-index: 5"
       >
         <h1 class="text-h2 font-weight-thin white--text">Privacy</h1>
       </v-col>
@@ -56,7 +56,7 @@
 
       <p class="grey--text">
         Please read our
-        <a @click="$root.view.terms = true">Terms and Conditions</a> for more
+        <a @click="$root.router = 'Terms'">Terms and Conditions</a> for more
         information.
       </p>
     </div>
