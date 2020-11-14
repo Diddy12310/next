@@ -135,6 +135,26 @@
                     friend.username
                   }}</v-list-item-title>
                 </v-list-item>
+
+                <v-list-item @click="$root.router = 'People'">
+                  <v-badge
+                    style="position: relative; left: -15px"
+                    bordered
+                    bottom
+                    dot
+                    :offset-x="!drawer ? 25 : 16"
+                    offset-y="17"
+                    color="green"
+                    :value="false"
+                  >
+                    <v-list-item-avatar
+                      :class="{ 'ma-2': drawer ? true : false }"
+                    >
+                      <v-icon>mdi-plus</v-icon>
+                    </v-list-item-avatar>
+                  </v-badge>
+                  <v-list-item-title>Add</v-list-item-title>
+                </v-list-item>
               </v-list-item-group>
             </v-list>
           </v-navigation-drawer>
