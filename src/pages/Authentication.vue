@@ -54,13 +54,14 @@
             @keyup="checkIfUserExists()"
           ></v-text-field>
           <v-text-field
-            hide-details
+            hide-details="auto"
             label="Password"
             class="mb-6"
             type="password"
             @keypress.enter="signIn()"
             v-model="password"
             :disabled="!user_auth_info.exists && !user_auth_info.in"
+            :error-messages="$root.notification.text"
           ></v-text-field>
           <v-btn
             block
@@ -144,7 +145,7 @@ export default {
           username: this.username.toLowerCase(),
           password: this.password,
         })
-        .then((response) => {
+        .then(async (response) => {
           if (!response.data.msg) {
             this.authenticated = true;
             if (!this.user_auth_info.in) {
@@ -246,7 +247,38 @@ export default {
                 ? (this.$root.router = "Preflight")
                 : (this.$root.router = "Home");
               this.$root.socket.emit("login", response.data);
+
+              if (
+                (await this.$root.worker.pushManager.permissionState()) !=
+                "granted"
+              ) {
+                // Register Push
+                console.log("Registering Push...");
+                const subscription = await this.$root.worker.pushManager.subscribe(
+                  {
+                    userVisibleOnly: true,
+                    applicationServerKey: this.$urlBase64ToUint8Array(
+                      this.$root.public_vapid_key
+                    ),
+                  }
+                );
+                console.log("Push Registered...");
+                // Send Push Subscription
+                console.log("Sending Push...");
+                await this.$http.post(
+                  `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
+                  subscription
+                );
+                console.log("Push Sent...");
+              }
             }
+          } else {
+            this.$notify(
+              "Password is incorrect",
+              "red--text",
+              "mdi-lock",
+              3000
+            );
           }
         });
     },
