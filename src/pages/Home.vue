@@ -1,6 +1,20 @@
 <template>
-  <div style="height: calc(100vh - 64px); overflow-y: auto" class="bg-img">
-    <div style="padding: 15vh 2rem 2rem 2rem; max-width: 72rem" class="mx-auto">
+  <div
+    :style="{
+      height: $vuetify.breakpoint.mdAndUp
+        ? 'calc(100vh - 64px)'
+        : 'calc(100vh - 56px)',
+    }"
+    style="overflow-y: auto"
+    class="bg-img"
+  >
+    <div
+      :style="{
+        padding: $vuetify.breakpoint.smAndUp ? '15vh 2rem 2rem 2rem' : '2rem',
+      }"
+      style="max-width: 72rem"
+      class="mx-auto"
+    >
       <h6 class="grey--text text--darken-1 overline">
         {{ $root.config.landing.date }}
       </h6>

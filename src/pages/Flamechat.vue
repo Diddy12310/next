@@ -1,10 +1,26 @@
 <template>
-  <div>
+  <div
+    :style="{
+      height: $vuetify.breakpoint.mdAndUp
+        ? 'calc(100vh - 64px)'
+        : 'calc(100vh - 56px)',
+    }"
+    style="overflow-y: auto"
+  >
     <!-- TOOLBAR -->
     <v-toolbar dense color="deep-orange">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Flamechat</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn
+        icon
+        @click="
+          ($root.router = 'People'),
+            ($root.url = ['', 'people', current_dm_person])
+        "
+        v-if="current && current_dm_person"
+        ><v-icon>mdi-account</v-icon></v-btn
+      >
       <v-btn icon @click="leaveChatroom()" v-if="current && !current_dm_person"
         ><v-icon>mdi-arrow-expand-left</v-icon></v-btn
       >
@@ -18,7 +34,12 @@
         <!-- DRAWER -->
         <v-navigation-drawer
           style="margin-top: 48px"
-          :style="{ width: drawer ? '256px !important' : '56px !important' }"
+          :style="{
+            width: drawer ? '256px !important' : '56px !important',
+            height: $vuetify.breakpoint.mdAndUp
+              ? 'calc(100vh - 112px)'
+              : 'calc(100vh - 104px)',
+          }"
           class="grey darken-4"
           absolute
           permanent
@@ -72,10 +93,13 @@
 
         <!-- HOME -->
         <section
-          class="text-center mt-12"
+          class="text-center mt-12 px-4"
           key="home"
           :style="{ 'margin-left': drawer ? '256px' : '56px' }"
-          v-if="current_id == 'home'"
+          v-if="
+            current_id == 'home' &&
+            ($vuetify.breakpoint.smAndDown ? (drawer ? false : true) : true)
+          "
         >
           <h3 class="text-h3 font-weight-light">Welcome to Flamechat!</h3>
           <p class="mt-3">
@@ -99,8 +123,18 @@
           class="d-flex"
         >
           <v-navigation-drawer
-            :style="{ width: !drawer ? '256px !important' : '56px !important' }"
-            style="height: calc(100vh - 112px)"
+            :style="{
+              width: $vuetify.breakpoint.smAndDown
+                ? !drawer
+                  ? '56px !important'
+                  : '56px !important'
+                : !drawer
+                ? '256px !important'
+                : '56px !important',
+              height: $vuetify.breakpoint.mdAndUp
+                ? 'calc(100vh - 112px)'
+                : 'calc(100vh - 104px)',
+            }"
             permanent
             :mini-variant="drawer"
             class="grey darken-4"
@@ -124,7 +158,15 @@
                     :value="friend.in"
                   >
                     <v-list-item-avatar
-                      :class="{ 'ma-2': drawer ? true : false }"
+                      :class="{
+                        'ma-2': $vuetify.breakpoint.xsOnly
+                          ? drawer
+                            ? true
+                            : true
+                          : drawer
+                          ? true
+                          : false,
+                      }"
                       ><v-img
                         loading="lazy"
                         :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.png`"
@@ -135,6 +177,34 @@
                     friend.username
                   }}</v-list-item-title>
                 </v-list-item>
+
+                <v-list-item @click="$root.router = 'People'">
+                  <v-badge
+                    style="position: relative; left: -15px"
+                    bordered
+                    bottom
+                    dot
+                    :offset-x="!drawer ? 25 : 16"
+                    offset-y="17"
+                    color="green"
+                    :value="false"
+                  >
+                    <v-list-item-avatar
+                      :class="{
+                        'ma-2': $vuetify.breakpoint.xsOnly
+                          ? drawer
+                            ? true
+                            : true
+                          : drawer
+                          ? true
+                          : false,
+                      }"
+                    >
+                      <v-icon>mdi-plus</v-icon>
+                    </v-list-item-avatar>
+                  </v-badge>
+                  <v-list-item-title>Add</v-list-item-title>
+                </v-list-item>
               </v-list-item-group>
             </v-list>
           </v-navigation-drawer>
@@ -142,11 +212,20 @@
           <!-- CHAT LIST -->
           <v-list
             :style="{
-              height: `calc(100vh - 179px)`,
+              height: $vuetify.breakpoint.mdAndUp
+                ? 'calc(100vh - 194px)'
+                : 'calc(100vh - 186px)',
               overflowY: 'auto',
-              width: 'calc(100vw - 312px)',
+              width: $vuetify.breakpoint.smAndDown
+                ? drawer
+                  ? 'calc(100vw - 312px)'
+                  : 'calc(100vw - 112px)'
+                : 'calc(100vw - 312px)',
             }"
-            v-if="current"
+            v-if="
+              current &&
+              ($vuetify.breakpoint.smAndDown ? (drawer ? false : true) : true)
+            "
             class="transparent"
             v-chat-scroll="{ always: false, smooth: true }"
           >
@@ -290,11 +369,17 @@
           <!-- CHAT LIST -->
           <v-list
             :style="{
-              height: `calc(100vh - 179px)`,
+              height: $vuetify.breakpoint.mdAndUp
+                ? 'calc(100vh - 194px)'
+                : 'calc(100vh - 186px)',
+
               overflowY: 'auto',
             }"
             class="transparent"
             v-chat-scroll="{ always: false, smooth: true }"
+            v-if="
+              $vuetify.breakpoint.smAndDown ? (drawer ? false : true) : true
+            "
           >
             <v-fade-transition group>
               <!-- CHAT LIST ITEM -->
@@ -451,16 +536,41 @@
         <!-- NEW CHAT FOOTER -->
         <footer
           :style="{
-            'margin-left':
-              current_dm_person || current_id == 'dm'
+            'margin-left': $vuetify.breakpoint.smAndDown
+              ? current_dm_person || current_id == 'dm'
                 ? drawer
                   ? '312px'
-                  : '312px'
+                  : '112px'
                 : drawer
                 ? '256px'
-                : '56px',
+                : '56px'
+              : current_dm_person || current_id == 'dm'
+              ? drawer
+                ? '312px'
+                : '312px'
+              : drawer
+              ? '256px'
+              : '56px',
+            width: $vuetify.breakpoint.smAndDown
+              ? current_dm_person || current_id == 'dm'
+                ? drawer
+                  ? 'calc(100vw - 312px)'
+                  : 'calc(100vw - 112px)'
+                : drawer
+                ? 'calc(100vw - 256px)'
+                : 'calc(100vw - 56px)'
+              : current_dm_person || current_id == 'dm'
+              ? drawer
+                ? 'calc(100vw - 312px)'
+                : 'calc(100vw - 312px)'
+              : drawer
+              ? 'calc(100vw - 256px)'
+              : 'calc(100vw - 56px)',
           }"
-          v-if="current_id != 'home' || current_dm_person"
+          v-if="
+            current &&
+            ($vuetify.breakpoint.smAndDown ? (drawer ? false : true) : true)
+          "
           key="footer"
         >
           <!-- <v-fade-transition leave-absolute v-if="current_status == 'approved'"> -->
@@ -492,10 +602,16 @@
             </v-col>
 
             <v-col cols="2" class="pl-4">
-              <v-btn icon @click="sendMessage()"
+              <v-btn
+                v-if="$vuetify.breakpoint.smAndUp"
+                icon
+                @click="sendMessage()"
                 ><v-icon>mdi-send</v-icon></v-btn
               >
-              <v-btn icon @click="upload.open = true"
+              <v-btn
+                icon
+                @click="upload.open = true"
+                :class="{ 'mb-3': $vuetify.breakpoint.xsOnly }"
                 ><v-icon>mdi-paperclip</v-icon></v-btn
               >
             </v-col>
@@ -685,7 +801,7 @@ export default {
   name: "Flamechat",
   data() {
     return {
-      drawer: true,
+      drawer: false,
       current: false,
       current_index: -1,
       current_message: false,
@@ -956,6 +1072,7 @@ export default {
     },
   },
   async mounted() {
+    if (this.$vuetify.breakpoint.mdAndUp) this.drawer = true;
     this.$http
       .get("https://www.theparadigmdev.com/api/users/shortlist")
       .then((response) => (this.all_people = response.data));
@@ -966,8 +1083,7 @@ export default {
 <style scoped>
 footer {
   position: absolute;
-  width: calc(100vw - 256px);
-  bottom: 65px;
+  bottom: 0px;
   padding: 0px 16px 16px 16px;
 }
 </style>

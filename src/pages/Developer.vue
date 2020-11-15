@@ -2,10 +2,11 @@
   <div
     class="developer"
     :style="{
-      height: $vuetify.breakpoint.smAndDown
-        ? 'calc(100vh - 56px)'
-        : 'calc(100vh - 64px)',
+      height: $vuetify.breakpoint.mdAndUp
+        ? 'calc(100vh - 64px)'
+        : 'calc(100vh - 56px)',
     }"
+    style="overflow-y: auto"
   >
     <v-toolbar dense color="blue-grey darken-4">
       <v-toolbar-title>Developer</v-toolbar-title>

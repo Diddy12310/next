@@ -5,7 +5,7 @@
         <v-btn icon text @click="$root.router = 'Home'">
           <v-img
             contain
-            src="../assets/logo.png"
+            src="../assets/logo.webp"
             width="40"
             style="border-radius: 9999px"
             class="ma-2"

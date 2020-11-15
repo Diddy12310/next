@@ -29,9 +29,11 @@
     </v-toolbar>
     <v-container
       :style="{
-        height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`,
-        overflowY: 'auto',
+        height: $vuetify.breakpoint.mdAndUp
+          ? 'calc(100vh - 112px)'
+          : 'calc(100vh - 104px)',
       }"
+      style="overflow-y: auto"
     >
       <v-data-table
         no-data-text="No files found"

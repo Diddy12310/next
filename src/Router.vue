@@ -7,11 +7,7 @@
         key="Authentication"
       />
       <Home v-if="$root.router == 'Home'" key="Home" />
-      <Flamechat
-        v-if="$root.router == 'Flamechat'"
-        key="Flamechat"
-        style="background-color: #131313; height: 100vh"
-      />
+      <Flamechat v-if="$root.router == 'Flamechat'" key="Flamechat" />
       <Media v-if="$root.router == 'Media'" key="Media" />
       <Satellite v-if="$root.router == 'Satellite'" key="Satellite" />
       <Paradox v-if="$root.router == 'The Paradox'" key="Paradox" />

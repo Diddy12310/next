@@ -30,6 +30,11 @@
       <Router
         key="router"
         style="background-color: #131313"
+        :style="{
+          height: $vuetify.breakpoint.mdAndUp
+            ? 'calc(100vh - 64px)'
+            : 'calc(100vh - 56px)',
+        }"
         v-else-if="$root.config && !$root.config.shutdown"
       />
       <div v-else-if="$root.config && $root.config.shutdown" key="shutdown">
@@ -132,6 +137,10 @@ export default {
 </script>
 
 <style>
+body {
+  background-color: #0F1E3C;
+}
+
 .centralize {
   position: absolute;
   top: 50%;

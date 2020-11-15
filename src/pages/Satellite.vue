@@ -46,7 +46,9 @@
     <iframe
       id="satellite-embed"
       :style="{
-        height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`,
+        height: $vuetify.breakpoint.mdAndUp
+          ? 'calc(100vh - 112px)'
+          : 'calc(100vh - 104px)',
       }"
       crossorigin="anonymous"
       :src="input"

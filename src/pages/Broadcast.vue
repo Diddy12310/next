@@ -22,13 +22,16 @@
 
     <div
       :style="{
-        height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`,
-        overflowY: 'auto',
+        height: $vuetify.breakpoint.mdAndUp
+          ? 'calc(100vh - 112px)'
+          : 'calc(100vh - 104px)',
       }"
+      style="overflow-y: auto"
+      class="pa-4"
     >
       <v-fade-transition group>
         <v-card
-          class="mx-auto mt-6"
+          class="mx-auto mx-4"
           color="indigo darken-3"
           max-width="500"
           key="new"
@@ -89,7 +92,7 @@
         </v-card>
 
         <v-card
-          class="mx-auto my-6"
+          class="mx-auto mt-4 mx-4"
           color="indigo darken-3"
           max-width="500"
           v-for="(post, index) in filteredPosts"

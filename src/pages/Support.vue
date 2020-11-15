@@ -7,9 +7,11 @@
     <v-container
       class="text-center grey--text text--lighten-2"
       :style="{
-        height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`,
-        overflowY: 'auto',
+        height: $vuetify.breakpoint.mdAndUp
+          ? 'calc(100vh - 112px)'
+          : 'calc(100vh - 104px)',
       }"
+      style="overflow-y: auto"
     >
       <v-row>
         <v-col sm="12" md="6" class="py-12">

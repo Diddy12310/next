@@ -6,9 +6,11 @@
 
     <div
       :style="{
-        height: `calc(100vh - ${$root.music.open ? '192px' : '112px'})`,
-        overflowY: 'auto',
+        height: $vuetify.breakpoint.mdAndUp
+          ? 'calc(100vh - 112px)'
+          : 'calc(100vh - 104px)',
       }"
+      style="overflow-y: auto"
     >
       <v-container>
         <div class="text-center mt-12 mb-5">
@@ -63,7 +65,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col sm="6">
+          <v-col sm="6" v-show="$vuetify.breakpoint.mdAndUp">
             <v-card class="fill-height">
               <v-card-text>
                 <p>Pinned Apps</p>
@@ -954,7 +956,8 @@ export default {
     }
 
     let apps = [];
-    for (app in this.$root.config.apps) {
+    for (let app in this.$root.config.apps) {
+      console.log(app);
       if (
         !this.user.pinned_apps.includes(app) &&
         app != "Home" &&
