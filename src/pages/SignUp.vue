@@ -15,8 +15,7 @@
         style="width: 100%; font-family: 'Roboto-Mono'"
       />
       <span class="grey--text text-left"
-        >Enter the invite code you received from the nominating core team
-        member.<br />
+        >Enter the invite code you received.<br />
         Please note that it is case sensitive.</span
       ><br />
       <v-btn
@@ -106,7 +105,7 @@
       </span>
       <v-btn
         block
-        class="my-6 mx-auto"
+        class="mt-6 mb-8 mx-auto"
         color="deep-purple darken-4"
         @click="signUp()"
         >Finish</v-btn
@@ -124,7 +123,7 @@ export default {
       invite_code_verified: false,
       new_user: {
         color: "",
-        username: this.$root.user.username,
+        username: this.$root.user.username.toLowerCase(),
         password: this.$root.user.password,
       },
       use_default: false,
