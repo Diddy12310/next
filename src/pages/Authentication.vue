@@ -8,14 +8,17 @@
     "
   >
     <div
-      style="max-width: 28rem; padding-top: 10rem"
+      style="max-width: 28rem"
+      :style="{
+        'padding-top': $vuetify.breakpoint.smAndUp ? '10rem' : '50px',
+      }"
       class="mx-auto text-center"
     >
-      <img style="height: 8rem; margin: auto" src="../assets/logo.png" />
+      <img style="height: 8rem; margin: auto" src="../assets/logo.webp" />
 
       <v-card
         style="border: none !important"
-        class="ma-3 mt-10"
+        class="ma-4 mt-10"
         color="#333333"
       >
         <v-card-title class="d-block text-left">
@@ -52,6 +55,7 @@
             class="mb-3"
             v-model="username"
             @keyup="checkIfUserExists()"
+            autocomplete="off"
           ></v-text-field>
           <v-text-field
             hide-details="auto"

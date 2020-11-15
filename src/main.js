@@ -69,7 +69,8 @@ new Vue({
       socket,
       public_vapid_key:
         "BANy_l888yNEj3sW1ASQBEc3dKBq4MnOn9uu4x_gZteD8SNUYwUFbOPrFdGMiFS0zI16bie6vA-P6bNBXMXhAvc",
-      worker: null
+      worker: null,
+      online: true
     };
   },
   render: h => h(App),
@@ -91,6 +92,9 @@ new Vue({
         }
       );
       console.log("Service Worker Registered...");
+
+      window.addEventListener("offline", e => (this.$root.online = false));
+      window.addEventListener("online", e => (this.$root.online = true));
     }
   }
 }).$mount("#app");

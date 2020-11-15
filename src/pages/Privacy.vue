@@ -28,7 +28,7 @@
       </p>
 
       <img
-        src="../assets/logo.png"
+        src="../assets/logo.webp"
         alt="Paradigm logo"
         width="50"
         class="ma-6 mx-auto"
@@ -41,7 +41,7 @@
       </p>
 
       <img
-        src="../assets/logo.png"
+        src="../assets/logo.webp"
         alt="Paradigm logo"
         width="50"
         class="ma-6 mx-auto"

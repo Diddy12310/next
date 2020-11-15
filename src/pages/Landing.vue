@@ -1,11 +1,12 @@
 <template>
   <div style="background-color: #0f1e3c; height: 100vh">
-    <header style="height: 8rem">
+    <header style="height: 8rem" class="px-4">
       <v-container class="d-flex align-center pa-0" style="width: 100%">
         <img
-          src="../assets/logo.png"
+          src="../assets/logo.webp"
           style="height: 128px; width: 112px"
           class="py-4 pr-4"
+          alt="Paradigm logo"
         />
         <h1
           v-if="$vuetify.breakpoint.smAndUp"
@@ -26,7 +27,7 @@
 
     <main
       style="height: calc(100vh - 128px); overflow-y: auto; overflow-x: hidden"
-      class="pt-12"
+      class="pt-12 px-4"
     >
       <v-container class="pa-0">
         <v-row class="ma-0" no-gutters>
@@ -81,7 +82,7 @@
               </v-col>
 
               <v-col xs="12" sm="4" class="text-h5 grey--text">
-                <v-icon class="grey--text pr-2" size="40">mdi-lock</v-icon>
+                <v-icon class="grey--text pr-2" size="50">mdi-lock</v-icon>
                 Secure
               </v-col>
 
@@ -97,7 +98,7 @@
           <v-col sm="12" md="4" v-if="$root.config.auth.sign_up">
             <v-card
               color="#333333"
-              class="ma-3"
+              class="ma-4"
               :class="{ 'mx-auto': $vuetify.breakpoint.smAndDown }"
               style="outline: none; max-width: 25rem"
             >
@@ -130,7 +131,9 @@
                   class="ma-auto subtitle-2 text-center font-weight-light text--grey text--darken-4"
                 >
                   By signing up, you agree to the
-                  <a class="text-grey text--darken-4"> Terms and Conditions</a>
+                  <span @click="" class="text-grey text--darken-4">
+                    Terms and Conditions</span
+                  >
                 </p>
               </v-card-actions>
             </v-card>
