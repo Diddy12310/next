@@ -70,16 +70,12 @@ export default {
   methods: {
     signOut() {
       if (this.$root.user) {
-        this.$http
-          .get(`https://www.theparadigmdev.com/api/users/signout`)
-          .then(() => {
-            this.$root.socket.emit("logout", this.$root.user);
-            this.$root.user = false;
-            this.$root.router = "Landing";
-            this.$root.profile = false;
-            this.$root.music = false;
-            this.$root.transmission = false;
-          });
+        this.$root.user = false;
+        this.$root.router = "Landing";
+        this.$root.profile = false;
+        this.$root.music = false;
+        this.$root.transmission = false;
+        this.$root.socket.emit("logout", this.$root.user);
       }
     },
   },
@@ -91,7 +87,7 @@ export default {
         this.$root.config = data;
         if (this.$root.config.banned.includes(this.$root.ip)) {
           if (this.$root.user)
-            this.$http.get("https://www.theparadigmdev.com/api/users/signout");
+            this.$root.socket.emit("logout", this.$root.user);
           this.$root.router = "Error";
           this.$root.user = false;
           this.$root.profile = false;
@@ -122,14 +118,20 @@ export default {
             "mdi-gavel",
             3000
           );
-        if (this.$root.router != "error") this.$root.user = data;
+        if (this.$root.router !== "error" && this.$root.user !== data)
+          this.$root.user = data;
       });
       this.$root.socket.on("logout", () => {
         this.$root.socket.disconnect();
         this.$root.socket = io.connect("https://www.theparadigmdev.com");
+        this.$root.user = false;
       });
       this.$root.socket.on("disconnect", () => {
-        this.$lock();
+        let reconnected = false;
+        this.$root.socket.on("reconnect", () => (reconnected = true));
+        setTimeout(() => {
+          if (!reconnected) this.$lock();
+        }, 10000);
       });
     });
   },
@@ -138,7 +140,7 @@ export default {
 
 <style>
 body {
-  background-color: #0F1E3C;
+  background-color: #0f1e3c;
 }
 
 .centralize {
