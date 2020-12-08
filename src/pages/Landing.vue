@@ -66,7 +66,7 @@
             <h1
               class="font-weight-bold text-h3 deep-purple--text text--darken-3"
             >
-              built for the 21st century
+              built for the people
             </h1>
             <p class="font-weight-light text-h6 grey--text mt-4">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -98,7 +98,7 @@
           <v-col sm="12" md="4" v-if="$root.config.auth.sign_up">
             <v-card
               color="#333333"
-              class="ma-4"
+              class="my-4 ml-4"
               :class="{ 'mx-auto': $vuetify.breakpoint.smAndDown }"
               style="outline: none; max-width: 25rem"
             >
@@ -159,9 +159,9 @@ export default {
       this.$root.user = {
         username: this.username,
         password: this.password,
-        preflight: true,
+        preflight: { creation: true },
       };
-      this.$root.router = "SignUp";
+      this.$root.router = "Preflight";
     },
   },
 };
