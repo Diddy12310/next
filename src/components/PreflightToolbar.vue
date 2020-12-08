@@ -33,10 +33,10 @@
         'text-right': $vuetify.breakpoint.xsOnly,
       }"
     >
-      <span v-if="!$root.user.password.includes('$2a$')"
+      <span v-if="$root.user.preflight.creation"
         >Complete Account Creation</span
       >
-      <span v-if="$root.user.preflight.in_recovery">Account Recovery</span>
+      <span v-if="$root.user.preflight.recovery">Account Recovery</span>
       <span
         v-if="$root.user.preflight.violation"
         class="font-weight-black red--text"
