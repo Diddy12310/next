@@ -197,7 +197,7 @@
           </template>
           <v-list dense>
             <v-list-item-group v-model="$root.router" mandatory>
-              <v-list-item value="Account">
+              <v-list-item value="Account" style="z-index: 1">
                 <v-list-item-avatar
                   ><v-img
                     :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.png`"
@@ -212,11 +212,17 @@
                     >Account</v-list-item-subtitle
                   >
                 </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn @click="signOut()" color="grey" icon
+                <v-list-item-action v-if="$vuetify.breakpoint.smAndUp">
+                  <v-btn @click="signOut()" color="grey" icon style="z-index: 2"
                     ><v-icon>mdi-logout-variant</v-icon></v-btn
                   >
                 </v-list-item-action>
+              </v-list-item>
+              <v-list-item @click="signOut()" v-if="$vuetify.breakpoint.xsOnly">
+                <v-list-item-icon
+                  ><v-icon>mdi-logout-variant</v-icon></v-list-item-icon
+                >
+                <v-list-item-title>Sign out</v-list-item-title>
               </v-list-item>
               <v-divider></v-divider>
               <v-list-item
@@ -290,16 +296,12 @@ export default {
   methods: {
     signOut() {
       if (this.$root.user) {
-        this.$http
-          .get(`https://www.theparadigmdev.com/api/users/signout`)
-          .then(() => {
-            this.$root.socket.emit("logout", this.$root.user);
-            this.$root.user = false;
-            this.$root.router = "Landing";
-            this.$root.profile = false;
-            this.$root.music = false;
-            this.$root.transmission = false;
-          });
+        this.$root.user = false;
+        this.$root.router = "Landing";
+        this.$root.profile = false;
+        this.$root.music = false;
+        this.$root.transmission = false;
+        this.$root.socket.emit("logout", this.$root.user);
       }
     },
     setPosition() {

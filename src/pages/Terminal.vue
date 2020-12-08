@@ -10,8 +10,8 @@
       class="px-4 py-3"
       :style="{
         height: $vuetify.breakpoint.mdAndUp
-          ? 'calc(100vh - 112px)'
-          : 'calc(100vh - 104px)',
+          ? 'calc(100vh - 152px)'
+          : 'calc(100vh - 144px)',
       }"
       style="overflow-y: auto"
     >
