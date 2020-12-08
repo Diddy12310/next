@@ -903,7 +903,7 @@ export default {
           is: false,
           color: this.$root.user.color,
         });
-        this.socket.emit("send", {
+        const data = {
           color: this.$root.user.color,
           username: this.$root.user.username,
           user_id: this.$root.user._id,
@@ -911,7 +911,8 @@ export default {
           timestamp: moment().format("MM/DD/YYYY [at] h:mm a"),
           edits: 0,
           type: "message",
-        });
+        };
+        this.socket.emit("send", data);
         this.new_message = "";
       }
     },
@@ -1075,7 +1076,17 @@ export default {
     if (this.$vuetify.breakpoint.mdAndUp) this.drawer = true;
     this.$http
       .get("https://www.theparadigmdev.com/api/users/shortlist")
-      .then((response) => (this.all_people = response.data));
+      .then((response) => {
+        this.all_people = response.data;
+        if (this.$root.url[1] == "flamechat") {
+          if (this.$root.url[2] == "dm") {
+            const friend = this.approved_friends.find(
+              (person) => person.username == this.$root.url[3]
+            );
+            this.changeChatroom(friend, true);
+          }
+        }
+      });
   },
 };
 </script>

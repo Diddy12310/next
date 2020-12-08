@@ -12,6 +12,27 @@
         class="mt-4"
         v-model="search"
       ></v-text-field>
+      <v-btn
+        icon
+        @click="toggleSubscription()"
+        v-if="$root.profile && is_approved"
+        :input-value="$root.user.people.approved[profile_index].subscribed"
+      >
+        <v-icon>{{
+          $root.user.people.approved[profile_index].subscribed
+            ? "mdi-bell"
+            : "mdi-bell-outline"
+        }}</v-icon>
+      </v-btn>
+
+      <v-progress-linear
+        :background-opacity="0"
+        :active="loading"
+        indeterminate
+        absolute
+        bottom
+        color="green"
+      ></v-progress-linear>
     </v-toolbar>
 
     <div
@@ -107,7 +128,24 @@
                   Friend...</v-btn
                 >
                 <v-btn
-                  v-else
+                  v-if="is_approved"
+                  @click="
+                    ($root.url = [
+                      '',
+                      'flamechat',
+                      'dm',
+                      $root.profile.username,
+                    ]),
+                      ($root.router = 'Flamechat')
+                  "
+                  block
+                  text
+                  class="mb-2"
+                  color="grey"
+                  ><v-icon left>mdi-message</v-icon>Chat</v-btn
+                >
+                <v-btn
+                  v-if="!is_blocked && !is_sent && !is_approved"
                   @click="addFriend()"
                   block
                   text
@@ -183,7 +221,7 @@
                     <v-col
                       class="text-right"
                       v-if="
-                        profile_index &&
+                        profile_index > -1 &&
                         $root.user.people.approved[profile_index]._id ==
                           $root.profile._id
                       "
@@ -265,6 +303,7 @@ export default {
       block_confirmer: false,
       search: "",
       profile_index: null,
+      loading: true,
     };
   },
   computed: {
@@ -302,12 +341,15 @@ export default {
     },
     is_approved() {
       var is = false;
-      this.$root.user.people.approved.forEach((person, index) => {
+      this.$root.user.people.approved.forEach((person) => {
         if (this.$root.profile._id === person._id) {
           is = true;
-          this.profile_index = index;
         }
       });
+      this.profile_index = this.$root.user.people.approved.findIndex(
+        (person) => this.$root.profile._id == person._id
+      );
+      console.log(this.profile_index);
       return is;
     },
     is_sent() {
@@ -332,6 +374,7 @@ export default {
       .get("https://www.theparadigmdev.com/api/users/list")
       .then((response) => {
         this.people = response.data;
+        this.loading = false;
       });
     if (this.$root.url[1] == "people") {
       this.people.forEach((person) => {
@@ -393,6 +436,22 @@ export default {
         .then((response) => {
           this.$root.profile = response.data.profile;
           this.$root.user = response.data.user;
+        })
+        .catch((error) => console.error(error));
+    },
+    toggleSubscription() {
+      this.$http
+        .put(
+          `https://www.theparadigmdev.com/api/broadcast/${
+            this.$root.user._id
+          }/${
+            this.$root.user.people.approved[this.profile_index].subscribed
+              ? "unsubscribe"
+              : "subscribe"
+          }/${this.$root.profile._id}`
+        )
+        .then((response) => {
+          this.$root.user = response.data;
         })
         .catch((error) => console.error(error));
     },
