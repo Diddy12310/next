@@ -1,6 +1,6 @@
 <template>
   <div style="background-color: #0f1e3c; height: 100vh">
-    <header style="height: 8rem" class="px-4">
+    <header style="height: 8rem; max-width: 1185px; margin: auto" class="px-4">
       <v-container class="d-flex align-center pa-0" style="width: 100%">
         <img
           src="../assets/logo.webp"
@@ -26,7 +26,13 @@
     </header>
 
     <main
-      style="height: calc(100vh - 128px); overflow-y: auto; overflow-x: hidden"
+      style="
+        height: calc(100vh - 128px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-width: 1185px;
+        margin: auto;
+      "
       class="pt-12 px-4"
     >
       <v-container class="pa-0">
@@ -95,11 +101,10 @@
             </v-row>
           </v-col>
 
-          <v-col sm="12" md="4" v-if="$root.config.auth.sign_up">
+          <v-col cols="12" md="4" v-if="$root.config.auth.sign_up">
             <v-card
               color="#333333"
-              class="my-4 ml-4"
-              :class="{ 'mx-auto': $vuetify.breakpoint.smAndDown }"
+              class="my-4 mx-auto"
               style="outline: none; max-width: 25rem"
             >
               <v-card-title class="text-h4 grey--text text--lighten-1">

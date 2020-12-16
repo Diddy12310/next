@@ -41,7 +41,7 @@
       </button> -->
     </div>
 
-    <button
+    <!-- <button
       style="position: absolute; bottom: 0px; right: 0px"
       class="d-flex align-center mb-6 mr-6 mx-auto"
       v-if="$vuetify.breakpoint.smAndUp"
@@ -55,7 +55,7 @@
         Drawer is a secure cloud file storage service
         <v-icon>mdi-chevron-right</v-icon>
       </div>
-    </button>
+    </button> -->
   </div>
 </template>
 

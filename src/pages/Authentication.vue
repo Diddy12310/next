@@ -308,6 +308,7 @@ export default {
               "mdi-lock",
               3000
             );
+            this.loading = false;
           }
         });
     },
