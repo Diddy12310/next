@@ -70,69 +70,74 @@ export default {
   methods: {
     signOut() {
       if (this.$root.user) {
-        this.$root.user = false;
         this.$root.router = "Landing";
         this.$root.profile = false;
         this.$root.music = false;
         this.$root.transmission = false;
-        this.$root.socket.emit("logout", this.$root.user);
+        this.$root.user = false;
+        this.$root.socket.emit("logout", {
+          _id: this.$root.user._id,
+          username: this.$root.user.username,
+        });
       }
     },
   },
   created() {
     if (this.$root.user == false) this.$root.router = "Landing";
 
-    this.$root.socket.on("connect", () => {
-      this.$root.socket.on("config", (data) => {
-        this.$root.config = data;
-        if (this.$root.config.banned.includes(this.$root.ip)) {
-          if (this.$root.user)
-            this.$root.socket.emit("logout", this.$root.user);
-          this.$root.router = "Error";
-          this.$root.user = false;
-          this.$root.profile = false;
-          this.$root.music = false;
-          this.$root.transmission = false;
-        }
-      });
-      this.$root.socket.on("kick", (username) => {
-        if (username == this.$root.user.username) {
-          this.signOut();
-          this.$notify(
-            "You were kicked out",
-            "red--text",
-            "mdi-alert-circle",
-            2000
-          );
-        }
-      });
-      this.$root.socket.on("nuke", () => {
-        this.$root.config.shutdown = true;
-      });
-      if (this.$root.user) this.$root.socket.emit("login", this.$root.user);
-      this.$root.socket.on("user", (data) => {
-        if (data.strikes != this.$root.user.strikes)
-          this.$notify(
-            `You have ${data.strikes} strikes!`,
-            "orange--text",
-            "mdi-gavel",
-            3000
-          );
-        if (this.$root.router !== "error" && this.$root.user !== data)
-          this.$root.user = data;
-      });
-      this.$root.socket.on("logout", () => {
-        this.$root.socket.disconnect();
-        this.$root.socket = io.connect("https://www.theparadigmdev.com");
+    this.$root.socket.on("connect", () => {});
+    this.$root.socket.on("config", (data) => {
+      this.$root.config = data;
+      if (this.$root.config.banned.includes(this.$root.ip)) {
+        if (this.$root.user)
+          this.$root.socket.emit("logout", {
+            _id: this.$root.user._id,
+            username: this.$root.user.username,
+          });
+        this.$root.router = "Error";
         this.$root.user = false;
-      });
-      this.$root.socket.on("disconnect", () => {
-        let reconnected = false;
-        this.$root.socket.on("reconnect", () => (reconnected = true));
-        setTimeout(() => {
-          if (!reconnected) this.$lock();
-        }, 10000);
-      });
+        this.$root.profile = false;
+        this.$root.music = false;
+        this.$root.transmission = false;
+      }
+    });
+    this.$root.socket.on("kick", (username) => {
+      if (username == this.$root.user.username) {
+        this.signOut();
+        this.$notify(
+          "You were kicked out",
+          "red--text",
+          "mdi-alert-circle",
+          2000
+        );
+      }
+    });
+    this.$root.socket.on("nuke", () => {
+      this.$root.config.shutdown = true;
+    });
+    if (this.$root.user) this.$root.socket.emit("login", this.$root.user);
+    this.$root.socket.on("user", (data) => {
+      if (data.strikes != this.$root.user.strikes)
+        this.$notify(
+          `You have ${data.strikes} strikes!`,
+          "orange--text",
+          "mdi-gavel",
+          3000
+        );
+      if (this.$root.router !== "error" && this.$root.user !== data)
+        this.$root.user = data;
+    });
+    this.$root.socket.on("logout", () => {
+      this.$root.socket.disconnect();
+      this.$root.socket = io.connect("https://www.theparadigmdev.com");
+      this.$root.user = false;
+    });
+    this.$root.socket.on("disconnect", () => {
+      let reconnected = false;
+      this.$root.socket.on("reconnect", () => (reconnected = true));
+      setTimeout(() => {
+        if (!reconnected) this.$lock();
+      }, 10000);
     });
   },
 };
