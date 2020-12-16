@@ -23,6 +23,7 @@
       <Terminal v-if="$root.router == 'Terminal'" key="Terminal" />
       <Support v-if="$root.router == 'Support'" key="Support" />
       <Preflight v-if="$root.router == 'Preflight'" key="Preflight" />
+      <Patriot v-if="$root.router == 'Patriot'" key="Patriot" />
     </v-slide-x-reverse-transition>
   </div>
 </template>
@@ -46,7 +47,8 @@ import Developer from "./pages/Developer.vue";
 import Terms from "./pages/Terms.vue";
 import Terminal from "./pages/Terminal.vue";
 import Support from "./pages/Support.vue";
-import Preflight from "./pages/preflight/Index.vue";
+import Preflight from "./pages/Preflight/Index.vue";
+import Patriot from "./pages/Patriot/Index.vue";
 
 export default {
   name: "Router",
@@ -70,6 +72,7 @@ export default {
     Terminal,
     Support,
     Preflight,
+    Patriot,
   },
 };
 </script>

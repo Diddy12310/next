@@ -240,6 +240,16 @@
                 >
                 <v-list-item-title>{{ item.content }}</v-list-item-title>
               </v-list-item>
+              <v-list-item
+                class="d-none"
+                value="Patriot"
+                v-if="$root.user.rights.patriot"
+              >
+                <v-list-item-icon
+                  ><v-icon>mdi-logout-variant</v-icon></v-list-item-icon
+                >
+                <v-list-item-title>Patriot</v-list-item-title>
+              </v-list-item>
             </v-list-item-group>
           </v-list>
         </v-menu>
@@ -301,7 +311,10 @@ export default {
         this.$root.profile = false;
         this.$root.music = false;
         this.$root.transmission = false;
-        this.$root.socket.emit("logout", this.$root.user);
+        this.$root.socket.emit("logout", {
+          _id: this.$root.user._id,
+          username: this.$root.user.username,
+        });
       }
     },
     setPosition() {
