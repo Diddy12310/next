@@ -475,19 +475,21 @@ export default {
       if (e.srcElement.muted) this.muted = true;
     },
     _handleKeyboardEvents(event) {
-      if (event.code == "KeyK") this.playing ? this.pause() : this.play();
-      else if (event.code == "KeyM") this.mute();
-      else if (event.code == "KeyR") this.repeat = !this.repeat;
-      else if (event.code == "KeyX") this.clearSession();
-      else if (event.code == "KeyL") this.lyrics = !this.lyrics;
-      else if (event.code == "Home") {
-        event.preventDefault();
-        this.percentage = 0;
-        this.setPosition();
-      } else if (event.code == "End") {
-        event.preventDefault();
-        this.percentage = 100;
-        this.setPosition();
+      if (event.target == document.querySelector("body")) {
+        if (event.code == "KeyK") this.playing ? this.pause() : this.play();
+        else if (event.code == "KeyM") this.mute();
+        else if (event.code == "KeyR") this.repeat = !this.repeat;
+        else if (event.code == "KeyX") this.clearSession();
+        else if (event.code == "KeyL") this.lyrics = !this.lyrics;
+        else if (event.code == "Home") {
+          event.preventDefault();
+          this.percentage = 0;
+          this.setPosition();
+        } else if (event.code == "End") {
+          event.preventDefault();
+          this.percentage = 100;
+          this.setPosition();
+        }
       }
     },
     init() {
