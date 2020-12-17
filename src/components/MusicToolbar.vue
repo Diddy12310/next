@@ -82,60 +82,119 @@
         class="w-full"
         :class="{ centralize: $vuetify.breakpoint.mdAndDown }"
       >
-        <v-btn
-          large
-          icon
-          class="primary--text"
-          :loading="!loaded"
-          @click.native="loaded ? (playing ? pause() : play()) : reload()"
-        >
-          <v-icon v-if="playing === false || paused === true">mdi-play</v-icon>
-          <v-icon v-else>mdi-pause</v-icon>
-        </v-btn>
-        <v-btn large icon class="primary--text" @click.native="stop()">
-          <v-icon>mdi-stop</v-icon>
-        </v-btn>
-        <v-btn large icon class="primary--text" @click.native="mute()">
-          <v-icon v-if="isMuted === false">mdi-volume-high</v-icon>
-          <v-icon v-else>mdi-volume-off</v-icon>
-        </v-btn>
-        <v-btn
-          large
-          icon
-          class="primary--text"
-          v-model="repeat"
-          @click.native="repeat = !repeat"
-        >
-          <v-icon>mdi-repeat</v-icon>
-        </v-btn>
-        <v-btn
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              large
+              icon
+              class="primary--text"
+              :loading="!loaded"
+              v-on="on"
+              v-bind="attrs"
+              @click.native="loaded ? (playing ? pause() : play()) : reload()"
+            >
+              <v-icon v-if="playing === false || paused === true"
+                >mdi-play</v-icon
+              >
+              <v-icon v-else>mdi-pause</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ playing ? "Pause (k)" : "Play (k)" }}</span>
+        </v-tooltip>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              large
+              icon
+              class="primary--text"
+              @click.native="mute()"
+              v-on="on"
+              v-bind="attrs"
+            >
+              <v-icon v-if="isMuted === false">mdi-volume-high</v-icon>
+              <v-icon v-else>mdi-volume-off</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ isMuted ? "Unmute (m)" : "Mute (m)" }}</span>
+        </v-tooltip>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              large
+              icon
+              class="primary--text"
+              v-model="repeat"
+              v-on="on"
+              v-bind="attrs"
+              @click.native="repeat = !repeat"
+            >
+              <v-icon>mdi-repeat</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ repeat ? "Stop repeating (r)" : "Repeat (r)" }}</span>
+        </v-tooltip>
+
+        <v-tooltip
+          bottom
           v-if="$root.user.rights.asteroid && $vuetify.breakpoint.lgAndUp"
-          large
-          icon
-          class="primary--text"
-          @click.native="download()"
         >
-          <v-icon>mdi-download</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          large
-          class="primary--text"
-          :input-value="lyrics"
-          @click.native="lyrics = !lyrics"
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              large
+              icon
+              class="primary--text"
+              @click.native="download()"
+              v-on="on"
+              v-bind="attrs"
+            >
+              <v-icon>mdi-download</v-icon>
+            </v-btn>
+          </template>
+          <span>Download</span>
+        </v-tooltip>
+
+        <v-tooltip
+          bottom
           v-if="$root.music[0].lyrics && $vuetify.breakpoint.lgAndUp"
         >
-          <v-icon>mdi-closed-caption</v-icon>
-        </v-btn>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              large
+              class="primary--text"
+              :input-value="lyrics"
+              @click.native="lyrics = !lyrics"
+              v-on="on"
+              v-bind="attrs"
+            >
+              <v-icon>mdi-closed-caption</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lyrics ? "Hide lyrics (l)" : "Show lyrics (l)" }}</span>
+        </v-tooltip>
+
         <v-menu
           offset-y
           style="background-color: #1e1e1e"
           :close-on-content-click="false"
         >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon large v-bind="attrs" v-on="on" class="primary--text">
-              <v-icon>mdi-playlist-music</v-icon>
-            </v-btn>
+          <template v-slot:activator="{ on: menu, attrs }">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on: tooltip }">
+                <v-btn
+                  icon
+                  large
+                  v-bind="attrs"
+                  v-on="{ ...menu, ...tooltip }"
+                  class="primary--text"
+                >
+                  <v-icon>mdi-playlist-music</v-icon>
+                </v-btn>
+              </template>
+              <span>Playlist</span>
+            </v-tooltip>
           </template>
           <v-list dense class="pa-0 ma-0">
             <v-list-item
@@ -177,9 +236,22 @@
           </v-list>
         </v-menu>
 
-        <v-btn large icon class="primary--text" @click.native="clearSession()">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              large
+              icon
+              class="primary--text"
+              @click.native="clearSession()"
+              v-on="on"
+              v-bind="attrs"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </template>
+          <span>Close (x)</span>
+        </v-tooltip>
+
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -402,6 +474,22 @@ export default {
     _handleVolumeChange(e) {
       if (e.srcElement.muted) this.muted = true;
     },
+    _handleKeyboardEvents(event) {
+      if (event.code == "KeyK") this.playing ? this.pause() : this.play();
+      else if (event.code == "KeyM") this.mute();
+      else if (event.code == "KeyR") this.repeat = !this.repeat;
+      else if (event.code == "KeyX") this.clearSession();
+      else if (event.code == "KeyL") this.lyrics = !this.lyrics;
+      else if (event.code == "Home") {
+        event.preventDefault();
+        this.percentage = 0;
+        this.setPosition();
+      } else if (event.code == "End") {
+        event.preventDefault();
+        this.percentage = 100;
+        this.setPosition();
+      }
+    },
     init() {
       this.audio.addEventListener("timeupdate", this._handlePlayingUI);
       this.audio.addEventListener("loadeddata", this._handleLoaded);
@@ -416,16 +504,20 @@ export default {
       this.refreshTitle();
     },
     refreshTitle() {
-      if (this.$root.music[0].playing)
-        document.title = `${this.$root.music[0].title} by ${this.$root.music[0].artist} - Paradigm`;
-      else document.title = "Paradigm";
+      if (this.$root.music) {
+        if (this.$root.music[0].playing)
+          document.title = `${this.$root.music[0].title} by ${this.$root.music[0].artist} - Paradigm`;
+        else document.title = "Paradigm";
+      } else document.title = "Paradigm";
     },
     _handleNextSong() {},
   },
   mounted() {
     this.audio = this.$refs.player;
+    this.playing = false;
     this.init();
     this.reload();
+    window.addEventListener("keydown", this._handleKeyboardEvents);
   },
   beforeDestroy() {
     this.audio.removeEventListener("timeupdate", this._handlePlayingUI);
@@ -433,6 +525,7 @@ export default {
     this.audio.removeEventListener("pause", this._handlePlayPause);
     this.audio.removeEventListener("play", this._handlePlayPause);
     this.audio.removeEventListener("ended", this._handleEnded);
+    window.removeEventListener("keydown", this._handleKeyboardEvents);
     this.refreshTitle();
   },
   computed: {
