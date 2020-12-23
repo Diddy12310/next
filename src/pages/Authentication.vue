@@ -41,7 +41,14 @@
             Or
             <a
               class="text--grey text--darken-4"
-              @click="$root.router = 'SignUp'"
+              @click="
+                ($root.router = 'Preflight'),
+                  ($root.user = {
+                    username: '',
+                    password: '',
+                    preflight: { creation: true },
+                  })
+              "
             >
               create an account</a
             >
@@ -85,16 +92,21 @@
               class="text--grey text--darken-4"
               @click="
                 $root.user = {
-                  password: 'PREFLIGHT',
-                  preflight: { in_recovery: true },
+                  preflight: { recovery: true },
                 };
-                $root.router = 'Recovery';
+                $root.router = 'Preflight';
               "
             >
               Enter account recovery</a
             >
           </p>
         </v-card-actions>
+
+        <v-progress-linear
+          indeterminate
+          color="deep-purple darken-4"
+          v-if="loading"
+        ></v-progress-linear>
       </v-card>
     </div>
 
@@ -140,10 +152,12 @@ export default {
         in: false,
       },
       authenticated: false,
+      loading: false,
     };
   },
   methods: {
     signIn() {
+      this.loading = true;
       this.$http
         .post("https://www.theparadigmdev.com/api/users/signin", {
           username: this.username.toLowerCase(),
@@ -244,29 +258,47 @@ export default {
                 ? (this.$root.router = "Preflight")
                 : (this.$root.router = "Home");
               this.$root.socket.emit("login", response.data);
+              this.loading = false;
 
+              const existsing_subscription = this.$root.user.notifications.find(
+                (subscription) =>
+                  subscription._id == this.$getCookie("notification_id")
+              );
+              console.log(existsing_subscription);
               if (
-                (await this.$root.worker.pushManager.permissionState()) !=
-                "granted"
+                ((await this.$root.worker.pushManager.permissionState()) !=
+                  "granted" &&
+                  !existsing_subscription) ||
+                ((await this.$root.worker.pushManager.permissionState()) ==
+                  "granted" &&
+                  !existsing_subscription)
               ) {
-                // Register Push
-                console.log("Registering Push...");
-                const subscription = await this.$root.worker.pushManager.subscribe(
-                  {
-                    userVisibleOnly: true,
-                    applicationServerKey: this.$urlBase64ToUint8Array(
-                      this.$root.public_vapid_key
-                    ),
-                  }
-                );
-                console.log("Push Registered...");
-                // Send Push Subscription
-                console.log("Sending Push...");
-                await this.$http.post(
-                  `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
-                  subscription
-                );
-                console.log("Push Sent...");
+                navigator.serviceWorker.ready.then(async () => {
+                  console.log("Registering Push...");
+                  const subscription = await this.$root.worker.pushManager.subscribe(
+                    {
+                      userVisibleOnly: true,
+                      applicationServerKey: this.$urlBase64ToUint8Array(
+                        this.$root.public_vapid_key
+                      ),
+                    }
+                  );
+                  console.log("Push Registered...");
+                  console.log("Sending Push...");
+                  this.$http
+                    .post(
+                      `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
+                      {
+                        data: subscription,
+                      }
+                    )
+                    .then((response) => {
+                      console.log("Push Sent...");
+                      console.log(response.data._id);
+                      document.cookie = `notification_id=${response.data._id}; Secure`;
+                    })
+                    .catch((error) => console.error(error));
+                });
               }
             }
           } else {
@@ -276,6 +308,7 @@ export default {
               "mdi-lock",
               3000
             );
+            this.loading = false;
           }
         });
     },

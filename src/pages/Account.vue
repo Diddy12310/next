@@ -609,7 +609,7 @@
                 x-small
                 text
                 v-if="$root.user.rights.patriot"
-                @click="$root.router = 'patriot'"
+                @click="$root.router = 'Patriot'"
               ></v-btn>
             </v-card>
           </v-col>
@@ -957,7 +957,6 @@ export default {
 
     let apps = [];
     for (let app in this.$root.config.apps) {
-      console.log(app);
       if (
         !this.user.pinned_apps.includes(app) &&
         app != "Home" &&

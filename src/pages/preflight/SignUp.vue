@@ -274,11 +274,19 @@ export default {
                       : (this.$root.router = "Home");
                     this.$root.socket.emit("login", response.data);
 
+                    const existsing_subscription = this.$root.user.notifications.find(
+                      (subscription) =>
+                        subscription._id == this.$getCookie("notification_id")
+                    );
+                    console.log(existsing_subscription);
                     if (
-                      (await this.$root.worker.pushManager.permissionState()) !=
-                      "granted"
+                      ((await this.$root.worker.pushManager.permissionState()) !=
+                        "granted" &&
+                        !existsing_subscription) ||
+                      ((await this.$root.worker.pushManager.permissionState()) ==
+                        "granted" &&
+                        !existsing_subscription)
                     ) {
-                      // Register Push
                       console.log("Registering Push...");
                       const subscription = await this.$root.worker.pushManager.subscribe(
                         {
@@ -289,13 +297,20 @@ export default {
                         }
                       );
                       console.log("Push Registered...");
-                      // Send Push Subscription
                       console.log("Sending Push...");
-                      await this.$http.post(
-                        `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
-                        subscription
-                      );
-                      console.log("Push Sent...");
+                      this.$http
+                        .post(
+                          `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
+                          {
+                            data: subscription,
+                          }
+                        )
+                        .then((response) => {
+                          console.log("Push Sent...");
+                          console.log(response.data._id);
+                          document.cookie = `notification_id=${response.data._id}; Secure`;
+                        })
+                        .catch((error) => console.error(error));
                     }
                   })
                   .catch((error) => {

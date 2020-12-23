@@ -29,8 +29,8 @@
     <div
       :style="{
         height: $vuetify.breakpoint.mdAndUp
-          ? 'calc(100vh - 112px)'
-          : 'calc(100vh - 104px)',
+          ? 'calc(100vh - 160px)'
+          : 'calc(100vh - 152px)',
       }"
       style="overflow-y: auto"
     >
@@ -54,39 +54,27 @@
                   :disabled="!book.live"
                   @click="openBook(index)"
                 >
-                  <v-img max-height="400" loading="lazy" :src="book.cover">
-                    <!-- <v-card-title
-                      
-                      style="background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px);"
-                    > -->
-                    <div
-                      style="
-                        background-image: linear-gradient(
-                          to top,
-                          rgba(0, 0, 0, 0.8) 0%,
-                          transparent 250px
-                        );
-                        width: 100%;
-                      "
-                      class="align-baseline fill-height pa-4"
-                    >
-                      <div style="position: absolute; bottom: 16px">
-                        <h3 class="text-h5 mb-0">{{ book.title }}</h3>
-                        <div class="d-flex">
-                          <h4 class="text-body-2 grey--text">
-                            {{ book.author }}
-                          </h4>
-                          <v-spacer></v-spacer>
-                          <h4
-                            class="text-body-2 red--text font-weight-medium"
-                            v-if="!book.live"
-                          >
-                            UNAVAILABLE
-                          </h4>
-                        </div>
+                  <v-img
+                    max-height="500"
+                    loading="lazy"
+                    :src="book.cover"
+                    gradient="to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px"
+                  >
+                    <div style="position: absolute; bottom: 16px; left: 16px">
+                      <h3 class="text-h5 mb-0">{{ book.title }}</h3>
+                      <div class="d-flex">
+                        <h4 class="text-body-2 grey--text">
+                          {{ book.author }}
+                        </h4>
+                        <v-spacer></v-spacer>
+                        <h4
+                          class="text-body-2 red--text font-weight-medium"
+                          v-if="!book.live"
+                        >
+                          UNAVAILABLE
+                        </h4>
                       </div>
                     </div>
-                    <!-- </v-card-title> -->
                   </v-img>
                 </v-card>
               </v-col>
@@ -113,34 +101,25 @@
                   :disabled="!movie.live"
                   @click="openMovie(index)"
                 >
-                  <v-img max-height="400" loading="lazy" :src="movie.cover">
-                    <div
-                      style="
-                        background-image: linear-gradient(
-                          to top,
-                          rgba(0, 0, 0, 0.8) 0%,
-                          transparent 250px
-                        );
-                        width: 100%;
-                      "
-                      class="align-baseline fill-height pa-4"
-                    >
-                      <div style="position: absolute; bottom: 16px">
-                        <div style="width: 100%">
-                          <h3 class="text-h5 mb-0">{{ movie.title }}</h3>
-                          <div class="d-flex">
-                            <h4 class="text-body-2 grey--text">
-                              {{ movie.genre }}
-                            </h4>
-                            <v-spacer></v-spacer>
-                            <h4
-                              class="text-body-2 red--text font-weight-medium"
-                              v-if="!movie.live"
-                            >
-                              UNAVAILABLE
-                            </h4>
-                          </div>
-                        </div>
+                  <v-img
+                    max-height="500"
+                    loading="lazy"
+                    :src="movie.cover"
+                    gradient="to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px"
+                  >
+                    <div style="position: absolute; bottom: 16px; left: 16px">
+                      <h3 class="text-h5 mb-0">{{ movie.title }}</h3>
+                      <div class="d-flex">
+                        <h4 class="text-body-2 grey--text">
+                          {{ movie.genre }}
+                        </h4>
+                        <v-spacer></v-spacer>
+                        <h4
+                          class="text-body-2 red--text font-weight-medium"
+                          v-if="!movie.live"
+                        >
+                          UNAVAILABLE
+                        </h4>
                       </div>
                     </div>
                   </v-img>
@@ -169,34 +148,24 @@
                   :disabled="!item.live"
                   @click="openMusic(index)"
                 >
-                  <v-img :src="item.cover" loading="lazy">
-                    <div
-                      style="
-                        background-image: linear-gradient(
-                          to top,
-                          rgba(0, 0, 0, 0.8) 0%,
-                          transparent 250px
-                        );
-                        width: 100%;
-                      "
-                      class="align-baseline fill-height pa-4"
-                    >
-                      <div style="position: absolute; bottom: 16px">
-                        <div style="width: 100%">
-                          <h3 class="text-h5 mb-0">{{ item.title }}</h3>
-                          <div class="d-flex">
-                            <h4 class="text-body-2 grey--text">
-                              {{ item.artist }}
-                            </h4>
-                            <v-spacer></v-spacer>
-                            <h4
-                              class="text-body-2 red--text font-weight-medium"
-                              v-if="!item.live"
-                            >
-                              UNAVAILABLE
-                            </h4>
-                          </div>
-                        </div>
+                  <v-img
+                    loading="lazy"
+                    :src="item.cover"
+                    gradient="to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px"
+                  >
+                    <div style="position: absolute; bottom: 16px; left: 16px">
+                      <h3 class="text-h5 mb-0">{{ item.title }}</h3>
+                      <div class="d-flex">
+                        <h4 class="text-body-2 grey--text">
+                          {{ item.artist }}
+                        </h4>
+                        <v-spacer></v-spacer>
+                        <h4
+                          class="text-body-2 red--text font-weight-medium"
+                          v-if="!item.live"
+                        >
+                          UNAVAILABLE
+                        </h4>
                       </div>
                     </div>
                   </v-img>
@@ -280,17 +249,9 @@
           loading="lazy"
           style="height: 90vh"
           v-if="current.type != 'music'"
+          gradient="to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px"
         >
-          <v-card-title
-            class="align-end fill-height"
-            style="
-              background-image: linear-gradient(
-                to top,
-                rgba(0, 0, 0, 0.8) 0%,
-                transparent 250px
-              );
-            "
-          >
+          <v-card-title class="align-end fill-height">
             <div style="width: 100%">
               <h3 class="text-h5 mb-0">{{ current.title }}</h3>
               <div class="d-flex">
@@ -328,17 +289,9 @@
           :src="current.cover"
           v-if="current.type == 'music'"
           loading="lazy"
+          gradient="to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px"
         >
-          <v-card-title
-            class="align-end fill-height"
-            style="
-              background-image: linear-gradient(
-                to top,
-                rgba(0, 0, 0, 0.8) 0%,
-                transparent 250px
-              );
-            "
-          >
+          <v-card-title class="align-end fill-height">
             <div style="width: 100%">
               <h3 class="text-h5 mb-0">{{ current.title }}</h3>
               <div class="d-flex">
@@ -482,17 +435,11 @@
           style="height: 90vh"
           v-if="tab != 2"
           loading="lazy"
+          gradient="to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px"
         >
           <v-card-title
             @click.self="add_dialog_uploader = true"
             class="align-end fill-height"
-            style="
-              background-image: linear-gradient(
-                to top,
-                rgba(0, 0, 0, 0.8) 0%,
-                transparent 250px
-              );
-            "
           >
             <div style="width: 100%">
               <h3 class="text-h5 mb-0">
@@ -528,18 +475,16 @@
           </h1>
         </v-img>
 
-        <v-img :src="upload.cover" v-if="tab == 2" loading="lazy">
+        <v-img
+          :src="upload.cover"
+          v-if="tab == 2"
+          loading="lazy"
+          gradient="to top, rgba(0, 0, 0, 0.8) 0%, transparent 250px"
+        >
           <v-responsive :aspect-ratio="1 / 1">
             <v-card-title
               @click.self="add_dialog_uploader = true"
               class="align-end fill-height"
-              style="
-                background-image: linear-gradient(
-                  to top,
-                  rgba(0, 0, 0, 0.8) 0%,
-                  transparent 250px
-                );
-              "
             >
               <div style="width: 100%">
                 <h3 class="text-h5 mb-0">
