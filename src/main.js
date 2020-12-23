@@ -7,6 +7,7 @@ import io from "socket.io-client";
 import "./assets/style.css";
 
 let socket = io.connect("https://www.theparadigmdev.com");
+const version = require("./../package.json").version;
 
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios;
@@ -85,7 +86,8 @@ new Vue({
       public_vapid_key:
         "BANy_l888yNEj3sW1ASQBEc3dKBq4MnOn9uu4x_gZteD8SNUYwUFbOPrFdGMiFS0zI16bie6vA-P6bNBXMXhAvc",
       worker: null,
-      online: true
+      online: true,
+      version
     };
   },
   render: h => h(App),

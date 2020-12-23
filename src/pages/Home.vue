@@ -8,13 +8,28 @@
     style="overflow-y: auto"
     class="bg-img"
   >
-    <div
+    <!-- <div
       :style="{
         padding: $vuetify.breakpoint.smAndUp ? '15vh 2rem 2rem 2rem' : '2rem',
       }"
       style="max-width: 72rem"
       class="mx-auto"
+    > -->
+    <div
+      :style="{
+        padding: $vuetify.breakpoint.smAndUp ? '5vh 2rem 2rem 2rem' : '2rem',
+      }"
+      style="max-width: 72rem"
+      class="mx-auto"
     >
+      <h1 class="display-2 font-weight-light mt-6">
+        Welcome,
+        <span :style="{ color: $root.user.color }">{{
+          $root.user.username
+        }}</span
+        >!
+      </h1>
+
       <h6 class="grey--text text--darken-1 overline">
         {{ $root.config.landing.date }}
       </h6>
@@ -56,12 +71,28 @@
         <v-icon>mdi-chevron-right</v-icon>
       </div>
     </button> -->
+    <p
+      class="caption mb-2 mr-3 grey--text"
+      style="position: absolute; bottom: 0px; right: 0px; cursor: pointer"
+      @click="
+        window.open(
+          `https://github.com/Paradigm-Dev/paradigm/releases/tag/v${$root.version}`
+        )
+      "
+    >
+      v{{ $root.version }}
+    </p>
   </div>
 </template>
 
 <script>
 export default {
   name: "Home",
+  data() {
+    return {
+      window,
+    };
+  },
 };
 </script>
 
