@@ -272,7 +272,7 @@ export default {
                     response.data.preflight
                       ? (this.$root.router = "Preflight")
                       : (this.$root.router = "Home");
-                    this.$root.socket.emit("login", response.data);
+                    this.$root.socket.emit("login", response.data.username);
 
                     const existsing_subscription = this.$root.user.notifications.find(
                       (subscription) =>

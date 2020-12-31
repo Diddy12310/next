@@ -74,6 +74,7 @@
             :disabled="!user_auth_info.exists && !user_auth_info.in"
             :error-messages="$root.notification.text"
           ></v-text-field>
+          <v-checkbox label="Stay signed in" v-model="sticky"></v-checkbox>
           <v-btn
             block
             color="deep-purple darken-4"
@@ -147,6 +148,7 @@ export default {
     return {
       username: "",
       password: "",
+      sticky: false,
       user_auth_info: {
         exists: false,
         in: false,
@@ -159,12 +161,13 @@ export default {
     signIn() {
       this.loading = true;
       this.$http
-        .post("https://www.theparadigmdev.com/api/users/signin", {
+        .post("/api/authentication/signin", {
           username: this.username.toLowerCase(),
           password: this.password,
+          sticky: this.sticky,
         })
         .then(async (response) => {
-          if (!response.data.msg) {
+          if (!response.data.errors) {
             this.authenticated = true;
             if (!this.user_auth_info.in) {
               this.$root.nav = [
@@ -257,7 +260,7 @@ export default {
               response.data.preflight
                 ? (this.$root.router = "Preflight")
                 : (this.$root.router = "Home");
-              this.$root.socket.emit("login", response.data);
+              this.$root.socket.emit("login", response.data.username);
               this.loading = false;
 
               const existsing_subscription = this.$root.user.notifications.find(

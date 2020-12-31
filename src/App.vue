@@ -79,12 +79,156 @@ export default {
           _id: this.$root.user._id,
           username: this.$root.user.username,
         });
+        this.$http.get("/api/authentication/signout");
       }
     },
   },
-  created() {
+  mounted() {
     if (this.$root.user == false) this.$root.router = "Landing";
+    if (this.$getCookie("jwt")) {
+      this.$http.get("/api/authentication/verify").then(async (response) => {
+        if (response.data.valid) {
+          this.$root.user = response.data.user;
+          this.$root.router = "Home";
+          this.$root.nav = [
+            {
+              icon: "mdi-home",
+              content: "Home",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-message",
+              content: "Flamechat",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-web",
+              content: "Satellite",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-newspaper",
+              content: "The Paradox",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-folder-multiple",
+              content: "Drawer",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-play",
+              content: "Media",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-account-group",
+              content: "People",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-satellite-uplink",
+              content: "Broadcast",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-download",
+              content: "Downloads",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-shield-lock",
+              content: "Privacy",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-feather",
+              content: "Terms",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-lifebuoy",
+              content: "Support",
+              disabled: false,
+              rights: true,
+            },
+            {
+              icon: "mdi-code-tags",
+              content: "Developer",
+              disabled: false,
+              rights: response.data.user.rights.developer,
+            },
+            {
+              icon: "mdi-console-line",
+              content: "Terminal",
+              disabled: false,
+              rights: response.data.user.rights.admin,
+            },
+          ];
+          response.data.preflight
+            ? (this.$root.router = "Preflight")
+            : (this.$root.router = "Home");
+          this.$root.socket.emit("login", response.data.user.username);
+          this.loading = false;
 
+          const existsing_subscription = this.$root.user.notifications.find(
+            (subscription) =>
+              subscription._id == this.$getCookie("notification_id")
+          );
+          console.log(existsing_subscription);
+          if (
+            ((await this.$root.worker.pushManager.permissionState()) !=
+              "granted" &&
+              !existsing_subscription) ||
+            ((await this.$root.worker.pushManager.permissionState()) ==
+              "granted" &&
+              !existsing_subscription)
+          ) {
+            navigator.serviceWorker.ready.then(async () => {
+              console.log("Registering Push...");
+              const subscription = await this.$root.worker.pushManager.subscribe(
+                {
+                  userVisibleOnly: true,
+                  applicationServerKey: this.$urlBase64ToUint8Array(
+                    this.$root.public_vapid_key
+                  ),
+                }
+              );
+              console.log("Push Registered...");
+              console.log("Sending Push...");
+              this.$http
+                .post(
+                  `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
+                  {
+                    data: subscription,
+                  }
+                )
+                .then((response) => {
+                  console.log("Push Sent...");
+                  console.log(response.data._id);
+                  document.cookie = `notification_id=${response.data._id}; Secure`;
+                })
+                .catch((error) => console.error(error));
+            });
+          }
+        } else {
+          this.$root.router = "Landing";
+        }
+      });
+    }
+  },
+  created() {
     this.$root.socket.on("connect", () => {});
     this.$root.socket.on("config", (data) => {
       this.$root.config = data;
@@ -115,7 +259,8 @@ export default {
     this.$root.socket.on("nuke", () => {
       this.$root.config.shutdown = true;
     });
-    if (this.$root.user) this.$root.socket.emit("login", this.$root.user);
+    if (this.$root.user)
+      this.$root.socket.emit("login", this.$root.user.username);
     this.$root.socket.on("user", (data) => {
       if (data.strikes != this.$root.user.strikes)
         this.$notify(

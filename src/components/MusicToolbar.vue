@@ -387,6 +387,7 @@ export default {
           _id: this.$root.user._id,
           username: this.$root.user.username,
         });
+        this.$http.get("/api/authentication/signout");
       }
     },
     setPosition() {
