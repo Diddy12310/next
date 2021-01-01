@@ -19,25 +19,18 @@
             If you need assistance with Paradigm or have any questions, email
             <a href="mailto:paradigmdevelop@gmail.com"
               >paradigmdevelop@gmail.com</a
-            >
-            or call or text (412) 427-0411.
+            >.
           </p>
           <p>
-            If there is a bug or any other sort of glitch,
-            <a
-              @click="
-                $root.view.bug_report = true;
-                $root.view.support = false;
-              "
-              >file a bug report</a
-            >.
+            If there is a bug or any other sort of glitch, file a bug report
+            using the form.
           </p>
           <p class="mb-0">
             Many issues can be temporarily solved by refreshing the page.
           </p>
         </v-col>
 
-        <v-col sm="12" md="6">
+        <v-col cols="12" md="6" class="py-12">
           <v-card max-width="500" class="mx-auto">
             <v-card-title class="text-h5 font-weight-medium"
               >REPORT A BUG</v-card-title
@@ -98,15 +91,6 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-btn
-                text
-                color="grey"
-                @click="
-                  $root.view.bug_report = false;
-                  new_bug = {};
-                "
-                >Cancel</v-btn
-              >
               <v-spacer></v-spacer>
               <v-btn text color="blue accent-1" @click="submit()">Submit</v-btn>
             </v-card-actions>
@@ -129,7 +113,7 @@ export default {
         "Navigation drawer",
         "Footer",
         "Home",
-        "Flamechat",
+        "Wire",
         "The Paradox",
         "Satellite",
         "Drawer",

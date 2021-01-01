@@ -8,9 +8,9 @@
     style="overflow-y: auto"
   >
     <!-- TOOLBAR -->
-    <v-toolbar dense color="deep-orange">
+    <v-toolbar dense color="#164E63">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Flamechat</v-toolbar-title>
+      <v-toolbar-title>Wire</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         icon
@@ -101,9 +101,9 @@
             ($vuetify.breakpoint.smAndDown ? (drawer ? false : true) : true)
           "
         >
-          <h3 class="text-h3 font-weight-light">Welcome to Flamechat!</h3>
+          <h3 class="text-h3 font-weight-light">Welcome to Wire!</h3>
           <p class="mt-3">
-            Flamechat is a secure and freedom-oriented chatting app.
+            Wire is a secure and freedom-oriented chatting app.
           </p>
           <div style="max-width: 150px; margin: auto">
             <v-btn x-large class="mt-8" block @click="buy_chatroom.open = true">
@@ -173,9 +173,11 @@
                       ></v-img
                     ></v-list-item-avatar>
                   </v-badge>
-                  <v-list-item-title :style="{ color: friend.color }">{{
-                    friend.username
-                  }}</v-list-item-title>
+                  <v-list-item-title
+                    class="font-weight-medium"
+                    :style="{ color: friend.color }"
+                    >{{ friend.username }}</v-list-item-title
+                  >
                 </v-list-item>
 
                 <v-list-item @click="$root.router = 'People'">
@@ -798,7 +800,7 @@ import moment from "moment";
 
 let typingTimeout;
 export default {
-  name: "Flamechat",
+  name: "Wire",
   data() {
     return {
       drawer: false,
@@ -848,11 +850,13 @@ export default {
       this.current_dm_person = false;
       if (dm) {
         this.socket = await io.connect(
+          // TODO(transition to wire endpoints)
           `https://www.theparadigmdev.com/flamechat/${to.dm}`
         );
         this.current_dm_person = to.username;
       } else {
         this.socket = await io.connect(
+          // TODO(transition to wire endpoints)
           `https://www.theparadigmdev.com/flamechat/${to.id}`
         );
       }
@@ -923,8 +927,8 @@ export default {
       this.$http
         .post(
           this.current_dm_person
-            ? `https://www.theparadigmdev.com/api/flamechat/dm/${this.current_id}/file`
-            : `https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current_id}/file`,
+            ? `https://www.theparadigmdev.com/api/wire/dm/${this.current_id}/file`
+            : `https://www.theparadigmdev.com/api/wire/chatroom/${this.current_id}/file`,
           formData,
           {
             headers: {
@@ -940,8 +944,8 @@ export default {
             timestamp: moment().format("MM/DD/YYYY [at] h:mm a"),
             content: this.upload.file[0].name,
             url: this.current_dm_person
-              ? `https://www.theparadigmdev.com/relay/flamechat/dm/${this.current_id}/${this.upload.file[0].name}`
-              : `https://www.theparadigmdev.com/relay/flamechat/chatroom/${this.current_id}/${this.upload.file[0].name}`,
+              ? `https://www.theparadigmdev.com/relay/wire/dm/${this.current_id}/${this.upload.file[0].name}`
+              : `https://www.theparadigmdev.com/relay/wire/chatroom/${this.current_id}/${this.upload.file[0].name}`,
             type: "",
           };
           if (this.upload.file[0].type.includes("image")) data.type = "image";
@@ -1007,7 +1011,7 @@ export default {
     },
     buyChatroom() {
       this.$http
-        .post("https://www.theparadigmdev.com/api/flamechat/chatroom/new", {
+        .post("https://www.theparadigmdev.com/api/wire/chatroom/new", {
           icon: "mdi-forum",
           name: this.buy_chatroom.name,
           owner: this.$root.user._id,
@@ -1063,7 +1067,7 @@ export default {
         this.$notify("Chatroom deleted", "whit--text", "mdi-delete", 3000);
         this.delete_verify_popup = false;
         await this.$http.get(
-          `https://www.theparadigmdev.com/api/flamechat/chatroom/${this.current.id}/delete`
+          `https://www.theparadigmdev.com/api/wire/chatroom/${this.current.id}/delete`
         );
         this.socket.disconnect();
         this.current = false;
@@ -1078,7 +1082,7 @@ export default {
       .get("https://www.theparadigmdev.com/api/users/shortlist")
       .then((response) => {
         this.all_people = response.data;
-        if (this.$root.url[1] == "flamechat") {
+        if (this.$root.url[1] == "wire") {
           if (this.$root.url[2] == "dm") {
             const friend = this.approved_friends.find(
               (person) => person.username == this.$root.url[3]

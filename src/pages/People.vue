@@ -130,13 +130,8 @@
                 <v-btn
                   v-if="is_approved"
                   @click="
-                    ($root.url = [
-                      '',
-                      'flamechat',
-                      'dm',
-                      $root.profile.username,
-                    ]),
-                      ($root.router = 'Flamechat')
+                    ($root.url = ['', 'wire', 'dm', $root.profile.username]),
+                      ($root.router = 'Wire')
                   "
                   block
                   text

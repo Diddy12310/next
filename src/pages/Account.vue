@@ -400,7 +400,7 @@
                   <v-list-item
                     v-for="(chatroom, index) in user.chatrooms"
                     :key="index"
-                    @click.self="$go(['', 'flamechat', chatroom.id])"
+                    @click.self="$go(['', 'Wire', chatroom.id])"
                   >
                     <v-list-item-icon class="mt-5 ml-3 mr-6"
                       ><v-icon>{{ chatroom.icon }}</v-icon></v-list-item-icon

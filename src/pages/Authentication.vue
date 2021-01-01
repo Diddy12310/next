@@ -179,7 +179,7 @@ export default {
                 },
                 {
                   icon: "mdi-message",
-                  content: "Flamechat",
+                  content: "Wire",
                   disabled: false,
                   rights: true,
                 },
@@ -247,20 +247,20 @@ export default {
                   icon: "mdi-code-tags",
                   content: "Developer",
                   disabled: false,
-                  rights: response.data.rights.developer,
+                  rights: response.data.user.rights.developer,
                 },
                 {
                   icon: "mdi-console-line",
                   content: "Terminal",
                   disabled: false,
-                  rights: response.data.rights.admin,
+                  rights: response.data.user.rights.admin,
                 },
               ];
-              this.$root.user = response.data;
-              response.data.preflight
+              this.$root.user = response.data.user;
+              response.data.user.preflight
                 ? (this.$root.router = "Preflight")
                 : (this.$root.router = "Home");
-              this.$root.socket.emit("login", response.data.username);
+              this.$root.socket.emit("login", response.data.user.username);
               this.loading = false;
 
               const existsing_subscription = this.$root.user.notifications.find(
@@ -290,7 +290,7 @@ export default {
                   console.log("Sending Push...");
                   this.$http
                     .post(
-                      `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
+                      `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
                       {
                         data: subscription,
                       }

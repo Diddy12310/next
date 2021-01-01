@@ -99,7 +99,7 @@ export default {
             },
             {
               icon: "mdi-message",
-              content: "Flamechat",
+              content: "Wire",
               disabled: false,
               rights: true,
             },
@@ -310,7 +310,10 @@ textarea {
 
 .moonrock-count {
   position: relative;
-  bottom: 45px;
+  bottom: 32.5px;
+}
+.moonrock-img {
+  height: 75px;
 }
 
 html {

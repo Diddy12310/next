@@ -162,7 +162,7 @@ export default {
               },
               moonrocks: 0,
               code: this.invite_code,
-              pinned_apps: ["Flamechat", "Drawer", "Broadcast"],
+              pinned_apps: ["Wire", "Drawer", "Broadcast"],
             })
             .then((response) => {
               if (!this.use_default) {
@@ -188,7 +188,7 @@ export default {
                       },
                       {
                         icon: "mdi-message",
-                        content: "Flamechat",
+                        content: "Wire",
                         disabled: false,
                         rights: true,
                       },

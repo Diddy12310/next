@@ -7,7 +7,7 @@
         key="Authentication"
       />
       <Home v-if="$root.router == 'Home'" key="Home" />
-      <Flamechat v-if="$root.router == 'Flamechat'" key="Flamechat" />
+      <Wire v-if="$root.router == 'Wire'" key="Wire" />
       <Media v-if="$root.router == 'Media'" key="Media" />
       <Satellite v-if="$root.router == 'Satellite'" key="Satellite" />
       <Paradox v-if="$root.router == 'The Paradox'" key="Paradox" />
@@ -32,7 +32,7 @@
 import Landing from "./pages/Landing.vue";
 import Authentication from "./pages/Authentication.vue";
 import Home from "./pages/Home.vue";
-import Flamechat from "./pages/Flamechat.vue";
+import Wire from "./pages/Wire.vue";
 import Media from "./pages/Media.vue";
 import Satellite from "./pages/Satellite.vue";
 import Paradox from "./pages/Paradox.vue";
@@ -56,7 +56,7 @@ export default {
     Landing,
     Authentication,
     Home,
-    Flamechat,
+    Wire,
     Media,
     Satellite,
     Paradox,
