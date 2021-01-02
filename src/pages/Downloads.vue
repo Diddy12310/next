@@ -15,80 +15,36 @@
       style="overflow-y: auto"
     >
       <v-container>
-        <v-card max-width="750" class="ma-auto mt-3">
+        <v-card
+          max-width="750"
+          class="ma-auto mt-3"
+          v-for="app in $root.config.downloads"
+          :key="app._id"
+        >
           <v-card-title class="py-2">
             <v-list-item class="pa-0">
               <v-list-item-avatar tile
-                ><v-img src="../assets/capture.png"></v-img
+                ><v-img :src="app.icon"></v-img
               ></v-list-item-avatar>
-              <v-list-item-title class="text-h5">Capture</v-list-item-title>
+              <v-list-item-title class="text-h5">{{
+                app.title
+              }}</v-list-item-title>
             </v-list-item>
           </v-card-title>
 
           <v-card-text>
-            Capture is a lightweight and user-friendly screen capturing tool.
+            {{ app.description }}
           </v-card-text>
 
           <v-card-actions>
-            <v-btn
-              icon
-              color="grey darken-3"
-              @click="window.open('https://github.com/Paradigm-Dev/capture')"
+            <v-btn icon color="grey darken-3" @click="window.open(app.github)"
               ><v-icon>mdi-github</v-icon></v-btn
             >
             <v-spacer></v-spacer>
-            <v-btn
-              @click="window.open($root.config.downloads.capture.win)"
-              color="blue accent-1"
-              text
+            <v-btn @click="window.open(app.win)" color="blue accent-1" text
               ><v-icon left>mdi-microsoft</v-icon>Windows</v-btn
             >
-            <v-btn
-              @click="window.open($root.config.downloads.capture.mac)"
-              color="blue accent-1"
-              text
-              ><v-icon left>mdi-apple</v-icon>macOS</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-
-        <v-card max-width="750" class="ma-auto mt-6">
-          <v-card-title class="py-2">
-            <v-list-item class="pa-0">
-              <v-list-item-avatar tile
-                ><v-img src="../assets/intelligence.png"></v-img
-              ></v-list-item-avatar>
-              <v-list-item-title class="text-h5"
-                >Intelligence</v-list-item-title
-              >
-            </v-list-item>
-          </v-card-title>
-
-          <v-card-text>
-            Intelligence is an open-source intelligence gathering and
-            organizational tool.
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn
-              icon
-              color="grey darken-3"
-              @click="
-                window.open('https://github.com/Paradigm-Dev/intelligence')
-              "
-              ><v-icon>mdi-github</v-icon></v-btn
-            >
-            <v-spacer></v-spacer>
-            <v-btn
-              @click="window.open($root.config.downloads.intelligence.win)"
-              color="blue accent-1"
-              text
-              ><v-icon left>mdi-microsoft</v-icon>Windows</v-btn
-            >
-            <v-btn
-              @click="window.open($root.config.downloads.intelligence.mac)"
-              color="blue accent-1"
-              text
+            <v-btn @click="window.open(app.mac)" color="blue accent-1" text
               ><v-icon left>mdi-apple</v-icon>macOS</v-btn
             >
           </v-card-actions>
