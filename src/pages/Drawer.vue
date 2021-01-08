@@ -40,7 +40,8 @@
         :headers="headers"
         :items="$root.user.files"
         :items-per-page="10"
-        class="elevation-1"
+        sort-by="name"
+        class="elevation-2"
         dense
         v-if="$vuetify.breakpoint.xsOnly"
       >
@@ -97,7 +98,8 @@
         :headers="headers"
         :items="$root.user.files"
         :items-per-page="10"
-        class="elevation-1"
+        sort-by="name"
+        class="elevation-2"
         v-else
       >
         <template v-slot:item.icon="{ item }">
