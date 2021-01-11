@@ -74,11 +74,11 @@
             >
               built for the people
             </h1>
-            <p class="font-weight-light text-h6 grey--text mt-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+            <p class="font-weight-light text-h6 grey--text mt-4 pr-4">
+              Paradigm is a suite of lightweight, secure, and performant
+              applications on the web for a free society. Our apps promote the
+              freedoms enshrined in the Constitution of the United States. User
+              privacy and security are our number one priority.
             </p>
 
             <v-row class="align-center">
@@ -127,7 +127,7 @@
                   @keypress.enter="signUp()"
                 ></v-text-field>
                 <v-btn block color="deep-purple darken-4" @click="signUp()"
-                  >Create my account</v-btn
+                  >Continue</v-btn
                 >
               </v-card-text>
 
@@ -135,9 +135,12 @@
                 <p
                   class="ma-auto subtitle-2 text-center font-weight-light text--grey text--darken-4"
                 >
-                  By signing up, you agree to the
-                  <span @click="" class="text-grey text--darken-4">
-                    Terms and Conditions</span
+                  Already have an account?
+                  <a
+                    @click="$root.router = 'Authentication'"
+                    class="text-grey text--darken-4"
+                  >
+                    Sign in here</a
                   >
                 </p>
               </v-card-actions>

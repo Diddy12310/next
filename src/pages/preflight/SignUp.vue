@@ -94,9 +94,9 @@
       ></v-checkbox>
       <span class="grey--text"
         >Please read and accept the
-        <a @click="$root.view.terms = true">Terms and Conditions</a>. Confirm
-        that you are over the age of 13. If you are under 18, parental
-        permission is required.
+        <a @click="terms = true">Terms and Conditions</a>. Confirm that you are
+        over the age of 13. If you are under 18, parental permission is
+        required.
         <a
           target="_blank"
           href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act"
@@ -111,10 +111,45 @@
         >Finish</v-btn
       >
     </div>
+
+    <v-dialog
+      v-model="terms"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+      @keyup.esc="terms = false"
+    >
+      <v-card>
+        <Terms />
+        <v-btn
+          style="z-index: 6"
+          small
+          text
+          fab
+          fixed
+          top
+          right
+          @click="terms = false"
+          ><v-icon>mdi-close</v-icon></v-btn
+        >
+      </v-card>
+    </v-dialog>
+
+    <v-btn
+      @click="($root.user = false), ($root.router = 'Landing')"
+      absolute
+      bottom
+      left
+      text
+      color="grey"
+      >Cancel</v-btn
+    >
   </div>
 </template>
 
 <script>
+import Terms from "../Terms";
+
 export default {
   name: "SignUp",
   data() {
@@ -127,7 +162,11 @@ export default {
         password: this.$root.user.password,
       },
       use_default: false,
+      terms: false,
     };
+  },
+  components: {
+    Terms,
   },
   created() {
     let randomHex = "";
