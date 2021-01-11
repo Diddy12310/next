@@ -343,11 +343,7 @@
                 ? 'calc(100vh - 204px)'
                 : 'calc(100vh - 186px)',
             }"
-            style="
-              width: calc(100vw - 312px) !important;
-              overflow: auto;
-              padding: 16px 16px 0px 16px;
-            "
+            style="overflow: auto; padding: 16px 16px 0px 16px"
           >
             <div
               v-for="(message, index) in current.messages"
@@ -962,7 +958,7 @@ export default {
         this.$notify(
           "You can't leave this chatroom, you own it!",
           "orange--text",
-          "mdi-warning",
+          "mdi-alert",
           3000
         );
     },

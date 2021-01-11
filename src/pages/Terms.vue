@@ -1,5 +1,5 @@
 <template>
-  <div class="terms" :style="{ height: `calc(100vh - 64px)`, overflowY: 'auto', overflowX: 'hidden' }">
+  <div class="terms" :style="{ height: $root.user.preflight.creation ? '100vh' : `calc(100vh - 64px)`, overflowY: 'auto', overflowX: 'hidden' }">
     <v-row class="text-center">
       <v-col sm="12" class="light-blue darken-3 py-12 elevation-5" style="z-index: 5;">
         <h1 class="text-h2 font-weight-thin white--text">Terms of Service and Use and Privacy Policy</h1>

@@ -447,7 +447,6 @@ export default {
         if (this.$root.music[0].lyrics[Math.round(this.audio.currentTime)])
           this.lyricTime = Math.round(this.audio.currentTime);
       }
-      // console.log(Math.round(this.audio.currentTime))
       this.refreshTitle();
     },
     _handlePlayPause(e) {

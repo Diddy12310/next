@@ -479,7 +479,7 @@
           <v-col sm="6">
             <v-card class="fill-height">
               <v-card-text>
-                <v-row>
+                <v-row class="mt-0">
                   <v-col class="py-0" sm="10">
                     <p>Apollo Program</p>
                   </v-col>

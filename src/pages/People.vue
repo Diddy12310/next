@@ -45,7 +45,7 @@
     >
       <v-container>
         <v-fade-transition group hide-on-leave>
-          <v-row key="list" v-if="!$root.profile">
+          <v-row key="list" v-if="!$root.profile" class="my-0">
             <v-col
               sm="6"
               md="4"
@@ -81,7 +81,7 @@
             </v-col>
           </v-row>
 
-          <v-row key="profile" v-if="$root.profile">
+          <v-row key="profile" v-if="$root.profile" class="mt-0">
             <v-col xs="12" md="4" cols="12">
               <v-btn
                 class="mt-n2 mb-2"
@@ -344,7 +344,6 @@ export default {
       this.profile_index = this.$root.user.people.approved.findIndex(
         (person) => this.$root.profile._id == person._id
       );
-      console.log(this.profile_index);
       return is;
     },
     is_sent() {
@@ -366,7 +365,8 @@ export default {
   },
   async created() {
     await this.$http
-      .get("https://www.theparadigmdev.com/api/users/list")
+      // .get("https://www.theparadigmdev.com/api/users/list")
+      .get("https://www.theparadigmdev.com/api/people")
       .then((response) => {
         this.people = response.data;
         this.loading = false;

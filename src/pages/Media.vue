@@ -1049,7 +1049,6 @@ export default {
       this.$nextTick(() => {
         audio.currentTime = oldTimeStamp;
         audio.play();
-        console.log(audio.currentTime);
       });
     },
     save() {
@@ -1068,7 +1067,6 @@ export default {
           this.upload
         )
         .then((response) => {
-          console.log(response);
           let formData = new FormData();
           formData.append("cover", this.upload.cover_file[0]);
           if (this.upload.type != "music")
