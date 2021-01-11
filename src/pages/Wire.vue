@@ -296,10 +296,6 @@
                   current_message == index
                     ? message.user_id == $root.user._id
                       ? true
-                      : current.owner == $root.user._id
-                      ? true
-                      : $root.user.rights.admin
-                      ? true
                       : false
                     : false
                 "
