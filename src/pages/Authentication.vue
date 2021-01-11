@@ -61,7 +61,6 @@
             label="Username"
             class="mb-3"
             v-model="username"
-            @keyup="checkIfUserExists()"
             autocomplete="off"
           ></v-text-field>
           <v-text-field
@@ -69,13 +68,17 @@
             label="Password"
             class="mb-6"
             type="password"
-            @keypress.enter="signIn()"
+            @keyup.enter="signIn()"
             v-model="password"
-            :disabled="!user_auth_info.exists && !user_auth_info.in"
             :error-messages="$root.notification.text"
           ></v-text-field>
-          <v-checkbox label="Stay signed in" v-model="sticky"></v-checkbox>
+          <v-checkbox
+            @keyup.enter="signIn()"
+            label="Stay signed in"
+            v-model="sticky"
+          ></v-checkbox>
           <v-btn
+            elevation="2"
             block
             color="deep-purple darken-4"
             @click="signIn()"
@@ -110,34 +113,6 @@
         ></v-progress-linear>
       </v-card>
     </div>
-
-    <v-dialog v-model="user_auth_info.in" v-if="authenticated" max-width="350">
-      <v-card color="red">
-        <v-card-title
-          class="title text-center font-weight-medium text-uppercase"
-          >Error</v-card-title
-        >
-        <v-card-text
-          >You are logged in on another client. If you continue, that client's
-          connection will be closed.</v-card-text
-        >
-        <v-card-actions>
-          <v-btn
-            text
-            color="grey darken-1"
-            @click="
-              (username = ''),
-                (password = ''),
-                (user_auth_info.in = false),
-                (user_auth_info.exists = false)
-            "
-            >Cancel</v-btn
-          >
-          <v-spacer></v-spacer>
-          <v-btn text color="white" @click="closeDupClient()">Continue</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -149,10 +124,6 @@ export default {
       username: "",
       password: "",
       sticky: false,
-      user_auth_info: {
-        exists: false,
-        in: false,
-      },
       authenticated: false,
       loading: false,
     };
@@ -169,140 +140,143 @@ export default {
         .then(async (response) => {
           if (!response.data.errors) {
             this.authenticated = true;
-            if (!this.user_auth_info.in) {
-              this.$root.nav = [
-                {
-                  icon: "mdi-home",
-                  content: "Home",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-message",
-                  content: "Wire",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-web",
-                  content: "Satellite",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-newspaper",
-                  content: "The Paradox",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-folder-multiple",
-                  content: "Drawer",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-play",
-                  content: "Media",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-account-group",
-                  content: "People",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-satellite-uplink",
-                  content: "Broadcast",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-download",
-                  content: "Downloads",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-shield-lock",
-                  content: "Privacy",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-feather",
-                  content: "Terms",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-lifebuoy",
-                  content: "Support",
-                  disabled: false,
-                  rights: true,
-                },
-                {
-                  icon: "mdi-code-tags",
-                  content: "Developer",
-                  disabled: false,
-                  rights: response.data.user.rights.developer,
-                },
-                {
-                  icon: "mdi-console-line",
-                  content: "Terminal",
-                  disabled: false,
-                  rights: response.data.user.rights.admin,
-                },
-              ];
-              this.$root.user = response.data.user;
-              response.data.user.preflight
-                ? (this.$root.router = "Preflight")
-                : (this.$root.router = "Home");
-              this.$root.socket.emit("login", response.data.user.username);
-              this.loading = false;
+            this.$root.user = response.data.user;
+            this.$root.nav = [
+              {
+                icon: "mdi-home",
+                content: "Home",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-message",
+                content: "Wire",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-web",
+                content: "Satellite",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-newspaper",
+                content: "The Paradox",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-folder-multiple",
+                content: "Drawer",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-play",
+                content: "Media",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-account-group",
+                content: "People",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-satellite-uplink",
+                content: "Broadcast",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-satellite-uplink",
+                content: "Parlay",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-download",
+                content: "Downloads",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-shield-lock",
+                content: "Privacy",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-feather",
+                content: "Terms",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-lifebuoy",
+                content: "Support",
+                disabled: false,
+                rights: true,
+              },
+              {
+                icon: "mdi-code-tags",
+                content: "Developer",
+                disabled: false,
+                rights: response.data.user.rights.developer,
+              },
+              {
+                icon: "mdi-console-line",
+                content: "Terminal",
+                disabled: false,
+                rights: response.data.user.rights.admin,
+              },
+            ];
+            response.data.user.preflight
+              ? (this.$root.router = "Preflight")
+              : (this.$root.router = "Home");
+            this.$root.socket.emit("login", response.data.user.username);
+            this.loading = false;
 
-              const existsing_subscription = this.$root.user.notifications.find(
-                (subscription) =>
-                  subscription._id == this.$getCookie("notification_id")
-              );
-              console.log(existsing_subscription);
-              if (
-                ((await this.$root.worker.pushManager.permissionState()) !=
-                  "granted" &&
-                  !existsing_subscription) ||
-                ((await this.$root.worker.pushManager.permissionState()) ==
-                  "granted" &&
-                  !existsing_subscription)
-              ) {
-                navigator.serviceWorker.ready.then(async () => {
-                  console.log("Registering Push...");
-                  const subscription = await this.$root.worker.pushManager.subscribe(
+            const existsing_subscription = this.$root.user.notifications.find(
+              (subscription) =>
+                subscription._id == this.$getCookie("notification_id")
+            );
+            console.log(existsing_subscription);
+            if (
+              ((await this.$root.worker.pushManager.permissionState()) !=
+                "granted" &&
+                !existsing_subscription) ||
+              ((await this.$root.worker.pushManager.permissionState()) ==
+                "granted" &&
+                !existsing_subscription)
+            ) {
+              navigator.serviceWorker.ready.then(async () => {
+                console.log("Registering Push...");
+                const subscription = await this.$root.worker.pushManager.subscribe(
+                  {
+                    userVisibleOnly: true,
+                    applicationServerKey: this.$urlBase64ToUint8Array(
+                      this.$root.public_vapid_key
+                    ),
+                  }
+                );
+                console.log("Push Registered...");
+                console.log("Sending Push...");
+                this.$http
+                  .post(
+                    `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
                     {
-                      userVisibleOnly: true,
-                      applicationServerKey: this.$urlBase64ToUint8Array(
-                        this.$root.public_vapid_key
-                      ),
+                      data: subscription,
                     }
-                  );
-                  console.log("Push Registered...");
-                  console.log("Sending Push...");
-                  this.$http
-                    .post(
-                      `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
-                      {
-                        data: subscription,
-                      }
-                    )
-                    .then((response) => {
-                      console.log("Push Sent...");
-                      console.log(response.data._id);
-                      document.cookie = `notification_id=${response.data._id}; Secure`;
-                    })
-                    .catch((error) => console.error(error));
-                });
-              }
+                  )
+                  .then((response) => {
+                    console.log("Push Sent...");
+                    document.cookie = `notification_id=${response.data._id}; Secure`;
+                  })
+                  .catch((error) => console.error(error));
+              });
             }
           } else {
             this.$notify(
@@ -314,23 +288,6 @@ export default {
             this.loading = false;
           }
         });
-    },
-    checkIfUserExists() {
-      if (this.username.length < 1) this.username_exists = false;
-      else {
-        this.$http
-          .get(
-            `https://www.theparadigmdev.com/api/users/check/${this.username.toLowerCase()}`
-          )
-          .then((response) => {
-            this.user_auth_info = response.data;
-          });
-      }
-    },
-    closeDupClient() {
-      this.$root.socket.emit("kick", this.username.toLowerCase());
-      this.user_auth_info.in = false;
-      this.signIn();
     },
   },
 };
