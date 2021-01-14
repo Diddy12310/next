@@ -66,6 +66,88 @@ Vue.mixin({
         outputArray[i] = rawData.charCodeAt(i);
       }
       return outputArray;
+    },
+    $initAppMenu() {
+      this.$root.nav = [
+        {
+          icon: "mdi-home",
+          content: "Home",
+          rights: this.$root.config.router.home
+        },
+        {
+          icon: "mdi-chat",
+          content: "Wire",
+          rights: this.$root.config.router.wire
+        },
+        {
+          icon: "mdi-web",
+          content: "Satellite",
+          rights: this.$root.config.router.satellite
+        },
+        {
+          icon: "mdi-newspaper",
+          content: "The Paradox",
+          rights: this.$root.config.router.paradox
+        },
+        {
+          icon: "mdi-folder-multiple",
+          content: "Drawer",
+          rights: this.$root.config.router.drawer
+        },
+        {
+          icon: "mdi-play",
+          content: "Media",
+          rights: this.$root.config.router.media
+        },
+        // {
+        //   icon: "mdi-account-group",
+        //   content: "People",
+        //   rights: this.$root.config.router.people
+        // },
+        {
+          icon: "mdi-satellite-uplink",
+          content: "Broadcast",
+          rights: this.$root.config.router.broadcast
+        },
+        {
+          icon: "mdi-forum",
+          content: "Parlay",
+          rights: this.$root.config.router.parlay
+        },
+        {
+          icon: "mdi-download",
+          content: "Downloads",
+          rights: this.$root.config.router.downloads
+        },
+        {
+          icon: "mdi-shield-lock",
+          content: "Privacy",
+          rights: this.$root.config.router.privacy
+        },
+        {
+          icon: "mdi-feather",
+          content: "Terms",
+          rights: this.$root.config.router.terms
+        },
+        {
+          icon: "mdi-lifebuoy",
+          content: "Support",
+          rights: this.$root.config.router.support
+        },
+        {
+          icon: "mdi-code-tags",
+          content: "Developer",
+          rights:
+            this.$root.config.router.developer &&
+            this.$root.user.rights.developer
+        },
+        {
+          icon: "mdi-console-line",
+          content: "Terminal",
+          rights:
+            this.$root.config.router.terminal && this.$root.user.rights.admin
+        }
+      ];
     }
   }
 });
@@ -87,11 +169,15 @@ new Vue({
         "BANy_l888yNEj3sW1ASQBEc3dKBq4MnOn9uu4x_gZteD8SNUYwUFbOPrFdGMiFS0zI16bie6vA-P6bNBXMXhAvc",
       worker: null,
       online: true,
+      timed_out: false,
       version
     };
   },
   render: h => h(App),
   created() {
+    let timeOut = setTimeout(() => {
+      if (!this.$root.config) this.$root.timed_out = true;
+    }, 15000);
     // Check for service worker
     if ("serviceWorker" in navigator) {
       registerServiceWorker().catch(err => console.error(err));

@@ -12,7 +12,8 @@
       <Satellite v-if="$root.router == 'Satellite'" key="Satellite" />
       <Paradox v-if="$root.router == 'The Paradox'" key="Paradox" />
       <Drawer v-if="$root.router == 'Drawer'" key="Drawer" />
-      <People v-if="$root.router == 'People'" key="People" />
+      <!-- <People v-if="$root.router == 'People'" key="People" /> -->
+      <Parlay v-if="$root.router == 'Parlay'" key="Parlay" />
       <Broadcast v-if="$root.router == 'Broadcast'" key="Broadcast" />
       <Downloads v-if="$root.router == 'Downloads'" key="Downloads" />
       <Transmission v-if="$root.router == 'Transmission'" key="Transmission" />
@@ -37,8 +38,9 @@ import Media from "./pages/Media.vue";
 import Satellite from "./pages/Satellite.vue";
 import Paradox from "./pages/Paradox.vue";
 import Drawer from "./pages/Drawer.vue";
-import People from "./pages/People.vue";
-import Broadcast from "./pages/Broadcast.vue";
+// import People from "./pages/People.vue";
+import Parlay from "./pages/Parlay.vue";
+import Broadcast from "./pages/Broadcast/Index.vue";
 import Downloads from "./pages/Downloads.vue";
 import Transmission from "./pages/Transmission.vue";
 import Account from "./pages/Account.vue";
@@ -61,7 +63,8 @@ export default {
     Satellite,
     Paradox,
     Drawer,
-    People,
+    // People,
+    Parlay,
     Broadcast,
     Downloads,
     Transmission,
