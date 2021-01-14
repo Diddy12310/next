@@ -18,6 +18,9 @@ export default {
     Recovery,
     SignUp,
   },
+  created() {
+    if (!this.$root.user.preflight) this.$router.replace("/");
+  },
 };
 </script>
 

@@ -29,14 +29,21 @@
 
     <div style="max-width: 500px" class="mx-auto" v-else>
       <v-text-field
-        hide-details
+        hide-details="auto"
+        :persistent-hint="true"
         v-model="$root.user.username"
         label="Username"
         class="my-4"
+        @keyup="checkIfUserExists()"
+        :hint="
+          username_exists && $root.user.username.length > 0
+            ? 'This username is taken already!'
+            : ''
+        "
       ></v-text-field>
       <span class="grey--text"
-        >Contrary to most other platforms, your username does not need to be
-        unique, but it should represent who you are.</span
+        >This should represent who you are. This must be unique and is not
+        changeable.</span
       >
       <v-text-field
         hide-details
@@ -136,7 +143,7 @@
     </v-dialog>
 
     <v-btn
-      @click="($root.user = false), ($root.router = 'Landing')"
+      @click="($root.user = false), $router.replace('/')"
       absolute
       bottom
       left
@@ -163,6 +170,7 @@ export default {
       },
       use_default: false,
       terms: false,
+      username_exists: false,
     };
   },
   components: {
@@ -178,13 +186,26 @@ export default {
       );
     }
     this.new_user.color = `#${randomHex}`;
+    this.checkIfUserExists();
   },
   methods: {
+    checkIfUserExists() {
+      if (this.$root.user.username.length < 1) this.username_exists = true;
+      else {
+        this.$http
+          .get(
+            `https://www.theparadigmdev.com/api/users/check/${this.$root.user.username.toLowerCase()}`
+          )
+          .then((response) => {
+            this.username_exists = response.data.exists;
+          });
+      }
+    },
+
     signUp() {
-      // if (this.new_user.password === this.new_user.password_confirm) {
       if (this.new_user.terms === true) {
         var regex = /([0-9A-Za-z_~.-])/gi;
-        if (regex.test(this.new_user.username)) {
+        if (regex.test(this.new_user.username) && !this.username_exists) {
           this.$http
             .post("https://www.theparadigmdev.com/api/users/register", {
               username: this.new_user.username.toLowerCase(),
@@ -221,10 +242,10 @@ export default {
                     this.$initAppMenu();
                     this.$root.user = response.data;
                     this.$root.user._id
-                      ? (this.$root.router = this.$root.router)
+                      ? ""
                       : response.data.preflight
-                      ? (this.$root.router = "Preflight")
-                      : (this.$root.router = "Home");
+                      ? this.$router.push("/preflight")
+                      : this.$router.push("/home");
 
                     this.$root.socket.emit("login", response.data.username);
 
@@ -271,7 +292,7 @@ export default {
                   });
               } else {
                 this.$root.user = response.data;
-                this.$root.router = "Home";
+                this.$router.push("/home");
               }
             })
             .catch((error) => {
@@ -279,7 +300,7 @@ export default {
             });
         } else
           this.$notify(
-            "Username contains invalid special characters",
+            "Enter a valid username",
             "error",
             "mdi-account-plus",
             false,
@@ -293,14 +314,6 @@ export default {
           false,
           3000
         );
-      // } else
-      //   this.$notify(
-      //     "Passwords do not match",
-      //     "error",
-      //     "mdi-account-plus",
-      //     false,
-      //     3000
-      //   );
     },
     verifyInviteCode() {
       this.$http
