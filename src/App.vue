@@ -73,7 +73,6 @@
 </template>
 
 <script>
-import Router from "./Router.vue";
 import DefaultToolbar from "./components/DefaultToolbar.vue";
 import MusicToolbar from "./components/MusicToolbar.vue";
 import PreflightToolbar from "./components/PreflightToolbar.vue";
@@ -82,7 +81,6 @@ import io from "socket.io-client";
 export default {
   name: "App",
   components: {
-    Router,
     DefaultToolbar,
     MusicToolbar,
     PreflightToolbar,
