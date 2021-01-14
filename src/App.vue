@@ -104,15 +104,11 @@ export default {
       if (this.$getCookie("jwt")) {
         this.$http.get("/api/authentication/verify").then(async (response) => {
           if (response.data.valid) {
-            this.$root.user._id
-              ? ""
-              : response.data.preflight
-              ? this.$router.replace("/preflight")
-              : this.$router.replace("/home");
-
             this.$root.user = response.data.user;
-            this.$initAppMenu();
             this.$root.socket.emit("login", response.data.user.username);
+            response.data.preflight ? this.$router.replace("/preflight") : "";
+
+            this.$initAppMenu();
             this.loading = false;
 
             const existing_subscription = this.$root.user.notifications.find(
@@ -158,12 +154,14 @@ export default {
             this.$router.replace("/");
           }
         });
+      } else {
+        this.$router.replace("/");
       }
     },
   },
-  mounted() {
-    if (this.$root.user == false) this.$router.replace("/");
-  },
+  // mounted() {
+  //   if (this.$root.user == false) this.$router.replace("/");
+  // },
   created() {
     this.$root.socket.on("connect", () => {
       this.verifyJWT();

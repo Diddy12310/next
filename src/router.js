@@ -3,17 +3,11 @@ import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
-function beforeEnter(to, from, next) {
-  console.log(this);
-  next();
-}
-
 const routes = [
   {
     path: "/",
     name: "Landing",
-    component: () => import("./pages/Landing.vue"),
-    beforeEnter
+    component: () => import("./pages/Landing.vue")
   },
   {
     path: "/authentication",
