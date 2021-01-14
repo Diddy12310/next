@@ -81,6 +81,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
   name: "BroadcastNew",
   data() {
@@ -128,6 +130,7 @@ export default {
           data
         )
         .then((response) => {
+          this.$notify("Posted!", "blue--text", "mdi-satellite-uplink", 3000);
           this.new_post.content = "";
           this.new_post.file = null;
         })

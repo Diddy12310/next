@@ -165,7 +165,10 @@ export default {
       this.verifyJWT();
     });
     this.$root.socket.on("config", (data) => {
-      this.$root.config = data;
+      if (this.$root.config != data) {
+        this.$root.config = data;
+        this.$initAppMenu();
+      }
 
       if (this.$root.config.banned.includes(this.$root.ip)) {
         if (this.$root.user) this.$signOut();

@@ -454,7 +454,7 @@ export default {
     },
 
     remove(id, index) {
-      this.$root.user.posts.splice(index, 1);
+      this.profile.posts.splice(index, 1);
       this.$http
         .get(
           `https://www.theparadigmdev.com/api/broadcast/${this.profile._id}/delete/${id}`
@@ -463,7 +463,7 @@ export default {
         .catch((error) => console.error(error));
     },
     update() {
-      this.$root.user.posts[this.edit_post_index] = this.edit_post;
+      this.profile.posts[this.edit_post_index] = this.edit_post;
       this.$http
         .put(
           `https://www.theparadigmdev.com/api/broadcast/${this.profile._id}/${this.edit_post._id}`,

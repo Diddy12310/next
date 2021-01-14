@@ -123,7 +123,7 @@ export default {
     return {
       username: "",
       password: "",
-      sticky: false,
+      sticky: true,
       authenticated: false,
       loading: false,
     };
@@ -140,13 +140,13 @@ export default {
         .then(async (response) => {
           if (!response.data.errors) {
             this.authenticated = true;
-            this.$root.user = response.data.user;
-            this.$initAppMenu();
             this.$root.user._id
               ? (this.$root.router = this.$root.router)
               : response.data.preflight
               ? (this.$root.router = "Preflight")
               : (this.$root.router = "Home");
+            this.$root.user = response.data.user;
+            this.$initAppMenu();
 
             this.$root.socket.emit("login", response.data.user.username);
             this.loading = false;

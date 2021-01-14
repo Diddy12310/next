@@ -2,6 +2,13 @@
   <div>
     <h1 class="display-1 ml-2 mt-2 mb-12">Feed</h1>
 
+    <p
+      class="grey--text text-center font-italic font-weight-light"
+      v-if="feed.length < 1"
+    >
+      Your feed is empty! Add some friends using the Find page.
+    </p>
+
     <v-card
       max-width="500"
       class="mx-auto mb-4"
