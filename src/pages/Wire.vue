@@ -242,6 +242,13 @@
               padding: 16px 16px 0px 16px;
             "
           >
+            <p
+              class="text-center grey--text font-italic font-weight-light mt-6"
+              v-if="current.messages.length < 1"
+            >
+              There are no messages posted here.
+            </p>
+
             <div
               v-for="(message, index) in current.messages"
               :key="message._id"
@@ -350,6 +357,13 @@
             }"
             style="overflow: auto; padding: 16px 16px 0px 16px"
           >
+            <p
+              class="text-center grey--text font-italic font-weight-light mt-6"
+              v-if="current.messages.length < 1"
+            >
+              There are no messages posted here.
+            </p>
+
             <div
               v-for="(message, index) in current.messages"
               :key="message._id"
@@ -701,6 +715,9 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <audio src="@/assets/audio/sent.wav" id="sent_sound"></audio>
+    <audio src="@/assets/audio/msg.wav" id="msg_sound"></audio>
   </div>
 </template>
 
@@ -709,6 +726,8 @@ import io from "socket.io-client";
 import moment from "moment";
 
 let typingTimeout;
+let msg_sound;
+let sent_sound;
 export default {
   name: "Wire",
   data() {
@@ -779,6 +798,8 @@ export default {
         this.current_id = dm ? data._id : data.id;
       });
       this.socket.on("send", (data) => {
+        if (data.user_id !== this.$root.user._id) msg_sound.play();
+        msg_sound.play();
         this.current.messages.push(data);
       });
       this.socket.on("delete", async (id) => {
@@ -815,6 +836,7 @@ export default {
     },
     async sendMessage() {
       if (this.new_message.length > 0) {
+        sent_sound.play();
         clearTimeout(typingTimeout);
         this.socket.emit("typing", {
           user: this.$root.user.username,
@@ -1002,6 +1024,9 @@ export default {
           );
           this.changeChatroom(chatroom, false);
         }
+      } else {
+        this.current = false;
+        this.socket.disconnect();
       }
     },
   },
@@ -1012,6 +1037,8 @@ export default {
       .then((response) => {
         this.all_people = response.data;
         this.$parseRoute();
+        sent_sound = document.getElementById("sent_sound");
+        msg_sound = document.getElementById("msg_sound");
       });
   },
   watch: {
