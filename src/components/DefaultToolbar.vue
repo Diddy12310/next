@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app color="#0F1E3C">
-    <v-slide-x-transition group>
+    <v-slide-x-transition group hide-on-leave leave-absolute>
       <div class="d-flex align-center" key="logo" v-if="!$root.notification">
         <v-btn icon text @click="$root.router = 'Home'">
           <v-img
@@ -30,7 +30,10 @@
 
     <div
       class="centralize d-flex justify-center"
-      v-if="$vuetify.breakpoint.mdAndUp"
+      v-if="
+        ($vuetify.breakpoint.mdAndDown && $root.notification ? false : true) &&
+        $vuetify.breakpoint.mdAndUp
+      "
     >
       <v-btn
         style="width: 10rem"
@@ -88,7 +91,6 @@
             v-for="(item, index) in $root.nav"
             :key="index"
             :value="item.content"
-            :disabled="item.disabled"
             v-show="item.rights"
           >
             <v-list-item-icon

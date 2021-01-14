@@ -139,7 +139,6 @@ export default {
           this.new_bug
         )
         .then((response) => {
-          this.$root.view.bug_report = false;
           this.new_bug = {};
         });
     },

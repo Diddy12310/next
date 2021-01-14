@@ -301,7 +301,6 @@
                 v-for="(item, index) in $root.nav"
                 :key="index"
                 :value="item.content"
-                :disabled="item.disabled"
                 v-show="item.rights"
               >
                 <v-list-item-icon

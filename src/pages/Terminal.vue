@@ -84,6 +84,8 @@ export default {
         case "app":
           this.app(this.output[1], this.output[2], this.output[3]);
           break;
+        // case "help":
+        //   break;
         default:
           this.$error(`command ${this.output[0]} not found`);
           this.input = "";
