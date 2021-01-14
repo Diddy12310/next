@@ -8,14 +8,14 @@
     style="overflow-y: auto"
   >
     <!-- TOOLBAR -->
-    <v-toolbar dense color="#164E63">
+    <v-toolbar dense color="#0C4A6E">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Wire</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         icon
         @click="
-          ($root.router = 'People'),
+          ($root.router = 'Broadcast'),
             ($root.url = ['', 'people', current_dm_person])
         "
         v-if="current && current_dm_person"
@@ -109,11 +109,22 @@
             Wire is a secure and freedom-oriented chatting app.
           </p>
           <div style="max-width: 150px; margin: auto">
-            <v-btn x-large class="mt-8" block @click="buy_chatroom.open = true">
-              <v-icon left>mdi-plus</v-icon>Create
+            <v-btn
+              color="#0C4A6E"
+              x-large
+              class="mt-8"
+              block
+              @click="buy_chatroom.open = true"
+            >
+              <v-icon left>mdi-plus</v-icon> Create
             </v-btn>
-            <v-btn x-large block class="mt-2" @click="add_chatroom.open = true"
-              ><v-icon left>mdi-forum</v-icon>Join</v-btn
+            <v-btn
+              color="#0C4A6E"
+              x-large
+              block
+              class="mt-2"
+              @click="add_chatroom.open = true"
+              ><v-icon left>mdi-forum</v-icon> Join</v-btn
             >
           </div>
         </section>
@@ -183,7 +194,7 @@
                   >
                 </v-list-item>
 
-                <v-list-item @click="$root.router = 'People'">
+                <v-list-item @click="$root.router = 'Broadcast'">
                   <v-badge
                     style="position: relative; left: -15px"
                     bordered
@@ -546,7 +557,7 @@
             >Delete</v-btn
           >
           <v-spacer></v-spacer>
-          <v-btn text color="blue accent-1" @click="editChatSave()">Save</v-btn>
+          <v-btn text color="#0369A1" @click="editChatSave()">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -572,7 +583,7 @@
             >Cancel</v-btn
           >
           <v-spacer></v-spacer>
-          <v-btn @click="sendFile()" color="blue accent-1" text>Upload</v-btn>
+          <v-btn @click="sendFile()" color="#0369A1" text>Upload</v-btn>
         </v-card-actions>
         <v-progress-linear
           :active="upload.loading"
@@ -605,7 +616,7 @@
             >Cancel</v-btn
           >
           <v-spacer></v-spacer>
-          <v-btn @click="joinChatroom()" color="blue accent-1" text>Join</v-btn>
+          <v-btn @click="joinChatroom()" color="#0369A1" text>Join</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -688,7 +699,7 @@
             >Cancel</v-btn
           >
           <v-spacer></v-spacer>
-          <v-btn @click="buyChatroom()" color="blue accent-1" text>Buy</v-btn>
+          <v-btn @click="buyChatroom()" color="#0369A1" text>Buy</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
