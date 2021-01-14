@@ -37,76 +37,68 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-row no-gutters align="center" justify="end">
-          <v-col>
-            <v-list-item class="grow pl-2">
-              <v-list-item-avatar
-                color="grey darken-3"
-                @click="$router.push(`/broadcast/profile/${post.username}`)"
-              >
-                <v-img
-                  class="elevation-6"
-                  loading="lazy"
-                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${post.uid}.png`"
-                ></v-img>
-              </v-list-item-avatar>
+        <v-list-item class="grow pl-2">
+          <v-list-item-avatar
+            color="grey darken-3"
+            @click="$router.push(`/broadcast/profile/${post.username}`)"
+          >
+            <v-img
+              class="elevation-6"
+              loading="lazy"
+              :src="`https://www.theparadigmdev.com/relay/profile-pics/${post.uid}.png`"
+            ></v-img>
+          </v-list-item-avatar>
 
-              <v-list-item-content>
-                <v-list-item-title
-                  class="font-weight-medium"
-                  :style="{ color: post.color }"
-                  >{{ post.username }}</v-list-item-title
-                >
-                <v-list-item-subtitle>{{
-                  post.timestamp_formatted
-                }}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-col>
-
-          <v-col class="text-right">
-            <div v-if="$root.user.rights.admin">
-              <v-btn
-                icon
-                color="grey"
-                @click="
-                  edit_post = post;
-                  edit_post_index = index;
-                  edit_post.open = true;
-                "
-                ><v-icon>mdi-pencil</v-icon></v-btn
-              >
-              <v-btn icon color="grey" class="mr-2" @click="remove(post, index)"
-                ><v-icon>mdi-delete</v-icon></v-btn
-              >
-            </div>
-            <span class="subheading mr-1">{{ post.likes }}</span>
-            <v-btn
-              @click="
-                $root.user.people.approved
-                  .find((person) => person._id == post.uid)
-                  .liked_posts.includes(post._id)
-                  ? unLikePost(post._id, post.uid)
-                  : likePost(post._id, post.uid)
-              "
-              :input-value="
-                $root.user.people.approved
-                  .find((person) => person._id == post.uid)
-                  .liked_posts.includes(post._id)
-              "
-              icon
-              class="mr-3"
+          <v-list-item-content>
+            <v-list-item-title
+              class="font-weight-medium"
+              :style="{ color: post.color }"
+              >{{ post.username }}</v-list-item-title
             >
-              <v-icon>{{
-                $root.user.people.approved
-                  .find((person) => person._id == post.uid)
-                  .liked_posts.includes(post._id)
-                  ? "mdi-heart"
-                  : "mdi-heart-outline"
-              }}</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
+            <v-list-item-subtitle>{{
+              post.timestamp_formatted
+            }}</v-list-item-subtitle>
+          </v-list-item-content>
+          <div v-if="$root.user.rights.admin">
+            <v-btn
+              icon
+              color="grey"
+              @click="
+                edit_post = post;
+                edit_post_index = index;
+                edit_post.open = true;
+              "
+              ><v-icon>mdi-pencil</v-icon></v-btn
+            >
+            <v-btn icon color="grey" class="mr-2" @click="remove(post, index)"
+              ><v-icon>mdi-delete</v-icon></v-btn
+            >
+          </div>
+          <span class="subheading mr-1">{{ post.likes }}</span>
+          <v-btn
+            @click="
+              $root.user.people.approved
+                .find((person) => person._id == post.uid)
+                .liked_posts.includes(post._id)
+                ? unLikePost(post._id, post.uid)
+                : likePost(post._id, post.uid)
+            "
+            :input-value="
+              $root.user.people.approved
+                .find((person) => person._id == post.uid)
+                .liked_posts.includes(post._id)
+            "
+            icon
+          >
+            <v-icon>{{
+              $root.user.people.approved
+                .find((person) => person._id == post.uid)
+                .liked_posts.includes(post._id)
+                ? "mdi-heart"
+                : "mdi-heart-outline"
+            }}</v-icon>
+          </v-btn>
+        </v-list-item>
       </v-card-actions>
     </v-card>
 
@@ -340,7 +332,7 @@ export default {
     },
   },
   created() {
-    this.get();
+    setTimeout(() => this.get(), 50);
   },
 };
 </script>

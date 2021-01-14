@@ -122,7 +122,7 @@
         class="mx-auto mb-4"
         v-if="result.type == 'user'"
         max-width="500"
-        @click="profile(result.data)"
+        @click="$router.push(`/broadcast/profile/${result.data.username}`)"
       >
         <v-list-item>
           <v-list-item-avatar
@@ -152,15 +152,16 @@
 <script>
 export default {
   name: "BroadcastFind",
-  props: ["feed", "people"],
   data() {
     return {
       query: "",
+
+      feed: [],
+      people: [],
     };
   },
   computed: {
     results() {
-      this.$emit("get");
       let results = [];
 
       if (this.query) {
@@ -197,19 +198,34 @@ export default {
     },
   },
   methods: {
-    profile(data) {
-      if (
-        !this.$root.user.people.blocked.find((person) => person._id == data._id)
-      )
-        this.$emit("person", data);
-      else
-        this.$notify(
-          "This person is blocked",
-          "orange--text",
-          "mdi-account-cancel",
-          3000
-        );
+    get() {
+      this.$http
+        .get(`/api/broadcast/${this.$root.user._id}`)
+        .then((response) => {
+          this.feed = response.data;
+          this.$http
+            .get("/api/users/list")
+            .then((response) => {
+              this.people = response.data;
+              if (this.profile)
+                this.profile = response.data.find(
+                  (person) => person._id == this.profile._id
+                );
+              this.loading = false;
+            })
+            .catch((error) => {
+              console.error(error);
+              this.loading = false;
+            });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.loading = false;
+        });
     },
+  },
+  created() {
+    this.get();
   },
 };
 </script>

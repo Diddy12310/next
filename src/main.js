@@ -96,8 +96,8 @@ Vue.mixin({
             rights: this.$root.config.router.broadcast
           },
           {
-            icon: "mdi-forum",
-            content: "Parlay",
+            icon: "mdi-comment-text-multiple",
+            content: "Forum",
             path: "/parlay",
             rights: this.$root.config.router.parlay
           },
