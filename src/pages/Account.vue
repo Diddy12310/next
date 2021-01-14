@@ -25,14 +25,12 @@
               :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.png`"
             ></v-img></v-avatar
           ><br />
-          <input
-            type="text"
-            @input="change = true"
-            class="text-h3 font-weight-medium mt-8"
-            style="text-align: center; width: 100%"
+          <h3
+            class="text-h3 font-weight-medium mt-8 mb-2"
             :style="{ color: user.color }"
-            v-model="user.username"
-          />
+          >
+            {{ user.username }}
+          </h3>
           <p class="grey--text text--darken-1 font-weight-light">
             {{ user._id }}
           </p>
@@ -177,50 +175,53 @@
               >
                 <v-tab-item>
                   <v-list>
+                    <draggable
+                      :list="user.people.approved"
+                      @change="change = true"
+                      draggable=".item"
+                      handle=".handle"
+                    >
+                      <v-list-item
+                        class="item"
+                        v-for="(person, index) in user.people.approved"
+                        :key="index"
+                        @click="
+                          $router.push(`/broadcast/profile/${person.username}`)
+                        "
+                      >
+                        <v-list-item-avatar
+                          ><v-img
+                            loading="lazy"
+                            :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                          ></v-img
+                        ></v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title
+                            class="font-weight-medium"
+                            :style="{ color: person.color }"
+                            >{{ person.username }}</v-list-item-title
+                          >
+                          <v-list-item-subtitle>{{
+                            person._id
+                          }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                        <v-btn
+                          icon
+                          color="red"
+                          @click="removeFriend(person._id)"
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
+                        <v-icon class="handle cursor-move grey--text ml-1"
+                          >mdi-menu</v-icon
+                        >
+                      </v-list-item>
+                    </draggable>
+
                     <v-list-item v-if="user.people.approved.length <= 0">
                       <v-list-item-title
                         class="text-center grey--text font-italic"
                         >You have no friends.</v-list-item-title
                       >
-                    </v-list-item>
-
-                    <v-list-item
-                      v-for="(person, index) in user.people.approved"
-                      :key="index"
-                      @click.self="$go(['', 'people', person.username])"
-                    >
-                      <v-list-item-avatar
-                        ><v-img
-                          loading="lazy"
-                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
-                        ></v-img
-                      ></v-list-item-avatar>
-                      <v-row>
-                        <v-col sm="10" class="py-0">
-                          <v-list-item-content>
-                            <v-list-item-title
-                              class="font-weight-medium"
-                              :style="{ color: person.color }"
-                              >{{ person.username }}</v-list-item-title
-                            >
-                            <v-list-item-subtitle>{{
-                              person._id
-                            }}</v-list-item-subtitle>
-                          </v-list-item-content>
-                        </v-col>
-                        <v-col
-                          sm="2"
-                          align-self="center"
-                          class="text-right py-0"
-                        >
-                          <v-btn
-                            icon
-                            color="red"
-                            @click="removeFriend(person._id)"
-                            ><v-icon>mdi-close</v-icon></v-btn
-                          >
-                        </v-col>
-                      </v-row>
                     </v-list-item>
                   </v-list>
                 </v-tab-item>
@@ -237,7 +238,9 @@
                     <v-list-item
                       v-for="(person, index) in user.people.requests"
                       :key="index"
-                      @click.self="$go(['', 'people', person.username])"
+                      @click="
+                        $router.push(`/broadcast/profile/${person.username}`)
+                      "
                     >
                       <v-list-item-avatar
                         ><v-img
@@ -294,7 +297,9 @@
                     <v-list-item
                       v-for="(person, index) in user.people.sent"
                       :key="index"
-                      @click.self="$go(['', 'people', person.username])"
+                      @click="
+                        $router.push(`/broadcast/profile/${person.username}`)
+                      "
                     >
                       <v-list-item-avatar
                         ><v-img
@@ -397,35 +402,40 @@
                     >
                   </v-list-item>
 
-                  <v-list-item
-                    v-for="(chatroom, index) in user.chatrooms"
-                    :key="index"
-                    @click.self="$go(['', 'Wire', chatroom.id])"
+                  <draggable
+                    :list="user.chatrooms"
+                    @change="change = true"
+                    draggable=".item"
+                    handle=".handle"
                   >
-                    <v-list-item-icon class="mt-5 ml-3 mr-6"
-                      ><v-icon>{{ chatroom.icon }}</v-icon></v-list-item-icon
+                    <v-list-item
+                      class="item"
+                      v-for="(chatroom, index) in user.chatrooms"
+                      :key="index"
+                      @click="$router.push(`/wire/chatroom/${chatroom.id}`)"
                     >
-                    <v-row>
-                      <v-col sm="10" class="py-0">
-                        <v-list-item-content>
-                          <v-list-item-title class="font-weight-medium">{{
-                            chatroom.name
-                          }}</v-list-item-title>
-                          <v-list-item-subtitle>{{
-                            chatroom.id
-                          }}</v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-col>
-                      <v-col sm="2" align-self="center" class="text-right py-0">
-                        <v-btn
-                          icon
-                          color="red"
-                          @click="deleteChatroom(chatroom.id)"
-                          ><v-icon>mdi-close</v-icon></v-btn
-                        >
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
+                      <v-list-item-icon class="mt-5 ml-3 mr-6"
+                        ><v-icon>{{ chatroom.icon }}</v-icon></v-list-item-icon
+                      >
+                      <v-list-item-content>
+                        <v-list-item-title class="font-weight-medium">{{
+                          chatroom.name
+                        }}</v-list-item-title>
+                        <v-list-item-subtitle>{{
+                          chatroom.id
+                        }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                      <v-btn
+                        icon
+                        color="red"
+                        @click="deleteChatroom(chatroom.id)"
+                        ><v-icon>mdi-close</v-icon></v-btn
+                      >
+                      <v-icon class="handle grey--text cursor-move ml-1"
+                        >mdi-menu</v-icon
+                      >
+                    </v-list-item>
+                  </draggable>
                 </v-list>
               </v-card-text>
             </v-card>
@@ -536,7 +546,9 @@
                         <td
                           v-ripple
                           style="cursor: pointer"
-                          @click="viewProfile(code.uid)"
+                          @click="
+                            $router.push(`/broadcast/profile/${code.username}`)
+                          "
                         >
                           {{ code.username }}
                         </td>
@@ -609,7 +621,7 @@
                 x-small
                 text
                 v-if="$root.user.rights.patriot"
-                @click="$root.router = 'Patriot'"
+                @click="$router.push('/patriot')"
               ></v-btn>
             </v-card>
           </v-col>
@@ -619,7 +631,7 @@
 
     <v-dialog v-model="uploader" max-width="350">
       <v-card>
-        <v-card-title class="text-h6 font-weight-medium"
+        <v-card-title class="text-h5 font-weight-medium"
           >PROFILE PICTURE</v-card-title
         >
         <v-card-text>
@@ -662,7 +674,7 @@
 
     <v-dialog v-model="delete_dialog" max-width="350">
       <v-card color="red">
-        <v-card-title class="text-h6 font-weight-medium">CONFIRM</v-card-title>
+        <v-card-title class="text-h5 font-weight-medium">CONFIRM</v-card-title>
         <v-card-text>
           <v-checkbox
             label="By checking this box, you acknowledge that deleting your account is irreversible. Your drawer files will be deleted. Your data will be deleted."
@@ -689,7 +701,7 @@
 
     <v-dialog v-model="apollo_unenroll_dialog" max-width="350">
       <v-card color="red">
-        <v-card-title class="text-h6 font-weight-medium">CONFIRM</v-card-title>
+        <v-card-title class="text-h5 font-weight-medium">CONFIRM</v-card-title>
         <v-card-text>
           By unerolling your account from the Apollo Beta Testing Program, you
           will lose all exclusive features and rights until you receive another
@@ -791,11 +803,11 @@ export default {
       this.$http
         .post("https://www.theparadigmdev.com/api/users/update", {
           old: this.$root.user.username,
-          username: this.user.username.toLowerCase(),
           bio: this.user.bio,
           color: this.user.color,
           pinned_apps: this.user.pinned_apps,
           chatrooms: this.user.chatrooms,
+          friends: this.user.people.approved,
         })
         .then((response) => {
           this.$root.user = response.data;
@@ -822,8 +834,6 @@ export default {
           }
         )
         .then((response) => {
-          this.$root.user = response.data;
-          this.user = response.data;
           this.new_pic = null;
           this.upload_file_loading = false;
           this.uploader = false;
@@ -851,7 +861,7 @@ export default {
         )
         .then((response) => {
           this.$root.user = false;
-          this.$root.router = "Landing";
+          this.$router.replace("/");
         })
         .catch((error) => console.error(error));
     },
@@ -923,25 +933,6 @@ export default {
         })
         .catch((error) => console.error(error));
     },
-    viewProfile(uid) {
-      if (uid != this.$root.user._id && uid != "") {
-        this.$http
-          .get(`https://www.theparadigmdev.com/api/users/${uid}/info`)
-          .then((response) => {
-            if (!response.data.error) {
-              this.$root.profile = response.data;
-              this.$root.router = "People";
-            } else
-              this.$notify(
-                response.data.error,
-                "error",
-                "mdi-alert-circle",
-                false,
-                3000
-              );
-          });
-      }
-    },
   },
   created() {
     this.fixData();
@@ -956,15 +947,16 @@ export default {
     }
 
     let apps = [];
-    for (let app in this.$root.config.apps) {
+    for (let app of Object.values(this.$root.config.apps)) {
       if (
-        !this.user.pinned_apps.includes(app) &&
-        app != "Home" &&
-        app != "Privacy" &&
-        app != "Terms" &&
-        app != "Support"
+        !this.user.pinned_apps.includes(app.title) &&
+        app.live &&
+        app.title != "Home" &&
+        app.title != "Privacy" &&
+        app.title != "Terms" &&
+        app.title != "Support"
       )
-        apps.push(app);
+        apps.push(app.title);
     }
     this.apps_remaining = JSON.parse(JSON.stringify(apps));
   },
@@ -976,4 +968,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.cusor-move {
+  cursor: grab !important;
+}
+</style>
