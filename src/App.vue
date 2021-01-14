@@ -1,21 +1,23 @@
 <template>
   <v-app style="background-color: #0f1e3c">
-    <DefaultToolbar
-      style="z-index: 100"
-      v-if="$root.user && !$root.music && !$root.user.preflight"
-    />
-    <MusicToolbar
-      style="z-index: 100"
-      v-if="$root.user && $root.music && !$root.user.preflight"
-    />
-    <PreflightToolbar
-      style="z-index: 100"
-      v-if="$root.user && $root.user.preflight"
-    />
+    <div v-if="$root.user">
+      <DefaultToolbar
+        style="z-index: 100"
+        v-if="!$root.music && !$root.user.preflight && !$root.config.shutdown"
+      />
+      <MusicToolbar
+        style="z-index: 100"
+        v-if="$root.music && !$root.user.preflight && !$root.config.shutdown"
+      />
+      <PreflightToolbar
+        style="z-index: 100"
+        v-if="$root.user.preflight && !$root.config.shutdown"
+      />
+    </div>
 
     <v-main>
       <div
-        v-if="!$root.config"
+        v-if="!$root.config && !$root.timed_out"
         style="max-width: 20rem; margin-top: 12rem"
         class="mx-auto text-center"
         key="loading"
@@ -37,15 +39,27 @@
         }"
         v-else-if="$root.config && !$root.config.shutdown"
       />
-      <div v-else-if="$root.config && $root.config.shutdown" key="shutdown">
-        <h1
-          class="text-h3 font-weight-light text-uppercase text-center px-12 deep-purple--text text--lighten-1"
-          style="margin-top: 100px"
-        >
-          A Connection Could not be Established
+      <div
+        v-else-if="($root.config && $root.config.shutdown) || $root.timed_out"
+        key="shutdown"
+        class="text-center"
+        style="position: relative; height: 100vh"
+      >
+        <img src="./assets/logo.webp" height="125" style="margin-top: 100px" />
+        <h1 class="text-h3 font-weight-light text-uppercase px-12 mt-12">
+          An Error has Occurred
         </h1>
-        <p class="text-center pt-6 title font-weight-light grey--text">
-          Try refreshing your page.
+        <p class="pt-5 title font-weight-light grey--text">
+          <span v-if="$root.timed_out">Reconnection timed out.</span>
+          <span v-else-if="$root.config.shutdown">The server has crashed.</span>
+          <br />Please try again later.
+        </p>
+        <p
+          style="position: absolute; bottom: 0px; width: 100vw"
+          class="font-weight-light grey--text text--darken-1 font-italic"
+        >
+          Since you're an administrator, maybe you should see why the server
+          shit itself?
         </p>
       </div>
     </v-main>
@@ -82,167 +96,80 @@ export default {
         this.$http.get("/api/authentication/signout");
       }
     },
+    verifyJWT() {
+      if (this.$getCookie("jwt")) {
+        this.$http.get("/api/authentication/verify").then(async (response) => {
+          if (response.data.valid) {
+            this.$root.user._id
+              ? (this.$root.router = this.$root.router)
+              : response.data.preflight
+              ? (this.$root.router = "Preflight")
+              : (this.$root.router = "Home");
+
+            this.$root.user = response.data.user;
+            this.$initAppMenu();
+            this.$root.socket.emit("login", response.data.user.username);
+            this.loading = false;
+
+            const existing_subscription = this.$root.user.notifications.find(
+              (subscription) =>
+                subscription._id == this.$getCookie("notification_id")
+            );
+            if (
+              ((await this.$root.worker.pushManager.permissionState()) !=
+                "granted" &&
+                !existing_subscription) ||
+              ((await this.$root.worker.pushManager.permissionState()) ==
+                "granted" &&
+                !existing_subscription)
+            ) {
+              navigator.serviceWorker.ready.then(async () => {
+                console.log("Registering Push...");
+                const subscription = await this.$root.worker.pushManager.subscribe(
+                  {
+                    userVisibleOnly: true,
+                    applicationServerKey: this.$urlBase64ToUint8Array(
+                      this.$root.public_vapid_key
+                    ),
+                  }
+                );
+                console.log("Push Registered...");
+                console.log("Sending Push...");
+                this.$http
+                  .post(
+                    `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
+                    {
+                      data: subscription,
+                    }
+                  )
+                  .then((response) => {
+                    console.log("Push Sent...");
+                    console.log(response.data._id);
+                    document.cookie = `notification_id=${response.data._id}; Secure`;
+                  })
+                  .catch((error) => console.error(error));
+              });
+            }
+          } else {
+            this.$root.router = "Landing";
+          }
+        });
+      }
+    },
   },
   mounted() {
     if (this.$root.user == false) this.$root.router = "Landing";
-    if (this.$getCookie("jwt")) {
-      this.$http.get("/api/authentication/verify").then(async (response) => {
-        if (response.data.valid) {
-          this.$root.user = response.data.user;
-          this.$root.router = "Home";
-          this.$root.nav = [
-            {
-              icon: "mdi-home",
-              content: "Home",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-message",
-              content: "Wire",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-web",
-              content: "Satellite",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-newspaper",
-              content: "The Paradox",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-folder-multiple",
-              content: "Drawer",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-play",
-              content: "Media",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-account-group",
-              content: "People",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-satellite-uplink",
-              content: "Broadcast",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-download",
-              content: "Downloads",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-shield-lock",
-              content: "Privacy",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-feather",
-              content: "Terms",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-lifebuoy",
-              content: "Support",
-              disabled: false,
-              rights: true,
-            },
-            {
-              icon: "mdi-code-tags",
-              content: "Developer",
-              disabled: false,
-              rights: response.data.user.rights.developer,
-            },
-            {
-              icon: "mdi-console-line",
-              content: "Terminal",
-              disabled: false,
-              rights: response.data.user.rights.admin,
-            },
-          ];
-          response.data.preflight
-            ? (this.$root.router = "Preflight")
-            : (this.$root.router = "Home");
-          this.$root.socket.emit("login", response.data.user.username);
-          this.loading = false;
-
-          const existsing_subscription = this.$root.user.notifications.find(
-            (subscription) =>
-              subscription._id == this.$getCookie("notification_id")
-          );
-          console.log(existsing_subscription);
-          if (
-            ((await this.$root.worker.pushManager.permissionState()) !=
-              "granted" &&
-              !existsing_subscription) ||
-            ((await this.$root.worker.pushManager.permissionState()) ==
-              "granted" &&
-              !existsing_subscription)
-          ) {
-            navigator.serviceWorker.ready.then(async () => {
-              console.log("Registering Push...");
-              const subscription = await this.$root.worker.pushManager.subscribe(
-                {
-                  userVisibleOnly: true,
-                  applicationServerKey: this.$urlBase64ToUint8Array(
-                    this.$root.public_vapid_key
-                  ),
-                }
-              );
-              console.log("Push Registered...");
-              console.log("Sending Push...");
-              this.$http
-                .post(
-                  `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
-                  {
-                    data: subscription,
-                  }
-                )
-                .then((response) => {
-                  console.log("Push Sent...");
-                  console.log(response.data._id);
-                  document.cookie = `notification_id=${response.data._id}; Secure`;
-                })
-                .catch((error) => console.error(error));
-            });
-          }
-        } else {
-          this.$root.router = "Landing";
-        }
-      });
-    }
   },
   created() {
-    this.$root.socket.on("connect", () => {});
+    this.$root.socket.on("connect", () => {
+      this.verifyJWT();
+    });
     this.$root.socket.on("config", (data) => {
       this.$root.config = data;
+
       if (this.$root.config.banned.includes(this.$root.ip)) {
-        if (this.$root.user)
-          this.$root.socket.emit("logout", {
-            _id: this.$root.user._id,
-            username: this.$root.user.username,
-          });
-        this.$root.router = "Error";
-        this.$root.user = false;
-        this.$root.profile = false;
-        this.$root.music = false;
-        this.$root.transmission = false;
+        if (this.$root.user) this.$signOut();
+        else this.$lock();
       }
     });
     this.$root.socket.on("kick", (username) => {
@@ -279,9 +206,29 @@ export default {
     });
     this.$root.socket.on("disconnect", () => {
       let reconnected = false;
-      this.$root.socket.on("reconnect", () => (reconnected = true));
+      this.$notify(
+        "Lost connection to the server!",
+        "orange--text",
+        "mdi-server",
+        3000
+      );
+      this.$root.socket.on("reconnect", () => {
+        this.verifyJWT();
+        reconnected = true;
+        this.$notify("Reconnected!", "blue--text", "mdi-server", 3000);
+      });
       setTimeout(() => {
-        if (!reconnected) this.$lock();
+        if (!reconnected) {
+          this.$notify(
+            "Reconnection timed out!",
+            "red--text",
+            "mdi-server",
+            3000
+          );
+          this.$root.timed_out = true;
+          this.$root.config = false;
+          this.$lock();
+        }
       }, 10000);
     });
   },
@@ -329,10 +276,10 @@ html {
   background: rgb(33, 33, 33);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgb(100, 100, 100);
+  background: rgb(60, 60, 60);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(60, 60, 60);
+  background: rgb(100, 100, 100);
 }
 ::-webkit-scrollbar-corner {
   background: rgb(33, 33, 33);

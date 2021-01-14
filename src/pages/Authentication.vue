@@ -141,101 +141,13 @@ export default {
           if (!response.data.errors) {
             this.authenticated = true;
             this.$root.user = response.data.user;
-            this.$root.nav = [
-              {
-                icon: "mdi-home",
-                content: "Home",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-message",
-                content: "Wire",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-web",
-                content: "Satellite",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-newspaper",
-                content: "The Paradox",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-folder-multiple",
-                content: "Drawer",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-play",
-                content: "Media",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-account-group",
-                content: "People",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-satellite-uplink",
-                content: "Broadcast",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-satellite-uplink",
-                content: "Parlay",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-download",
-                content: "Downloads",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-shield-lock",
-                content: "Privacy",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-feather",
-                content: "Terms",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-lifebuoy",
-                content: "Support",
-                disabled: false,
-                rights: true,
-              },
-              {
-                icon: "mdi-code-tags",
-                content: "Developer",
-                disabled: false,
-                rights: response.data.user.rights.developer,
-              },
-              {
-                icon: "mdi-console-line",
-                content: "Terminal",
-                disabled: false,
-                rights: response.data.user.rights.admin,
-              },
-            ];
-            response.data.user.preflight
+            this.$initAppMenu();
+            this.$root.user._id
+              ? (this.$root.router = this.$root.router)
+              : response.data.preflight
               ? (this.$root.router = "Preflight")
               : (this.$root.router = "Home");
+
             this.$root.socket.emit("login", response.data.user.username);
             this.loading = false;
 
@@ -243,7 +155,6 @@ export default {
               (subscription) =>
                 subscription._id == this.$getCookie("notification_id")
             );
-            console.log(existsing_subscription);
             if (
               ((await this.$root.worker.pushManager.permissionState()) !=
                 "granted" &&

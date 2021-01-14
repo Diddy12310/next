@@ -218,106 +218,20 @@ export default {
                     }
                   )
                   .then(async (response) => {
-                    this.$root.nav = [
-                      {
-                        icon: "mdi-home",
-                        content: "Home",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-message",
-                        content: "Wire",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-web",
-                        content: "Satellite",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-newspaper",
-                        content: "The Paradox",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-folder-multiple",
-                        content: "Drawer",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-play",
-                        content: "Media",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-account-group",
-                        content: "People",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-satellite-uplink",
-                        content: "Broadcast",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-download",
-                        content: "Downloads",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-shield-lock",
-                        content: "Privacy",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-feather",
-                        content: "Terms",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-lifebuoy",
-                        content: "Support",
-                        disabled: false,
-                        rights: true,
-                      },
-
-                      {
-                        icon: "mdi-code-tags",
-                        content: "Developer",
-                        disabled: false,
-                        rights: response.data.rights.developer,
-                      },
-                      {
-                        icon: "mdi-console-line",
-                        content: "Terminal",
-                        disabled: false,
-                        rights: response.data.rights.admin,
-                      },
-                    ];
-
+                    this.$initAppMenu();
                     this.$root.user = response.data;
-                    this.$root.router = "Home";
-                    response.data.preflight
+                    this.$root.user._id
+                      ? (this.$root.router = this.$root.router)
+                      : response.data.preflight
                       ? (this.$root.router = "Preflight")
                       : (this.$root.router = "Home");
+
                     this.$root.socket.emit("login", response.data.username);
 
                     const existsing_subscription = this.$root.user.notifications.find(
                       (subscription) =>
                         subscription._id == this.$getCookie("notification_id")
                     );
-                    console.log(existsing_subscription);
                     if (
                       ((await this.$root.worker.pushManager.permissionState()) !=
                         "granted" &&
