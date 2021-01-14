@@ -151,7 +151,7 @@
           style="margin-bottom: 30px"
           color="grey"
           text
-          @click="current = false"
+          @click="$router.push('/parlay')"
           ><v-icon left>mdi-chevron-left</v-icon>Back</v-btn
         >
         <h1 class="display-1">{{ current.title }}</h1>
@@ -501,17 +501,34 @@ export default {
   created() {
     this.getThreads();
   },
+  watch: {
+    $route(to, from) {
+      this.$parseRoute();
+    },
+  },
+
   methods: {
+    $parseRoute() {
+      if (this.$route.path != "/parlay") {
+        this.getThread(this.$route.params.id);
+      } else this.current = false;
+    },
+
     getThreads() {
       this.$http.get("/api/parlay").then((response) => {
         this.threads = response.data;
+        this.$parseRoute();
         this.loading = false;
       });
     },
     getThread(id) {
       this.$http
         .get(`/api/parlay/${id}`)
-        .then((response) => (this.current = response.data))
+        .then((response) => {
+          this.current = response.data;
+          if (this.$route.path != `/parlay/${response.data._id}`)
+            this.$router.push(`/parlay/${response.data._id}`);
+        })
         .catch((error) => console.error(error));
     },
     newThread() {

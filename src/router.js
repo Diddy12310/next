@@ -3,11 +3,17 @@ import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
+function beforeEnter(to, from, next) {
+  console.log(this);
+  next();
+}
+
 const routes = [
   {
     path: "/",
     name: "Landing",
-    component: () => import("./pages/Landing.vue")
+    component: () => import("./pages/Landing.vue"),
+    beforeEnter
   },
   {
     path: "/authentication",
@@ -76,6 +82,11 @@ const routes = [
   {
     path: "/parlay",
     name: "Parlay",
+    component: () => import("./pages/Parlay.vue")
+  },
+  {
+    path: "/parlay/:id",
+    name: "ParlayPost",
     component: () => import("./pages/Parlay.vue")
   },
   {
