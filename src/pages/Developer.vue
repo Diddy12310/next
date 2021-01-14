@@ -57,7 +57,7 @@
                   <td
                     v-ripple
                     style="cursor: pointer"
-                    @click="$go(['', 'people', bug.username])"
+                    @click="$router.push(`/broadcast/profile/${bug.username}`)"
                   >
                     {{ bug.username }}
                   </td>

@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #0f1e3c; height: 100vh">
+  <div style="height: 100vh">
     <header style="height: 8rem; max-width: 1185px; margin: auto" class="px-4">
       <v-container class="d-flex align-center pa-0" style="width: 100%">
         <img
@@ -19,7 +19,7 @@
         <v-btn
           color="#182D57"
           depressed
-          @click="$root.router = 'Authentication'"
+          @click="$router.push('/authentication')"
           >Sign in</v-btn
         >
       </v-container>
@@ -136,10 +136,7 @@
                   class="ma-auto subtitle-2 text-center font-weight-light text--grey text--darken-4"
                 >
                   Already have an account?
-                  <a
-                    @click="$root.router = 'Authentication'"
-                    class="text-grey text--darken-4"
-                  >
+                  <a to="/authentication" class="text-grey text--darken-4">
                     Sign in here</a
                   >
                 </p>
@@ -169,10 +166,14 @@ export default {
         password: this.password,
         preflight: { creation: true },
       };
-      this.$root.router = "Preflight";
+      this.$router.push("/preflight");
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.router-view {
+  background-color: #0f1e3c !important;
+}
+</style>

@@ -56,7 +56,7 @@
 
       <p class="grey--text">
         Please read our
-        <a @click="$root.router = 'Terms'">Terms and Conditions</a> for more
+        <a @click="$router.push('/terms')">Terms and Conditions</a> for more
         information.
       </p>
     </div>

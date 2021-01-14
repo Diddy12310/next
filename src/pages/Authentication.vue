@@ -42,7 +42,7 @@
             <a
               class="text--grey text--darken-4"
               @click="
-                ($root.router = 'Preflight'),
+                $router.replace('/preflight'),
                   ($root.user = {
                     username: '',
                     password: '',
@@ -98,7 +98,7 @@
                 $root.user = {
                   preflight: { recovery: true },
                 };
-                $root.router = 'Preflight';
+                $router.push('/preflight');
               "
             >
               Enter account recovery</a
@@ -141,10 +141,10 @@ export default {
           if (!response.data.errors) {
             this.authenticated = true;
             this.$root.user._id
-              ? (this.$root.router = this.$root.router)
+              ? ""
               : response.data.preflight
-              ? (this.$root.router = "Preflight")
-              : (this.$root.router = "Home");
+              ? this.$router.replace("/preflight")
+              : this.$router.push("home");
             this.$root.user = response.data.user;
             this.$initAppMenu();
 
@@ -204,4 +204,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.router-view {
+  background-color: #0f1e3c !important;
+}
+</style>

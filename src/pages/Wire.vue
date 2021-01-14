@@ -14,10 +14,7 @@
       <v-spacer></v-spacer>
       <v-btn
         icon
-        @click="
-          ($root.router = 'Broadcast'),
-            ($root.url = ['', 'people', current_dm_person])
-        "
+        :to="`/broadcast/profile/${current_dm_person}`"
         v-if="current && current_dm_person"
         ><v-icon>mdi-account</v-icon></v-btn
       >
@@ -58,6 +55,7 @@
                   current_id = 'home';
                   current = null;
                   current_dm_person = false;
+                  $router.push('/wire');
                 "
               >
                 <v-list-item-icon><v-icon>mdi-home</v-icon></v-list-item-icon>
@@ -194,7 +192,7 @@
                   >
                 </v-list-item>
 
-                <v-list-item @click="$root.router = 'Broadcast'">
+                <v-list-item @click="$router.push('/broadcast/find')">
                   <v-badge
                     style="position: relative; left: -15px"
                     bordered
@@ -766,11 +764,15 @@ export default {
           `https://www.theparadigmdev.com/flamechat/${to.dm}`
         );
         this.current_dm_person = to.username;
+        if (this.$route.path != `/wire/dm/${to.username}`)
+          this.$router.push(`/wire/dm/${to.username}`);
       } else {
         this.socket = await io.connect(
           // TODO(transition to wire endpoints)
           `https://www.theparadigmdev.com/flamechat/${to.id}`
         );
+        if (this.$route.path != `/wire/chatroom/${to.id}`)
+          this.$router.push(`/wire/chatroom/${to.id}`);
       }
       this.socket.on("data", (data) => {
         this.current = data;
@@ -987,22 +989,35 @@ export default {
         this.current_id = "home";
       }
     },
+    $parseRoute() {
+      if (this.$route.path != "/wire") {
+        if (this.$route.params.type == "dm") {
+          const friend = this.approved_friends.find(
+            (person) => person.username == this.$route.params.id
+          );
+          this.changeChatroom(friend, true);
+        } else {
+          const chatroom = this.$root.user.chatrooms.find(
+            (chatroom) => chatroom.id == this.$route.params.id
+          );
+          this.changeChatroom(chatroom, false);
+        }
+      }
+    },
   },
-  async mounted() {
+  async created() {
     if (this.$vuetify.breakpoint.mdAndUp) this.drawer = true;
     this.$http
       .get("https://www.theparadigmdev.com/api/users/shortlist")
       .then((response) => {
         this.all_people = response.data;
-        if (this.$root.url[1] == "wire") {
-          if (this.$root.url[2] == "dm") {
-            const friend = this.approved_friends.find(
-              (person) => person.username == this.$root.url[3]
-            );
-            this.changeChatroom(friend, true);
-          }
-        }
+        this.$parseRoute();
       });
+  },
+  watch: {
+    $route(to, from) {
+      this.$parseRoute();
+    },
   },
 };
 </script>

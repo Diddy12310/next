@@ -44,10 +44,7 @@
               <v-btn
                 v-on="on"
                 v-bind="attrs"
-                @click="
-                  ($root.url = ['', 'wire', 'dm', profile.username]),
-                    ($root.router = 'Wire')
-                "
+                :to="`/wire/dm/${profile.username}`"
                 icon
                 class="mb-2"
                 color="grey"
@@ -312,7 +309,6 @@
 <script>
 export default {
   name: "BroadcastProfile",
-  props: ["profile"],
   data() {
     return {
       edit_post: {
@@ -321,6 +317,7 @@ export default {
         open: false,
       },
       edit_post_index: null,
+      profile: false,
 
       uploader: false,
       new_file: null,
@@ -489,9 +486,29 @@ export default {
       };
       reader.readAsDataURL(this.new_file);
     },
+
+    get() {
+      this.$http
+        .get("/api/users/list")
+        .then((response) => {
+          this.profile = response.data.find(
+            (person) => person.username == this.$route.params.username
+          );
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.error(error);
+          this.loading = false;
+        });
+    },
   },
   created() {
-    this.$emit("get");
+    this.get();
+  },
+  watch: {
+    $route(to, from) {
+      this.get();
+    },
   },
 };
 </script>

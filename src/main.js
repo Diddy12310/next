@@ -5,6 +5,7 @@ import axios from "axios";
 import VueChatScroll from "vue-chat-scroll";
 import io from "socket.io-client";
 import "./assets/style.css";
+import router from "./router.js";
 
 let socket = io.connect("https://www.theparadigmdev.com");
 const version = require("./../package.json").version;
@@ -68,92 +69,104 @@ Vue.mixin({
       return outputArray;
     },
     $initAppMenu() {
-      this.$root.nav = [
-        {
-          icon: "mdi-home",
-          content: "Home",
-          rights: this.$root.config.router.home
-        },
-        {
-          icon: "mdi-chat",
-          content: "Wire",
-          rights: this.$root.config.router.wire
-        },
-        {
-          icon: "mdi-web",
-          content: "Satellite",
-          rights: this.$root.config.router.satellite
-        },
-        {
-          icon: "mdi-newspaper",
-          content: "The Paradox",
-          rights: this.$root.config.router.paradox
-        },
-        {
-          icon: "mdi-folder-multiple",
-          content: "Drawer",
-          rights: this.$root.config.router.drawer
-        },
-        {
-          icon: "mdi-play",
-          content: "Media",
-          rights: this.$root.config.router.media
-        },
-        // {
-        //   icon: "mdi-account-group",
-        //   content: "People",
-        //   rights: this.$root.config.router.people
-        // },
-        {
-          icon: "mdi-satellite-uplink",
-          content: "Broadcast",
-          rights: this.$root.config.router.broadcast
-        },
-        {
-          icon: "mdi-forum",
-          content: "Parlay",
-          rights: this.$root.config.router.parlay
-        },
-        {
-          icon: "mdi-download",
-          content: "Downloads",
-          rights: this.$root.config.router.downloads
-        },
-        {
-          icon: "mdi-shield-lock",
-          content: "Privacy",
-          rights: this.$root.config.router.privacy
-        },
-        {
-          icon: "mdi-feather",
-          content: "Terms",
-          rights: this.$root.config.router.terms
-        },
-        {
-          icon: "mdi-lifebuoy",
-          content: "Support",
-          rights: this.$root.config.router.support
-        },
-        {
-          icon: "mdi-code-tags",
-          content: "Developer",
-          rights:
-            this.$root.config.router.developer &&
-            this.$root.user.rights.developer
-        },
-        {
-          icon: "mdi-console-line",
-          content: "Terminal",
-          rights:
-            this.$root.config.router.terminal && this.$root.user.rights.admin
-        }
-      ];
+      if (this.$root.user && !this.$root.user.preflight) {
+        this.$root.nav = [
+          {
+            icon: "mdi-home",
+            content: "Home",
+            path: "/home",
+            rights: this.$root.config.router.home
+          },
+          {
+            icon: "mdi-chat",
+            content: "Wire",
+            path: "/wire",
+            rights: this.$root.config.router.wire
+          },
+          {
+            icon: "mdi-folder-multiple",
+            content: "Drawer",
+            path: "/drawer",
+            rights: this.$root.config.router.drawer
+          },
+          {
+            icon: "mdi-satellite-uplink",
+            content: "Broadcast",
+            path: "/broadcast",
+            rights: this.$root.config.router.broadcast
+          },
+          {
+            icon: "mdi-forum",
+            content: "Parlay",
+            path: "/parlay",
+            rights: this.$root.config.router.parlay
+          },
+          {
+            icon: "mdi-web",
+            content: "Satellite",
+            path: "/satellite",
+            rights: this.$root.config.router.satellite
+          },
+          {
+            icon: "mdi-newspaper",
+            content: "The Paradox",
+            path: "/paradox",
+            rights: this.$root.config.router.paradox
+          },
+          {
+            icon: "mdi-play",
+            content: "Media",
+            path: "/media",
+            rights: this.$root.config.router.media
+          },
+          {
+            icon: "mdi-download",
+            content: "Downloads",
+            path: "/downloads",
+            rights: this.$root.config.router.downloads
+          },
+          {
+            icon: "mdi-shield-lock",
+            content: "Privacy",
+            path: "/privacy",
+            rights: this.$root.config.router.privacy
+          },
+          {
+            icon: "mdi-feather",
+            content: "Terms",
+            path: "/terms",
+            rights: this.$root.config.router.terms
+          },
+          {
+            icon: "mdi-lifebuoy",
+            content: "Support",
+            path: "/support",
+            rights: this.$root.config.router.support
+          },
+          {
+            icon: "mdi-code-tags",
+            content: "Developer",
+            path: "/developer",
+            rights:
+              this.$root.config.router.developer &&
+              this.$root.user.rights.developer
+          },
+          {
+            icon: "mdi-console-line",
+            content: "Terminal",
+            path: "/terminal",
+            rights:
+              this.$root.config.router.terminal && this.$root.user.rights.admin
+          }
+        ];
+      }
     }
   }
 });
 
 new Vue({
   vuetify,
+
   data() {
     return {
       user: false,
@@ -173,7 +186,10 @@ new Vue({
       version
     };
   },
+
   render: h => h(App),
+  router,
+
   created() {
     let timeOut = setTimeout(() => {
       if (!this.$root.config) this.$root.timed_out = true;

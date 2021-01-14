@@ -29,16 +29,22 @@
         ></v-progress-circular>
         <p style="color: #1c3973" class="mt-5 text-h5">Loading...</p>
       </div>
-      <Router
-        key="router"
-        style="background-color: #131313"
-        :style="{
-          height: $vuetify.breakpoint.mdAndUp
-            ? 'calc(100vh - 64px)'
-            : 'calc(100vh - 56px)',
-        }"
+      <v-fade-transition
         v-else-if="$root.config && !$root.config.shutdown"
-      />
+        key="router"
+      >
+        <router-view
+          class="router-view"
+          :style="{
+            height: $root.user
+              ? $vuetify.breakpoint.mdAndUp
+                ? 'calc(100vh - 64px)'
+                : 'calc(100vh - 56px)'
+              : '100vh',
+          }"
+          style="background-color: #131313; overflow-x: hidden !important"
+        ></router-view>
+      </v-fade-transition>
       <div
         v-else-if="($root.config && $root.config.shutdown) || $root.timed_out"
         key="shutdown"
@@ -84,7 +90,7 @@ export default {
   methods: {
     signOut() {
       if (this.$root.user) {
-        this.$root.router = "Landing";
+        this.$router.push("/");
         this.$root.profile = false;
         this.$root.music = false;
         this.$root.transmission = false;
@@ -101,10 +107,10 @@ export default {
         this.$http.get("/api/authentication/verify").then(async (response) => {
           if (response.data.valid) {
             this.$root.user._id
-              ? (this.$root.router = this.$root.router)
+              ? ""
               : response.data.preflight
-              ? (this.$root.router = "Preflight")
-              : (this.$root.router = "Home");
+              ? this.$router.replace("/preflight")
+              : this.$router.replace("/home");
 
             this.$root.user = response.data.user;
             this.$initAppMenu();
@@ -151,14 +157,14 @@ export default {
               });
             }
           } else {
-            this.$root.router = "Landing";
+            this.$router.replace("/");
           }
         });
       }
     },
   },
   mounted() {
-    if (this.$root.user == false) this.$root.router = "Landing";
+    if (this.$root.user == false) this.$router.replace("/");
   },
   created() {
     this.$root.socket.on("connect", () => {
@@ -192,6 +198,10 @@ export default {
     if (this.$root.user)
       this.$root.socket.emit("login", this.$root.user.username);
     this.$root.socket.on("user", (data) => {
+      if (data.preflight && this.$route.path !== "/preflight")
+        this.$router.replace("/preflight");
+      if (!data.preflight && this.$route.path == "/preflight")
+        this.$router.replace("/home");
       if (data.strikes != this.$root.user.strikes)
         this.$notify(
           `You have ${data.strikes} strikes!`,
@@ -199,8 +209,7 @@ export default {
           "mdi-gavel",
           3000
         );
-      if (this.$root.router !== "error" && this.$root.user !== data)
-        this.$root.user = data;
+      if (this.$root.user !== data) this.$root.user = data;
     });
     this.$root.socket.on("logout", () => {
       this.$root.socket.disconnect();
