@@ -23,13 +23,13 @@
     >
       <v-container>
         <p
-          class="text-center font-italic grey--text mt-12"
+          class="text-center font-italic grey--text mt-12 font-weight-light"
           v-if="filteredNews.length < 1"
         >
           No articles have been published yet.
         </p>
         <p
-          class="text-center font-italic grey--text"
+          class="text-center font-italic grey--text font-weight-light"
           v-if="filteredNews.length < 1 && $root.user.rights.author"
         >
           Why don't you create one? Click the plus button.

@@ -253,7 +253,7 @@
         <v-divider class="ma-6" v-if="new_reply.open"></v-divider>
 
         <p
-          class="text-center font-italic grey--text"
+          class="text-center font-italic grey--text font-weight-light"
           v-if="current.replies.length < 1"
         >
           No replies in this thread<span v-if="new_reply.open">... yet</span>

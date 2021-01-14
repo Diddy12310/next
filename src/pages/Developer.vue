@@ -95,7 +95,7 @@
           </v-simple-table>
           <p
             v-if="bugs.length < 1"
-            class="text-center mt-6 grey--text font-italic"
+            class="text-center mt-6 grey--text font-italic font-weight-light"
           >
             No bugs reported.
           </p>
