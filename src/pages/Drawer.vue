@@ -39,9 +39,10 @@
         no-data-text="No files found"
         :headers="headers"
         :items="$root.user.files"
-        :items-per-page="10"
+        :items-per-page="-1"
+        :hide-default-footer="true"
         sort-by="name"
-        class="elevation-2"
+        class="elevation-2 mb-3"
         dense
         v-if="$vuetify.breakpoint.xsOnly"
       >
@@ -97,7 +98,8 @@
         no-data-text="No files found"
         :headers="headers"
         :items="$root.user.files"
-        :items-per-page="10"
+        :items-per-page="-1"
+        :hide-default-footer="true"
         sort-by="name"
         class="elevation-2"
         v-else
