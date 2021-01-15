@@ -169,6 +169,9 @@ export default {
       this.$router.push("/preflight");
     },
   },
+  created() {
+    if (this.$root.user) this.$router.replace("/home");
+  },
 };
 </script>
 

@@ -117,6 +117,11 @@ const routes = [
     path: "/patriot",
     name: "Patriot",
     component: () => import("./pages/Patriot/Index.vue")
+  },
+
+  {
+    path: "*",
+    redirect: "/"
   }
 ];
 
