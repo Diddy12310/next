@@ -125,11 +125,23 @@
         @click="$router.push(`/broadcast/profile/${result.data.username}`)"
       >
         <v-list-item>
-          <v-list-item-avatar
-            ><v-img
-              :src="`https://www.theparadigmdev.com/relay/profile-pics/${result.data._id}.png`"
-            ></v-img
-          ></v-list-item-avatar>
+          <v-badge
+            style="position: relative; left: -15px"
+            bordered
+            bottom
+            dot
+            :offset-x="25"
+            offset-y="17"
+            color="green"
+            :value="result.data.in"
+          >
+            <v-list-item-avatar>
+              <v-img
+                :src="`https://www.theparadigmdev.com/relay/profile-pics/${result.data._id}.png`"
+              >
+              </v-img>
+            </v-list-item-avatar>
+          </v-badge>
           <v-list-item-content>
             <v-list-item-title
               :style="{ color: result.data.color }"
@@ -140,9 +152,7 @@
               v-html="result.data.bio"
             ></v-list-item-subtitle>
           </v-list-item-content>
-          <!-- <v-list-item-actions> -->
           <v-icon>mdi-chevron-right</v-icon>
-          <!-- </v-list-item-actions> -->
         </v-list-item>
       </v-card>
     </div>

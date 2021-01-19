@@ -2,11 +2,22 @@
   <div>
     <h1 class="display-1 ml-2 mt-2 mb-12">
       <v-list-item class="px-0 my-n3">
-        <v-list-item-avatar
-          ><v-img
-            :src="`https://www.theparadigmdev.com/relay/profile-pics/${profile._id}.png`"
-          ></v-img
-        ></v-list-item-avatar>
+        <v-badge
+          style="position: relative; left: -15px"
+          bordered
+          bottom
+          dot
+          :offset-x="25"
+          offset-y="17"
+          color="green"
+          :value="profile.in && $root.user._id !== profile._id"
+        >
+          <v-list-item-avatar
+            ><v-img
+              :src="`https://www.theparadigmdev.com/relay/profile-pics/${profile._id}.png`"
+            ></v-img
+          ></v-list-item-avatar>
+        </v-badge>
         <v-list-item-content>
           <v-list-item-title :style="{ color: profile.color }">{{
             profile.username
