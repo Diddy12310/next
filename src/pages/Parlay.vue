@@ -41,9 +41,12 @@
 
         <v-card
           class="pa-4 mb-4"
-          v-for="thread in filteredThreads"
+          style="position: relative"
+          v-for="(thread, index) in filteredThreads"
           :key="thread._id"
           @click="getThread(thread._id)"
+          @mouseenter="thread_hover = index"
+          @mouseleave="thread_hover = -1"
         >
           <div v-if="thread.attachment">
             <v-img
@@ -78,6 +81,19 @@
             </h2>
           </div>
           <p class="mt-6 mb-0" v-html="thread.op"></p>
+          <v-btn
+            color="grey darken-2"
+            absolute
+            bottom
+            right
+            icon
+            @click="deleteThread(index)"
+            v-if="
+              thread_hover == index &&
+              ($root.user._id == thread.user._id || $root.user.rights.admin)
+            "
+            ><v-icon>mdi-delete</v-icon></v-btn
+          >
         </v-card>
       </div>
 
@@ -246,7 +262,9 @@
               ><v-icon>mdi-close</v-icon></v-btn
             >
             <v-spacer></v-spacer>
-            <v-btn color="grey" icon><v-icon>mdi-send</v-icon></v-btn>
+            <v-btn @click="newReply()" color="grey" icon
+              ><v-icon>mdi-send</v-icon></v-btn
+            >
           </v-card-actions>
         </v-card>
 
@@ -309,17 +327,29 @@
                 on {{ reply.timestamp_formatted }}
               </h2>
             </div>
-            <v-btn
-              color="grey"
-              v-if="hover == index"
-              style="position: absolute; bottom: 8px; right: 8px"
-              icon
-              @click="
-                (new_subreply = { open: index, content: '' }),
-                  (new_reply = { open: false, content: '' })
-              "
-              ><v-icon>mdi-reply</v-icon></v-btn
-            >
+            <div style="position: absolute; bottom: 8px; right: 8px">
+              <v-btn
+                color="grey"
+                v-if="
+                  hover == index &&
+                  ($root.user._id == reply.user._id || $root.user.rights.admin)
+                "
+                icon
+                @click="deleteReply(index)"
+                ><v-icon>mdi-delete</v-icon></v-btn
+              >
+
+              <v-btn
+                color="grey"
+                v-if="hover == index"
+                icon
+                @click="
+                  (new_subreply = { open: index, content: '' }),
+                    (new_reply = { open: false, content: '' })
+                "
+                ><v-icon>mdi-reply</v-icon></v-btn
+              >
+            </div>
           </v-card>
 
           <v-card v-if="new_subreply.open == index" class="ml-12 mt-3">
@@ -481,6 +511,10 @@ export default {
       uploader: false,
       file: null,
 
+      thread_hover: -1,
+      reply_hover: -1,
+      subreply_hover: -1,
+
       window,
     };
   },
@@ -559,6 +593,14 @@ export default {
         })
         .catch((error) => console.error(error));
     },
+    deleteThread(index) {
+      const thread = this.filteredThreads[index];
+      this.$http
+        .delete(`/api/parlay/${thread._id}`)
+        .catch((error) => console.error(error));
+      this.filteredThreads.splice(index, 1);
+    },
+
     newReply() {
       const data = {
         attachment: this.new_reply.attachment,
@@ -580,6 +622,14 @@ export default {
         .put(`/api/parlay/${this.current._id}`, data)
         .catch((error) => console.error(error));
     },
+    deleteReply(index) {
+      const reply = this.current.replies[index];
+      this.$http
+        .delete(`/api/parlay/${this.current._id}/${reply._id}`)
+        .catch((error) => console.error(error));
+      this.current.replies.splice(index, 1);
+    },
+
     newSubreply(id, index) {
       const data = {
         attachment: this.new_subreply.attachment,
@@ -599,6 +649,15 @@ export default {
         .put(`/api/parlay/${this.current._id}/${id}`, data)
         .catch((error) => console.error(error));
     },
+    deleteSubreply(reply, subreply) {
+      const r = this.current.replies[reply];
+      const s = r.replies[subreply];
+      this.$http
+        .delete(`/api/parlay/${this.current._id}/${r._id}/${s._id}`)
+        .catch((error) => console.error(error));
+      this.current.replies[reply].replies.splice(subreply, 1);
+    },
+
     parseUpload() {
       let reader = new FileReader();
       let that = this;

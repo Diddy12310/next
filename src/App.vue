@@ -104,6 +104,8 @@ export default {
       if (this.$getCookie("jwt")) {
         this.$http.get("/api/authentication/verify").then(async (response) => {
           if (response.data.valid) {
+            if (this.$root.user && this.$route.path == "/")
+              this.$router.push("/home");
             this.$root.user = response.data.user;
             this.$root.socket.emit("login", response.data.user.username);
             response.data.preflight ? this.$router.replace("/preflight") : "";
