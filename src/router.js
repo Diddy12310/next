@@ -74,14 +74,14 @@ const routes = [
     component: () => import("./pages/Media.vue")
   },
   {
-    path: "/parlay",
-    name: "Parlay",
-    component: () => import("./pages/Parlay.vue")
+    path: "/forum",
+    name: "Forum",
+    component: () => import("./pages/Forum.vue")
   },
   {
-    path: "/parlay/:id",
-    name: "ParlayPost",
-    component: () => import("./pages/Parlay.vue")
+    path: "/forum/:id",
+    name: "ForumPost",
+    component: () => import("./pages/Forum.vue")
   },
   {
     path: "/downloads",

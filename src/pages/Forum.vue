@@ -1,9 +1,10 @@
 <template>
   <div class="">
     <v-toolbar dense color="#881337" style="z-index: 1">
-      <v-toolbar-title>${APP_NAME}</v-toolbar-title>
+      <v-toolbar-title>Forum</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-text-field
+        v-if="$route.path == '/forum'"
         hide-details
         style="max-width: 500px"
         color="white"
@@ -82,7 +83,7 @@
           </div>
           <p class="mt-6 mb-0" v-html="thread.op"></p>
           <v-btn
-            color="grey darken-2"
+            color="grey"
             absolute
             bottom
             right
@@ -167,7 +168,7 @@
           style="margin-bottom: 30px"
           color="grey"
           text
-          @click="$router.push('/parlay')"
+          @click="$router.push('/forum')"
           ><v-icon left>mdi-chevron-left</v-icon>Back</v-btn
         >
         <h1 class="display-1">{{ current.title }}</h1>
@@ -216,17 +217,34 @@
               on {{ current.timestamp_formatted }}
             </h2>
           </div>
-          <v-btn
-            color="grey"
-            v-if="hover == -1"
-            style="position: absolute; bottom: 8px; right: 8px"
-            icon
-            @click="
-              (new_reply = { open: true, content: '' }),
-                (new_subreply = { open: -1, content: '' })
-            "
-            ><v-icon>mdi-reply</v-icon></v-btn
-          >
+
+          <div style="position: absolute; bottom: 8px; right: 8px">
+            <v-btn
+              color="grey"
+              icon
+              @click="
+                deleteThread(
+                  filteredThreads.findIndex((item) => item._id == current._id)
+                )
+              "
+              v-if="
+                hover == -1 &&
+                ($root.user._id == current.user._id || $root.user.rights.admin)
+              "
+              ><v-icon>mdi-delete</v-icon></v-btn
+            >
+
+            <v-btn
+              color="grey"
+              v-if="hover == -1"
+              icon
+              @click="
+                (new_reply = { open: true, content: '' }),
+                  (new_subreply = { open: -1, content: '' })
+              "
+              ><v-icon>mdi-reply</v-icon></v-btn
+            >
+          </div>
         </v-card>
 
         <v-divider class="ma-6"></v-divider>
@@ -383,7 +401,9 @@
                 ><v-icon>mdi-close</v-icon></v-btn
               >
               <v-spacer></v-spacer>
-              <v-btn color="grey" icon><v-icon>mdi-send</v-icon></v-btn>
+              <v-btn color="grey" icon @click="newSubreply(reply._id, index)"
+                ><v-icon>mdi-send</v-icon></v-btn
+              >
             </v-card-actions>
           </v-card>
 
@@ -395,8 +415,10 @@
 
           <v-card
             class="ml-12 mt-3 pa-4"
-            v-for="subreply in reply.replies"
+            v-for="(subreply, index) in reply.replies"
             :key="subreply._id"
+            @mouseenter="sub_hover = { sub: index, parent: reply._id }"
+            @mouseleave="sub_hover = { sub: -1, parent: -1 }"
           >
             <div v-if="reply.attachment">
               <v-img
@@ -436,6 +458,19 @@
                 >
                 on {{ subreply.timestamp_formatted }}
               </h2>
+            </div>
+            <div style="position: absolute; bottom: 8px; right: 8px">
+              <v-btn
+                color="grey"
+                v-if="
+                  sub_hover.sub == index &&
+                  sub_hover.parent == reply._id &&
+                  ($root.user._id == reply.user._id || $root.user.rights.admin)
+                "
+                icon
+                @click="deleteSubreply(reply._id, subreply._id)"
+                ><v-icon>mdi-delete</v-icon></v-btn
+              >
             </div>
           </v-card>
         </div>
@@ -480,7 +515,7 @@
 import moment from "moment";
 
 export default {
-  name: "Parlay",
+  name: "Forum",
   data() {
     return {
       threads: [],
@@ -513,7 +548,10 @@ export default {
 
       thread_hover: -1,
       reply_hover: -1,
-      subreply_hover: -1,
+      sub_hover: {
+        sub: -1,
+        parent: -1,
+      },
 
       window,
     };
@@ -543,13 +581,13 @@ export default {
 
   methods: {
     $parseRoute() {
-      if (this.$route.path != "/parlay") {
+      if (this.$route.path != "/forum") {
         this.getThread(this.$route.params.id);
       } else this.current = false;
     },
 
     getThreads() {
-      this.$http.get("/api/parlay").then((response) => {
+      this.$http.get("/api/forum").then((response) => {
         this.threads = response.data;
         this.$parseRoute();
         this.loading = false;
@@ -557,11 +595,11 @@ export default {
     },
     getThread(id) {
       this.$http
-        .get(`/api/parlay/${id}`)
+        .get(`/api/forum/${id}`)
         .then((response) => {
           this.current = response.data;
-          if (this.$route.path != `/parlay/${response.data._id}`)
-            this.$router.push(`/parlay/${response.data._id}`);
+          if (this.$route.path != `/forum/${response.data._id}`)
+            this.$router.push(`/forum/${response.data._id}`);
         })
         .catch((error) => console.error(error));
     },
@@ -576,9 +614,10 @@ export default {
         "dddd, MMMM Do YYYY [at] h:mm:ss a"
       );
       this.$http
-        .post("/api/parlay", this.new_thread.data)
+        .post("/api/forum", this.new_thread.data)
         .then((response) => {
           this.current = response.data;
+          this.$router.push(`/forum/${response.data._id}`);
           this.threads.unshift(response.data);
           this.new_thread = {
             open: false,
@@ -596,9 +635,10 @@ export default {
     deleteThread(index) {
       const thread = this.filteredThreads[index];
       this.$http
-        .delete(`/api/parlay/${thread._id}`)
+        .delete(`/api/forum/${thread._id}`)
         .catch((error) => console.error(error));
       this.filteredThreads.splice(index, 1);
+      if (this.$route.path != "/forum") this.$router.push("/forum");
     },
 
     newReply() {
@@ -619,13 +659,13 @@ export default {
       this.new_reply = { open: false, content: "" };
       this.current.replies.unshift(data);
       this.$http
-        .put(`/api/parlay/${this.current._id}`, data)
+        .put(`/api/forum/${this.current._id}`, data)
         .catch((error) => console.error(error));
     },
     deleteReply(index) {
       const reply = this.current.replies[index];
       this.$http
-        .delete(`/api/parlay/${this.current._id}/${reply._id}`)
+        .delete(`/api/forum/${this.current._id}/${reply._id}`)
         .catch((error) => console.error(error));
       this.current.replies.splice(index, 1);
     },
@@ -646,16 +686,21 @@ export default {
       this.new_subreply = { open: -1, content: "" };
       this.current.replies[index].replies.unshift(data);
       this.$http
-        .put(`/api/parlay/${this.current._id}/${id}`, data)
+        .put(`/api/forum/${this.current._id}/${id}`, data)
+        .then(
+          (response) =>
+            (this.current.replies[index].replies[0]._id = response.data._id)
+        )
         .catch((error) => console.error(error));
     },
     deleteSubreply(reply, subreply) {
-      const r = this.current.replies[reply];
-      const s = r.replies[subreply];
+      console.log(reply, subreply);
+      let r = this.current.replies.find((item) => item._id == reply);
+      let s = r.replies.find((item) => item._id == subreply);
       this.$http
-        .delete(`/api/parlay/${this.current._id}/${r._id}/${s._id}`)
+        .delete(`/api/forum/${this.current._id}/${reply}/${subreply}`)
         .catch((error) => console.error(error));
-      this.current.replies[reply].replies.splice(subreply, 1);
+      r.replies.splice(subreply, 1);
     },
 
     parseUpload() {
