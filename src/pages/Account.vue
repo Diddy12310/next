@@ -31,13 +31,9 @@
           >
             {{ user.username }}
           </h3>
-          <p class="grey--text text--darken-1 font-weight-light">
+          <p class="grey--text text--darken-1 font-weight-light mb-12">
             {{ user._id }}
           </p>
-          <div class="d-flex mx-auto align-center justify-center">
-            <img height="50" width="50" src="@/assets/moonrocks.png" />
-            <span>{{ user.moonrocks }}</span>
-          </div>
         </div>
         <v-row>
           <v-col sm="6">
@@ -82,11 +78,11 @@
                     </div>
                     <v-btn
                       v-for="app in user.pinned_apps"
-                      :key="$root.config.apps[app].path"
+                      :key="app.path"
                       block
                       class="cursor-move item mb-2"
-                      :color="$root.config.apps[app].color"
-                      >{{ app }}</v-btn
+                      :color="app.color"
+                      >{{ app.title }}</v-btn
                     >
                   </draggable>
                   <draggable
@@ -102,12 +98,12 @@
                     </div>
 
                     <v-btn
-                      v-for="app2 in apps_remaining"
-                      :key="$root.config.apps[app2].path"
+                      v-for="app in apps_remaining"
+                      :key="app.path"
                       block
                       class="cursor-move item mb-2"
-                      :color="$root.config.apps[app2].color"
-                      >{{ app2 }}</v-btn
+                      :color="app.color"
+                      >{{ app.title }}</v-btn
                     >
                   </draggable>
                 </div>
@@ -185,26 +181,33 @@
                         class="item"
                         v-for="(person, index) in user.people.approved"
                         :key="index"
-                        @click="
-                          $router.push(`/broadcast/profile/${person.username}`)
-                        "
                       >
-                        <v-list-item-avatar
-                          ><v-img
-                            loading="lazy"
-                            :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
-                          ></v-img
-                        ></v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title
-                            class="font-weight-medium"
-                            :style="{ color: person.color }"
-                            >{{ person.username }}</v-list-item-title
-                          >
-                          <v-list-item-subtitle>{{
-                            person._id
-                          }}</v-list-item-subtitle>
-                        </v-list-item-content>
+                        <div
+                          class="d-flex align-center"
+                          style="width: 100%"
+                          @click="
+                            $router.push(
+                              `/broadcast/profile/${person.username}`
+                            )
+                          "
+                        >
+                          <v-list-item-avatar
+                            ><v-img
+                              loading="lazy"
+                              :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                            ></v-img
+                          ></v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title
+                              class="font-weight-medium"
+                              :style="{ color: person.color }"
+                              >{{ person.username }}</v-list-item-title
+                            >
+                            <v-list-item-subtitle>{{
+                              person._id
+                            }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </div>
                         <v-btn
                           icon
                           color="red"
@@ -238,48 +241,43 @@
                     <v-list-item
                       v-for="(person, index) in user.people.requests"
                       :key="index"
-                      @click="
-                        $router.push(`/broadcast/profile/${person.username}`)
-                      "
                     >
-                      <v-list-item-avatar
-                        ><v-img
-                          loading="lazy"
-                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
-                        ></v-img
-                      ></v-list-item-avatar>
-                      <v-row>
-                        <v-col sm="8" class="py-0">
-                          <v-list-item-content>
-                            <v-list-item-title
-                              class="font-weight-medium"
-                              :style="{ color: person.color }"
-                              >{{ person.username }}</v-list-item-title
-                            >
-                            <v-list-item-subtitle>{{
-                              person._id
-                            }}</v-list-item-subtitle>
-                          </v-list-item-content>
-                        </v-col>
-                        <v-col
-                          sm="4"
-                          align-self="center"
-                          class="text-right py-0"
-                        >
-                          <v-btn
-                            icon
-                            color="green"
-                            @click="approveRequest(person._id)"
-                            ><v-icon>mdi-check</v-icon></v-btn
+                      <div
+                        class="d-flex"
+                        style="width: 100%"
+                        @click="
+                          $router.push(`/broadcast/profile/${person.username}`)
+                        "
+                      >
+                        <v-list-item-avatar
+                          ><v-img
+                            loading="lazy"
+                            :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                          ></v-img
+                        ></v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title
+                            class="font-weight-medium"
+                            :style="{ color: person.color }"
+                            >{{ person.username }}</v-list-item-title
                           >
-                          <v-btn
-                            icon
-                            color="red"
-                            @click="declineRequest(person._id)"
-                            ><v-icon>mdi-close</v-icon></v-btn
-                          >
-                        </v-col>
-                      </v-row>
+                          <v-list-item-subtitle>{{
+                            person._id
+                          }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                      </div>
+                      <v-btn
+                        icon
+                        color="green"
+                        @click="approveRequest(person._id)"
+                        ><v-icon>mdi-check</v-icon></v-btn
+                      >
+                      <v-btn
+                        icon
+                        color="red"
+                        @click="declineRequest(person._id)"
+                        ><v-icon>mdi-close</v-icon></v-btn
+                      >
                     </v-list-item>
                   </v-list>
                 </v-tab-item>
@@ -297,42 +295,37 @@
                     <v-list-item
                       v-for="(person, index) in user.people.sent"
                       :key="index"
-                      @click="
-                        $router.push(`/broadcast/profile/${person.username}`)
-                      "
                     >
-                      <v-list-item-avatar
-                        ><v-img
-                          loading="lazy"
-                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
-                        ></v-img
-                      ></v-list-item-avatar>
-                      <v-row>
-                        <v-col sm="10" class="py-0">
-                          <v-list-item-content>
-                            <v-list-item-title
-                              class="font-weight-medium"
-                              :style="{ color: person.color }"
-                              >{{ person.username }}</v-list-item-title
-                            >
-                            <v-list-item-subtitle>{{
-                              person._id
-                            }}</v-list-item-subtitle>
-                          </v-list-item-content>
-                        </v-col>
-                        <v-col
-                          sm="2"
-                          align-self="center"
-                          class="text-right py-0"
-                        >
-                          <v-btn
-                            icon
-                            color="blue lighten-1"
-                            @click="retractRequest(person._id)"
-                            ><v-icon>mdi-undo-variant</v-icon></v-btn
+                      <div
+                        class="d-flex"
+                        style="width: 100%"
+                        @click="
+                          $router.push(`/broadcast/profile/${person.username}`)
+                        "
+                      >
+                        <v-list-item-avatar
+                          ><v-img
+                            loading="lazy"
+                            :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                          ></v-img
+                        ></v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title
+                            class="font-weight-medium"
+                            :style="{ color: person.color }"
+                            >{{ person.username }}</v-list-item-title
                           >
-                        </v-col>
-                      </v-row>
+                          <v-list-item-subtitle>{{
+                            person._id
+                          }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                      </div>
+                      <v-btn
+                        icon
+                        color="blue lighten-1"
+                        @click="retractRequest(person._id)"
+                        ><v-icon>mdi-undo-variant</v-icon></v-btn
+                      >
                     </v-list-item>
                   </v-list>
                 </v-tab-item>
@@ -356,32 +349,22 @@
                           :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
                         ></v-img
                       ></v-list-item-avatar>
-                      <v-row>
-                        <v-col sm="10" class="py-0">
-                          <v-list-item-content>
-                            <v-list-item-title
-                              class="font-weight-medium"
-                              :style="{ color: person.color }"
-                              >{{ person.username }}</v-list-item-title
-                            >
-                            <v-list-item-subtitle>{{
-                              person._id
-                            }}</v-list-item-subtitle>
-                          </v-list-item-content>
-                        </v-col>
-                        <v-col
-                          sm="2"
-                          align-self="center"
-                          class="text-right py-0"
+                      <v-list-item-content>
+                        <v-list-item-title
+                          class="font-weight-medium"
+                          :style="{ color: person.color }"
+                          >{{ person.username }}</v-list-item-title
                         >
-                          <v-btn
-                            icon
-                            color="green"
-                            @click="unblockPerson(person._id)"
-                            ><v-icon>mdi-minus</v-icon></v-btn
-                          >
-                        </v-col>
-                      </v-row>
+                        <v-list-item-subtitle>{{
+                          person._id
+                        }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                      <v-btn
+                        icon
+                        color="green"
+                        @click="unblockPerson(person._id)"
+                        ><v-icon>mdi-minus</v-icon></v-btn
+                      >
                     </v-list-item>
                   </v-list>
                 </v-tab-item>
@@ -486,7 +469,7 @@
               </v-card-actions>
             </v-card>
           </v-col>
-          <v-col sm="6">
+          <!-- <v-col sm="6">
             <v-card class="fill-height">
               <v-card-text>
                 <v-row class="mt-0">
@@ -601,7 +584,7 @@
                 </div>
               </v-card-text>
             </v-card>
-          </v-col>
+          </v-col> -->
           <v-col sm="6">
             <v-card class="fill-height" style="border: #f44336 2px solid">
               <v-card-text class="text-center">
@@ -936,6 +919,9 @@ export default {
   },
   created() {
     this.fixData();
+  },
+  mounted() {
+    this.fixData();
     if (this.$root.user.rights.developer) {
       this.$http
         .get(
@@ -949,14 +935,16 @@ export default {
     let apps = [];
     for (let app of Object.values(this.$root.config.apps)) {
       if (
-        !this.user.pinned_apps.includes(app.title) &&
-        app.live &&
+        !this.user.pinned_apps.find(
+          (pinned_app) => pinned_app.path == app.path
+        ) &&
+        app.enabled &&
         app.title != "Home" &&
         app.title != "Privacy" &&
         app.title != "Terms" &&
         app.title != "Support"
       )
-        apps.push(app.title);
+        apps.push(app);
     }
     this.apps_remaining = JSON.parse(JSON.stringify(apps));
   },

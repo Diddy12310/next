@@ -658,49 +658,6 @@
             class="mt-3 mb-3 elevation-0"
             v-model="buy_chatroom.theme"
           ></v-color-picker>
-          <!-- <p>Icon selection is not ready yet.</p> -->
-          <div v-if="$root.user.moonrocks > 50">
-            <img
-              src="@/assets/moonrocks.png"
-              alt="Moonrocks"
-              class="moonrock-img"
-            /><span class="moonrock-count font-weight-medium red--text"
-              >- 50</span
-            >
-            <p class="green--text">
-              You have enough moonrocks to purchase a chatroom.
-            </p>
-            <p class="mb-0">
-              New Balance:
-              <span class="font-weight-light"
-                >{{ $root.user.moonrocks - 50 }} Moonrocks</span
-              >
-            </p>
-          </div>
-          <div v-if="$root.user.moonrocks == 50">
-            <img
-              src="@/assets/moonrocks.png"
-              alt="Moonrocks"
-              class="moonrock-img"
-            /><span class="moonrock-count font-weight-medium red--text"
-              >- 50</span
-            >
-            <p class="orange--text mb-0">
-              You have just enough moonrocks to purchase a chatroom.
-            </p>
-          </div>
-          <div v-if="$root.user.moonrocks < 50">
-            <img
-              src="@/assets/moonrocks.png"
-              alt="Moonrocks"
-              class="moonrock-img"
-            /><span class="moonrock-count font-weight-medium red--text"
-              >- 50</span
-            >
-            <p class="red--text mb-0">
-              You do <b>not</b> have enough moonrocks to purchase a chatroom.
-            </p>
-          </div>
         </v-card-text>
 
         <v-card-actions>
@@ -780,7 +737,7 @@ export default {
       if (dm) {
         this.socket = await io.connect(
           // TODO(transition to wire endpoints)
-          `https://www.theparadigmdev.com/flamechat/${to.dm}`
+          `https://www.theparadigmdev.com/wire/${to.dm}`
         );
         this.current_dm_person = to.username;
         if (this.$route.path != `/wire/dm/${to.username}`)
@@ -788,7 +745,7 @@ export default {
       } else {
         this.socket = await io.connect(
           // TODO(transition to wire endpoints)
-          `https://www.theparadigmdev.com/flamechat/${to.id}`
+          `https://www.theparadigmdev.com/wire/${to.id}`
         );
         if (this.$route.path != `/wire/chatroom/${to.id}`)
           this.$router.push(`/wire/chatroom/${to.id}`);
@@ -955,9 +912,6 @@ export default {
         })
         .then((response) => {
           this.$root.socket.emit("new_chatroom");
-          this.$http.get(
-            `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/moonrocks/-50`
-          );
           this.$root.user.chatrooms.push(response.data);
           this.changeChatroom(response.data.id);
           this.buy_chatroom = {
@@ -1026,7 +980,7 @@ export default {
         }
       } else {
         this.current = false;
-        this.socket.disconnect();
+        if (this.socket) this.socket.disconnect();
       }
     },
   },

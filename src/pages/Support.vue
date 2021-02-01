@@ -71,23 +71,6 @@
                 label="Description"
                 v-model="new_bug.description"
               ></v-textarea>
-
-              <div class="text-left">
-                <img
-                  src="@/assets/moonrocks.png"
-                  alt="Moonrocks"
-                  class="moonrock-img"
-                /><span class="moonrock-count font-weight-medium green--text"
-                  >+ 15</span
-                >
-                <p>If this bug exists, you will be awarded 15 Moonrocks.</p>
-                <p>
-                  New Balance:
-                  <span class="font-weight-light"
-                    >{{ $root.user.moonrocks + 15 }} Moonrocks</span
-                  >
-                </p>
-              </div>
             </v-card-text>
 
             <v-card-actions>
