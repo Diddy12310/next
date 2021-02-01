@@ -29,22 +29,18 @@
         ></v-progress-circular>
         <p style="color: #1c3973" class="mt-5 text-h5">Loading...</p>
       </div>
-      <v-fade-transition
+      <router-view
         v-else-if="$root.config && !$root.config.shutdown"
-        key="router"
-      >
-        <router-view
-          class="router-view"
-          :style="{
-            height: $root.user
-              ? $vuetify.breakpoint.mdAndUp
-                ? 'calc(100vh - 64px)'
-                : 'calc(100vh - 56px)'
-              : '100vh',
-          }"
-          style="background-color: #131313; overflow-x: hidden !important"
-        ></router-view>
-      </v-fade-transition>
+        class="router-view"
+        :style="{
+          height: $root.user
+            ? $vuetify.breakpoint.mdAndUp
+              ? 'calc(100vh - 64px)'
+              : 'calc(100vh - 56px)'
+            : '100vh',
+        }"
+        style="background-color: #131313; overflow-x: hidden !important"
+      ></router-view>
       <div
         v-else-if="($root.config && $root.config.shutdown) || $root.timed_out"
         key="shutdown"

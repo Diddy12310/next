@@ -81,7 +81,7 @@
               on {{ thread.timestamp_formatted }}
             </h2>
           </div>
-          <p class="mt-6 mb-0" v-html="thread.op"></p>
+          <p class="mt-6 mb-0" v-html="`${thread.op.substring(0, 300)}...`"></p>
           <v-btn
             color="grey"
             absolute
