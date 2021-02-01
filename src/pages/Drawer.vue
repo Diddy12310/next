@@ -63,7 +63,7 @@
           <v-icon
             small
             class="light-blue--text mr-2"
-            @click="downloadFile(item._id)"
+            @click="downloadFile(item.path)"
             >mdi-download</v-icon
           >
           <v-icon small class="red--text mr-2" @click="deleteFile(item._id)"
@@ -81,7 +81,7 @@
                 small
                 class="white--text"
                 v-on="on"
-                @click="getLink(item._id)"
+                @click="getLink(item.path)"
                 >mdi-link</v-icon
               >
             </template>
@@ -121,7 +121,7 @@
           <v-icon
             small
             class="light-blue--text mr-2"
-            @click="downloadFile(item._id)"
+            @click="downloadFile(item.path)"
             >mdi-download</v-icon
           >
           <v-icon small class="red--text mr-2" @click="deleteFile(item._id)"
@@ -139,7 +139,7 @@
                 small
                 class="white--text"
                 v-on="on"
-                @click="getLink(item._id)"
+                @click="getLink(item.path)"
                 >mdi-link</v-icon
               >
             </template>
@@ -229,9 +229,9 @@ export default {
           this.uploading = false;
         });
     },
-    downloadFile(id) {
+    downloadFile(path) {
       window.open(
-        `https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/download/${id}`
+        `https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/download/${path}`
       );
     },
     deleteFile(id) {
@@ -263,8 +263,8 @@ export default {
           this.$root.user = response.data;
         });
     },
-    getLink(id) {
-      this.link = `https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/download/${id}`;
+    getLink(path) {
+      this.link = `https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/get/${path}`;
     },
   },
 };
