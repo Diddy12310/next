@@ -235,12 +235,9 @@
               height: $vuetify.breakpoint.mdAndUp
                 ? 'calc(100vh - 204px)'
                 : 'calc(100vh - 186px)',
+              width: drawer ? 'calc(100vw - 312px)' : 'calc(100vw - 112px)',
             }"
-            style="
-              width: calc(100vw - 312px) !important;
-              overflow: auto;
-              padding: 16px 16px 0px 16px;
-            "
+            style="overflow: auto; padding: 16px 16px 0px 16px"
           >
             <p
               class="text-center grey--text font-italic font-weight-light mt-6"
@@ -253,7 +250,7 @@
               v-for="(message, index) in current.messages"
               :key="message._id"
               @mouseover="current_message = index"
-              @mouseleave="current_message = false"
+              @mouseleave="current_message = -1"
               class="d-flex"
               style="position: relative"
             >
@@ -368,7 +365,7 @@
               v-for="(message, index) in current.messages"
               :key="message._id"
               @mouseover="current_message = index"
-              @mouseleave="current_message = false"
+              @mouseleave="current_message = -1"
               class="d-flex"
               style="position: relative"
             >
@@ -641,7 +638,7 @@
     >
       <v-card>
         <v-card-title class="text-h5 font-weight-medium"
-          >BUY A CHATROOM</v-card-title
+          >CREATE A CHATROOM</v-card-title
         >
 
         <v-card-text>

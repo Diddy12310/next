@@ -380,7 +380,8 @@
                 <p class="ma-0 pt-4 pb-2 pl-4">Chatrooms</p>
                 <v-list style="max-height: 454px; overflow-y: auto">
                   <v-list-item v-if="user.chatrooms.length <= 0">
-                    <v-list-item-title class="text-center"
+                    <v-list-item-title
+                      class="text-center grey--text font-italic"
                       >You aren't in any chatrooms.</v-list-item-title
                     >
                   </v-list-item>
