@@ -6,7 +6,10 @@
     }"
     class="pa-4"
   >
-    <div class="text-center" v-if="!invite_code_verified">
+    <div
+      class="text-center"
+      v-if="!invite_code_verified && $root.config.auth.invite_code"
+    >
       <input
         v-model="invite_code"
         type="text"
@@ -87,6 +90,7 @@
         label="Profile Picture"
         :disabled="use_default"
         class="mt-4"
+        accepts="image/*"
       ></v-file-input>
       <span class="grey--text">A visual representation of yourself.</span>
       <!-- <v-checkbox
@@ -115,6 +119,12 @@
         class="mt-6 mb-8 mx-auto"
         color="deep-purple darken-4"
         @click="signUp()"
+        :disabled="
+          username_exists ||
+          $root.user.username.length < 0 ||
+          $root.user.password.length < 0 ||
+          !new_user.terms
+        "
         >Finish</v-btn
       >
     </div>
@@ -205,11 +215,11 @@ export default {
     signUp() {
       if (this.new_user.terms === true) {
         var regex = /([0-9A-Za-z_~.-])/gi;
-        if (regex.test(this.new_user.username) && !this.username_exists) {
+        if (regex.test(this.$root.user.username) && !this.username_exists) {
           this.$http
-            .post("https://www.theparadigmdev.com/api/users/register", {
-              username: this.new_user.username.toLowerCase(),
-              password: this.new_user.password,
+            .post("/api/authentication/signup", {
+              username: this.$root.user.username.toLowerCase(),
+              password: this.$root.user.password,
               bio: this.new_user.bio,
               color: this.new_user.color,
               rights: {
@@ -220,11 +230,39 @@ export default {
                 developer: false,
                 apollo: true,
               },
-              moonrocks: 0,
               code: this.invite_code,
-              pinned_apps: ["Wire", "Drawer", "Broadcast"],
+              pinned_apps: [
+                {
+                  title: "Wire",
+                  path: "/wire",
+                  icon: "mdi-chat",
+                  color: "#0C4A6E",
+                  enabled: true,
+                },
+                {
+                  title: "Drawer",
+                  path: "/drawer",
+                  icon: "mdi-folder-open",
+                  color: "#00695C",
+                  enabled: true,
+                },
+                {
+                  title: "Broadcast",
+                  path: "/broadcast",
+                  icon: "mdi-satellite-uplink",
+                  color: "#303F9F",
+                  enabled: true,
+                },
+                {
+                  title: "Forum",
+                  path: "/forum",
+                  icon: "mdi-forum",
+                  color: "#881337",
+                  enabled: true,
+                },
+              ],
             })
-            .then((response) => {
+            .then(async (response) => {
               if (!this.use_default) {
                 let formData = new FormData();
                 formData.append("files[0]", this.new_user.pic);
@@ -238,14 +276,10 @@ export default {
                       },
                     }
                   )
-                  .then(async (response) => {
+                  .then(async () => {
                     this.$initAppMenu();
                     this.$root.user = response.data;
-                    this.$root.user._id
-                      ? ""
-                      : response.data.preflight
-                      ? this.$router.push("/preflight")
-                      : this.$router.push("/home");
+                    this.$router.push("/home");
 
                     this.$root.socket.emit("login", response.data.username);
 
@@ -281,7 +315,6 @@ export default {
                         )
                         .then((response) => {
                           console.log("Push Sent...");
-                          console.log(response.data._id);
                           document.cookie = `notification_id=${response.data._id}; Secure`;
                         })
                         .catch((error) => console.error(error));
@@ -292,7 +325,46 @@ export default {
                   });
               } else {
                 this.$root.user = response.data;
+                this.$root.socket.emit("login", response.data.username);
+                this.$initAppMenu();
                 this.$router.push("/home");
+
+                const existsing_subscription = this.$root.user.notifications.find(
+                  (subscription) =>
+                    subscription._id == this.$getCookie("notification_id")
+                );
+                if (
+                  ((await this.$root.worker.pushManager.permissionState()) !=
+                    "granted" &&
+                    !existsing_subscription) ||
+                  ((await this.$root.worker.pushManager.permissionState()) ==
+                    "granted" &&
+                    !existsing_subscription)
+                ) {
+                  console.log("Registering Push...");
+                  const subscription = await this.$root.worker.pushManager.subscribe(
+                    {
+                      userVisibleOnly: true,
+                      applicationServerKey: this.$urlBase64ToUint8Array(
+                        this.$root.public_vapid_key
+                      ),
+                    }
+                  );
+                  console.log("Push Registered...");
+                  console.log("Sending Push...");
+                  this.$http
+                    .post(
+                      `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
+                      {
+                        data: subscription,
+                      }
+                    )
+                    .then((response) => {
+                      console.log("Push Sent...");
+                      document.cookie = `notification_id=${response.data._id}; Secure`;
+                    })
+                    .catch((error) => console.error(error));
+                }
               }
             })
             .catch((error) => {
@@ -301,17 +373,15 @@ export default {
         } else
           this.$notify(
             "Enter a valid username",
-            "error",
+            "red--text",
             "mdi-account-plus",
-            false,
             3000
           );
       } else
         this.$notify(
           "Read and accept the terms",
-          "error",
+          "red--text",
           "mdi-account-plus",
-          false,
           3000
         );
     },

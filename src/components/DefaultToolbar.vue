@@ -38,13 +38,13 @@
       <v-btn
         style="width: 10rem"
         class="mx-2 elevation-0"
-        :class="{ 'elevation-24': $route.path == $root.config.apps[app].path }"
-        :color="$root.config.apps[app].color"
+        :class="{ 'elevation-24': $route.path == app.path }"
+        :color="app.color"
         v-for="(app, index) in $root.user.pinned_apps"
         :key="index"
-        :input-value="$route.path.includes($root.config.apps[app].path)"
-        :to="$root.config.apps[app].path"
-        >{{ $root.config.apps[app].title }}</v-btn
+        :input-value="$route.path.includes(app.path)"
+        :to="app.path"
+        >{{ app.title }}</v-btn
       >
     </div>
 

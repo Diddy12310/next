@@ -57,11 +57,12 @@
 
         <v-card-text>
           <v-text-field
-            hide-details
+            hide-details="auto"
             label="Username"
             class="mb-3"
             v-model="username"
             autocomplete="off"
+            :error-messages="errors.username"
           ></v-text-field>
           <v-text-field
             hide-details="auto"
@@ -70,7 +71,7 @@
             type="password"
             @keyup.enter="signIn()"
             v-model="password"
-            :error-messages="$root.notification.text"
+            :error-messages="errors.password"
           ></v-text-field>
           <v-checkbox
             @keyup.enter="signIn()"
@@ -126,6 +127,7 @@ export default {
       sticky: true,
       authenticated: false,
       loading: false,
+      errors: false,
     };
   },
   methods: {
@@ -190,12 +192,7 @@ export default {
               });
             }
           } else {
-            this.$notify(
-              "Password is incorrect",
-              "red--text",
-              "mdi-lock",
-              3000
-            );
+            this.errors = response.data.errors;
             this.loading = false;
           }
         });

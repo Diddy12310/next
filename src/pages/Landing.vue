@@ -171,7 +171,7 @@ export default {
   },
   watch: {
     "$root.user": function () {
-      this.$router.push("/home");
+      if (!this.$root.user.preflight) this.$router.push("/home");
     },
   },
 };

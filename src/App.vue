@@ -78,6 +78,8 @@ import MusicToolbar from "./components/MusicToolbar.vue";
 import PreflightToolbar from "./components/PreflightToolbar.vue";
 import io from "socket.io-client";
 
+let autoLockout;
+
 export default {
   name: "App",
   components: {
@@ -193,7 +195,7 @@ export default {
     this.$root.socket.on("nuke", () => {
       this.$root.config.shutdown = true;
     });
-    if (this.$root.user)
+    if (this.$root.user && !this.$root.user.preflight)
       this.$root.socket.emit("login", this.$root.user.username);
     this.$root.socket.on("user", (data) => {
       if (data.preflight && this.$route.path !== "/preflight")
@@ -213,6 +215,7 @@ export default {
       this.$root.socket.disconnect();
       this.$root.socket = io.connect("https://www.theparadigmdev.com");
       this.$root.user = false;
+      clearTimeout(autoLockout);
     });
     this.$root.socket.on("disconnect", () => {
       let reconnected = false;
@@ -227,7 +230,7 @@ export default {
         reconnected = true;
         this.$notify("Reconnected!", "blue--text", "mdi-server", 3000);
       });
-      setTimeout(() => {
+      autoLockout = setTimeout(() => {
         if (!reconnected) {
           this.$notify(
             "Reconnection timed out!",

@@ -70,95 +70,27 @@ Vue.mixin({
     },
     $initAppMenu() {
       if (this.$root.user && !this.$root.user.preflight) {
-        this.$root.nav = [
-          {
-            icon: "mdi-home",
-            content: "Home",
-            path: "/home",
-            rights: this.$root.config.router.home
-          },
-          {
-            icon: "mdi-chat",
-            content: "Wire",
-            path: "/wire",
-            rights: this.$root.config.router.wire
-          },
-          {
-            icon: "mdi-folder-multiple",
-            content: "Drawer",
-            path: "/drawer",
-            rights: this.$root.config.router.drawer
-          },
-          {
-            icon: "mdi-satellite-uplink",
-            content: "Broadcast",
-            path: "/broadcast",
-            rights: this.$root.config.router.broadcast
-          },
-          {
-            icon: "mdi-comment-text-multiple",
-            content: "Forum",
-            path: "/parlay",
-            rights: this.$root.config.router.parlay
-          },
-          {
-            icon: "mdi-web",
-            content: "Satellite",
-            path: "/satellite",
-            rights: this.$root.config.router.satellite
-          },
-          {
-            icon: "mdi-newspaper",
-            content: "The Paradox",
-            path: "/paradox",
-            rights: this.$root.config.router.paradox
-          },
-          {
-            icon: "mdi-play",
-            content: "Media",
-            path: "/media",
-            rights: this.$root.config.router.media
-          },
-          {
-            icon: "mdi-download",
-            content: "Downloads",
-            path: "/downloads",
-            rights: this.$root.config.router.downloads
-          },
-          {
-            icon: "mdi-shield-lock",
-            content: "Privacy",
-            path: "/privacy",
-            rights: this.$root.config.router.privacy
-          },
-          {
-            icon: "mdi-feather",
-            content: "Terms",
-            path: "/terms",
-            rights: this.$root.config.router.terms
-          },
-          {
-            icon: "mdi-lifebuoy",
-            content: "Support",
-            path: "/support",
-            rights: this.$root.config.router.support
-          },
-          {
-            icon: "mdi-code-tags",
-            content: "Developer",
-            path: "/developer",
-            rights:
-              this.$root.config.router.developer &&
-              this.$root.user.rights.developer
-          },
-          {
-            icon: "mdi-console-line",
-            content: "Terminal",
-            path: "/terminal",
-            rights:
-              this.$root.config.router.terminal && this.$root.user.rights.admin
+        this.$root.nav = [];
+        Object.values(this.$root.config.apps).forEach(app => {
+          if (app.enabled) {
+            if (app.rights) {
+              if (this.$root.user.rights[app.rights])
+                this.$root.nav.push({
+                  icon: app.icon,
+                  content: app.title,
+                  path: app.path,
+                  rights: app.enabled
+                });
+            } else {
+              this.$root.nav.push({
+                icon: app.icon,
+                content: app.title,
+                path: app.path,
+                rights: app.enabled
+              });
+            }
           }
-        ];
+        });
       }
     }
   }
