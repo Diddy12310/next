@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #0f1e3c; height: 100vh">
+  <div style="height: 100vh">
     <header style="height: 8rem; max-width: 1185px; margin: auto" class="px-4">
       <v-container class="d-flex align-center pa-0" style="width: 100%">
         <img
@@ -19,7 +19,7 @@
         <v-btn
           color="#182D57"
           depressed
-          @click="$root.router = 'Authentication'"
+          @click="$router.push('/authentication')"
           >Sign in</v-btn
         >
       </v-container>
@@ -74,11 +74,11 @@
             >
               built for the people
             </h1>
-            <p class="font-weight-light text-h6 grey--text mt-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+            <p class="font-weight-light text-h6 grey--text mt-4 pr-4">
+              Paradigm is a suite of lightweight, secure, and performant
+              applications on the web for a free society. Our apps promote the
+              freedoms enshrined in the Constitution of the United States. User
+              privacy and security are our number one priority.
             </p>
 
             <v-row class="align-center">
@@ -127,7 +127,7 @@
                   @keypress.enter="signUp()"
                 ></v-text-field>
                 <v-btn block color="deep-purple darken-4" @click="signUp()"
-                  >Create my account</v-btn
+                  >Continue</v-btn
                 >
               </v-card-text>
 
@@ -135,9 +135,9 @@
                 <p
                   class="ma-auto subtitle-2 text-center font-weight-light text--grey text--darken-4"
                 >
-                  By signing up, you agree to the
-                  <span @click="" class="text-grey text--darken-4">
-                    Terms and Conditions</span
+                  Already have an account?
+                  <a to="/authentication" class="text-grey text--darken-4">
+                    Sign in here</a
                   >
                 </p>
               </v-card-actions>
@@ -166,10 +166,19 @@ export default {
         password: this.password,
         preflight: { creation: true },
       };
-      this.$root.router = "Preflight";
+      this.$router.push("/preflight");
+    },
+  },
+  watch: {
+    "$root.user": function () {
+      if (!this.$root.user.preflight) this.$router.push("/home");
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.router-view {
+  background-color: #0f1e3c !important;
+}
+</style>

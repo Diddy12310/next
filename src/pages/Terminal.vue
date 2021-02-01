@@ -59,6 +59,7 @@ export default {
       switch (this.output[0]) {
         case "nuke":
           socket.emit("nuke");
+          this.$log("You nuked the server!");
           break;
         case "clear":
           this.history = [];
@@ -84,6 +85,8 @@ export default {
         case "app":
           this.app(this.output[1], this.output[2], this.output[3]);
           break;
+        // case "help":
+        //   break;
         default:
           this.$error(`command ${this.output[0]} not found`);
           this.input = "";
@@ -99,7 +102,7 @@ export default {
       socket.emit("config", payload);
       this.$log(`set config.${query} to ${input}`);
     },
-    user(username, key, value) {
+    async user(username, key, value) {
       switch (key) {
         case "ban":
           socket.emit("ban", { username, value: this.parseBool(value) });
@@ -167,14 +170,14 @@ export default {
           break;
         case "delete":
           socket.emit("kick", username);
-          this.$http.get(
-            `https://www.theparadigmdev.com/api/terminal/user/${username}/delete`
-          );
-          this.$log(`user ${username} deleted`);
-          break;
-        case "rocks":
-          socket.emit("moonrocks", { username, value: parseInt(value, 10) });
-          this.$log(`user ${username}.moonrocks incremented by ${value}`);
+          this.$http
+            .get(`/api/users/username/${username}/info`)
+            .then((response) => {
+              this.$http.get(
+                `https://www.theparadigmdev.com/api/users/${response.data._id}/delete`
+              );
+              this.$log(`user ${username} deleted`);
+            });
           break;
         case "rename":
           this.$http

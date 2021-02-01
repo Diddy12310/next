@@ -6,7 +6,10 @@
     }"
     class="pa-4"
   >
-    <div class="text-center" v-if="!invite_code_verified">
+    <div
+      class="text-center"
+      v-if="!invite_code_verified && $root.config.auth.invite_code"
+    >
       <input
         v-model="invite_code"
         type="text"
@@ -29,14 +32,21 @@
 
     <div style="max-width: 500px" class="mx-auto" v-else>
       <v-text-field
-        hide-details
+        hide-details="auto"
+        :persistent-hint="true"
         v-model="$root.user.username"
         label="Username"
         class="my-4"
+        @keyup="checkIfUserExists()"
+        :hint="
+          username_exists && $root.user.username.length > 0
+            ? 'This username is taken already!'
+            : ''
+        "
       ></v-text-field>
       <span class="grey--text"
-        >Contrary to most other platforms, your username does not need to be
-        unique, but it should represent who you are.</span
+        >This should represent who you are. This must be unique and is not
+        changeable.</span
       >
       <v-text-field
         hide-details
@@ -80,6 +90,7 @@
         label="Profile Picture"
         :disabled="use_default"
         class="mt-4"
+        accepts="image/*"
       ></v-file-input>
       <span class="grey--text">A visual representation of yourself.</span>
       <!-- <v-checkbox
@@ -94,9 +105,9 @@
       ></v-checkbox>
       <span class="grey--text"
         >Please read and accept the
-        <a @click="$root.view.terms = true">Terms and Conditions</a>. Confirm
-        that you are over the age of 13. If you are under 18, parental
-        permission is required.
+        <a @click="terms = true">Terms and Conditions</a>. Confirm that you are
+        over the age of 13. If you are under 18, parental permission is
+        required.
         <a
           target="_blank"
           href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act"
@@ -108,13 +119,54 @@
         class="mt-6 mb-8 mx-auto"
         color="deep-purple darken-4"
         @click="signUp()"
+        :disabled="
+          username_exists ||
+          $root.user.username.length < 0 ||
+          $root.user.password.length < 0 ||
+          !new_user.terms
+        "
         >Finish</v-btn
       >
     </div>
+
+    <v-dialog
+      v-model="terms"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+      @keyup.esc="terms = false"
+    >
+      <v-card>
+        <Terms />
+        <v-btn
+          style="z-index: 6"
+          small
+          text
+          fab
+          fixed
+          top
+          right
+          @click="terms = false"
+          ><v-icon>mdi-close</v-icon></v-btn
+        >
+      </v-card>
+    </v-dialog>
+
+    <v-btn
+      @click="($root.user = false), $router.replace('/')"
+      absolute
+      bottom
+      left
+      text
+      color="grey"
+      >Cancel</v-btn
+    >
   </div>
 </template>
 
 <script>
+import Terms from "../Terms";
+
 export default {
   name: "SignUp",
   data() {
@@ -127,7 +179,12 @@ export default {
         password: this.$root.user.password,
       },
       use_default: false,
+      terms: false,
+      username_exists: false,
     };
+  },
+  components: {
+    Terms,
   },
   created() {
     let randomHex = "";
@@ -139,17 +196,30 @@ export default {
       );
     }
     this.new_user.color = `#${randomHex}`;
+    this.checkIfUserExists();
   },
   methods: {
+    checkIfUserExists() {
+      if (this.$root.user.username.length < 1) this.username_exists = true;
+      else {
+        this.$http
+          .get(
+            `https://www.theparadigmdev.com/api/users/check/${this.$root.user.username.toLowerCase()}`
+          )
+          .then((response) => {
+            this.username_exists = response.data.exists;
+          });
+      }
+    },
+
     signUp() {
-      // if (this.new_user.password === this.new_user.password_confirm) {
       if (this.new_user.terms === true) {
         var regex = /([0-9A-Za-z_~.-])/gi;
-        if (regex.test(this.new_user.username)) {
+        if (regex.test(this.$root.user.username) && !this.username_exists) {
           this.$http
-            .post("https://www.theparadigmdev.com/api/users/register", {
-              username: this.new_user.username.toLowerCase(),
-              password: this.new_user.password,
+            .post("/api/authentication/signup", {
+              username: this.$root.user.username.toLowerCase(),
+              password: this.$root.user.password,
               bio: this.new_user.bio,
               color: this.new_user.color,
               rights: {
@@ -160,11 +230,39 @@ export default {
                 developer: false,
                 apollo: true,
               },
-              moonrocks: 0,
               code: this.invite_code,
-              pinned_apps: ["Flamechat", "Drawer", "Broadcast"],
+              pinned_apps: [
+                {
+                  title: "Wire",
+                  path: "/wire",
+                  icon: "mdi-chat",
+                  color: "#0C4A6E",
+                  enabled: true,
+                },
+                {
+                  title: "Drawer",
+                  path: "/drawer",
+                  icon: "mdi-folder-open",
+                  color: "#00695C",
+                  enabled: true,
+                },
+                {
+                  title: "Broadcast",
+                  path: "/broadcast",
+                  icon: "mdi-satellite-uplink",
+                  color: "#303F9F",
+                  enabled: true,
+                },
+                {
+                  title: "Forum",
+                  path: "/forum",
+                  icon: "mdi-forum",
+                  color: "#881337",
+                  enabled: true,
+                },
+              ],
             })
-            .then((response) => {
+            .then(async (response) => {
               if (!this.use_default) {
                 let formData = new FormData();
                 formData.append("files[0]", this.new_user.pic);
@@ -178,107 +276,17 @@ export default {
                       },
                     }
                   )
-                  .then(async (response) => {
-                    this.$root.nav = [
-                      {
-                        icon: "mdi-home",
-                        content: "Home",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-message",
-                        content: "Flamechat",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-web",
-                        content: "Satellite",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-newspaper",
-                        content: "The Paradox",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-folder-multiple",
-                        content: "Drawer",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-play",
-                        content: "Media",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-account-group",
-                        content: "People",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-satellite-uplink",
-                        content: "Broadcast",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-download",
-                        content: "Downloads",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-shield-lock",
-                        content: "Privacy",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-feather",
-                        content: "Terms",
-                        disabled: false,
-                        rights: true,
-                      },
-                      {
-                        icon: "mdi-lifebuoy",
-                        content: "Support",
-                        disabled: false,
-                        rights: true,
-                      },
-
-                      {
-                        icon: "mdi-code-tags",
-                        content: "Developer",
-                        disabled: false,
-                        rights: response.data.rights.developer,
-                      },
-                      {
-                        icon: "mdi-console-line",
-                        content: "Terminal",
-                        disabled: false,
-                        rights: response.data.rights.admin,
-                      },
-                    ];
-
+                  .then(async () => {
+                    this.$initAppMenu();
                     this.$root.user = response.data;
-                    this.$root.router = "Home";
-                    response.data.preflight
-                      ? (this.$root.router = "Preflight")
-                      : (this.$root.router = "Home");
-                    this.$root.socket.emit("login", response.data);
+                    this.$router.push("/home");
+
+                    this.$root.socket.emit("login", response.data.username);
 
                     const existsing_subscription = this.$root.user.notifications.find(
                       (subscription) =>
                         subscription._id == this.$getCookie("notification_id")
                     );
-                    console.log(existsing_subscription);
                     if (
                       ((await this.$root.worker.pushManager.permissionState()) !=
                         "granted" &&
@@ -307,7 +315,6 @@ export default {
                         )
                         .then((response) => {
                           console.log("Push Sent...");
-                          console.log(response.data._id);
                           document.cookie = `notification_id=${response.data._id}; Secure`;
                         })
                         .catch((error) => console.error(error));
@@ -318,7 +325,46 @@ export default {
                   });
               } else {
                 this.$root.user = response.data;
-                this.$root.router = "Home";
+                this.$root.socket.emit("login", response.data.username);
+                this.$initAppMenu();
+                this.$router.push("/home");
+
+                const existsing_subscription = this.$root.user.notifications.find(
+                  (subscription) =>
+                    subscription._id == this.$getCookie("notification_id")
+                );
+                if (
+                  ((await this.$root.worker.pushManager.permissionState()) !=
+                    "granted" &&
+                    !existsing_subscription) ||
+                  ((await this.$root.worker.pushManager.permissionState()) ==
+                    "granted" &&
+                    !existsing_subscription)
+                ) {
+                  console.log("Registering Push...");
+                  const subscription = await this.$root.worker.pushManager.subscribe(
+                    {
+                      userVisibleOnly: true,
+                      applicationServerKey: this.$urlBase64ToUint8Array(
+                        this.$root.public_vapid_key
+                      ),
+                    }
+                  );
+                  console.log("Push Registered...");
+                  console.log("Sending Push...");
+                  this.$http
+                    .post(
+                      `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
+                      {
+                        data: subscription,
+                      }
+                    )
+                    .then((response) => {
+                      console.log("Push Sent...");
+                      document.cookie = `notification_id=${response.data._id}; Secure`;
+                    })
+                    .catch((error) => console.error(error));
+                }
               }
             })
             .catch((error) => {
@@ -326,28 +372,18 @@ export default {
             });
         } else
           this.$notify(
-            "Username contains invalid special characters",
-            "error",
+            "Enter a valid username",
+            "red--text",
             "mdi-account-plus",
-            false,
             3000
           );
       } else
         this.$notify(
           "Read and accept the terms",
-          "error",
+          "red--text",
           "mdi-account-plus",
-          false,
           3000
         );
-      // } else
-      //   this.$notify(
-      //     "Passwords do not match",
-      //     "error",
-      //     "mdi-account-plus",
-      //     false,
-      //     3000
-      //   );
     },
     verifyInviteCode() {
       this.$http

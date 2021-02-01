@@ -22,7 +22,7 @@
       style="max-width: 72rem"
       class="mx-auto"
     >
-      <h1 class="display-2 font-weight-light mt-6">
+      <h1 class="display-3 font-weight-light mt-6">
         Welcome,
         <span :style="{ color: $root.user.color }">{{
           $root.user.username
@@ -30,12 +30,12 @@
         >!
       </h1>
 
-      <h6 class="grey--text text--darken-1 overline">
+      <h6 class="grey--text text--darken-1 overline mt-8">
         {{ $root.config.landing.date }}
       </h6>
       <h1
         style="max-width: 56rem"
-        class="deep-purple--text text--darken-3 font-weight-bold text-h3"
+        class="font-weight-medium text-h3"
         v-html="$root.config.landing.title"
       ></h1>
       <p

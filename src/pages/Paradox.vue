@@ -23,14 +23,14 @@
     >
       <v-container>
         <p
-          class="text-center font-italic grey--text mt-12"
-          v-if="filteredNews.length <= 0"
+          class="text-center font-italic grey--text mt-12 font-weight-light"
+          v-if="filteredNews.length < 1"
         >
           No articles have been published yet.
         </p>
         <p
-          class="text-center font-italic grey--text"
-          v-if="filteredNews.length <= 0 && $root.user.rights.author"
+          class="text-center font-italic grey--text font-weight-light"
+          v-if="filteredNews.length < 1 && $root.user.rights.author"
         >
           Why don't you create one? Click the plus button.
         </p>
@@ -169,9 +169,10 @@ export default {
     filteredNews() {
       return this.news.filter((item) => {
         return (
-          item.title.match(this.searchNews) ||
-          item.author.match(this.searchNews) ||
-          item.timestamp.match(this.searchNews)
+          (item.title.match(this.searchNews) ||
+            item.author.match(this.searchNews) ||
+            item.timestamp.match(this.searchNews)) &&
+          item.live
         );
       });
     },

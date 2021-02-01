@@ -9,7 +9,7 @@ export default new Vuetify({
     themes: {
       dark: {
         // primary: "#311B92",
-      },
-    },
-  },
+      }
+    }
+  }
 });

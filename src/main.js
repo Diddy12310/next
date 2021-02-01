@@ -5,6 +5,7 @@ import axios from "axios";
 import VueChatScroll from "vue-chat-scroll";
 import io from "socket.io-client";
 import "./assets/style.css";
+import router from "./router.js";
 
 let socket = io.connect("https://www.theparadigmdev.com");
 const version = require("./../package.json").version;
@@ -66,12 +67,38 @@ Vue.mixin({
         outputArray[i] = rawData.charCodeAt(i);
       }
       return outputArray;
+    },
+    $initAppMenu() {
+      if (this.$root.user && !this.$root.user.preflight) {
+        this.$root.nav = [];
+        Object.values(this.$root.config.apps).forEach(app => {
+          if (app.enabled) {
+            if (app.rights) {
+              if (this.$root.user.rights[app.rights])
+                this.$root.nav.push({
+                  icon: app.icon,
+                  content: app.title,
+                  path: app.path,
+                  rights: app.enabled
+                });
+            } else {
+              this.$root.nav.push({
+                icon: app.icon,
+                content: app.title,
+                path: app.path,
+                rights: app.enabled
+              });
+            }
+          }
+        });
+      }
     }
   }
 });
 
 new Vue({
   vuetify,
+
   data() {
     return {
       user: false,
@@ -87,11 +114,18 @@ new Vue({
         "BANy_l888yNEj3sW1ASQBEc3dKBq4MnOn9uu4x_gZteD8SNUYwUFbOPrFdGMiFS0zI16bie6vA-P6bNBXMXhAvc",
       worker: null,
       online: true,
+      timed_out: false,
       version
     };
   },
+
   render: h => h(App),
+  router,
+
   created() {
+    let timeOut = setTimeout(() => {
+      if (!this.$root.config) this.$root.timed_out = true;
+    }, 15000);
     // Check for service worker
     if ("serviceWorker" in navigator) {
       registerServiceWorker().catch(err => console.error(err));
