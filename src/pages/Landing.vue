@@ -174,6 +174,10 @@ export default {
       if (!this.$root.user.preflight) this.$router.push("/home");
     },
   },
+  created() {
+    if (this.$root.config.auth.landing === false)
+      this.$router.replace("/authentication");
+  },
 };
 </script>
 

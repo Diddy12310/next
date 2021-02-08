@@ -39,17 +39,7 @@
             v-if="$root.config.auth.sign_up"
           >
             Or
-            <a
-              class="text--grey text--darken-4"
-              @click="
-                $router.replace('/preflight'),
-                  ($root.user = {
-                    username: '',
-                    password: '',
-                    preflight: { creation: true },
-                  })
-              "
-            >
+            <a class="text--grey text--darken-4" @click="signUp()">
               create an account</a
             >
           </p></v-card-title
@@ -92,8 +82,8 @@
           <p
             class="ma-auto subtitle-2 text-center font-weight-light text--grey text--darken-4"
           >
-            Forgot your credentials?
-            <a
+            Forgot your credentials? Oh well, for now...
+            <!-- <a
               class="text--grey text--darken-4"
               @click="
                 $root.user = {
@@ -103,7 +93,7 @@
               "
             >
               Enter account recovery</a
-            >
+            > -->
           </p>
         </v-card-actions>
 
@@ -130,7 +120,25 @@ export default {
       errors: false,
     };
   },
+  created() {
+    if (this.$root.user && !this.$root.user.preflight)
+      this.$router.replace("/home");
+  },
+  watch: {
+    "$root.user": function () {
+      if (this.$root.user && !this.$root.user.preflight)
+        this.$router.replace("/home");
+    },
+  },
   methods: {
+    signUp() {
+      this.$root.user = {
+        username: this.username,
+        password: this.password,
+        preflight: { creation: true },
+      };
+      this.$router.push("/preflight");
+    },
     signIn() {
       this.loading = true;
       this.$http
