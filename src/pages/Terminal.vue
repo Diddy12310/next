@@ -85,8 +85,14 @@ export default {
         case "app":
           this.app(this.output[1], this.output[2], this.output[3]);
           break;
-        // case "help":
-        //   break;
+        case "help":
+          window.open(
+            "https://github.com/Paradigm-Dev/docs/blob/master/Terminal.md"
+          );
+          this.$log(
+            '<a href="https://github.com/Paradigm-Dev/docs/blob/master/Terminal.md">https://github.com/Paradigm-Dev/docs/blob/master/Terminal.md</a>'
+          );
+          break;
         default:
           this.$error(`command ${this.output[0]} not found`);
           this.input = "";
@@ -208,7 +214,7 @@ export default {
       this.$log(`ip ${ip} banned`);
     },
     app(app, key, value) {
-      if (key == "live") value = this.parseBool(value);
+      if (key == "enabled") value = this.parseBool(value);
       this.$http
         .put(`https://www.theparadigmdev.com/api/terminal/app`, {
           app,
