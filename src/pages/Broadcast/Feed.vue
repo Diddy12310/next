@@ -15,6 +15,8 @@
       color="indigo darken-3"
       v-for="(post, index) in feed"
       :key="index"
+      @mouseenter="hover = index"
+      @mouseleave="hover = -1"
     >
       <div v-if="post.file">
         <v-img
@@ -41,6 +43,7 @@
           <v-list-item-avatar
             color="grey darken-3"
             @click="$router.push(`/broadcast/profile/${post.username}`)"
+            style="cursor: pointer"
           >
             <v-img
               class="elevation-6"
@@ -59,7 +62,7 @@
               post.timestamp_formatted
             }}</v-list-item-subtitle>
           </v-list-item-content>
-          <div v-if="$root.user.rights.admin">
+          <div v-if="$root.user.rights.admin && hover == index">
             <v-btn
               icon
               color="grey"
@@ -215,6 +218,7 @@ export default {
       edit_post_index: null,
       uploader: false,
       new_file: null,
+      hover: -1,
     };
   },
   computed: {
@@ -302,6 +306,10 @@ export default {
 
     likePost(id, uid) {
       this.loading = true;
+      this.feed.find((post) => post._id == id).likes++;
+      this.$root.user.people.approved
+        .find((person) => person._id == uid)
+        .liked_posts.push(id);
       this.$http
         .get(
           `https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/like/${uid}/${id}`
@@ -317,6 +325,16 @@ export default {
     },
     unLikePost(id, uid) {
       this.loading = true;
+      this.feed.find((post) => post._id == id).likes--;
+      const profile_index = this.$root.user.people.approved.findIndex(
+        (person) => person._id == uid
+      );
+      this.$root.user.people.approved[profile_index].liked_posts.splice(
+        this.$root.user.people.approved[profile_index].liked_posts.findIndex(
+          (post) => post == id
+        ),
+        1
+      );
       this.$http
         .get(
           `https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/unlike/${uid}/${id}`

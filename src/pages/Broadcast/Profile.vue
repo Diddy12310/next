@@ -18,10 +18,12 @@
             ></v-img
           ></v-list-item-avatar>
         </v-badge>
-        <v-list-item-content>
-          <v-list-item-title :style="{ color: profile.color }">{{
-            profile.username
-          }}</v-list-item-title>
+        <v-list-item-content class="ml-n3">
+          <v-list-item-title
+            class="font-weight-medium"
+            :style="{ color: profile.color }"
+            >{{ profile.username }}</v-list-item-title
+          >
           <v-list-item-subtitle v-html="profile.bio"></v-list-item-subtitle>
         </v-list-item-content>
 
@@ -103,6 +105,8 @@
       color="indigo darken-3"
       v-for="(post, index) in profile.posts"
       :key="index"
+      @mouseenter="hover = index"
+      @mouseleave="hover = -1"
     >
       <div v-if="post.file">
         <v-img
@@ -151,7 +155,10 @@
 
           <v-col class="text-right">
             <v-btn
-              v-if="profile._id == $root.user._id || $root.user.rights.admin"
+              v-if="
+                (profile._id == $root.user._id || $root.user.rights.admin) &&
+                hover == index
+              "
               icon
               color="grey"
               @click="
@@ -162,7 +169,10 @@
               ><v-icon>mdi-pencil</v-icon></v-btn
             >
             <v-btn
-              v-if="profile._id == $root.user._id || $root.user.rights.admin"
+              v-if="
+                (profile._id == $root.user._id || $root.user.rights.admin) &&
+                hover == index
+              "
               icon
               color="grey"
               class="mr-2"
@@ -333,6 +343,7 @@ export default {
       uploader: false,
       new_file: null,
       block_confirmer: false,
+      hover: -1,
     };
   },
   computed: {
@@ -433,6 +444,9 @@ export default {
     likePost(id, index) {
       this.loading = true;
       this.profile.posts[index].likes++;
+      this.$root.user.people.approved
+        .find((person) => person._id == this.profile._id)
+        .liked_posts.push(id);
       this.$http
         .get(
           `https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/like/${this.profile._id}/${id}`
@@ -448,6 +462,15 @@ export default {
     unLikePost(id, index) {
       this.loading = true;
       this.profile.posts[index].likes--;
+      const profile_index = this.$root.user.people.approved.findIndex(
+        (person) => person._id == this.profile._id
+      );
+      this.$root.user.people.approved[profile_index].liked_posts.splice(
+        this.$root.user.people.approved[profile_index].liked_posts.findIndex(
+          (post) => post == id
+        ),
+        1
+      );
       this.$http
         .get(
           `https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/unlike/${this.profile._id}/${id}`

@@ -106,7 +106,7 @@ export default {
               this.$router.push("/home");
             this.$root.user = response.data.user;
             this.$root.socket.emit("login", response.data.user.username);
-            response.data.preflight ? this.$router.replace("/preflight") : "";
+            if (response.data.preflight) this.$router.replace("/preflight");
 
             this.$initAppMenu();
             this.loading = false;
@@ -151,11 +151,11 @@ export default {
               });
             }
           } else {
-            this.$router.replace("/");
+            if (this.$route.path != "/") this.$router.replace("/");
           }
         });
       } else {
-        this.$router.replace("/");
+        if (this.$route.path != "/") this.$router.replace("/");
       }
     },
   },

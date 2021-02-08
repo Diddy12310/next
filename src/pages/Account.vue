@@ -1,5 +1,5 @@
 <template>
-  <div class="account">
+  <div class="account" v-if="user._id">
     <v-toolbar dense color="deep-purple darken-3">
       <v-toolbar-title>Account</v-toolbar-title>
     </v-toolbar>
@@ -751,6 +751,26 @@ export default {
   methods: {
     fixData() {
       this.user = JSON.parse(JSON.stringify(this.$root.user));
+      let apps = [];
+      for (let app of Object.values(this.$root.config.apps)) {
+        if (
+          !this.user.pinned_apps.find(
+            (pinned_app) => pinned_app.path == app.path
+          ) &&
+          app.enabled &&
+          app.title != "Home" &&
+          app.title != "Privacy" &&
+          app.title != "Terms" &&
+          app.title != "Support"
+        )
+          apps.push(app);
+      }
+      this.apps_remaining = [];
+      JSON.parse(JSON.stringify(apps)).forEach((app) => {
+        if (app.rights) {
+          if (this.user.rights[app.rights]) this.apps_remaining.push(app);
+        } else this.apps_remaining.push(app);
+      });
     },
     changePassword() {
       if (this.reset.new === this.reset.verify) {
@@ -919,10 +939,12 @@ export default {
     },
   },
   created() {
-    this.fixData();
+    let fixDataLoop = setInterval(() => {
+      this.fixData();
+      if (this.user._id) clearInterval(fixDataLoop);
+    }, 250);
   },
   mounted() {
-    this.fixData();
     if (this.$root.user.rights.developer) {
       this.$http
         .get(
@@ -932,28 +954,7 @@ export default {
           this.apollo_codes = response.data;
         });
     }
-
-    let apps = [];
-    for (let app of Object.values(this.$root.config.apps)) {
-      if (
-        !this.user.pinned_apps.find(
-          (pinned_app) => pinned_app.path == app.path
-        ) &&
-        app.enabled &&
-        app.title != "Home" &&
-        app.title != "Privacy" &&
-        app.title != "Terms" &&
-        app.title != "Support"
-      )
-        apps.push(app);
-    }
-    this.apps_remaining = JSON.parse(JSON.stringify(apps));
   },
-  // beforeMount() {
-  //   this.$http.get(`https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people`).then(response => {
-  //     this.people = response.data
-  //   }).catch(error => console.error(error))
-  // }
 };
 </script>
 
