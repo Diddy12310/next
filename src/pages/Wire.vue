@@ -676,7 +676,7 @@
 </template>
 
 <script>
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 import moment from "moment";
 
 let typingTimeout;
@@ -728,12 +728,21 @@ export default {
   },
   methods: {
     async changeChatroom(to, dm) {
-      if (this.current) this.socket.disconnect();
+      if (this.socket) {
+        this.socket.off("data");
+        this.socket.off("send");
+        this.socket.off("delete");
+        this.socket.off("edit");
+        this.socket.off("kill");
+        this.socket.off("typing");
+        this.socket.off("people");
+        this.socket.off("purge");
+        await this.socket.disconnect();
+      }
       this.current = false;
       this.current_dm_person = false;
       if (dm) {
         this.socket = await io.connect(
-          // TODO(transition to wire endpoints)
           `https://www.theparadigmdev.com/wire/${to.dm}`
         );
         this.current_dm_person = to.username;
@@ -741,7 +750,6 @@ export default {
           this.$router.push(`/wire/dm/${to.username}`);
       } else {
         this.socket = await io.connect(
-          // TODO(transition to wire endpoints)
           `https://www.theparadigmdev.com/wire/${to.id}`
         );
         if (this.$route.path != `/wire/chatroom/${to.id}`)

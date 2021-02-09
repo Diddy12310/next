@@ -61,6 +61,10 @@ export default {
           socket.emit("nuke");
           this.$log("You nuked the server!");
           break;
+        case "reboot":
+          socket.emit("reboot");
+          this.$log("You rebooted the server!");
+          break;
         case "clear":
           this.history = [];
           break;
