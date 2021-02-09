@@ -72,7 +72,7 @@
 import DefaultToolbar from "./components/DefaultToolbar.vue";
 import MusicToolbar from "./components/MusicToolbar.vue";
 import PreflightToolbar from "./components/PreflightToolbar.vue";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 
 let autoLockout;
 

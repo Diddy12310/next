@@ -99,6 +99,14 @@
         </div>
       </v-list-item>
     </h1>
+
+    <p
+      class="grey--text text-center font-italic font-weight-light"
+      v-if="profile.posts.length < 1"
+    >
+      No posts
+    </p>
+
     <v-card
       max-width="500"
       class="mx-auto mb-4"

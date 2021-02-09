@@ -24,9 +24,10 @@
     >
       <h1 class="display-3 font-weight-light mt-6">
         Welcome,
-        <span :style="{ color: $root.user.color }">{{
-          $root.user.username
-        }}</span
+        <span
+          class="font-weight-regular"
+          :style="{ color: $root.user.color }"
+          >{{ $root.user.username }}</span
         >!
       </h1>
 
