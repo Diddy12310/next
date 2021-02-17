@@ -122,21 +122,14 @@ new Vue({
   render: h => h(App),
   router,
 
-  created() {
+  async created() {
     let timeOut = setTimeout(() => {
       if (!this.$root.config) this.$root.timed_out = true;
     }, 15000);
     // Check for service worker
     if ("serviceWorker" in navigator) {
-      registerServiceWorker().catch(err => console.error(err));
-    }
-
-    let that = this;
-    // Register SW, Register Push, Send Push
-    async function registerServiceWorker() {
-      // Register Service Worker
       console.log("Registering service worker...");
-      that.$root.worker = await navigator.serviceWorker.register(
+      this.$root.worker = await navigator.serviceWorker.register(
         `${process.env.BASE_URL}worker.js`,
         {
           scope: "/"

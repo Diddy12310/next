@@ -123,16 +123,14 @@ export default {
                 "granted" &&
                 !existing_subscription)
             ) {
-              navigator.serviceWorker.ready.then(async () => {
+              navigator.serviceWorker.ready.then(async (sw) => {
                 console.log("Registering Push...");
-                const subscription = await this.$root.worker.pushManager.subscribe(
-                  {
-                    userVisibleOnly: true,
-                    applicationServerKey: this.$urlBase64ToUint8Array(
-                      this.$root.public_vapid_key
-                    ),
-                  }
-                );
+                const subscription = await sw.pushManager.subscribe({
+                  userVisibleOnly: true,
+                  applicationServerKey: this.$urlBase64ToUint8Array(
+                    this.$root.public_vapid_key
+                  ),
+                });
                 console.log("Push Registered...");
                 console.log("Sending Push...");
                 this.$http

@@ -21,7 +21,7 @@
       <v-btn
         icon
         @click="leaveChatroom()"
-        v-if="current && !current_dm_person && current.owner != $root.user._id"
+        v-if="current && !current_dm_person && current.owner !== $root.user._id"
         ><v-icon>mdi-arrow-expand-left</v-icon></v-btn
       >
       <v-btn icon @click="deleteChatroom()" v-if="current && !current_dm_person"
@@ -761,7 +761,6 @@ export default {
       });
       this.socket.on("send", (data) => {
         if (data.user_id !== this.$root.user._id) msg_sound.play();
-        msg_sound.play();
         this.current.messages.push(data);
       });
       this.socket.on("delete", async (id) => {
