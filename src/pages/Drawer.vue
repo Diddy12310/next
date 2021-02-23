@@ -472,7 +472,13 @@ export default {
           this.current = response.data.files;
         });
     },
-    getLink(path) {},
+    getLink(path) {
+      navigator.clipboard.writeText(
+        `https://www.theparadigmdev.com/api/drawer/${
+          this.$root.user._id
+        }/get/${encodeURIComponent(path)}`
+      );
+    },
   },
 };
 </script>
