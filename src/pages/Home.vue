@@ -102,5 +102,6 @@ export default {
   background: url("../assets/home_bg.jpg");
   background-attachment: fixed;
   background-position: center;
+  background-size: cover;
 }
 </style>

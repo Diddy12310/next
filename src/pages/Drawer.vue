@@ -288,23 +288,29 @@ export default {
       return array;
     },
   },
-  async mounted() {
+  async created() {
     let interval;
     let that = this;
     async function loadFiles() {
       clearInterval(interval);
+      if (!that.$root.user.preferences) {
+        that.$root.user.preferences = {
+          drawer: {
+            show_file_types: false,
+          },
+        };
+        that.updatePrefs();
+      } else if (!that.$root.user.preferences.drawer) {
+        that.$root.user.preferences.drawer = {
+          show_file_types: false,
+        };
+      }
       const stats = await that.$http.get(
         `https://www.theparadigmdev.com/api/drawer/${
           that.$root.user._id
         }/${encodeURIComponent(`/mnt/drawer/${that.$root.user._id}`)}`
       );
       that.current = stats.data.files;
-      if (!that.$root.user.preferences.drawer) {
-        that.$root.user.preferences.drawer = {
-          show_file_types: false,
-        };
-        that.updatePrefs();
-      }
     }
 
     if (this.$root.user) {
