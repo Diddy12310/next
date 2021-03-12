@@ -1,5 +1,6 @@
 <template>
   <v-app style="background-color: #0f1e3c">
+    <Launchpad style="z-index: 101" v-if="$root.launchpad" />
     <div v-if="$root.user">
       <DefaultToolbar
         style="z-index: 100"
@@ -72,6 +73,7 @@
 import DefaultToolbar from "./components/DefaultToolbar.vue";
 import MusicToolbar from "./components/MusicToolbar.vue";
 import PreflightToolbar from "./components/PreflightToolbar.vue";
+import Launchpad from "./components/Launchpad.vue";
 import { io } from "socket.io-client";
 
 let autoLockout;
@@ -82,6 +84,7 @@ export default {
     DefaultToolbar,
     MusicToolbar,
     PreflightToolbar,
+    Launchpad,
   },
   methods: {
     signOut() {
@@ -111,43 +114,39 @@ export default {
             this.$initAppMenu();
             this.loading = false;
 
-            const existing_subscription = this.$root.user.notifications.find(
-              (subscription) =>
-                subscription._id == this.$getCookie("notification_id")
-            );
-            if (
-              ((await this.$root.worker.pushManager.permissionState()) !=
-                "granted" &&
-                !existing_subscription) ||
-              ((await this.$root.worker.pushManager.permissionState()) ==
-                "granted" &&
-                !existing_subscription)
-            ) {
-              navigator.serviceWorker.ready.then(async (sw) => {
-                console.log("Registering Push...");
-                const subscription = await sw.pushManager.subscribe({
-                  userVisibleOnly: true,
-                  applicationServerKey: this.$urlBase64ToUint8Array(
-                    this.$root.public_vapid_key
-                  ),
+            this.$root.worker.pushManager.getSubscription().then((sub) => {
+              const existing_subscription = this.$root.user.notifications.find(
+                (subscription) =>
+                  JSON.stringify(subscription.data) == JSON.stringify(sub)
+              );
+
+              if (!existing_subscription) {
+                navigator.serviceWorker.ready.then(async (sw) => {
+                  console.log("Registering Push...");
+                  const subscription = await sw.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: this.$urlBase64ToUint8Array(
+                      this.$root.public_vapid_key
+                    ),
+                  });
+                  console.log("Push Registered...");
+                  console.log("Sending Push...");
+                  this.$http
+                    .post(
+                      `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
+                      {
+                        data: subscription,
+                      }
+                    )
+                    .then((response) => {
+                      console.log("Push Sent...");
+                      console.log(response.data._id);
+                      document.cookie = `notification_id=${response.data._id}; Secure`;
+                    })
+                    .catch((error) => console.error(error));
                 });
-                console.log("Push Registered...");
-                console.log("Sending Push...");
-                this.$http
-                  .post(
-                    `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
-                    {
-                      data: subscription,
-                    }
-                  )
-                  .then((response) => {
-                    console.log("Push Sent...");
-                    console.log(response.data._id);
-                    document.cookie = `notification_id=${response.data._id}; Secure`;
-                  })
-                  .catch((error) => console.error(error));
-              });
-            }
+              }
+            });
           } else {
             if (this.$route.path != "/") this.$router.replace("/");
           }
@@ -156,10 +155,16 @@ export default {
         if (this.$route.path != "/") this.$router.replace("/");
       }
     },
+    _handleKeyboardEvents(event) {
+      if (event.target == document.querySelector("body")) {
+        if (event.code == "Space" && event.ctrlKey)
+          this.$root.launchpad = !this.$root.launchpad;
+      }
+    },
   },
-  // mounted() {
-  //   if (this.$root.user == false) this.$router.replace("/");
-  // },
+  mounted() {
+    window.addEventListener("keydown", this._handleKeyboardEvents);
+  },
   created() {
     this.$root.socket.on("connect", () => {
       this.verifyJWT();
@@ -238,6 +243,9 @@ export default {
         }
       }, 10000);
     });
+  },
+  beforeDestroy() {
+    window.removeEventListener("keydown", this._handleKeyboardEvents);
   },
 };
 </script>

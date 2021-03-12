@@ -283,42 +283,44 @@ export default {
 
                     this.$root.socket.emit("login", response.data.username);
 
-                    const existsing_subscription = this.$root.user.notifications.find(
-                      (subscription) =>
-                        subscription._id == this.$getCookie("notification_id")
-                    );
-                    if (
-                      ((await this.$root.worker.pushManager.permissionState()) !=
-                        "granted" &&
-                        !existsing_subscription) ||
-                      ((await this.$root.worker.pushManager.permissionState()) ==
-                        "granted" &&
-                        !existsing_subscription)
-                    ) {
-                      console.log("Registering Push...");
-                      const subscription = await this.$root.worker.pushManager.subscribe(
-                        {
-                          userVisibleOnly: true,
-                          applicationServerKey: this.$urlBase64ToUint8Array(
-                            this.$root.public_vapid_key
-                          ),
+                    this.$root.worker.pushManager
+                      .getSubscription()
+                      .then((sub) => {
+                        const existing_subscription = this.$root.user.notifications.find(
+                          (subscription) =>
+                            JSON.stringify(subscription.data) ==
+                            JSON.stringify(sub)
+                        );
+
+                        if (!existing_subscription) {
+                          navigator.serviceWorker.ready.then(async (sw) => {
+                            console.log("Registering Push...");
+                            const subscription = await sw.pushManager.subscribe(
+                              {
+                                userVisibleOnly: true,
+                                applicationServerKey: this.$urlBase64ToUint8Array(
+                                  this.$root.public_vapid_key
+                                ),
+                              }
+                            );
+                            console.log("Push Registered...");
+                            console.log("Sending Push...");
+                            this.$http
+                              .post(
+                                `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
+                                {
+                                  data: subscription,
+                                }
+                              )
+                              .then((response) => {
+                                console.log("Push Sent...");
+                                console.log(response.data._id);
+                                document.cookie = `notification_id=${response.data._id}; Secure`;
+                              })
+                              .catch((error) => console.error(error));
+                          });
                         }
-                      );
-                      console.log("Push Registered...");
-                      console.log("Sending Push...");
-                      this.$http
-                        .post(
-                          `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
-                          {
-                            data: subscription,
-                          }
-                        )
-                        .then((response) => {
-                          console.log("Push Sent...");
-                          document.cookie = `notification_id=${response.data._id}; Secure`;
-                        })
-                        .catch((error) => console.error(error));
-                    }
+                      });
                   })
                   .catch((error) => {
                     console.log("Upload: failed", error);
