@@ -100,125 +100,131 @@
       </v-list-item>
     </h1>
 
-    <p
-      class="grey--text text-center font-italic font-weight-light"
-      v-if="profile.posts.length < 1"
-    >
-      No posts
-    </p>
-
-    <v-card
-      max-width="500"
-      class="mx-auto mb-4"
-      color="indigo darken-3"
-      v-for="(post, index) in profile.posts"
-      :key="index"
-      @mouseenter="hover = index"
-      @mouseleave="hover = -1"
-    >
-      <div v-if="post.file">
+    <main v-if="profile">
+      <div v-if="profile.posts.length < 1" class="pt-6 ml-12 text-center">
         <v-img
-          :src="post.file.uri"
-          v-if="post.file.type.includes('image')"
+          src="../../assets/img/no_posts.png"
+          class="ma-auto mb-5"
+          height="125"
+          width="125"
         ></v-img>
-        <video
-          :src="post.file.uri"
-          v-else-if="post.file.type.includes('video')"
-          controls
-          style="max-width: 500px"
-        ></video>
-        <v-btn v-else @click="window.open(post.file.uri)" text block large
-          ><v-icon left>mdi-download</v-icon>{{ post.file.name }}</v-btn
-        >
+        <h4 class="text-h4 mb-2">You haven't posted anything yet!</h4>
+        <p class="grey--text">Click on the New button on the left.</p>
       </div>
 
-      <v-card-text class="pb-0">
-        <h5 class="text-h5" v-html="post.content"></h5>
-      </v-card-text>
+      <v-card
+        max-width="500"
+        class="mx-auto mb-4"
+        color="indigo darken-3"
+        v-for="(post, index) in profile.posts"
+        :key="index"
+        @mouseenter="hover = index"
+        @mouseleave="hover = -1"
+      >
+        <div v-if="post.file">
+          <v-img
+            :src="post.file.uri"
+            v-if="post.file.type.includes('image')"
+          ></v-img>
+          <video
+            :src="post.file.uri"
+            v-else-if="post.file.type.includes('video')"
+            controls
+            style="max-width: 500px"
+          ></video>
+          <v-btn v-else @click="window.open(post.file.uri)" text block large
+            ><v-icon left>mdi-download</v-icon>{{ post.file.name }}</v-btn
+          >
+        </div>
 
-      <v-card-actions>
-        <v-row no-gutters align="center" justify="end">
-          <v-col>
-            <v-list-item class="grow pl-2">
-              <v-list-item-avatar color="grey darken-3">
-                <v-img
-                  class="elevation-6"
-                  loading="lazy"
-                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${profile._id}.png`"
-                ></v-img>
-              </v-list-item-avatar>
+        <v-card-text class="pb-0">
+          <h5 class="text-h5" v-html="post.content"></h5>
+        </v-card-text>
 
-              <v-list-item-content>
-                <v-list-item-title
-                  class="font-weight-medium"
-                  :style="{ color: profile.color }"
-                  >{{ profile.username }}</v-list-item-title
-                >
-                <v-list-item-subtitle>{{
-                  post.timestamp_formatted
-                }}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-col>
+        <v-card-actions>
+          <v-row no-gutters align="center" justify="end">
+            <v-col>
+              <v-list-item class="grow pl-2">
+                <v-list-item-avatar color="grey darken-3">
+                  <v-img
+                    class="elevation-6"
+                    loading="lazy"
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${profile._id}.png`"
+                  ></v-img>
+                </v-list-item-avatar>
 
-          <v-col class="text-right">
-            <v-btn
-              v-if="
-                (profile._id == $root.user._id || $root.user.rights.admin) &&
-                hover == index
-              "
-              icon
-              color="grey"
-              @click="
-                edit_post = post;
-                edit_post_index = index;
-                edit_post.open = true;
-              "
-              ><v-icon>mdi-pencil</v-icon></v-btn
-            >
-            <v-btn
-              v-if="
-                (profile._id == $root.user._id || $root.user.rights.admin) &&
-                hover == index
-              "
-              icon
-              color="grey"
-              class="mr-2"
-              @click="remove(post._id, index)"
-              ><v-icon>mdi-delete</v-icon></v-btn
-            >
-            <span class="subheading mr-2">{{ post.likes }}</span>
-            <v-btn
-              v-if="profile._id != $root.user._id && is_approved"
-              @click="
-                $root.user.people.approved
-                  .find((person) => person._id == profile._id)
-                  .liked_posts.includes(post._id)
-                  ? unLikePost(post._id, index)
-                  : likePost(post._id, index)
-              "
-              :input-value="
-                $root.user.people.approved
-                  .find((person) => person._id == profile._id)
-                  .liked_posts.includes(post._id)
-              "
-              icon
-              class="mr-3"
-            >
-              <v-icon>{{
-                $root.user.people.approved
-                  .find((person) => person._id == profile._id)
-                  .liked_posts.includes(post._id)
-                  ? "mdi-heart"
-                  : "mdi-heart-outline"
-              }}</v-icon>
-            </v-btn>
+                <v-list-item-content>
+                  <v-list-item-title
+                    class="font-weight-medium"
+                    :style="{ color: profile.color }"
+                    >{{ profile.username }}</v-list-item-title
+                  >
+                  <v-list-item-subtitle>{{
+                    post.timestamp_formatted
+                  }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-col>
 
-            <v-icon v-else class="mr-4">mdi-heart</v-icon>
-          </v-col>
-        </v-row>
-      </v-card-actions>
-    </v-card>
+            <v-col class="text-right">
+              <v-btn
+                v-if="
+                  (profile._id == $root.user._id || $root.user.rights.admin) &&
+                  hover == index
+                "
+                icon
+                color="grey"
+                @click="
+                  edit_post = post;
+                  edit_post_index = index;
+                  edit_post.open = true;
+                "
+                ><v-icon>mdi-pencil</v-icon></v-btn
+              >
+              <v-btn
+                v-if="
+                  (profile._id == $root.user._id || $root.user.rights.admin) &&
+                  hover == index
+                "
+                icon
+                color="grey"
+                class="mr-2"
+                @click="remove(post._id, index)"
+                ><v-icon>mdi-delete</v-icon></v-btn
+              >
+              <span class="subheading mr-2">{{ post.likes }}</span>
+              <v-btn
+                v-if="profile._id != $root.user._id && is_approved"
+                @click="
+                  $root.user.people.approved
+                    .find((person) => person._id == profile._id)
+                    .liked_posts.includes(post._id)
+                    ? unLikePost(post._id, index)
+                    : likePost(post._id, index)
+                "
+                :input-value="
+                  $root.user.people.approved
+                    .find((person) => person._id == profile._id)
+                    .liked_posts.includes(post._id)
+                "
+                icon
+                class="mr-3"
+              >
+                <v-icon>{{
+                  $root.user.people.approved
+                    .find((person) => person._id == profile._id)
+                    .liked_posts.includes(post._id)
+                    ? "mdi-heart"
+                    : "mdi-heart-outline"
+                }}</v-icon>
+              </v-btn>
+
+              <v-icon v-else class="mr-4">mdi-heart</v-icon>
+            </v-col>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </main>
 
     <v-dialog v-model="uploader" max-width="350">
       <v-card>

@@ -33,12 +33,33 @@
       class="pa-4"
     >
       <div style="max-width: 750px; margin: auto">
-        <p
-          v-if="filteredThreads.length < 1"
-          class="font-weight-light font-italic grey--text text-center mt-12"
+        <div
+          v-if="filteredThreads.length < 1 && !search"
+          class="text-center mt-12"
         >
-          No threads.
-        </p>
+          <v-img
+            height="175"
+            width="175"
+            src="../assets/img/forum.png"
+            class="ma-auto mb-3"
+          ></v-img>
+          <h4 class="text-h4 mb-5">Nobody has posted anything!</h4>
+          <v-btn color="#881337">Be the first</v-btn>
+        </div>
+
+        <div
+          v-if="filteredThreads.length < 1 && search"
+          class="text-center mt-12"
+        >
+          <v-img
+            height="175"
+            width="175"
+            src="../assets/img/forum.png"
+            class="ma-auto mb-3"
+          ></v-img>
+          <h4 class="text-h4 mb-5">No results</h4>
+          <v-btn color="#881337">New thread</v-btn>
+        </div>
 
         <v-card
           class="pa-4 mb-4"
@@ -145,6 +166,7 @@
 
       <v-btn
         @click="new_thread.open = true"
+        v-if="filteredThreads.length > 1"
         fab
         fixed
         bottom

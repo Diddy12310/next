@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="display-1 ml-2 mt-2 mb-12">New</h1>
+    <h1 class="display-1 ml-2 mt-2 mb-12 font-weight-light">New</h1>
 
     <v-card max-width="500" class="mx-auto mb-4" color="indigo darken-3">
       <v-card-text class="pb-0">
@@ -131,8 +131,10 @@ export default {
         )
         .then((response) => {
           this.$notify("Posted!", "blue--text", "mdi-satellite-uplink", 3000);
-          this.new_post.content = "";
-          this.new_post.file = null;
+          this.new_post = {
+            content: "",
+            file: null,
+          };
         })
         .catch((error) => console.error(error));
     },

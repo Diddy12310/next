@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="display-1 ml-2 mt-2 mb-12">Find</h1>
+    <h1 class="display-1 ml-2 mt-2 mb-12 font-weight-light">Find</h1>
 
     <v-text-field
       style="

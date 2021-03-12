@@ -2,9 +2,18 @@
   <div style="overflow: auto; height: calc(100vh - 64px)">
     <v-toolbar dense color="teal darken-2">
       <v-toolbar-title>Drawer</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="newFolder()"><v-icon>mdi-folder-plus</v-icon></v-btn>
     </v-toolbar>
     <v-container>
       <p>
+        <v-btn
+          x-small
+          icon
+          color="grey"
+          @click="cd(resolvePath(split_path.length - 2))"
+          ><v-icon>mdi-chevron-left</v-icon></v-btn
+        >
         <span
           @click="cd(resolvePath(index))"
           style="cursor: pointer"
@@ -20,6 +29,7 @@
         fixed-header
         height="calc(100vh - 180px)"
         style="background: transparent"
+        v-if="current.length > 0"
       >
         <template v-slot:default>
           <thead>
@@ -95,18 +105,22 @@
               </td>
               <td style="width: 200px">{{ item.modified }}</td>
             </tr>
-
-            <tr v-if="current.length < 1">
-              <td
-                colspan="5"
-                class="font-weight-light font-italic grey--text text-center"
-              >
-                No files in this folder.
-              </td>
-            </tr>
           </tbody>
         </template>
       </v-simple-table>
+
+      <div v-else class="text-center pt-2">
+        <v-img
+          height="125"
+          width="125"
+          src="../assets/img/empty_folder.png"
+          class="ma-auto mb-5"
+        ></v-img>
+        <h4 class="text-h4 mb-5">There are no files in this folder</h4>
+        <v-btn color="teal darken-3" @click="uploader = true"
+          >Upload File</v-btn
+        >
+      </div>
     </v-container>
 
     <v-menu
@@ -245,16 +259,20 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="grey" icon @click="newFolder()"
-            ><v-icon>mdi-folder-plus</v-icon></v-btn
-          >
           <v-spacer></v-spacer>
           <v-btn text color="teal darken-2" @click="uploadFile()">Upload</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <v-btn fab fixed bottom right color="teal darken-3" @click="uploader = true"
+    <v-btn
+      v-if="current.length > 1"
+      fab
+      fixed
+      bottom
+      right
+      color="teal darken-3"
+      @click="uploader = true"
       ><v-icon>mdi-plus</v-icon></v-btn
     >
   </div>
@@ -387,7 +405,10 @@ export default {
         .then((response) => {
           if (response.data.error)
             this.$notify(
-              `<span class="red--text">${response.data.error}</span>`
+              response.data.error,
+              "red--text",
+              "mdi-folder-open",
+              3000
             );
           else this.current = response.data.files;
           this.uploader = false;

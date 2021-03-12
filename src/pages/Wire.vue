@@ -236,12 +236,16 @@
           }"
           style="overflow: auto; padding: 16px 16px 0px 16px"
         >
-          <p
-            class="text-center grey--text font-italic font-weight-light mt-6"
-            v-if="current.messages.length < 1"
-          >
-            There are no messages posted here.
-          </p>
+          <div class="text-center mt-12" v-if="current.messages.length < 1">
+            <v-img
+              src="../assets/img/wire.png"
+              width="125"
+              height="125"
+              class="ma-auto mb-5"
+            ></v-img>
+            <h4 class="text-h4 mb-2">There are no messages here</h4>
+            <p class="grey--text">Why don't you start the conversation?</p>
+          </div>
 
           <div
             v-for="(message, index) in current.messages"
@@ -348,12 +352,16 @@
           }"
           style="overflow: auto; padding: 16px 16px 0px 16px"
         >
-          <p
-            class="text-center grey--text font-italic font-weight-light mt-6"
-            v-if="current.messages.length < 1"
-          >
-            There are no messages posted here.
-          </p>
+          <div class="text-center mt-12" v-if="current.messages.length < 1">
+            <v-img
+              src="../assets/img/wire.png"
+              width="125"
+              height="125"
+              class="ma-auto mb-5"
+            ></v-img>
+            <h4 class="text-h4 mb-2">There are no messages here</h4>
+            <p class="grey--text">Why don't you start the conversation?</p>
+          </div>
 
           <div
             v-for="(message, index) in current.messages"

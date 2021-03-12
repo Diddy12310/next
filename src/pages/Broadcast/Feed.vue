@@ -1,13 +1,20 @@
 <template>
   <div>
-    <h1 class="display-1 ml-2 mt-2 mb-12">Feed</h1>
+    <h1 class="display-1 ml-2 mt-2 mb-12 font-weight-light">Feed</h1>
 
-    <p
-      class="grey--text text-center font-italic font-weight-light"
-      v-if="feed.length < 1"
-    >
-      Your feed is empty! Add some friends using the Find page.
-    </p>
+    <div class="text-center" v-if="feed.length < 1">
+      <v-img
+        class="ma-auto mb-5"
+        src="../../assets/img/search.png"
+        height="125"
+        width="125"
+      ></v-img>
+      <h4 class="text-h4 mb-2">Your feed is empty</h4>
+      <p class="grey--text" v-if="$root.user.people.approved.length < 1">
+        You should add some friends! Click the Find button on the left.
+      </p>
+      <p class="grey--text" v-else>Your friends haven't posted anything yet.</p>
+    </div>
 
     <v-card
       max-width="500"
