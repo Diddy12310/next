@@ -104,6 +104,7 @@ new Vue({
       user: false,
       music: false,
       router: "Landing",
+      launchpad: false,
       url: false,
       profile: false,
       nav: [],
