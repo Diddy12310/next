@@ -119,30 +119,28 @@ export default {
     };
   },
   created() {
-    this.$http
-      .get("https://www.theparadigmdev.com/api/bugs")
-      .then((response) => {
-        this.bugs = response.data;
-      });
+    this.$http.get("https://www.theparadigm.ga/api/bugs").then((response) => {
+      this.bugs = response.data;
+    });
   },
   methods: {
     fixBug(bug) {
       this.$http
-        .put(`https://www.theparadigmdev.com/api/bugs/${bug}`)
+        .put(`https://www.theparadigm.ga/api/bugs/${bug}`)
         .then((response) => {
           this.bugs = response.data;
         });
     },
     unfixBug(bug) {
       this.$http
-        .get(`https://www.theparadigmdev.com/api/bugs/${bug}`)
+        .get(`https://www.theparadigm.ga/api/bugs/${bug}`)
         .then((response) => {
           this.bugs = response.data;
         });
     },
     deleteBug(bug) {
       this.$http
-        .delete(`https://www.theparadigmdev.com/api/bugs/${bug}`)
+        .delete(`https://www.theparadigm.ga/api/bugs/${bug}`)
         .then((response) => {
           this.bugs = response.data;
         });

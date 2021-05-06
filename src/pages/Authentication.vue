@@ -180,7 +180,7 @@ export default {
                   console.log("Sending Push...");
                   this.$http
                     .post(
-                      `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
+                      `https://www.theparadigm.ga/api/notifications/${response.data.user._id}/subscribe`,
                       {
                         data: subscription,
                       }

@@ -174,7 +174,7 @@
         <v-list-item @click="signOut()">
           <v-list-item-avatar
             ><v-img
-              :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.png`"
+              :src="`https://www.theparadigm.ga/relay/profile-pics/${$root.user._id}.png`"
             ></v-img
           ></v-list-item-avatar>
           <v-list-item-content>
@@ -324,7 +324,7 @@ export default {
         };
       }
       const stats = await that.$http.get(
-        `https://www.theparadigmdev.com/api/drawer/${
+        `https://www.theparadigm.ga/api/drawer/${
           that.$root.user._id
         }/${encodeURIComponent(`/mnt/drawer/${that.$root.user._id}`)}`
       );
@@ -342,7 +342,7 @@ export default {
   methods: {
     updatePrefs() {
       this.$http
-        .post("https://www.theparadigmdev.com/api/users/update", {
+        .post("https://www.theparadigm.ga/api/users/update", {
           old: this.$root.user.username,
           preferences: this.$root.user.preferences,
         })
@@ -371,7 +371,7 @@ export default {
 
     async cd(target) {
       const data = await this.$http.get(
-        `https://www.theparadigmdev.com/api/drawer/${
+        `https://www.theparadigm.ga/api/drawer/${
           this.$root.user._id
         }/${encodeURIComponent(target)}`
       );
@@ -398,7 +398,7 @@ export default {
           : this.current_path;
       this.$http
         .put(
-          `https://www.theparadigmdev.com/api/drawer/${
+          `https://www.theparadigm.ga/api/drawer/${
             this.$root.user._id
           }/${encodeURIComponent(path)}`
         )
@@ -423,7 +423,7 @@ export default {
       }
       this.$http
         .post(
-          `https://www.theparadigmdev.com/api/drawer/${
+          `https://www.theparadigm.ga/api/drawer/${
             this.$root.user._id
           }/${encodeURIComponent(
             this.current_path == "/"
@@ -458,7 +458,7 @@ export default {
     },
     downloadFile(item) {
       window.open(
-        `https://www.theparadigmdev.com/api/drawer/${
+        `https://www.theparadigm.ga/api/drawer/${
           this.$root.user._id
         }/download/${encodeURIComponent(item.path)}`
       );
@@ -466,7 +466,7 @@ export default {
     deleteFile(path) {
       this.$http
         .delete(
-          `https://www.theparadigmdev.com/api/drawer/${
+          `https://www.theparadigm.ga/api/drawer/${
             this.$root.user._id
           }/${encodeURIComponent(path)}`
         )
@@ -484,7 +484,7 @@ export default {
     renameFile() {
       this.$http
         .post(
-          `https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/rename`,
+          `https://www.theparadigm.ga/api/drawer/${this.$root.user._id}/rename`,
           {
             old: this.rename.path,
             new:
@@ -501,7 +501,7 @@ export default {
     },
     getLink(path) {
       navigator.clipboard.writeText(
-        `https://www.theparadigmdev.com/api/drawer/${
+        `https://www.theparadigm.ga/api/drawer/${
           this.$root.user._id
         }/get/${encodeURIComponent(path)}`
       );

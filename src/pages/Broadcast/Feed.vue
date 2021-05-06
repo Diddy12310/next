@@ -55,7 +55,7 @@
             <v-img
               class="elevation-6"
               loading="lazy"
-              :src="`https://www.theparadigmdev.com/relay/profile-pics/${post.uid}.png`"
+              :src="`https://www.theparadigm.ga/relay/profile-pics/${post.uid}.png`"
             ></v-img>
           </v-list-item-avatar>
 
@@ -276,7 +276,7 @@ export default {
       this.feed.splice(index, 1);
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/broadcast/${post.uid}/delete/${post._id}`
+          `https://www.theparadigm.ga/api/broadcast/${post.uid}/delete/${post._id}`
         )
         .then((response) => {})
         .catch((error) => console.error(error));
@@ -285,7 +285,7 @@ export default {
       this.feed[this.edit_post_index] = this.edit_post;
       this.$http
         .put(
-          `https://www.theparadigmdev.com/api/broadcast/${
+          `https://www.theparadigm.ga/api/broadcast/${
             this.feed[this.edit_post_index].uid
           }/${this.edit_post._id}`,
           this.edit_post
@@ -319,7 +319,7 @@ export default {
         .liked_posts.push(id);
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/like/${uid}/${id}`
+          `https://www.theparadigm.ga/api/broadcast/${this.$root.user._id}/like/${uid}/${id}`
         )
         .then((response) => {
           this.loading = false;
@@ -344,7 +344,7 @@ export default {
       );
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/unlike/${uid}/${id}`
+          `https://www.theparadigm.ga/api/broadcast/${this.$root.user._id}/unlike/${uid}/${id}`
         )
         .then((response) => {
           this.$emit("feed", response.data);

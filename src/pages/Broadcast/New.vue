@@ -126,7 +126,7 @@ export default {
       this.$root.user.posts.unshift(data);
       this.$http
         .post(
-          `https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/create`,
+          `https://www.theparadigm.ga/api/broadcast/${this.$root.user._id}/create`,
           data
         )
         .then((response) => {

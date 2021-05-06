@@ -22,7 +22,7 @@
             width="175"
             ><v-img
               loading="lazy"
-              :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.png`"
+              :src="`https://www.theparadigm.ga/relay/profile-pics/${$root.user._id}.png`"
             ></v-img></v-avatar
           ><br />
           <h3
@@ -194,7 +194,7 @@
                           <v-list-item-avatar
                             ><v-img
                               loading="lazy"
-                              :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                              :src="`https://www.theparadigm.ga/relay/profile-pics/${person._id}.png`"
                             ></v-img
                           ></v-list-item-avatar>
                           <v-list-item-content>
@@ -252,7 +252,7 @@
                         <v-list-item-avatar
                           ><v-img
                             loading="lazy"
-                            :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                            :src="`https://www.theparadigm.ga/relay/profile-pics/${person._id}.png`"
                           ></v-img
                         ></v-list-item-avatar>
                         <v-list-item-content>
@@ -306,7 +306,7 @@
                         <v-list-item-avatar
                           ><v-img
                             loading="lazy"
-                            :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                            :src="`https://www.theparadigm.ga/relay/profile-pics/${person._id}.png`"
                           ></v-img
                         ></v-list-item-avatar>
                         <v-list-item-content>
@@ -346,7 +346,7 @@
                       <v-list-item-avatar
                         ><v-img
                           loading="lazy"
-                          :src="`https://www.theparadigmdev.com/relay/profile-pics/${person._id}.png`"
+                          :src="`https://www.theparadigm.ga/relay/profile-pics/${person._id}.png`"
                         ></v-img
                       ></v-list-item-avatar>
                       <v-list-item-content>
@@ -775,14 +775,14 @@ export default {
     changePassword() {
       if (this.reset.new === this.reset.verify) {
         this.$http
-          .post("https://www.theparadigmdev.com/api/users/signin", {
+          .post("https://www.theparadigm.ga/api/users/signin", {
             username: this.$root.user.username,
             password: this.reset.current,
           })
           .then((response) => {
             if (!response.data.msg) {
               this.$http
-                .post("https://www.theparadigmdev.com/api/users/reset", {
+                .post("https://www.theparadigm.ga/api/users/reset", {
                   username: this.$root.user.username,
                   password: this.reset.new,
                 })
@@ -805,7 +805,7 @@ export default {
     },
     saveChanges() {
       this.$http
-        .post("https://www.theparadigmdev.com/api/users/update", {
+        .post("https://www.theparadigm.ga/api/users/update", {
           old: this.$root.user.username,
           bio: this.user.bio,
           color: this.user.color,
@@ -829,7 +829,7 @@ export default {
       }
       this.$http
         .post(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/pic`,
+          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/pic`,
           formData,
           {
             headers: {
@@ -849,10 +849,9 @@ export default {
     },
     createCode() {
       this.$http
-        .post(
-          `https://www.theparadigmdev.com/api/apollo/${this.$root.user._id}`,
-          { name: this.new_code_name }
-        )
+        .post(`https://www.theparadigm.ga/api/apollo/${this.$root.user._id}`, {
+          name: this.new_code_name,
+        })
         .then((response) => {
           this.new_code_name = "";
           this.apollo_codes = response.data;
@@ -861,7 +860,7 @@ export default {
     deleteAccount() {
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/delete`
+          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/delete`
         )
         .then((response) => {
           this.$root.user = false;
@@ -872,7 +871,7 @@ export default {
     approveRequest(person) {
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/approve`
+          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/people/request/${person}/approve`
         )
         .then((response) => {
           this.$root.user.people = response.data;
@@ -884,7 +883,7 @@ export default {
     declineRequest(person) {
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/decline`
+          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/people/request/${person}/decline`
         )
         .then((response) => {
           this.$root.user.people = response.data;
@@ -895,7 +894,7 @@ export default {
     retractRequest(person) {
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/request/${person}/retract`
+          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/people/request/${person}/retract`
         )
         .then((response) => {
           this.$root.user.people = response.data;
@@ -906,7 +905,7 @@ export default {
     removeFriend(person) {
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${person}`
+          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/people/remove/${person}`
         )
         .then((response) => {
           this.$root.user.people = response.data;
@@ -918,7 +917,7 @@ export default {
     unblockPerson(person) {
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/unblock/${person}`
+          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/people/unblock/${person}`
         )
         .then((response) => {
           this.$root.user.people = response.data;
@@ -929,7 +928,7 @@ export default {
     deleteChatroom(chatroom) {
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/chatroom/${chatroom}/leave`
+          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/chatroom/${chatroom}/leave`
         )
         .then((response) => {
           this.$root.user = response.data;
@@ -948,7 +947,7 @@ export default {
     if (this.$root.user.rights.developer) {
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/apollo/${this.$root.user._id}/list`
+          `https://www.theparadigm.ga/api/apollo/${this.$root.user._id}/list`
         )
         .then((response) => {
           this.apollo_codes = response.data;

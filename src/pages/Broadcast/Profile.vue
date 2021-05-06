@@ -14,7 +14,7 @@
         >
           <v-list-item-avatar
             ><v-img
-              :src="`https://www.theparadigmdev.com/relay/profile-pics/${profile._id}.png`"
+              :src="`https://www.theparadigm.ga/relay/profile-pics/${profile._id}.png`"
             ></v-img
           ></v-list-item-avatar>
         </v-badge>
@@ -149,7 +149,7 @@
                   <v-img
                     class="elevation-6"
                     loading="lazy"
-                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${profile._id}.png`"
+                    :src="`https://www.theparadigm.ga/relay/profile-pics/${profile._id}.png`"
                   ></v-img>
                 </v-list-item-avatar>
 
@@ -414,7 +414,7 @@ export default {
       });
 
       this.$http.get(
-        `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/send/${this.profile._id}`
+        `https://www.theparadigm.ga/api/users/${this.$root.user._id}/people/send/${this.profile._id}`
       );
     },
     removeFriend() {
@@ -425,7 +425,7 @@ export default {
 
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/remove/${this.profile._id}`
+          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/people/remove/${this.profile._id}`
         )
         .then((response) => {
           this.$root.user = response.data.user;
@@ -444,7 +444,7 @@ export default {
 
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/people/block/${this.profile._id}`
+          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/people/block/${this.profile._id}`
         )
         .then((response) => {
           this.$root.user = response.data;
@@ -463,7 +463,7 @@ export default {
         .liked_posts.push(id);
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/like/${this.profile._id}/${id}`
+          `https://www.theparadigm.ga/api/broadcast/${this.$root.user._id}/like/${this.profile._id}/${id}`
         )
         .then((response) => {
           this.loading = false;
@@ -487,7 +487,7 @@ export default {
       );
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/broadcast/${this.$root.user._id}/unlike/${this.profile._id}/${id}`
+          `https://www.theparadigm.ga/api/broadcast/${this.$root.user._id}/unlike/${this.profile._id}/${id}`
         )
         .then((response) => {
           this.loading = false;
@@ -502,7 +502,7 @@ export default {
       this.profile.posts.splice(index, 1);
       this.$http
         .get(
-          `https://www.theparadigmdev.com/api/broadcast/${this.profile._id}/delete/${id}`
+          `https://www.theparadigm.ga/api/broadcast/${this.profile._id}/delete/${id}`
         )
         .then((response) => {})
         .catch((error) => console.error(error));
@@ -511,7 +511,7 @@ export default {
       this.profile.posts[this.edit_post_index] = this.edit_post;
       this.$http
         .put(
-          `https://www.theparadigmdev.com/api/broadcast/${this.profile._id}/${this.edit_post._id}`,
+          `https://www.theparadigm.ga/api/broadcast/${this.profile._id}/${this.edit_post._id}`,
           this.edit_post
         )
         .then((response) => {

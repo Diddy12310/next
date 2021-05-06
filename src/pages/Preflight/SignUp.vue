@@ -204,7 +204,7 @@ export default {
       else {
         this.$http
           .get(
-            `https://www.theparadigmdev.com/api/users/check/${this.$root.user.username.toLowerCase()}`
+            `https://www.theparadigm.ga/api/users/check/${this.$root.user.username.toLowerCase()}`
           )
           .then((response) => {
             this.username_exists = response.data.exists;
@@ -268,7 +268,7 @@ export default {
                 formData.append("files[0]", this.new_user.pic);
                 this.$http
                   .post(
-                    `https://www.theparadigmdev.com/api/users/${response.data._id}/pic`,
+                    `https://www.theparadigm.ga/api/users/${response.data._id}/pic`,
                     formData,
                     {
                       headers: {
@@ -307,7 +307,7 @@ export default {
                             console.log("Sending Push...");
                             this.$http
                               .post(
-                                `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
+                                `https://www.theparadigm.ga/api/notifications/${response.data.user._id}/subscribe`,
                                 {
                                   data: subscription,
                                 }
@@ -356,7 +356,7 @@ export default {
                   console.log("Sending Push...");
                   this.$http
                     .post(
-                      `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
+                      `https://www.theparadigm.ga/api/notifications/${response.data._id}/subscribe`,
                       {
                         data: subscription,
                       }
@@ -389,7 +389,7 @@ export default {
     },
     verifyInviteCode() {
       this.$http
-        .put(`https://www.theparadigmdev.com/api/apollo`, {
+        .put(`https://www.theparadigm.ga/api/apollo`, {
           code: this.invite_code,
         })
         .then((response) => {

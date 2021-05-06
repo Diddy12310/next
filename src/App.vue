@@ -1,6 +1,6 @@
 <template>
   <v-app style="background-color: #0f1e3c">
-    <Launchpad style="z-index: 101" v-if="$root.launchpad" />
+    <!-- <Launchpad style="z-index: 101" v-if="$root.launchpad" /> -->
     <div v-if="$root.user">
       <DefaultToolbar
         style="z-index: 100"
@@ -60,6 +60,7 @@
         <p
           style="position: absolute; bottom: 0px; width: 100vw"
           class="font-weight-light grey--text text--darken-1 font-italic"
+          v-if="$root.user.rights.admin"
         >
           Since you're an administrator, maybe you should see why the server
           shit itself?
@@ -133,7 +134,7 @@ export default {
                   console.log("Sending Push...");
                   this.$http
                     .post(
-                      `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
+                      `https://www.theparadigm.ga/api/notifications/${response.data.user._id}/subscribe`,
                       {
                         data: subscription,
                       }
@@ -212,7 +213,7 @@ export default {
     });
     this.$root.socket.on("logout", () => {
       this.$root.socket.disconnect();
-      this.$root.socket = io.connect("https://www.theparadigmdev.com");
+      this.$root.socket = io.connect("https://www.theparadigm.ga");
       this.$root.user = false;
       clearTimeout(autoLockout);
     });
