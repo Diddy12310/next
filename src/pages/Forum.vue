@@ -44,7 +44,9 @@
             class="ma-auto mb-3"
           ></v-img>
           <h4 class="text-h4 mb-5">Nobody has posted anything!</h4>
-          <v-btn color="#881337">Be the first</v-btn>
+          <v-btn color="#881337" @click="new_thread.open = true"
+            >Be the first</v-btn
+          >
         </div>
 
         <div
