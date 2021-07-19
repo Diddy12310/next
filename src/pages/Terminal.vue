@@ -121,7 +121,7 @@ export default {
         case "view":
           this.$http
             .get(
-              `https://www.theparadigm.ga/api/terminal/user/${username}/view`
+              `https://www.theparadigmdev.com/api/terminal/user/${username}/view`
             )
             .then((response) => {
               if (response.data.error) this.$error(response.data.error);
@@ -166,7 +166,7 @@ export default {
           break;
         case "strike":
           this.$http.get(
-            `https://www.theparadigm.ga/api/terminal/user/${username}/strike`
+            `https://www.theparadigmdev.com/api/terminal/user/${username}/strike`
           );
           this.$log(`user ${username}.strikes incremented by 1`);
           break;
@@ -184,14 +184,14 @@ export default {
             .get(`/api/users/username/${username}/info`)
             .then((response) => {
               this.$http.get(
-                `https://www.theparadigm.ga/api/users/${response.data._id}/delete`
+                `https://www.theparadigmdev.com/api/users/${response.data._id}/delete`
               );
               this.$log(`user ${username} deleted`);
             });
           break;
         case "rename":
           this.$http
-            .post("https://www.theparadigm.ga/api/users/update", {
+            .post("https://www.theparadigmdev.com/api/users/update", {
               old: username.toLowerCase(),
               username: value.toLowerCase(),
             })
@@ -206,7 +206,7 @@ export default {
     },
     list(query) {
       this.$http
-        .get(`https://www.theparadigm.ga/api/terminal/list/${query}`)
+        .get(`https://www.theparadigmdev.com/api/terminal/list/${query}`)
         .then((response) => {
           if (response.data.error) this.$error(response.data.error);
           else this.$log(response.data.toString());
@@ -220,7 +220,7 @@ export default {
     app(app, key, value) {
       if (key == "enabled") value = this.parseBool(value);
       this.$http
-        .put(`https://www.theparadigm.ga/api/terminal/app`, {
+        .put(`https://www.theparadigmdev.com/api/terminal/app`, {
           app,
           key,
           value,
@@ -239,7 +239,7 @@ export default {
     },
   },
   async created() {
-    socket = await io.connect(`https://www.theparadigm.ga/terminal`);
+    socket = await io.connect(`https://www.theparadigmdev.com/terminal`);
     socket.on("log", (log) => console.log(log));
     this.$root.socket.on("list", async (connections) => {
       var data = [];

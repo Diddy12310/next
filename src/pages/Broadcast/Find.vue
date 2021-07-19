@@ -70,7 +70,7 @@
                   <v-img
                     class="elevation-6"
                     loading="lazy"
-                    :src="`https://www.theparadigm.ga/relay/profile-pics/${result.data.uid}.png`"
+                    :src="`https://www.theparadigmdev.com/relay/profile-pics/${result.data.uid}.png`"
                   ></v-img>
                 </v-list-item-avatar>
 
@@ -137,7 +137,7 @@
           >
             <v-list-item-avatar>
               <v-img
-                :src="`https://www.theparadigm.ga/relay/profile-pics/${result.data._id}.png`"
+                :src="`https://www.theparadigmdev.com/relay/profile-pics/${result.data._id}.png`"
               >
               </v-img>
             </v-list-item-avatar>

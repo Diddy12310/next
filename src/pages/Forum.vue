@@ -91,7 +91,7 @@
           <div class="d-flex mt-3">
             <v-avatar size="30"
               ><v-img
-                :src="`https://www.theparadigm.ga/relay/profile-pics/${thread.user._id}.png`"
+                :src="`https://www.theparadigmdev.com/relay/profile-pics/${thread.user._id}.png`"
               ></v-img
             ></v-avatar>
             <h2 class="subtitle-1 ml-3 grey--text font-weight-light">
@@ -227,7 +227,7 @@
           <div class="d-flex mt-3">
             <v-avatar size="30"
               ><v-img
-                :src="`https://www.theparadigm.ga/relay/profile-pics/${current.user._id}.png`"
+                :src="`https://www.theparadigmdev.com/relay/profile-pics/${current.user._id}.png`"
               ></v-img
             ></v-avatar>
 
@@ -355,7 +355,7 @@
             <div class="d-flex mt-3">
               <v-avatar size="30"
                 ><v-img
-                  :src="`https://www.theparadigm.ga/relay/profile-pics/${reply.user._id}.png`"
+                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${reply.user._id}.png`"
                 ></v-img
               ></v-avatar>
 
@@ -469,7 +469,7 @@
             <div class="d-flex mt-3">
               <v-avatar size="30"
                 ><v-img
-                  :src="`https://www.theparadigm.ga/relay/profile-pics/${subreply.user._id}.png`"
+                  :src="`https://www.theparadigmdev.com/relay/profile-pics/${subreply.user._id}.png`"
                 ></v-img
               ></v-avatar>
 

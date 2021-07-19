@@ -118,7 +118,7 @@ export default {
       this.new_bug.uid = this.$root.user._id;
       this.$http
         .post(
-          `https://www.theparadigm.ga/api/bugs/${this.$root.user._id}`,
+          `https://www.theparadigmdev.com/api/bugs/${this.$root.user._id}`,
           this.new_bug
         )
         .then((response) => {

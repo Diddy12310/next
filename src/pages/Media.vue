@@ -830,19 +830,19 @@ export default {
   },
   async created() {
     await this.$http
-      .get("https://www.theparadigm.ga/api/media/books/get")
+      .get("https://www.theparadigmdev.com/api/media/books/get")
       .then((response) => {
         this.books = response.data;
       })
       .catch((error) => console.error(error));
     await this.$http
-      .get("https://www.theparadigm.ga/api/media/movies/get")
+      .get("https://www.theparadigmdev.com/api/media/movies/get")
       .then((response) => {
         this.movies = response.data;
       })
       .catch((error) => console.error(error));
     await this.$http
-      .get("https://www.theparadigm.ga/api/media/music/get")
+      .get("https://www.theparadigmdev.com/api/media/music/get")
       .then((response) => {
         this.music = response.data;
       })
@@ -894,7 +894,7 @@ export default {
     updateUserBook() {
       this.$http
         .post(
-          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/media/books/${this.current._id}/update`,
+          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/books/${this.current._id}/update`,
           {
             rating: this.current.rating,
             favorite: this.current.favorite,
@@ -925,7 +925,7 @@ export default {
     updateUserMovie() {
       this.$http
         .post(
-          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/media/movies/${this.current._id}/update`,
+          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/movies/${this.current._id}/update`,
           {
             rating: this.current.rating,
             favorite: this.current.favorite,
@@ -956,7 +956,7 @@ export default {
     updateUserMusic() {
       this.$http
         .post(
-          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/media/music/${this.current._id}/update`,
+          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/media/music/${this.current._id}/update`,
           {
             rating: this.current.rating,
             favorite: this.current.favorite,
@@ -1062,7 +1062,10 @@ export default {
       if (this.tab == 1) this.upload.type = "movie";
       if (this.tab == 2) this.upload.type = "music";
       this.$http
-        .post(`https://www.theparadigm.ga/api/media/create/data`, this.upload)
+        .post(
+          `https://www.theparadigmdev.com/api/media/create/data`,
+          this.upload
+        )
         .then((response) => {
           let formData = new FormData();
           formData.append("cover", this.upload.cover_file[0]);
@@ -1075,7 +1078,7 @@ export default {
           }
           this.$http
             .post(
-              `https://www.theparadigm.ga/api/media/create/${response.data._id}/files/${this.upload.type}`,
+              `https://www.theparadigmdev.com/api/media/create/${response.data._id}/files/${this.upload.type}`,
               formData,
               {
                 headers: {

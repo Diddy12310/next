@@ -178,7 +178,7 @@
                     }"
                     ><v-img
                       loading="lazy"
-                      :src="`https://www.theparadigm.ga/relay/profile-pics/${friend._id}.png`"
+                      :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.png`"
                     ></v-img
                   ></v-list-item-avatar>
                 </v-badge>
@@ -260,7 +260,7 @@
               class="mt-1"
               height="40"
               width="40"
-              :src="`https://www.theparadigm.ga/relay/profile-pics/${message.user_id}.png`"
+              :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
             />
             <div class="ml-3" style="flex-grow: 1; width: calc(100% - 125px)">
               <p class="mb-0">
@@ -376,7 +376,7 @@
               class="mt-1"
               height="40"
               width="40"
-              :src="`https://www.theparadigm.ga/relay/profile-pics/${message.user_id}.png`"
+              :src="`https://www.theparadigmdev.com/relay/profile-pics/${message.user_id}.png`"
             />
             <div class="ml-3" style="flex-grow: 1; width: calc(100% - 125px)">
               <p class="mb-0">
@@ -740,14 +740,14 @@ export default {
       this.current_dm_person = false;
       if (dm) {
         this.socket = await io.connect(
-          `https://www.theparadigm.ga/wire/${to.dm}`
+          `https://www.theparadigmdev.com/wire/${to.dm}`
         );
         this.current_dm_person = to.username;
         if (this.$route.path != `/wire/dm/${to.username}`)
           this.$router.push(`/wire/dm/${to.username}`);
       } else {
         this.socket = await io.connect(
-          `https://www.theparadigm.ga/wire/${to.id}`
+          `https://www.theparadigmdev.com/wire/${to.id}`
         );
         if (this.$route.path != `/wire/chatroom/${to.id}`)
           this.$router.push(`/wire/chatroom/${to.id}`);
@@ -821,8 +821,8 @@ export default {
       this.$http
         .post(
           this.current_dm_person
-            ? `https://www.theparadigm.ga/api/wire/dm/${this.current_id}/file`
-            : `https://www.theparadigm.ga/api/wire/chatroom/${this.current_id}/file`,
+            ? `https://www.theparadigmdev.com/api/wire/dm/${this.current_id}/file`
+            : `https://www.theparadigmdev.com/api/wire/chatroom/${this.current_id}/file`,
           formData,
           {
             headers: {
@@ -838,8 +838,8 @@ export default {
             timestamp: moment().format("MM/DD/YYYY [at] h:mm a"),
             content: this.upload.file[0].name,
             url: this.current_dm_person
-              ? `https://www.theparadigm.ga/relay/wire/dm/${this.current_id}/${this.upload.file[0].name}`
-              : `https://www.theparadigm.ga/relay/wire/chatroom/${this.current_id}/${this.upload.file[0].name}`,
+              ? `https://www.theparadigmdev.com/relay/wire/dm/${this.current_id}/${this.upload.file[0].name}`
+              : `https://www.theparadigmdev.com/relay/wire/chatroom/${this.current_id}/${this.upload.file[0].name}`,
             type: "",
           };
           if (this.upload.file[0].type.includes("image")) data.type = "image";
@@ -884,7 +884,7 @@ export default {
     joinChatroom() {
       this.$http
         .get(
-          `https://www.theparadigm.ga/api/users/${this.$root.user._id}/chatroom/${this.add_chatroom.code}/request`
+          `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/chatroom/${this.add_chatroom.code}/request`
         )
         .then((response) => {
           if (!response.data.error) {
@@ -905,7 +905,7 @@ export default {
     },
     buyChatroom() {
       this.$http
-        .post("https://www.theparadigm.ga/api/wire/chatroom/new", {
+        .post("https://www.theparadigmdev.com/api/wire/chatroom/new", {
           icon: "mdi-forum",
           name: this.buy_chatroom.name,
           owner: this.$root.user._id,
@@ -925,7 +925,7 @@ export default {
       if (this.$root.user._id != this.current.owner) {
         this.$http
           .get(
-            `https://www.theparadigm.ga/api/users/${this.$root.user._id}/chatroom/${this.current.id}/leave`
+            `https://www.theparadigmdev.com/api/users/${this.$root.user._id}/chatroom/${this.current.id}/leave`
           )
           .then((response) => {
             this.$root.user = response.data;
@@ -958,7 +958,7 @@ export default {
         this.$notify("Chatroom deleted", "whit--text", "mdi-delete", 3000);
         this.delete_verify_popup = false;
         await this.$http.get(
-          `https://www.theparadigm.ga/api/wire/chatroom/${this.current.id}/delete`
+          `https://www.theparadigmdev.com/api/wire/chatroom/${this.current.id}/delete`
         );
         this.socket.disconnect();
         this.current = false;
@@ -988,7 +988,7 @@ export default {
   async created() {
     if (this.$vuetify.breakpoint.mdAndUp) this.drawer = true;
     this.$http
-      .get("https://www.theparadigm.ga/api/users/shortlist")
+      .get("https://www.theparadigmdev.com/api/users/shortlist")
       .then((response) => {
         this.all_people = response.data;
         this.$parseRoute();

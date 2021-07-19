@@ -91,7 +91,7 @@ export default {
     recover() {
       this.$http
         .post(
-          `https://www.theparadigm.ga/api/users/${this.recovery.username}/recover`,
+          `https://www.theparadigmdev.com/api/users/${this.recovery.username}/recover`,
           this.recovery
         )
         .then((response) => {})

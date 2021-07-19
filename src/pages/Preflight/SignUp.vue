@@ -204,7 +204,7 @@ export default {
       else {
         this.$http
           .get(
-            `https://www.theparadigm.ga/api/users/check/${this.$root.user.username.toLowerCase()}`
+            `https://www.theparadigmdev.com/api/users/check/${this.$root.user.username.toLowerCase()}`
           )
           .then((response) => {
             this.username_exists = response.data.exists;
@@ -268,7 +268,7 @@ export default {
                 formData.append("files[0]", this.new_user.pic);
                 this.$http
                   .post(
-                    `https://www.theparadigm.ga/api/users/${response.data._id}/pic`,
+                    `https://www.theparadigmdev.com/api/users/${response.data._id}/pic`,
                     formData,
                     {
                       headers: {
@@ -286,11 +286,12 @@ export default {
                     this.$root.worker.pushManager
                       .getSubscription()
                       .then((sub) => {
-                        const existing_subscription = this.$root.user.notifications.find(
-                          (subscription) =>
-                            JSON.stringify(subscription.data) ==
-                            JSON.stringify(sub)
-                        );
+                        const existing_subscription =
+                          this.$root.user.notifications.find(
+                            (subscription) =>
+                              JSON.stringify(subscription.data) ==
+                              JSON.stringify(sub)
+                          );
 
                         if (!existing_subscription) {
                           navigator.serviceWorker.ready.then(async (sw) => {
@@ -298,16 +299,17 @@ export default {
                             const subscription = await sw.pushManager.subscribe(
                               {
                                 userVisibleOnly: true,
-                                applicationServerKey: this.$urlBase64ToUint8Array(
-                                  this.$root.public_vapid_key
-                                ),
+                                applicationServerKey:
+                                  this.$urlBase64ToUint8Array(
+                                    this.$root.public_vapid_key
+                                  ),
                               }
                             );
                             console.log("Push Registered...");
                             console.log("Sending Push...");
                             this.$http
                               .post(
-                                `https://www.theparadigm.ga/api/notifications/${response.data.user._id}/subscribe`,
+                                `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
                                 {
                                   data: subscription,
                                 }
@@ -331,10 +333,11 @@ export default {
                 this.$initAppMenu();
                 this.$router.push("/home");
 
-                const existsing_subscription = this.$root.user.notifications.find(
-                  (subscription) =>
-                    subscription._id == this.$getCookie("notification_id")
-                );
+                const existsing_subscription =
+                  this.$root.user.notifications.find(
+                    (subscription) =>
+                      subscription._id == this.$getCookie("notification_id")
+                  );
                 if (
                   ((await this.$root.worker.pushManager.permissionState()) !=
                     "granted" &&
@@ -344,19 +347,18 @@ export default {
                     !existsing_subscription)
                 ) {
                   console.log("Registering Push...");
-                  const subscription = await this.$root.worker.pushManager.subscribe(
-                    {
+                  const subscription =
+                    await this.$root.worker.pushManager.subscribe({
                       userVisibleOnly: true,
                       applicationServerKey: this.$urlBase64ToUint8Array(
                         this.$root.public_vapid_key
                       ),
-                    }
-                  );
+                    });
                   console.log("Push Registered...");
                   console.log("Sending Push...");
                   this.$http
                     .post(
-                      `https://www.theparadigm.ga/api/notifications/${response.data._id}/subscribe`,
+                      `https://www.theparadigmdev.com/api/notifications/${response.data._id}/subscribe`,
                       {
                         data: subscription,
                       }
@@ -389,7 +391,7 @@ export default {
     },
     verifyInviteCode() {
       this.$http
-        .put(`https://www.theparadigm.ga/api/apollo`, {
+        .put(`https://www.theparadigmdev.com/api/apollo`, {
           code: this.invite_code,
         })
         .then((response) => {

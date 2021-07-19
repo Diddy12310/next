@@ -80,7 +80,13 @@
 
         <v-card-actions class="grey darken-4 pa-7">
           <p
-            class="ma-auto subtitle-2 text-center font-weight-light text--grey text--darken-4"
+            class="
+              ma-auto
+              subtitle-2
+              text-center
+              font-weight-light
+              text--grey text--darken-4
+            "
           >
             Forgot your credentials? Oh well, for now...
             <!-- <a
@@ -180,7 +186,7 @@ export default {
                   console.log("Sending Push...");
                   this.$http
                     .post(
-                      `https://www.theparadigm.ga/api/notifications/${response.data.user._id}/subscribe`,
+                      `https://www.theparadigmdev.com/api/notifications/${response.data.user._id}/subscribe`,
                       {
                         data: subscription,
                       }

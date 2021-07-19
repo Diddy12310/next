@@ -13,7 +13,7 @@
         <v-list-item-avatar
           ><v-img
             loading="lazy"
-            :src="`https://www.theparadigm.ga/relay/profile-pics/${friend._id}.png`"
+            :src="`https://www.theparadigmdev.com/relay/profile-pics/${friend._id}.png`"
           ></v-img
         ></v-list-item-avatar>
         <v-list-item-title :style="{ color: friend.color }">{{
@@ -82,13 +82,14 @@ export default {
       peerConnection = null;
       peerConnection = new RTCPeerConnection({
         iceServers: [
-          { urls: "stun:stunserver.org" },
           {
-            urls: "turn:numb.viagenie.ca",
-            credential: "muazkh",
-            username: "webrtc@live.com",
+            urls: [
+              "stun:stun1.l.google.com:19302",
+              "stun:stun2.l.google.com:19302",
+            ],
           },
         ],
+        iceCandidatePoolSize: 10,
       });
       this.$root.socket.on("call-made", async (data) => {
         console.log("call-made");
@@ -197,6 +198,7 @@ export default {
   bottom: 0px;
   right: 0px;
   height: 200px;
+  z-index: 1;
 }
 
 #remote-video {
