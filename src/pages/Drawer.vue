@@ -12,6 +12,10 @@
           icon
           color="grey"
           @click="cd(resolvePath(split_path.length - 2))"
+          :disabled="
+            current_path == '/' ||
+            current_path == `/mnt/drawer/${$root.user._id}`
+          "
           ><v-icon>mdi-chevron-left</v-icon></v-btn
         >
         <span
@@ -174,7 +178,7 @@
         <v-list-item @click="signOut()">
           <v-list-item-avatar
             ><v-img
-              :src="`https://www.theparadigm.ga/relay/profile-pics/${$root.user._id}.png`"
+              :src="`https://www.theparadigmdev.com/relay/profile-pics/${$root.user._id}.png`"
             ></v-img
           ></v-list-item-avatar>
           <v-list-item-content>
@@ -189,8 +193,8 @@
 
         <v-list-item
           @click="
-            ($root.user.preferences.drawer.show_file_types = !$root.user
-              .preferences.drawer.show_file_types),
+            ($root.user.preferences.drawer.show_file_types =
+              !$root.user.preferences.drawer.show_file_types),
               updatePrefs()
           "
         >
@@ -225,11 +229,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog
-      v-model="uploader"
-      max-width="350"
-      @click:outside="(files = null), (uploader = false)"
-    >
+    <v-dialog v-model="uploader" max-width="350" :persistent="uploading">
       <v-card style="text-align: center">
         <v-card-title class="text-h5 font-weight-medium"
           >UPLOAD FILE
@@ -239,6 +239,7 @@
             @click="(files = null), (uploader = false)"
             icon
             class="mr-n2"
+            :disabled="uploading"
             ><v-icon>mdi-close</v-icon></v-btn
           >
         </v-card-title>
@@ -252,8 +253,7 @@
             hide-details
             id="file"
             ref="file"
-            v-model="files"
-            multiple
+            v-model="file"
             label="Upload..."
           ></v-file-input>
         </v-card-text>
@@ -262,11 +262,17 @@
           <v-spacer></v-spacer>
           <v-btn text color="teal darken-2" @click="uploadFile()">Upload</v-btn>
         </v-card-actions>
+
+        <v-progress-linear
+          color="teal darken-2"
+          v-show="uploading"
+          :value="uploadPercentage"
+        ></v-progress-linear>
       </v-card>
     </v-dialog>
 
     <v-btn
-      v-if="current.length > 1"
+      v-if="current.length > 0"
       fab
       fixed
       bottom
@@ -279,10 +285,12 @@
 </template>
 
 <script>
+import generateObjectId from "../helpers/generateObjectId";
+
 export default {
   name: "Drawer",
   data: () => ({
-    files: null,
+    file: null,
     rename: { open: false },
     uploader: false,
     uploadPercentage: 0,
@@ -324,7 +332,7 @@ export default {
         };
       }
       const stats = await that.$http.get(
-        `https://www.theparadigm.ga/api/drawer/${
+        `https://www.theparadigmdev.com/api/drawer/${
           that.$root.user._id
         }/${encodeURIComponent(`/mnt/drawer/${that.$root.user._id}`)}`
       );
@@ -342,7 +350,7 @@ export default {
   methods: {
     updatePrefs() {
       this.$http
-        .post("https://www.theparadigm.ga/api/users/update", {
+        .post("https://www.theparadigmdev.com/api/users/update", {
           old: this.$root.user.username,
           preferences: this.$root.user.preferences,
         })
@@ -371,7 +379,7 @@ export default {
 
     async cd(target) {
       const data = await this.$http.get(
-        `https://www.theparadigm.ga/api/drawer/${
+        `https://www.theparadigmdev.com/api/drawer/${
           this.$root.user._id
         }/${encodeURIComponent(target)}`
       );
@@ -398,7 +406,7 @@ export default {
           : this.current_path;
       this.$http
         .put(
-          `https://www.theparadigm.ga/api/drawer/${
+          `https://www.theparadigmdev.com/api/drawer/${
             this.$root.user._id
           }/${encodeURIComponent(path)}`
         )
@@ -416,49 +424,76 @@ export default {
     },
     uploadFile() {
       this.uploading = true;
-      let formData = new FormData();
-      for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i];
-        formData.append(i, file);
-      }
-      this.$http
-        .post(
-          `https://www.theparadigm.ga/api/drawer/${
-            this.$root.user._id
-          }/${encodeURIComponent(
-            this.current_path == "/"
-              ? `/mnt/drawer/${this.$root.user._id}`
-              : this.current_path
-          )}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            onUploadProgress: (progressEvent) => {
-              this.uploadPercentage = parseInt(
-                Math.round((progressEvent.loaded / progressEvent.total) * 100)
-              );
-            },
-            timeout: 0,
-          }
-        )
-        .then((response) => {
-          this.current = response.data.files;
-          this.files = null;
-          this.uploading = false;
-          this.uploader = false;
-        })
-        .catch((error) => {
-          console.log("Upload: failed", error);
-          this.files = null;
-          this.uploading = false;
-          this.uploader = false;
-        });
+      let reader = new FileReader();
+      let that = this;
+      reader.onloadend = () => {
+        const chunkSize = 1000000;
+        const sessionID = generateObjectId();
+        let start = 0;
+        let count = 0;
+        let file_name = that.file.name;
+        const final = reader.result.substring(reader.result.indexOf(",") + 1);
+        let uploadChunk = () => {
+          that.$http
+            .post(
+              `https://www.theparadigmdev.com/api/drawer/${
+                that.$root.user._id
+              }/${encodeURIComponent(
+                that.current_path == "/"
+                  ? `/mnt/drawer/${that.$root.user._id}`
+                  : that.current_path
+              )}`,
+              {
+                base64: final.slice(
+                  start,
+                  start + chunkSize > reader.result.length
+                    ? reader.result.length
+                    : start + chunkSize
+                ),
+                name: file_name,
+                session: sessionID,
+                final: start + chunkSize > reader.result.length ? true : false,
+              }
+            )
+            .then((response) => {
+              count++;
+              const total = reader.result.length / chunkSize;
+              that.uploadPercentage = (count / total) * 100;
+              start + chunkSize > reader.result.length
+                ? (start = reader.result.length)
+                : (start += chunkSize);
+              if (start < reader.result.length) uploadChunk();
+              else {
+                that.current = response.data.files;
+                that.file = null;
+                that.uploading = false;
+                that.uploader = false;
+              }
+            })
+            .catch((error) => {
+              console.log("Upload: failed", error);
+              that.file = null;
+              that.uploading = false;
+              that.uploader = false;
+              that.uploadPercentage = 0;
+            });
+        };
+        uploadChunk();
+
+        // that.new_post.file = {
+        //   uri: reader.result,
+        //   name: that.new_file.name,
+        //   size: that.new_file.size + "B",
+        //   type: that.new_file.type,
+        // };
+        // that.uploader = false;
+        // that.new_file = null;
+      };
+      reader.readAsDataURL(this.file);
     },
     downloadFile(item) {
       window.open(
-        `https://www.theparadigm.ga/api/drawer/${
+        `https://www.theparadigmdev.com/api/drawer/${
           this.$root.user._id
         }/download/${encodeURIComponent(item.path)}`
       );
@@ -466,7 +501,7 @@ export default {
     deleteFile(path) {
       this.$http
         .delete(
-          `https://www.theparadigm.ga/api/drawer/${
+          `https://www.theparadigmdev.com/api/drawer/${
             this.$root.user._id
           }/${encodeURIComponent(path)}`
         )
@@ -484,7 +519,7 @@ export default {
     renameFile() {
       this.$http
         .post(
-          `https://www.theparadigm.ga/api/drawer/${this.$root.user._id}/rename`,
+          `https://www.theparadigmdev.com/api/drawer/${this.$root.user._id}/rename`,
           {
             old: this.rename.path,
             new:
@@ -501,7 +536,7 @@ export default {
     },
     getLink(path) {
       navigator.clipboard.writeText(
-        `https://www.theparadigm.ga/api/drawer/${
+        `https://www.theparadigmdev.com/api/drawer/${
           this.$root.user._id
         }/get/${encodeURIComponent(path)}`
       );
