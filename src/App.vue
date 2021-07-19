@@ -225,13 +225,8 @@ export default {
         "mdi-server",
         3000
       );
-      this.$root.socket.on("reconnect", () => {
-        this.verifyJWT();
-        reconnected = true;
-        this.$notify("Reconnected!", "blue--text", "mdi-server", 3000);
-      });
       autoLockout = setTimeout(() => {
-        if (!reconnected) {
+        if (!this.$root.socket.connected) {
           this.$notify(
             "Reconnection timed out!",
             "red--text",
@@ -241,6 +236,9 @@ export default {
           this.$root.timed_out = true;
           this.$root.config = false;
           this.$lock();
+        } else {
+          this.verifyJWT();
+          this.$notify("Reconnected!", "blue--text", "mdi-server", 3000);
         }
       }, 10000);
     });
